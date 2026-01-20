@@ -11,6 +11,8 @@ but at the end of the day, this was the most straight forward way and the easies
 from lorgs.data.roles import *
 from lorgs.data.classes import *
 
+from lorgs.data.raids import *
+
 # from lorgs.data.racials import *
 # from lorgs.data.externals import *
 
