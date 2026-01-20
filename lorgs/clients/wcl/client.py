@@ -88,8 +88,9 @@ class BaseClient:
 
 class WarcraftlogsClient(BaseClient):
 
-    URL_API = "https://www.warcraftlogs.com/api/v2/client"
-    URL_AUTH = "https://www.warcraftlogs.com/oauth/token"
+    # FF Logs API v2 Endpoints
+    URL_API = "https://www.fflogs.com/api/v2/client"
+    URL_AUTH = "https://www.fflogs.com/oauth/token"
 
     def __init__(self, client_id: str = "", client_secret: str = "") -> None:
         super().__init__()
