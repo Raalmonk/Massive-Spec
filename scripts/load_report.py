@@ -51,29 +51,27 @@ class WarcraftReport(pydantic.BaseModel):
         return f"http://localhost:9001/user_report/{self.report_id}?fight={fight_ids_str}&player={player_ids_str}"
 
     async def load(self) -> None:
+        print(f"Loading Report: {self.report_id}")
 
-        # Load
-        user_report = UserReport.get_or_create(report_id=self.report_id, create=True)
+        # 1. Instantiate directly (Bypass DB lookup)
+        user_report = UserReport(report_id=self.report_id)
+
+        # 2. Load Master Data
         await user_report.load()
 
+        # 3. Load Fights
         await user_report.load_fights(fight_ids=self.fight_ids, player_ids=self.player_ids)
 
-        """
-        print("#" * 32)
+        # 4. Print results instead of saving
+        # user_report.save() # <--- Commented out to avoid AWS connection
 
+        print("\n" + "="*30)
+        print(f"Report: {user_report.title}")
         for fight in user_report.fights:
-            print("===== Phases:")
-            print(fight.boss.phases)
-
-            print("===== d")
-            print(fight.boss.as_dict())
-
-        print("#" * 32)
-        """
-        user_report.save()
-
-        # Return
-        print(self.as_lorrgs_url())
+            print(f"Fight: {fight.boss.name if fight.boss else 'Unknown'} (ID: {fight.fight_id})")
+            for player in fight.players:
+                print(f" - Player: {player.name} ({player.spec_slug}) | Casts: {len(player.casts)}")
+        print("="*30 + "\n")
 
 
 if __name__ == "__main__":
