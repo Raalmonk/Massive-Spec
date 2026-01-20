@@ -68,7 +68,7 @@ class WarcraftReport(pydantic.BaseModel):
         print("\n" + "="*30)
         print(f"Report: {user_report.title}")
         for fight in user_report.fights:
-            print(f"Fight: {fight.boss.raid_name if fight.boss else 'Unknown'} (ID: {fight.fight_id})")
+            print(f"Fight: {fight.boss.raid_boss.name if fight.boss else 'Unknown'} (ID: {fight.fight_id})")
             for player in fight.players:
                 print(f" - Player: {player.name} ({player.spec_slug}) | Casts: {len(player.casts)}")
         print("="*30 + "\n")
