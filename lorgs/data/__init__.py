@@ -15,7 +15,7 @@ from lorgs.data.classes import *
 # from lorgs.data.externals import *
 
 # Consumables, Gear and similar
-# from lorgs.data.items import *
+from lorgs.data.items import *
 
 
 # from lorgs.data.expansions import cataclysm

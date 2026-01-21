@@ -66,6 +66,9 @@ class SpellTag:
     RAID_MIT = "RAID_MIT"
     """Tag for Raid Wide Mitigation."""
 
+    UTILITY = "utility"
+    """Tag for Utility Spells."""
+
 
 class WowSpell(base.MemoryModel):
     """Container to define a spell."""

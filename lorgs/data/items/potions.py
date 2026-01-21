@@ -7,6 +7,8 @@
 
 from lorgs.data.classes import *
 from lorgs.models.wow_potion import WowPotion
+from lorgs.models.wow_spell import WowSpell
+from lorgs.models.wow_spell import SpellTag
 
 
 ################################################################################
@@ -28,18 +30,38 @@ WowPotion(
 # DPS Potions
 #
 
+# Grade 4 Gemdraught of Intelligence [HQ]
+potion_int = WowPotion(
+    spell_id=34603669,
+    cooldown=270,
+    duration=30,
+    color="#b576e8",
+    name="Grade 4 Gemdraught of Intelligence [HQ]",
+    icon="Grade_4_gemdraught_of_intelligence_icon1.png",
+    tags=[SpellTag.UTILITY],
+    item=49237,
+)
 
-# Intellect users
-# for s in INT_SPECS:
-#     s.add_spell(spell_type=TYPE_POTION, spell_id=307162, cooldown=300, duration=25, color="#b576e8", name="Potion of Spectral Intellect", icon="trade_alchemy_potionc4.jpg")
+CASTER_SPECS = [RED_MAGE_MAIN, SUMMONER_MAIN, BLACK_MAGE_MAIN, PICTOMANCER_MAIN]
+potion_int.add_specs(*CASTER_SPECS)
+
+
+################################################################################
+# General Utility
 #
-# # Agility Users
-# for s in AGI_SPECS:
-#     s.add_spell(spell_type=TYPE_POTION, spell_id=307159, cooldown=300, duration=25, color="#b576e8", name="Potion of Spectral Agility",   icon="trade_alchemy_potionc6.jpg")
-#
-# # Strength Users
-# for s in STR_SPECS:
-#     s.add_spell(spell_type=TYPE_POTION, spell_id=307164, cooldown=300, duration=25, color="#b576e8", name="Potion of Spectral Strength",  icon="trade_alchemy_potionc2.jpg")
+
+sprint = WowSpell(
+    spell_id=3,
+    cooldown=60,
+    duration=10,
+    color="#666666",
+    name="Sprint",
+    icon="Sprint_icon1.png",
+    tags=[SpellTag.UTILITY],
+)
+
+for spec in ALL_SPECS:
+    spec.add_spell(sprint)
 
 
 ################################################################################
