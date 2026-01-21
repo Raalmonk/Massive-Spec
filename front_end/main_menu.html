@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFLorrgs - Cooldown Usage Analysis</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        gray: {
+                            850: '#1f2937',
+                            900: '#111827',
+                            950: '#030712',
+                        },
+                        // Main Theme Color (Monk Green)
+                        monk: {
+                            DEFAULT: '#00FF96',
+                            dim: '#00cc78',
+                            dark: '#009e5f',
+                        },
+                        // Custom FF14 Job Colors
+                        job: {
+                            pld: '#A8D2E6', war: '#CF2621', drk: '#D126CC', gnb: '#796D30',
+                            whm: '#FFF0F5', sch: '#8657FF', ast: '#FFE74A', sge: '#80A0F0',
+                            mnk: '#D69C00', drg: '#4164CD', nin: '#AF1964', sam: '#E46D04', rpr: '#965A90', vpr: '#108221',
+                            brd: '#91BA5E', mch: '#6EE1D6', dnc: '#E2B0AF',
+                            blm: '#A579D6', smn: '#2D9B78', rdm: '#E87B7B', pct: '#FF66CC', blu: '#2459FF',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f1115;
+            color: #e5e7eb;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #111827; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+        
+        .job-btn {
+            transition: all 0.2s;
+        }
+        .job-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Dropdown fade transition */
+        .dropdown-enter { opacity: 0; transform: translateY(-5px); }
+        .dropdown-enter-active { opacity: 1; transform: translateY(0); transition: opacity 0.15s, transform 0.15s; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans relative" onclick="closeAllDropdowns(event)">
+
+    <!-- Navigation -->
+    <nav class="border-b border-gray-800 bg-gray-900/80 backdrop-blur-md sticky top-0 z-50">
+        <!-- Changed to w-full and removed mx-auto to keep logo strictly on the left -->
+        <div class="w-full px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="text-2xl font-bold text-white tracking-tight">
+                        <span class="text-monk">FF</span>Lorrgs
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-[95rem] mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+        
+        <!-- Top Section: Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
+            
+            <!-- Left Column: Intro & Disclaimer (Width: ~30%) -->
+            <div class="lg:col-span-4 xl:col-span-3 space-y-8 order-2 lg:order-1">
+                <!-- Intro Section -->
+                <div>
+                    <h1 class="text-3xl font-bold text-white mb-4">What is this?</h1>
+                    <!-- Reverted font size to text-sm -->
+                    <div class="text-gray-400 space-y-2 text-sm leading-relaxed">
+                        <p>This website looks at the current <span class="text-monk font-semibold">top 50 logs for every job</span> and visualizes <span class="text-monk font-semibold">"relevant"</span> spells on an encounter timeline.</p>
+                        <p>This lets you easily compare multiple high performing logs against each other.</p>
+                        <p class="font-medium text-gray-300">No more sifting through individual FFLogs manually!</p>
+                    </div>
+                </div>
+
+                <!-- Disclaimer Section -->
+                <div class="bg-yellow-900/10 border-l-4 border-yellow-600/80 p-5 rounded-r-lg">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 mt-1"></i>
+                        </div>
+                        <div class="ml-3">
+                            <!-- Reverted header size to text-base and text size to text-xs -->
+                            <h3 class="text-base font-bold text-yellow-500 mb-2">Disclaimer</h3>
+                            <div class="text-yellow-100/80 space-y-2 text-xs leading-relaxed">
+                                <p class="font-semibold">Do not simply copy paste the timings you see here!</p>
+                                <p>You will have to <span class="text-white font-medium">adapt your cooldowns</span> based on your static's strats and kill times.</p>
+                                <p>Just seeing what people are doing successfully will not make it work for you, <span class="underline decoration-yellow-500/50">unless you understand why.</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Top Parses by Job (Width: ~70%) -->
+            <div class="lg:col-span-8 xl:col-span-9 order-1 lg:order-2">
+                <h2 class="text-2xl font-bold text-white mb-6 border-b border-gray-800 pb-2">Top Parses by Job</h2>
+                
+                <div class="space-y-4">
+                    
+                    <!-- Row 1: Tanks -->
+                    <div class="flex flex-col md:flex-row md:items-center bg-gray-900/40 rounded-lg border border-gray-800 p-4 gap-4">
+                        <div class="w-32 flex-shrink-0 flex items-center text-gray-400 font-bold uppercase tracking-wider text-sm">
+                            <span class="w-8 flex justify-center mr-2"><i class="fas fa-shield-alt text-blue-400"></i></span>
+                            Tank
+                        </div>
+                        <div class="flex flex-wrap gap-3 flex-1">
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-pld rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/paladin.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Paladin</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-war rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/warrior.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Warrior</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-drk rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/darkknight.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Dark Knight</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-gnb rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/gunbreaker.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Gunbreaker</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Healers -->
+                    <div class="flex flex-col md:flex-row md:items-center bg-gray-900/40 rounded-lg border border-gray-800 p-4 gap-4">
+                        <div class="w-32 flex-shrink-0 flex items-center text-gray-400 font-bold uppercase tracking-wider text-sm">
+                            <span class="w-8 flex justify-center mr-2"><i class="fas fa-plus text-green-400"></i></span>
+                            Healer
+                        </div>
+                        <div class="flex flex-wrap gap-3 flex-1">
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-whm rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/whitemage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>White Mage</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-sch rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/scholar.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Scholar</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-ast rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/astrologian.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Astrologian</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-sge rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/sage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Sage</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Melee DPS -->
+                    <div class="flex flex-col md:flex-row md:items-center bg-gray-900/40 rounded-lg border border-gray-800 p-4 gap-4">
+                        <div class="w-32 flex-shrink-0 flex items-center text-gray-400 font-bold uppercase tracking-wider text-sm">
+                            <span class="w-8 flex justify-center mr-2"><i class="fas fa-gavel text-red-400"></i></span>
+                            Melee
+                        </div>
+                        <div class="flex flex-wrap gap-3 flex-1">
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-mnk rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/monk.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Monk</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-drg rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/dragoon.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Dragoon</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-nin rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/ninja.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Ninja</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-sam rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/samurai.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Samurai</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-rpr rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/reaper.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Reaper</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-vpr rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/viper.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Viper</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Row 4: Phys Ranged DPS -->
+                    <div class="flex flex-col md:flex-row md:items-center bg-gray-900/40 rounded-lg border border-gray-800 p-4 gap-4">
+                        <div class="w-32 flex-shrink-0 flex items-center text-gray-400 font-bold uppercase tracking-wider text-sm">
+                            <span class="w-8 flex justify-center mr-2"><i class="fas fa-bullseye text-red-400"></i></span>
+                            Phys Ranged
+                        </div>
+                        <div class="flex flex-wrap gap-3 flex-1">
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-brd rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/bard.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Bard</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-mch rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/machinist.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Machinist</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-dnc rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/dancer.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Dancer</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Row 5: Magical Ranged DPS -->
+                    <div class="flex flex-col md:flex-row md:items-center bg-gray-900/40 rounded-lg border border-gray-800 p-4 gap-4">
+                        <div class="w-32 flex-shrink-0 flex items-center text-gray-400 font-bold uppercase tracking-wider text-sm">
+                            <span class="w-8 flex justify-center mr-2"><i class="fas fa-meteor text-red-400"></i></span>
+                            Magic Ranged
+                        </div>
+                        <div class="flex flex-wrap gap-3 flex-1">
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-blm rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/blackmage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Black Mage</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-smn rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/summoner.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Summoner</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-rdm rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/redmage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Red Mage</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-pct rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/pictomancer.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Pictomancer</span>
+                            </a>
+                            <a href="#" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-blu rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
+                                <img src="lorrgs_assets/images/classes/bluemage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <span>Blue Mage</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Bottom Section: Search & Custom Report -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+            
+            <!-- Search Specific Comp -->
+            <div class="bg-gray-800/30 rounded-lg p-6 border border-gray-700/50 flex flex-col h-full">
+                <h2 class="text-xl font-bold text-white mb-2">Search Specific Comp</h2>
+                <p class="text-gray-400 text-sm mb-6">Tap a slot to select a job and filter reports.</p>
+                
+                <!-- Party Slots Container -->
+                <div class="grid grid-cols-4 gap-3 mb-6 relative" id="party-grid">
+                    <!-- Slots generated by JS -->
+                </div>
+
+                <button onclick="searchComposition()" class="w-full bg-monk hover:bg-monk-dim text-gray-900 px-4 py-2 rounded font-bold transition shadow-lg shadow-monk/20 mt-auto">
+                    Search Composition
+                </button>
+            </div>
+
+            <!-- Custom Report -->
+            <div class="bg-gray-800/30 rounded-lg p-6 border border-gray-700/50 flex flex-col h-full">
+                <h2 class="text-xl font-bold text-white mb-2">Custom Report</h2>
+                <p class="text-gray-400 text-sm mb-6">Enter a FFLogs Report ID to analyze a specific log.</p>
+                
+                <div class="flex gap-2">
+                    <input type="text" placeholder="e.g. a:12345XYZ" class="flex-1 bg-gray-900 border border-gray-700 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-monk focus:border-transparent transition">
+                    <button class="bg-monk hover:bg-monk-dim text-gray-900 px-6 py-2 rounded font-bold transition shadow-lg shadow-monk/20">
+                        Load Log
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-800 py-10 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <span class="text-xl font-bold text-gray-500">FFLorrgs</span>
+                    <p class="text-gray-600 text-sm mt-1">© 2024 Lorrgs. Not affiliated with Square Enix.</p>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition flex items-center gap-2 group">
+                        <i class="fab fa-discord group-hover:text-indigo-500"></i>
+                        <span>Discord</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Logic -->
+    <script>
+        // --- Data ---
+        const jobData = {
+            Tank: [
+                { id: 'pld', name: 'Paladin', color: 'text-job-pld', icon: 'shield-alt' },
+                { id: 'war', name: 'Warrior', color: 'text-job-war', icon: 'axe-battle' },
+                { id: 'drk', name: 'Dark Knight', color: 'text-job-drk', icon: 'skull' },
+                { id: 'gnb', name: 'Gunbreaker', color: 'text-job-gnb', icon: 'bomb' },
+            ],
+            Healer: [
+                { id: 'whm', name: 'White Mage', color: 'text-job-whm', icon: 'staff' },
+                { id: 'sch', name: 'Scholar', color: 'text-job-sch', icon: 'book-open' },
+                { id: 'ast', name: 'Astrologian', color: 'text-job-ast', icon: 'star' },
+                { id: 'sge', name: 'Sage', color: 'text-job-sge', icon: 'syringe' },
+            ],
+            DPS: [
+                // Melee
+                { id: 'mnk', name: 'Monk', category: 'Melee', color: 'text-job-mnk', icon: 'fist-raised' },
+                { id: 'drg', name: 'Dragoon', category: 'Melee', color: 'text-job-drg', icon: 'dragon' },
+                { id: 'nin', name: 'Ninja', category: 'Melee', color: 'text-job-nin', icon: 'user-ninja' },
+                { id: 'sam', name: 'Samurai', category: 'Melee', color: 'text-job-sam', icon: 'khanda' },
+                { id: 'rpr', name: 'Reaper', category: 'Melee', color: 'text-job-rpr', icon: 'scythe' },
+                { id: 'vpr', name: 'Viper', category: 'Melee', color: 'text-job-vpr', icon: 'snake' },
+                // Phys Ranged
+                { id: 'brd', name: 'Bard', category: 'Phys Ranged', color: 'text-job-brd', icon: 'music' },
+                { id: 'mch', name: 'Machinist', category: 'Phys Ranged', color: 'text-job-mch', icon: 'cog' },
+                { id: 'dnc', name: 'Dancer', category: 'Phys Ranged', color: 'text-job-dnc', icon: 'fan' },
+                // Magic Ranged
+                { id: 'blm', name: 'Black Mage', category: 'Caster', color: 'text-job-blm', icon: 'fire' },
+                { id: 'smn', name: 'Summoner', category: 'Caster', color: 'text-job-smn', icon: 'book' },
+                { id: 'rdm', name: 'Red Mage', category: 'Caster', color: 'text-job-rdm', icon: 'hat-wizard' },
+                { id: 'pct', name: 'Pictomancer', category: 'Caster', color: 'text-job-pct', icon: 'palette' },
+            ]
+        };
+
+        // Default layout
+        const defaultComp = [
+            { role: 'Tank', icon: 'shield-alt', color: 'border-blue-400/50 text-gray-600' },
+            { role: 'Tank', icon: 'shield-alt', color: 'border-blue-400/50 text-gray-600' },
+            { role: 'Healer', icon: 'plus', color: 'border-green-400/50 text-gray-600' },
+            { role: 'Healer', icon: 'plus', color: 'border-green-400/50 text-gray-600' },
+            { role: 'DPS', icon: 'gavel', color: 'border-red-400/50 text-gray-600' },
+            { role: 'DPS', icon: 'gavel', color: 'border-red-400/50 text-gray-600' },
+            { role: 'DPS', icon: 'meteor', color: 'border-red-400/50 text-gray-600' },
+            { role: 'DPS', icon: 'meteor', color: 'border-red-400/50 text-gray-600' },
+        ];
+
+        // State
+        let currentComp = new Array(8).fill(null); // Stores job IDs or null
+
+        // --- Init ---
+        function initPartyGrid() {
+            const grid = document.getElementById('party-grid');
+            grid.innerHTML = '';
+
+            defaultComp.forEach((slot, index) => {
+                // Wrapper relative for positioning dropdown
+                const wrapper = document.createElement('div');
+                wrapper.className = "relative group"; 
+                // Note: We manage dropdown visibility via JS to click, not hover, but relative is needed.
+
+                // 1. The Button
+                const btn = document.createElement('button');
+                btn.className = `relative h-14 w-full bg-gray-900 border rounded flex items-center justify-center transition hover:bg-gray-800 ${slot.color} border-gray-700 select-none`;
+                btn.id = `slot-${index}`;
+                // Toggle dropdown on click
+                btn.onclick = (e) => toggleDropdown(index, e);
+
+                // Initial Content
+                btn.innerHTML = `
+                    <div id="slot-content-${index}" class="flex flex-col items-center justify-center w-full h-full pointer-events-none">
+                        <i class="fas fa-${slot.icon} text-lg mb-0.5"></i>
+                        <span class="text-[10px] font-medium opacity-60">${slot.role}</span>
+                    </div>
+                `;
+
+                // 2. The Dropdown (Hidden by default)
+                const dropdown = document.createElement('div');
+                dropdown.id = `dropdown-${index}`;
+                dropdown.className = "absolute top-full left-0 w-48 mt-1 bg-gray-800 border border-gray-700 rounded-md shadow-xl z-50 hidden max-h-60 overflow-y-auto";
+                
+                // Populate Dropdown Items based on Role
+                const roleJobs = jobData[slot.role] || [];
+                
+                // Add "Empty" option
+                const clearBtn = document.createElement('button');
+                clearBtn.className = "w-full text-left px-4 py-2 text-xs text-red-400 hover:bg-gray-700 border-b border-gray-700 flex items-center";
+                clearBtn.innerHTML = `<i class="fas fa-times mr-2"></i> Clear`;
+                clearBtn.onclick = () => selectJob(index, null);
+                dropdown.appendChild(clearBtn);
+
+                roleJobs.forEach(job => {
+                    const item = document.createElement('button');
+                    item.className = "w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white flex items-center justify-between group";
+                    item.onclick = () => selectJob(index, job.id);
+                    
+                    // Category label for DPS
+                    let categoryBadge = '';
+                    if (job.category) {
+                        // Tiny badge for DPS types
+                        let catColor = 'bg-gray-600';
+                        if(job.category === 'Melee') catColor = 'bg-red-900/50 text-red-300';
+                        if(job.category === 'Phys Ranged') catColor = 'bg-green-900/50 text-green-300';
+                        if(job.category === 'Caster') catColor = 'bg-purple-900/50 text-purple-300';
+                        categoryBadge = `<span class="text-[10px] px-1 rounded ${catColor} ml-2 opacity-70">${job.category.substring(0,1)}</span>`;
+                    }
+
+                    item.innerHTML = `
+                        <div class="flex items-center">
+                            <span class="w-5 h-5 mr-2 flex items-center justify-center">
+                                <img src="lorrgs_assets/images/classes/${job.name.toLowerCase().replace(/\s+/g, '')}.png" 
+                                     class="w-full h-full object-contain"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <i class="fas fa-${job.icon} ${job.color} text-xs hidden"></i>
+                            </span>
+                            <span>${job.name}</span>
+                        </div>
+                        ${categoryBadge}
+                    `;
+                    dropdown.appendChild(item);
+                });
+
+                wrapper.appendChild(btn);
+                wrapper.appendChild(dropdown);
+                grid.appendChild(wrapper);
+            });
+        }
+
+        // --- Interaction ---
+        function toggleDropdown(index, event) {
+            event.stopPropagation(); // Prevent body click from closing immediately
+            
+            const dropdown = document.getElementById(`dropdown-${index}`);
+            const isHidden = dropdown.classList.contains('hidden');
+
+            // Close all other dropdowns first
+            closeAllDropdowns();
+
+            if (isHidden) {
+                dropdown.classList.remove('hidden');
+            }
+        }
+
+        function closeAllDropdowns() {
+            const dropdowns = document.querySelectorAll('[id^="dropdown-"]');
+            dropdowns.forEach(d => d.classList.add('hidden'));
+        }
+
+        function selectJob(index, jobId) {
+            currentComp[index] = jobId;
+            updateSlotVisual(index, jobId);
+            closeAllDropdowns();
+        }
+
+        function updateSlotVisual(index, jobId) {
+            const slotBtn = document.getElementById(`slot-${index}`);
+            const contentDiv = document.getElementById(`slot-content-${index}`);
+            
+            if (!jobId) {
+                // Reset to default
+                const defaultData = defaultComp[index];
+                slotBtn.className = `relative h-14 w-full bg-gray-900 border rounded flex items-center justify-center transition hover:bg-gray-800 border-gray-700 ${defaultData.color} select-none`;
+                contentDiv.innerHTML = `
+                    <i class="fas fa-${defaultData.icon} text-lg mb-0.5"></i>
+                    <span class="text-[10px] font-medium opacity-60">${defaultData.role}</span>
+                `;
+                slotBtn.style.borderColor = ''; // clear inline style
+                return;
+            }
+
+            // Find job data flat search
+            let job = null;
+            Object.values(jobData).flat().forEach(j => {
+                if (j.id === jobId) job = j;
+            });
+
+            if (job) {
+                // Generate Dynamic Classes for border color
+                const jobBorderColor = getComputedStyle(document.documentElement).getPropertyValue(`--color-job-${job.id}`) || '#4b5563'; 
+                
+                // Let's try to construct the class.
+                const jobBorderClass = `border-${job.id.replace('pld','job-pld').replace('war','job-war').replace('drk','job-drk').replace('gnb','job-gnb').replace('whm','job-whm').replace('sch','job-sch').replace('ast','job-ast').replace('sge','job-sge').replace('mnk','job-mnk').replace('drg','job-drg').replace('nin','job-nin').replace('sam','job-sam').replace('rpr','job-rpr').replace('vpr','job-vpr').replace('brd','job-brd').replace('mch','job-mch').replace('dnc','job-dnc').replace('blm','job-blm').replace('smn','job-smn').replace('rdm','job-rdm').replace('pct','job-pct').replace('blu','job-blu')}`;
+
+                slotBtn.className = `relative h-14 w-full bg-gray-800 border-2 rounded flex items-center justify-center transition shadow-lg ${jobBorderClass} select-none`;
+                
+                contentDiv.innerHTML = `
+                    <div class="flex flex-col items-center">
+                        <img src="lorrgs_assets/images/classes/${job.name.toLowerCase().replace(/\s+/g, '')}.png" 
+                             alt="${job.name}" 
+                             class="w-8 h-8 object-contain mb-1 shadow-sm drop-shadow-md"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <i class="fas fa-${job.icon} text-2xl ${job.color} mb-1 hidden"></i>
+                        <span class="text-[10px] font-bold text-white leading-none">${job.name}</span>
+                    </div>
+                `;
+            }
+        }
+
+        function searchComposition() {
+            // Filter out nulls
+            const selectedJobs = currentComp.filter(j => j !== null);
+            if (selectedJobs.length === 0) {
+                alert("Please select at least one job.");
+                return;
+            }
+            console.log("Searching for composition:", selectedJobs);
+            alert(`Searching for: ${selectedJobs.join(', ')}`);
+        }
+
+        // Initialize
+        initPartyGrid();
+
+    </script>
+</body>
+</html>

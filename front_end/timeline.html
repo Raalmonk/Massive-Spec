@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFLorrgs - Timeline Preview</title>
+    
+    <!-- 1. Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- 3. Environment Setup -->
+    <script>
+        window.process = { env: { NODE_ENV: 'production' } };
+    </script>
+
+    <style>
+        /* Scrollbar Styling */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+            background: #121212;
+        }
+        .custom-scrollbar::-webkit-scrollbar-corner {
+            background: #121212;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #333;
+            border: 3px solid #121212;
+            border-radius: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #00FF96;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none; 
+            scrollbar-width: none; 
+        }
+        body { margin: 0; overflow: hidden; background-color: #121212; }
+        
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- 4. React App -->
+    <script type="text/babel" data-type="module">
+        import React, { useState, useRef, useEffect, useMemo } from 'https://esm.sh/react@18.2.0?dev';
+        import { createRoot } from 'https://esm.sh/react-dom@18.2.0/client?dev';
+        import { ZoomIn, ZoomOut, Search, Menu, Skull, Clock, Hourglass, Shield, ShieldAlert, Zap, Swords, MoreHorizontal, Layers, Minimize2, Maximize2 } from 'https://esm.sh/lucide-react@0.263.1?dev';
+
+        // --- Configuration ---
+        const THEME_COLOR = '#00FF96'; 
+        const JOB_COLOR_RDM = '#E87B7B'; 
+        const FIGHT_DURATION = 380; // seconds
+
+        // --- Mock Data Layer ---
+        const fetchSpellCategories = async () => ({
+            MAJOR: { label: 'CD', color: '#E87B7B', iconType: 'swords' },
+            SINGLE_MIT: { label: 'Single Mit', color: '#4facfe', iconType: 'shield' },
+            RAID_MIT: { label: 'Group Mit', color: '#8657FF', iconType: 'shieldAlert' },
+            UTILITY: { label: 'Utility', color: '#E6B33D', iconType: 'zap' },
+        });
+
+        const fetchSpellData = async () => ({
+            'manafication': { id: 'manafication', name: 'Manafication', image: 'https://xivapi.com/i/003000/003219.png', cd: 110, duration: 30, category: 'MAJOR', color: '#C656CE' },
+            'embolden': { id: 'embolden', name: 'Embolden', image: 'https://xivapi.com/i/003000/003218.png', cd: 120, duration: 20, category: 'UTILITY', color: '#E87B7B' },
+            'magick_barrier': { id: 'magick_barrier', name: 'Magick Barrier', image: 'https://xivapi.com/i/003000/003222.png', cd: 120, duration: 10, category: 'RAID_MIT', color: '#6398CC' },
+            'addle': { id: 'addle', name: 'Addle', image: 'https://xivapi.com/i/000000/000861.png', cd: 90, duration: 10, category: 'SINGLE_MIT', color: '#888' },
+            'potion': { id: 'potion', name: 'Grade 8 Tincture', image: 'https://xivapi.com/i/020000/020701.png', cd: 270, duration: 30, category: 'UTILITY', color: '#E6B33D' },
+        });
+
+        const fetchBossMechanics = async () => ([
+            { time: 15, duration: 5, name: 'Raid Wide', type: 'aoe', color: '#ff4d4d' },
+            { time: 45, duration: 4, name: 'Tank Buster', type: 'tb', color: '#ff944d' },
+            { time: 60, duration: 0, name: 'Mechanic Start', type: 'mech', color: '#4da6ff' },
+            { time: 120, duration: 0, name: '2min Burst', type: 'window', color: '#ffcc00' },
+            { time: 140, duration: 5, name: 'Spread', type: 'mech', color: '#4da6ff' },
+            { time: 180, duration: 10, name: 'Transition', type: 'phase', color: '#a64dff' },
+            { time: 240, duration: 5, name: 'Stack', type: 'mech', color: '#ffcc00' },
+            { time: 360, duration: 0, name: 'Enrage', type: 'wipe', color: '#000000' },
+        ]);
+
+        // --- Logic: Overlap Calculation ---
+        const calculateCastTracks = (casts) => {
+            if (!casts || casts.length === 0) return { tracks: [], maxTracks: 1 };
+            // Sort: Start time asc, Duration desc
+            const sortedCasts = [...casts].sort((a, b) => a.timestamp - b.timestamp || b.duration - a.duration);
+            
+            const tracks = []; 
+            const results = [];
+
+            sortedCasts.forEach(cast => {
+                const castEnd = cast.timestamp + (cast.duration || 0) + 1; 
+                let placed = false;
+                for (let i = 0; i < tracks.length; i++) {
+                    if (tracks[i] <= cast.timestamp) {
+                        tracks[i] = castEnd;
+                        results.push({ ...cast, trackIndex: i });
+                        placed = true;
+                        break;
+                    }
+                }
+                if (!placed) {
+                    results.push({ ...cast, trackIndex: tracks.length });
+                    tracks.push(castEnd);
+                }
+            });
+
+            return { processedCasts: results, maxTracks: Math.max(1, tracks.length) };
+        };
+
+        // --- Components ---
+        const CategoryIcon = ({ type }) => {
+            switch(type) {
+                case 'swords': return <Swords size={14} />;
+                case 'shield': return <Shield size={14} />;
+                case 'shieldAlert': return <ShieldAlert size={14} />;
+                case 'zap': return <Zap size={14} />;
+                default: return <MoreHorizontal size={14} />;
+            }
+        };
+
+        const RenderIcon = ({ spell, className }) => {
+            if (spell.image) return <img src={spell.image} alt={spell.name} className={`w-full h-full object-cover ${className}`} />;
+            return <div className={`flex items-center justify-center w-full h-full text-sm select-none ${className}`}>{spell.char || '?'}</div>;
+        };
+
+        const getRandomName = () => {
+            const names = ['Cloud S.', 'Tifa L.', 'Aerith G.', 'Clive R.', 'Jill W.', 'Thancred W.', 'Y\'shtola R.', 'Urianger A.', 'Alisaie L.', 'Alphinaud L.', 'Estinien W.', 'G\'raha T.'];
+            return names[Math.floor(Math.random() * names.length)];
+        };
+
+        const generateRankings = (count, spells) => {
+            const spellList = Object.values(spells);
+            return Array.from({ length: count }).map((_, i) => {
+                const rank = i + 1;
+                const casts = [];
+                const deaths = [];
+                if (Math.random() > 0.9) deaths.push(Math.floor(Math.random() * 300) + 20);
+
+                // Mandatory Pattern
+                casts.push({ spellId: 'manafication', timestamp: Math.max(0, 0 + (Math.random()*2-1)), duration: 30 });
+                casts.push({ spellId: 'manafication', timestamp: 120 + (Math.random()*2-1), duration: 30 });
+                casts.push({ spellId: 'potion', timestamp: 2, duration: 30 });
+                casts.push({ spellId: 'embolden', timestamp: 4, duration: 20 });
+
+                // Random Fills
+                spellList.forEach(spell => {
+                    if (['potion', 'embolden', 'manafication'].includes(spell.id)) return;
+                    let time = 10 + Math.random() * 20; 
+                    while (time < FIGHT_DURATION) {
+                        const isDead = deaths.some(d => time >= d && time <= d + 10);
+                        if (!isDead) casts.push({ spellId: spell.id, timestamp: time, duration: spell.duration });
+                        time += spell.cd + (Math.random() * 10 - 2); 
+                    }
+                });
+
+                // Subsequent bursts
+                let burstTime = 124; 
+                while(burstTime < FIGHT_DURATION) {
+                     casts.push({ spellId: 'embolden', timestamp: burstTime, duration: 20 });
+                     if (burstTime > 130) casts.push({ spellId: 'manafication', timestamp: burstTime + 2, duration: 30 });
+                     if (burstTime > 270) casts.push({ spellId: 'potion', timestamp: burstTime - 2, duration: 30 });
+                     burstTime += 120;
+                }
+
+                return { rank, id: `player-${rank}`, name: getRandomName(), job: 'RDM', killTime: '6:20', partner: null, casts: casts.sort((a,b) => a.timestamp - b.timestamp), deaths };
+            });
+        };
+
+        // --- Main App ---
+        const App = () => {
+            const [zoom, setZoom] = useState(15); 
+            const [isCollapsed, setIsCollapsed] = useState(true); // Default: Collapsed (Stacked)
+            const [viewMode, setViewMode] = useState('damage');
+            const [selectedBoss, setSelectedBoss] = useState('M2S: Honey B. Lovely');
+            const [selectedSpec, setSelectedSpec] = useState('Red Mage');
+            
+            const [spellCategories, setSpellCategories] = useState({});
+            const [spells, setSpells] = useState({});
+            const [bossMechanics, setBossMechanics] = useState([]);
+            const [rankData, setRankData] = useState([]);
+            const [loading, setLoading] = useState(true);
+
+            const [showDuration, setShowDuration] = useState(true);
+            const [showCooldown, setShowCooldown] = useState(false);
+            const [showDeaths, setShowDeaths] = useState(true);
+            const [showPhases, setShowPhases] = useState(true);
+            const [showBossRow, setShowBossRow] = useState(true);
+
+            const [selectedSpells, setSelectedSpells] = useState(new Set());
+            const scrollContainerRef = useRef(null);
+
+            useEffect(() => {
+                const load = async () => {
+                    setLoading(true);
+                    const cats = await fetchSpellCategories();
+                    const sps = await fetchSpellData();
+                    const mechs = await fetchBossMechanics();
+                    const ranks = generateRankings(50, sps);
+                    setSpellCategories(cats); setSpells(sps); setBossMechanics(mechs); setRankData(ranks);
+                    setSelectedSpells(new Set(Object.values(sps).map(s => s.id)));
+                    setLoading(false);
+                };
+                load();
+            }, [selectedBoss, selectedSpec]);
+
+            const toggleSpell = (spellId) => {
+                const newSet = new Set(selectedSpells);
+                if (newSet.has(spellId)) newSet.delete(spellId); else newSet.add(spellId);
+                setSelectedSpells(newSet);
+            };
+
+            const toggleCategory = (catKey) => {
+                const spellsInCat = Object.values(spells).filter(s => s.category === catKey);
+                const allSelected = spellsInCat.every(s => selectedSpells.has(s.id));
+                const newSet = new Set(selectedSpells);
+                spellsInCat.forEach(s => {
+                    if (allSelected) newSet.delete(s.id); else newSet.add(s.id);
+                });
+                setSelectedSpells(newSet);
+            };
+
+            const handleZoomIn = () => setZoom(prev => Math.min(prev + 5, 60));
+            const handleZoomOut = () => setZoom(prev => Math.max(prev - 5, 5));
+            const formatTime = (s) => `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
+
+            if (loading) return <div className="h-screen bg-[#121212] flex items-center justify-center text-[#00FF96]">Loading...</div>;
+
+            return (
+                <div className="flex flex-col h-screen bg-[#121212] text-gray-300 font-sans overflow-hidden">
+                
+                {/* Navbar */}
+                <nav className="h-14 bg-[#1a1a1a] border-b border-gray-800 flex items-center justify-between px-4 shrink-0 z-[60]">
+                    <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-2">
+                            <Menu className="text-gray-400 cursor-pointer hover:text-white" size={20} />
+                            <div className="text-xl font-bold tracking-tight text-white flex items-center select-none"><span style={{ color: THEME_COLOR }} className="mr-1">FF</span>LORRGS</div>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm bg-black/30 px-3 py-1.5 rounded-md border border-gray-800">
+                            <span className="text-gray-400">Boss:</span>
+                            <select value={selectedBoss} onChange={(e) => setSelectedBoss(e.target.value)} className="bg-transparent text-white font-medium focus:outline-none focus:text-[#00FF96] cursor-pointer">
+                                <option>M1S: Black Cat</option><option>M2S: Honey B. Lovely</option><option>M3S: Brute Bomber</option><option>M4S: Wicked Thunder</option>
+                            </select>
+                            <span className="w-px h-3 bg-gray-600 mx-1"></span>
+                            <span className="text-gray-400">Spec:</span>
+                            <select value={selectedSpec} onChange={(e) => setSelectedSpec(e.target.value)} className="bg-transparent font-medium focus:outline-none focus:text-[#00FF96] cursor-pointer" style={{ color: JOB_COLOR_RDM }}>
+                                <option>Red Mage</option><option>Summoner</option><option>Black Mage</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <div className="relative">
+                            <select value={viewMode} onChange={(e) => setViewMode(e.target.value)} className="bg-[#0a0a0a] border border-gray-700 text-sm rounded-md pl-3 pr-8 py-1.5 text-gray-200 focus:outline-none focus:border-[#00FF96] cursor-pointer">
+                                <option value="damage">Damage</option><option value="healing">Healing</option><option value="boss_damage">Boss Damage</option>
+                            </select>
+                        </div>
+                        <div className="relative">
+                            <Search className="absolute left-2.5 top-1.5 text-gray-500" size={14} />
+                            <input type="text" placeholder="Search Player..." className="bg-[#0a0a0a] border border-gray-700 text-sm rounded-full pl-8 pr-3 py-1 w-48 focus:outline-none focus:border-[#00FF96] transition-colors"/>
+                        </div>
+                    </div>
+                </nav>
+
+                {/* Control Bar */}
+                <div className="bg-[#181818] border-b border-gray-800 px-4 py-2 shrink-0 flex items-center gap-4 overflow-x-auto no-scrollbar shadow-md z-50">
+                    <div className="flex flex-col gap-1 border-r border-gray-700 pr-4 shrink-0">
+                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Display</span>
+                        <div className="flex items-center gap-1">
+                            <button title="Duration" onClick={() => setShowDuration(!showDuration)} className={`w-8 h-6 flex items-center justify-center text-sm rounded border transition-colors ${showDuration ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>⏳</button>
+                            <button title="Cooldown" onClick={() => setShowCooldown(!showCooldown)} className={`w-8 h-6 flex items-center justify-center text-sm rounded border transition-colors ${showCooldown ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>💿</button>
+                            <button title="Deaths" onClick={() => setShowDeaths(!showDeaths)} className={`w-8 h-6 flex items-center justify-center text-sm rounded border transition-colors ${showDeaths ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>💀</button>
+                            <button title="Phases" onClick={() => setShowPhases(!showPhases)} className={`w-8 h-6 flex items-center justify-center text-sm rounded border transition-colors ${showPhases ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>🚧</button>
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-1 border-r border-gray-700 pr-4 shrink-0">
+                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Boss</span>
+                        <div className="flex items-center gap-2">
+                            <div className={`w-8 h-8 rounded border-2 overflow-hidden cursor-pointer transition ${showBossRow ? 'border-[#00FF96] opacity-100' : 'border-gray-700 opacity-50 grayscale'}`} onClick={() => setShowBossRow(!showBossRow)} title="Toggle Boss Row">
+                                <img src="https://xivapi.com/i/068000/068057.png" alt="Boss" className="w-full h-full object-cover" />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-6">
+                        {Object.entries(spellCategories).map(([catKey, category]) => (
+                            <div key={catKey} className="flex flex-col gap-1">
+                                <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-white" onClick={() => toggleCategory(catKey)}>
+                                    <CategoryIcon type={category.iconType} /> {category.label}
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                    {Object.values(spells).filter(spell => spell.category === catKey).map(spell => {
+                                        const isSelected = selectedSpells.has(spell.id);
+                                        return (
+                                            <button
+                                                key={spell.id}
+                                                onClick={() => toggleSpell(spell.id)}
+                                                className={`relative w-8 h-8 rounded border transition-all duration-200 group overflow-hidden ${isSelected ? 'border-transparent opacity-100 shadow-[0_0_10px_rgba(255,255,255,0.1)] grayscale-0' : 'border-gray-800 opacity-30 grayscale hover:opacity-70 hover:border-gray-600'}`}
+                                                title={spell.name}
+                                            >
+                                                <RenderIcon spell={spell} />
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex-1"></div>
+                    <div className="flex items-center gap-2 bg-black/20 p-1 rounded-lg border border-gray-800 shrink-0">
+                        {/* Stacking Toggle Button */}
+                        <button 
+                            onClick={() => setIsCollapsed(!isCollapsed)} 
+                            className={`p-1.5 rounded transition ${isCollapsed ? 'text-[#00FF96] bg-gray-700' : 'text-gray-400 hover:text-white hover:bg-gray-700'}`}
+                            title={isCollapsed ? "Expand Rows (Smart Stacking)" : "Collapse Rows"}
+                        >
+                            {isCollapsed ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+                        </button>
+                        <div className="w-px h-4 bg-gray-700 mx-1"></div>
+                        <button onClick={handleZoomOut} className="p-1.5 hover:bg-gray-700 rounded text-gray-400 hover:text-[#00FF96] transition"><ZoomOut size={16} /></button>
+                        <button onClick={handleZoomIn} className="p-1.5 hover:bg-gray-700 rounded text-gray-400 hover:text-[#00FF96] transition"><ZoomIn size={16} /></button>
+                    </div>
+                </div>
+
+                {/* Timeline */}
+                <div className="flex-1 flex overflow-hidden">
+                    <div className="flex-1 overflow-auto bg-[#121212] custom-scrollbar relative" ref={scrollContainerRef}>
+                        <div className="min-w-fit pb-10">
+                            
+                            <div className="sticky top-0 z-40 flex h-10 bg-[#202020] border-b border-gray-800">
+                                <div className="sticky left-0 bg-[#202020] border-r border-gray-800 w-[220px] shrink-0 flex items-center px-4 text-xs font-bold text-gray-500 uppercase z-50 shadow-[4px_0_10px_rgba(0,0,0,0.5)]">
+                                    <div className="w-8 text-center mr-2 text-[#00FF96]">Rank</div>
+                                    <div className="flex-1 text-left">Player</div>
+                                    <div className="w-8 text-center text-gray-600">Pair</div>
+                                </div>
+                                <div className="relative h-full" style={{ width: `${FIGHT_DURATION * zoom}px` }}>
+                                    {Array.from({ length: Math.ceil(FIGHT_DURATION / 30) + 1 }).map((_, i) => (
+                                        <div key={i} className="absolute bottom-0 border-l border-gray-600 pl-1 pb-1 text-[10px] text-gray-500 font-mono select-none" style={{ left: `${i * 30 * zoom}px` }}>{formatTime(i * 30)}</div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {showPhases && (
+                                <div className="absolute top-10 bottom-0 left-[220px] right-0 pointer-events-none z-0">
+                                    {bossMechanics.filter(m => m.type === 'phase' || m.type === 'window').map((mech, i) => (
+                                        <div key={i} className="absolute top-0 bottom-0 border-l border-dashed z-0" style={{ left: `${mech.time * zoom}px`, borderColor: mech.color || 'rgba(255,255,255,0.1)' }} />
+                                    ))}
+                                </div>
+                            )}
+
+                            {showBossRow && (
+                                <div className="flex h-10 border-b border-gray-800/60 bg-[#151515] hover:bg-[#1a1a1a] transition-colors group relative">
+                                    <div className="sticky left-0 bg-[#181818] border-r border-gray-800 w-[220px] shrink-0 flex items-center px-4 z-50 shadow-[4px_0_10px_rgba(0,0,0,0.5)]">
+                                        <div className="flex-1 font-bold text-gray-300">Boss Timeline</div>
+                                    </div>
+                                    <div className="relative h-full z-10" style={{ width: `${FIGHT_DURATION * zoom}px` }}>
+                                        {bossMechanics.map((mech, i) => (
+                                            <div key={i} className="absolute top-1/2 -translate-y-1/2 h-6 rounded border border-white/10 flex items-center justify-center text-[10px] text-white/90 overflow-hidden shadow-sm" style={{ left: `${mech.time * zoom}px`, width: mech.duration > 0 ? `${Math.max(mech.duration * zoom, 20)}px` : '20px', backgroundColor: mech.color }} title={`${mech.name} (${mech.time}s)`}>
+                                                <span className="truncate px-1">{mech.name}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {rankData.map((row) => {
+                                const visibleCasts = row.casts.filter(cast => selectedSpells.has(cast.spellId));
+                                
+                                // LOGIC BRANCH: Collapsed vs Smart Stacking
+                                const { processedCasts, maxTracks } = isCollapsed 
+                                    ? { processedCasts: visibleCasts.map(c => ({ ...c, trackIndex: 0 })), maxTracks: 1 }
+                                    : calculateCastTracks(visibleCasts);
+
+                                const rowHeight = 50; 
+                                const totalHeight = isCollapsed ? rowHeight : Math.max(rowHeight, maxTracks * 30);
+
+                                return (
+                                    <div key={row.id} className="flex border-b border-gray-800/40 hover:bg-[#1a1a1a] transition-colors group relative" style={{ height: `${totalHeight}px` }}>
+                                        <div className="sticky left-0 bg-[#161616] group-hover:bg-[#1e1e1e] border-r border-gray-800 w-[220px] shrink-0 flex items-center px-4 z-50 transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.2)]">
+                                            <div className="w-8 text-center mr-2 font-mono text-gray-500 text-sm">{row.rank}</div>
+                                            <div className="flex-1 flex flex-col justify-center truncate pr-2">
+                                                <span className="text-sm font-medium text-gray-200 truncate">{row.name}</span>
+                                                <span className="text-[10px] text-gray-500">{viewMode === 'damage' ? '24.5k DPS' : 'Healing...'} • {row.job}</span>
+                                            </div>
+                                            <div className="w-8 text-center text-gray-700 text-xs">-</div>
+                                        </div>
+
+                                        <div className="relative h-full z-10" style={{ width: `${FIGHT_DURATION * zoom}px` }}>
+                                            {Array.from({ length: Math.ceil(FIGHT_DURATION / 30) + 1 }).map((_, i) => (
+                                                <div key={i} className="absolute top-0 bottom-0 border-l border-gray-800/20 pointer-events-none" style={{ left: `${i * 30 * zoom}px` }} />
+                                            ))}
+                                            {showDeaths && row.deaths.map((deathTime, dIdx) => (
+                                                <div key={dIdx} className="absolute top-1/2 -translate-y-1/2 text-gray-600 z-0" style={{ left: `${deathTime * zoom}px` }}><Skull size={16} /></div>
+                                            ))}
+
+                                            {processedCasts.map((cast, cIdx) => {
+                                                const spell = spells[cast.spellId];
+                                                if (!spell) return null;
+                                                
+                                                const sliceHeight = 100 / maxTracks;
+                                                const topPos = cast.trackIndex * sliceHeight;
+                                                // Icon size logic:
+                                                // Collapsed: Fixed 80% of rowHeight (40px) -> min(40, 50*0.8)
+                                                // Expanded: 80% of the slice height
+                                                const trackPixelHeight = totalHeight / maxTracks;
+                                                const iconSize = Math.min(36, trackPixelHeight * 0.8);
+
+                                                return (
+                                                    <div
+                                                        key={cIdx}
+                                                        className="absolute flex items-center group/icon"
+                                                        style={{ 
+                                                            left: `${cast.timestamp * zoom}px`,
+                                                            top: `${topPos}%`,
+                                                            height: `${sliceHeight}%`,
+                                                            zIndex: 20 // Base z-index for the wrapper
+                                                        }}
+                                                    >
+                                                        {/* Icon - Higher Z-Index to stay above overlapping bars in collapsed mode */}
+                                                        <div 
+                                                            className="rounded-sm bg-gray-900 border flex items-center justify-center text-sm hover:scale-110 hover:z-[100] transition-transform cursor-pointer shadow-sm relative overflow-hidden z-30"
+                                                            style={{ 
+                                                                borderColor: spell.color,
+                                                                height: `${iconSize}px`,
+                                                                width: `${iconSize}px`,
+                                                                minWidth: `${iconSize}px`
+                                                            }}
+                                                            title={`${spell.name} @ ${formatTime(cast.timestamp)}`}
+                                                        >
+                                                            <RenderIcon spell={spell} />
+                                                        </div>
+
+                                                        {/* Duration Block - Lower Z-Index */}
+                                                        {showDuration && cast.duration > 0 && (
+                                                            <div 
+                                                                className="absolute left-0 z-10 shadow-sm"
+                                                                style={{ 
+                                                                    left: `${iconSize - 1}px`, 
+                                                                    width: `${cast.duration * zoom}px`,
+                                                                    height: `${iconSize}px`, 
+                                                                    backgroundColor: spell.color,
+                                                                    opacity: 0.6
+                                                                }}
+                                                            />
+                                                        )}
+                                                        
+                                                        {showCooldown && (
+                                                            <div className="absolute left-0 h-px bg-gray-600/50 z-0" style={{ left: `${iconSize}px`, width: `${spell.cd * zoom}px`, top: '50%' }} />
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+                </div>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
