@@ -6,6 +6,7 @@ eg.: spells, classes, specs
 from __future__ import annotations
 
 # IMPORT THIRD PARTY LIBRARIES
+from typing import Union
 import fastapi
 
 # IMPORT LOCAL LIBRARIES
@@ -69,7 +70,7 @@ async def get_spec(spec_slug: str) -> WowSpec:
 
 
 @router.get("/specs/{spec_slug}/spells", tags=["specs"])
-async def get_spec_spells(spec_slug: str) -> dict[int, WowSpell]:
+async def get_spec_spells(spec_slug: str) -> dict[Union[int, str], dict]:
     """Get all spells for a given spec.
 
     Args:
@@ -92,7 +93,7 @@ async def get_spec_spells(spec_slug: str) -> dict[int, WowSpell]:
 
 
 @router.get("/spells/{spell_id}", tags=["spells"])
-async def spells_one(spell_id: int) -> WowSpell:
+async def spells_one(spell_id: Union[int, str]) -> WowSpell:
     """Get a single Spell by spell_id."""
     spell = WowSpell.get(spell_id=spell_id)
     if not spell:
@@ -101,7 +102,7 @@ async def spells_one(spell_id: int) -> WowSpell:
 
 
 @router.get("/spells", tags=["spells"])
-async def spells_all() -> dict[int, WowSpell]:
+async def spells_all() -> dict[Union[int, str], WowSpell]:
     """Get all Spells."""
     return {spell.spell_id: spell for spell in WowSpell.list()}
 

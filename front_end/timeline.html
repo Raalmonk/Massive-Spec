@@ -113,6 +113,7 @@
                     cd: spell.cooldown || 0,
                     duration: spell.duration || 0,
                     color: spell.color || '#ffcc00',
+                    desc: spell.desc || '',
 
                     // Fix: Dynamic Category
                     category: resolveCategory(spell.tags, spell.name)
@@ -464,7 +465,7 @@
                                                                 width: `${iconSize}px`,
                                                                 minWidth: `${iconSize}px`
                                                             }}
-                                                            title={`${spell.name} @ ${formatTime(cast.timestamp)}`}
+                                                            title={`${spell.name}\n${spell.desc}\n@ ${formatTime(cast.timestamp)}`}
                                                         >
                                                             <RenderIcon spell={spell} />
                                                         </div>
