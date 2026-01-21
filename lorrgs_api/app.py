@@ -4,6 +4,7 @@ from __future__ import annotations
 
 # IMPORT THIRD PARTY LIBRARIES
 import fastapi
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.gzip import GZipMiddleware
 
 # IMPORT LOCAL LIBRARIES
@@ -27,6 +28,7 @@ def create_app() -> fastapi.FastAPI:
     )
 
     app.include_router(api.router, prefix="/api")
+    app.mount("/lorrgs_assets", StaticFiles(directory="lorrgs_assets"), name="assets")
 
     cors_middleware.init(app)
     cache_middleware.init(app)
