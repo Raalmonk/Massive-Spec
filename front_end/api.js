@@ -1,7 +1,8 @@
 
-async function loadFightData(reportId, fightId, specSlug = 'redmage-redmage') {
+async function loadFightData(reportId, fightId) {
     // URL structure: http://127.0.0.1:5000/api/fight_analysis/<ReportID>/<FightID>
-    const url = `http://127.0.0.1:5000/api/fight_analysis/${reportId}/${fightId}?spec=${specSlug}`;
+    // Hardcoded spec parameter for now as requested
+    const url = `http://127.0.0.1:5000/api/fight_analysis/${reportId}/${fightId}?spec=redmage-redmage`;
 
     console.log(`[FFLorrgs] Fetching data from: ${url}`);
 
@@ -18,28 +19,12 @@ async function loadFightData(reportId, fightId, specSlug = 'redmage-redmage') {
 
         // Call the render function if it exists
         if (typeof renderCanvas === 'function') {
-            renderCanvas(data, specSlug);
+            renderCanvas(data);
         } else {
             console.error("renderCanvas function is not defined!");
         }
 
     } catch (error) {
         console.error("[FFLorrgs] Failed to fetch fight data:", error);
-    }
-}
-
-async function loadSpellData(specSlug) {
-    const url = `http://127.0.0.1:5000/api/specs/${specSlug}/spells`;
-    console.log(`[FFLorrgs] Fetching spell data from: ${url}`);
-
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error("[FFLorrgs] Failed to fetch spell data:", error);
-        return {};
     }
 }
