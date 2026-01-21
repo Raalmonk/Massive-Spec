@@ -123,8 +123,8 @@
             return spellMap;
         };
 
-        // 2. fetchRankings (New Function)
-        const fetchRankings = async (specSlug, bossSlug, spellMap) => {
+        // 2. fetchRankings (New Function with Caching)
+        const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = []) => {
             console.log('[FFLorrgs] Starting fetch for:', specSlug, bossSlug);
 
             try {
@@ -159,10 +159,37 @@
                 allPlayers.sort((a, b) => b.total - a.total);
                 const topPlayers = allPlayers.slice(0, 5);
 
-                console.log('[FFLorrgs] Processed Top 5 Players:', topPlayers);
-
-                // Map to rankData format
+                // Map to rankData format with Caching
                 const rankData = topPlayers.map((player, index) => {
+                     const id = `player-${player.source_id || index}`;
+
+                     // Helper: Derive Job Name from specSlug
+                     // e.g. "redmage-redmage" -> "Red Mage" (approx) or just "RDM"
+                     // Mapping based on known slugs:
+                     const JOB_MAP = {
+                        'redmage-redmage': 'RDM',
+                        'summoner-summoner': 'SMN',
+                        'blackmage-blackmage': 'BLM'
+                     };
+                     const job = JOB_MAP[specSlug] || specSlug.split('-')[0].toUpperCase();
+
+                     const dps = player.total;
+
+                     // --- Smart Caching Check ---
+                     const existing = currentRankData.find(p => p.id === id);
+
+                     if (existing) {
+                        const dpsMatch = Math.abs((existing.dps || 0) - dps) < 0.1;
+                        const jobMatch = existing.job === job;
+
+                        if (jobMatch && dpsMatch) {
+                            console.log('[FFLorrgs] Cache hit (ID+Job+DPS match) - reusing data for:', player.name);
+                            // Return shallow copy with updated rank, reusing expensive 'casts'
+                            return { ...existing, rank: index + 1 };
+                        }
+                     }
+
+                     // New Data Mapping
                      // Duration is in ms. KillTime formatted as M:SS
                      const durationSeconds = player.fightDuration / 1000;
                      const m = Math.floor(durationSeconds / 60);
@@ -170,9 +197,10 @@
 
                      return {
                         rank: index + 1,
-                        id: `player-${player.source_id || index}`,
+                        id: id,
                         name: player.name,
-                        job: 'RDM',
+                        job: job,
+                        dps: dps, // Stored for caching
                         killTime: `${m}:${s}`,
                         partner: null,
                         casts: (player.casts || []).map(c => ({
@@ -184,6 +212,7 @@
                     };
                 });
 
+                console.log('[FFLorrgs] Final Top 5 Players (updated):', rankData);
                 return rankData;
             } catch (error) {
                 console.error('[FFLorrgs] Error fetching rankings:', error);
@@ -307,8 +336,8 @@
                     const sps = await fetchSpellData(selectedSpec);
                     const mechs = await fetchBossMechanics(selectedBoss);
 
-                    // Call fetchRankings instead of fetchFightData
-                    const ranks = await fetchRankings(selectedSpec, selectedBoss, sps);
+                    // Call fetchRankings with current rankData for "Smart Caching"
+                    const ranks = await fetchRankings(selectedSpec, selectedBoss, sps, rankData);
 
                     setSpellCategories(cats); setSpells(sps); setBossMechanics(mechs); setRankData(ranks);
                     setSelectedSpells(new Set(Object.values(sps).map(s => s.id)));
