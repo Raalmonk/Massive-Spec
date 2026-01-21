@@ -68,6 +68,7 @@
         const THEME_COLOR = '#00FF96';
         const JOB_COLOR_RDM = '#E87B7B';
         const FIGHT_DURATION = 380; // seconds
+        const API_BASE = 'http://127.0.0.1:5000';
 
         // --- Mock Data Layer ---
         const fetchSpellCategories = async () => ({
@@ -79,7 +80,7 @@
 
         // 1. fetchSpellData (API)
         const fetchSpellData = async (specSlug = 'redmage-redmage') => {
-            const res = await fetch(`http://127.0.0.1:5000/api/specs/${specSlug}/spells`);
+            const res = await fetch(`${API_BASE}/api/specs/${specSlug}/spells`);
             const data = await res.json();
 
             // Helper to map Backend Tags -> Frontend Categories
@@ -107,7 +108,7 @@
                 spellMap[spell.spell_id] = {
                     id: spell.spell_id,
                     name: spell.name,
-                    image: spell.icon.startsWith('http') ? spell.icon : 'http://127.0.0.1:5000/lorrgs_assets/images/spells/' + spell.icon,
+                    image: spell.icon.startsWith('http') ? spell.icon : `${API_BASE}/lorrgs_assets/images/spells/` + spell.icon,
 
                     // Fix: Actually read cooldown/duration from API
                     cd: spell.cooldown || 0,
@@ -125,7 +126,7 @@
         // 2. fetchFightData (API)
         const fetchFightData = async (reportId, fightId, spellMap) => {
             // 接口：/api/fight_analysis/{report_id}/{fight_id}
-            const res = await fetch(`http://127.0.0.1:5000/api/fight_analysis/${reportId}/${fightId}?spec=redmage-redmage`);
+            const res = await fetch(`${API_BASE}/api/fight_analysis/${reportId}/${fightId}?spec=redmage-redmage`);
             const data = await res.json();
 
             // 映射到 React State 需要的结构 (rankData)
@@ -148,16 +149,46 @@
             }));
         };
 
-        const fetchBossMechanics = async () => ([
-            { time: 15, duration: 5, name: 'Raid Wide', type: 'aoe', color: '#ff4d4d' },
-            { time: 45, duration: 4, name: 'Tank Buster', type: 'tb', color: '#ff944d' },
-            { time: 60, duration: 0, name: 'Mechanic Start', type: 'mech', color: '#4da6ff' },
-            { time: 120, duration: 0, name: '2min Burst', type: 'window', color: '#ffcc00' },
-            { time: 140, duration: 5, name: 'Spread', type: 'mech', color: '#4da6ff' },
-            { time: 180, duration: 10, name: 'Transition', type: 'phase', color: '#a64dff' },
-            { time: 240, duration: 5, name: 'Stack', type: 'mech', color: '#ffcc00' },
-            { time: 360, duration: 0, name: 'Enrage', type: 'wipe', color: '#000000' },
-        ]);
+        const parseTime = (timeStr) => {
+            if (!timeStr) return 0;
+            const parts = timeStr.split(':');
+            if (parts.length === 2) {
+                return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+            }
+            return parseInt(timeStr);
+        };
+
+        const fetchBossMechanics = async (bossSlug) => {
+            if (!bossSlug) return [];
+            try {
+                const res = await fetch(`${API_BASE}/api/bosses/${bossSlug}/spells`);
+                const data = await res.json();
+
+                return Object.values(data)
+                    .filter(spell => spell.time)
+                    .map(spell => {
+                        let color = '#4da6ff'; // Default Blue
+                        const tags = spell.tags || [];
+                        const tagSet = new Set(tags.map(t => String(t).toLowerCase()));
+
+                        if (tagSet.has('raid_mit') || tagSet.has('raid_cd')) color = '#8657FF'; // Purple
+                        else if (tagSet.has('tank_mit') || tagSet.has('tank')) color = '#ff944d'; // Orange
+                        else if (tagSet.has('utility')) color = '#E6B33D'; // Gold
+
+                        return {
+                            time: parseTime(spell.time),
+                            duration: spell.duration || 5,
+                            name: spell.name,
+                            type: 'mech',
+                            color: color
+                        };
+                    })
+                    .sort((a, b) => a.time - b.time);
+            } catch (e) {
+                console.error("Failed to fetch boss mechanics", e);
+                return [];
+            }
+        };
 
         // --- Logic: Overlap Calculation ---
         const calculateCastTracks = (casts) => {
@@ -209,7 +240,7 @@
             const [zoom, setZoom] = useState(15);
             const [isCollapsed, setIsCollapsed] = useState(true); // Default: Collapsed (Stacked)
             const [viewMode, setViewMode] = useState('damage');
-            const [selectedBoss, setSelectedBoss] = useState('M2S: Honey B. Lovely');
+            const [selectedBoss, setSelectedBoss] = useState('vamp-fatale');
             const [selectedSpec, setSelectedSpec] = useState('Red Mage');
             
             const [spellCategories, setSpellCategories] = useState({});
@@ -232,7 +263,7 @@
                     setLoading(true);
                     const cats = await fetchSpellCategories();
                     const sps = await fetchSpellData();
-                    const mechs = await fetchBossMechanics();
+                    const mechs = await fetchBossMechanics(selectedBoss);
 
                     // 2. 加载真实战斗 (使用测试 ID)
                     // Report: vyHg3TtcKp614LkD, Fight: 33
@@ -281,7 +312,11 @@
                         <div className="flex items-center gap-2 text-sm bg-black/30 px-3 py-1.5 rounded-md border border-gray-800">
                             <span className="text-gray-400">Boss:</span>
                             <select value={selectedBoss} onChange={(e) => setSelectedBoss(e.target.value)} className="bg-transparent text-white font-medium focus:outline-none focus:text-[#00FF96] cursor-pointer">
-                                <option>M1S: Black Cat</option><option>M2S: Honey B. Lovely</option><option>M3S: Brute Bomber</option><option>M4S: Wicked Thunder</option>
+                                <option value="vamp-fatale">M9S: Vamp Fatale</option>
+                                <option value="red-hot-and-deep-blue">M10S: Red Hot and Deep Blue</option>
+                                <option value="the-tyrant">M11S: The Tyrant</option>
+                                <option value="lindwurm">M12S P1: Lindwurm</option>
+                                <option value="lindwurm-ii">M12S P2: Lindwurm II</option>
                             </select>
                             <span className="w-px h-3 bg-gray-600 mx-1"></span>
                             <span className="text-gray-400">Spec:</span>

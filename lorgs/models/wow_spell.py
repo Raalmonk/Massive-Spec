@@ -86,6 +86,7 @@ class WowSpell(base.MemoryModel):
     duration: float = 0.0
     icon: str = ""
     name: str = ""
+    time: str = ""
     color: str = ""
     show: bool = True
     desc: str = ""
@@ -180,6 +181,7 @@ class WowSpell(base.MemoryModel):
             # display attributes
             "name": self.name,
             "icon": self.icon,
+            "time": self.time,
             "color": self.color,
             "show": self.show,
             "tooltip": self.tooltip,
