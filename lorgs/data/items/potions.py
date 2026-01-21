@@ -16,14 +16,6 @@ from lorgs.models.wow_spell import SpellTag
 #
 
 # generic pots for all specs
-WowPotion(
-    spell_id=6262,
-    cooldown=0,  # no cooldown per se. One per fight use.
-    color="#63cf48",
-    name="Healthstone",
-    icon="warlock_-healthstone.jpg",
-    item=5512,
-).add_specs(*ALL_SPECS)
 
 
 ################################################################################
