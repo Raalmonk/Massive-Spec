@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FFLorrgs - Timeline Preview</title>
-    
+
     <!-- 1. Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- 2. Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
@@ -41,11 +41,11 @@
             display: none;
         }
         .no-scrollbar {
-            -ms-overflow-style: none; 
-            scrollbar-width: none; 
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
         body { margin: 0; overflow: hidden; background-color: #121212; }
-        
+
         select {
             appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
@@ -65,8 +65,8 @@
         import { ZoomIn, ZoomOut, Search, Menu, Skull, Clock, Hourglass, Shield, ShieldAlert, Zap, Swords, MoreHorizontal, Layers, Minimize2, Maximize2 } from 'https://esm.sh/lucide-react@0.263.1?dev';
 
         // --- Configuration ---
-        const THEME_COLOR = '#00FF96'; 
-        const JOB_COLOR_RDM = '#E87B7B'; 
+        const THEME_COLOR = '#00FF96';
+        const JOB_COLOR_RDM = '#E87B7B';
         const FIGHT_DURATION = 380; // seconds
 
         // --- Mock Data Layer ---
@@ -77,13 +77,52 @@
             UTILITY: { label: 'Utility', color: '#E6B33D', iconType: 'zap' },
         });
 
-        const fetchSpellData = async () => ({
-            'manafication': { id: 'manafication', name: 'Manafication', image: 'https://xivapi.com/i/003000/003219.png', cd: 110, duration: 30, category: 'MAJOR', color: '#C656CE' },
-            'embolden': { id: 'embolden', name: 'Embolden', image: 'https://xivapi.com/i/003000/003218.png', cd: 120, duration: 20, category: 'UTILITY', color: '#E87B7B' },
-            'magick_barrier': { id: 'magick_barrier', name: 'Magick Barrier', image: 'https://xivapi.com/i/003000/003222.png', cd: 120, duration: 10, category: 'RAID_MIT', color: '#6398CC' },
-            'addle': { id: 'addle', name: 'Addle', image: 'https://xivapi.com/i/000000/000861.png', cd: 90, duration: 10, category: 'SINGLE_MIT', color: '#888' },
-            'potion': { id: 'potion', name: 'Grade 8 Tincture', image: 'https://xivapi.com/i/020000/020701.png', cd: 270, duration: 30, category: 'UTILITY', color: '#E6B33D' },
-        });
+        // 1. fetchSpellData (API)
+        const fetchSpellData = async (specSlug = 'redmage-redmage') => {
+            // 接口：/api/specs/{spec_slug}/spells
+            const res = await fetch(`http://127.0.0.1:5000/api/specs/${specSlug}/spells`);
+            const data = await res.json();
+
+            // 数据清洗：把后端的 snake_case 转成前端需要的格式
+            const spellMap = {};
+            Object.values(data).forEach(spell => {
+                spellMap[spell.spell_id] = {
+                    id: spell.spell_id,      // 注意：后端是 int
+                    name: spell.name,
+                    image: `/lorrgs_assets/images/spells/${spell.icon}`,
+                    cd: spell.cooldown || 0,
+                    duration: spell.duration || 0,
+                    color: spell.color || '#ffcc00',
+                    category: 'MAJOR' // 暂时默认，后面再优化
+                };
+            });
+            return spellMap;
+        };
+
+        // 2. fetchFightData (API)
+        const fetchFightData = async (reportId, fightId) => {
+            // 接口：/api/fight_analysis/{report_id}/{fight_id}
+            const res = await fetch(`http://127.0.0.1:5000/api/fight_analysis/${reportId}/${fightId}?spec=redmage-redmage`);
+            const data = await res.json();
+
+            // 映射到 React State 需要的结构 (rankData)
+            // 后端返回的是 { players: [...] }
+            return data.players.map((player, index) => ({
+                rank: index + 1,
+                id: `player-${player.source_id}`,
+                name: player.name,
+                job: 'RDM',
+                killTime: '6:20',
+                partner: null,
+                // 关键映射：后端 timestamp 是毫秒，前端时间轴用的是秒
+                casts: player.casts.map(c => ({
+                    spellId: c.spell_id,
+                    timestamp: c.timestamp / 1000,
+                    duration: 0 // 后端 cast 暂无 duration，设为 0
+                })),
+                deaths: []
+            }));
+        };
 
         const fetchBossMechanics = async () => ([
             { time: 15, duration: 5, name: 'Raid Wide', type: 'aoe', color: '#ff4d4d' },
@@ -101,12 +140,12 @@
             if (!casts || casts.length === 0) return { tracks: [], maxTracks: 1 };
             // Sort: Start time asc, Duration desc
             const sortedCasts = [...casts].sort((a, b) => a.timestamp - b.timestamp || b.duration - a.duration);
-            
-            const tracks = []; 
+
+            const tracks = [];
             const results = [];
 
             sortedCasts.forEach(cast => {
-                const castEnd = cast.timestamp + (cast.duration || 0) + 1; 
+                const castEnd = cast.timestamp + (cast.duration || 0) + 1;
                 let placed = false;
                 for (let i = 0; i < tracks.length; i++) {
                     if (tracks[i] <= cast.timestamp) {
@@ -141,52 +180,9 @@
             return <div className={`flex items-center justify-center w-full h-full text-sm select-none ${className}`}>{spell.char || '?'}</div>;
         };
 
-        const getRandomName = () => {
-            const names = ['Cloud S.', 'Tifa L.', 'Aerith G.', 'Clive R.', 'Jill W.', 'Thancred W.', 'Y\'shtola R.', 'Urianger A.', 'Alisaie L.', 'Alphinaud L.', 'Estinien W.', 'G\'raha T.'];
-            return names[Math.floor(Math.random() * names.length)];
-        };
-
-        const generateRankings = (count, spells) => {
-            const spellList = Object.values(spells);
-            return Array.from({ length: count }).map((_, i) => {
-                const rank = i + 1;
-                const casts = [];
-                const deaths = [];
-                if (Math.random() > 0.9) deaths.push(Math.floor(Math.random() * 300) + 20);
-
-                // Mandatory Pattern
-                casts.push({ spellId: 'manafication', timestamp: Math.max(0, 0 + (Math.random()*2-1)), duration: 30 });
-                casts.push({ spellId: 'manafication', timestamp: 120 + (Math.random()*2-1), duration: 30 });
-                casts.push({ spellId: 'potion', timestamp: 2, duration: 30 });
-                casts.push({ spellId: 'embolden', timestamp: 4, duration: 20 });
-
-                // Random Fills
-                spellList.forEach(spell => {
-                    if (['potion', 'embolden', 'manafication'].includes(spell.id)) return;
-                    let time = 10 + Math.random() * 20; 
-                    while (time < FIGHT_DURATION) {
-                        const isDead = deaths.some(d => time >= d && time <= d + 10);
-                        if (!isDead) casts.push({ spellId: spell.id, timestamp: time, duration: spell.duration });
-                        time += spell.cd + (Math.random() * 10 - 2); 
-                    }
-                });
-
-                // Subsequent bursts
-                let burstTime = 124; 
-                while(burstTime < FIGHT_DURATION) {
-                     casts.push({ spellId: 'embolden', timestamp: burstTime, duration: 20 });
-                     if (burstTime > 130) casts.push({ spellId: 'manafication', timestamp: burstTime + 2, duration: 30 });
-                     if (burstTime > 270) casts.push({ spellId: 'potion', timestamp: burstTime - 2, duration: 30 });
-                     burstTime += 120;
-                }
-
-                return { rank, id: `player-${rank}`, name: getRandomName(), job: 'RDM', killTime: '6:20', partner: null, casts: casts.sort((a,b) => a.timestamp - b.timestamp), deaths };
-            });
-        };
-
         // --- Main App ---
         const App = () => {
-            const [zoom, setZoom] = useState(15); 
+            const [zoom, setZoom] = useState(15);
             const [isCollapsed, setIsCollapsed] = useState(true); // Default: Collapsed (Stacked)
             const [viewMode, setViewMode] = useState('damage');
             const [selectedBoss, setSelectedBoss] = useState('M2S: Honey B. Lovely');
@@ -213,7 +209,11 @@
                     const cats = await fetchSpellCategories();
                     const sps = await fetchSpellData();
                     const mechs = await fetchBossMechanics();
-                    const ranks = generateRankings(50, sps);
+
+                    // 2. 加载真实战斗 (使用测试 ID)
+                    // Report: aeda436cdee27320ae6043a8e34cd358801112fa, Fight: 1
+                    const ranks = await fetchFightData('aeda436cdee27320ae6043a8e34cd358801112fa', 1);
+
                     setSpellCategories(cats); setSpells(sps); setBossMechanics(mechs); setRankData(ranks);
                     setSelectedSpells(new Set(Object.values(sps).map(s => s.id)));
                     setLoading(false);
@@ -245,7 +245,7 @@
 
             return (
                 <div className="flex flex-col h-screen bg-[#121212] text-gray-300 font-sans overflow-hidden">
-                
+
                 {/* Navbar */}
                 <nav className="h-14 bg-[#1a1a1a] border-b border-gray-800 flex items-center justify-between px-4 shrink-0 z-[60]">
                     <div className="flex items-center gap-6">
@@ -324,8 +324,8 @@
                     <div className="flex-1"></div>
                     <div className="flex items-center gap-2 bg-black/20 p-1 rounded-lg border border-gray-800 shrink-0">
                         {/* Stacking Toggle Button */}
-                        <button 
-                            onClick={() => setIsCollapsed(!isCollapsed)} 
+                        <button
+                            onClick={() => setIsCollapsed(!isCollapsed)}
                             className={`p-1.5 rounded transition ${isCollapsed ? 'text-[#00FF96] bg-gray-700' : 'text-gray-400 hover:text-white hover:bg-gray-700'}`}
                             title={isCollapsed ? "Expand Rows (Smart Stacking)" : "Collapse Rows"}
                         >
@@ -341,7 +341,7 @@
                 <div className="flex-1 flex overflow-hidden">
                     <div className="flex-1 overflow-auto bg-[#121212] custom-scrollbar relative" ref={scrollContainerRef}>
                         <div className="min-w-fit pb-10">
-                            
+
                             <div className="sticky top-0 z-40 flex h-10 bg-[#202020] border-b border-gray-800">
                                 <div className="sticky left-0 bg-[#202020] border-r border-gray-800 w-[220px] shrink-0 flex items-center px-4 text-xs font-bold text-gray-500 uppercase z-50 shadow-[4px_0_10px_rgba(0,0,0,0.5)]">
                                     <div className="w-8 text-center mr-2 text-[#00FF96]">Rank</div>
@@ -380,13 +380,13 @@
 
                             {rankData.map((row) => {
                                 const visibleCasts = row.casts.filter(cast => selectedSpells.has(cast.spellId));
-                                
+
                                 // LOGIC BRANCH: Collapsed vs Smart Stacking
-                                const { processedCasts, maxTracks } = isCollapsed 
+                                const { processedCasts, maxTracks } = isCollapsed
                                     ? { processedCasts: visibleCasts.map(c => ({ ...c, trackIndex: 0 })), maxTracks: 1 }
                                     : calculateCastTracks(visibleCasts);
 
-                                const rowHeight = 50; 
+                                const rowHeight = 50;
                                 const totalHeight = isCollapsed ? rowHeight : Math.max(rowHeight, maxTracks * 30);
 
                                 return (
@@ -411,7 +411,7 @@
                                             {processedCasts.map((cast, cIdx) => {
                                                 const spell = spells[cast.spellId];
                                                 if (!spell) return null;
-                                                
+
                                                 const sliceHeight = 100 / maxTracks;
                                                 const topPos = cast.trackIndex * sliceHeight;
                                                 // Icon size logic:
@@ -424,7 +424,7 @@
                                                     <div
                                                         key={cIdx}
                                                         className="absolute flex items-center group/icon"
-                                                        style={{ 
+                                                        style={{
                                                             left: `${cast.timestamp * zoom}px`,
                                                             top: `${topPos}%`,
                                                             height: `${sliceHeight}%`,
@@ -432,9 +432,9 @@
                                                         }}
                                                     >
                                                         {/* Icon - Higher Z-Index to stay above overlapping bars in collapsed mode */}
-                                                        <div 
+                                                        <div
                                                             className="rounded-sm bg-gray-900 border flex items-center justify-center text-sm hover:scale-110 hover:z-[100] transition-transform cursor-pointer shadow-sm relative overflow-hidden z-30"
-                                                            style={{ 
+                                                            style={{
                                                                 borderColor: spell.color,
                                                                 height: `${iconSize}px`,
                                                                 width: `${iconSize}px`,
@@ -447,18 +447,18 @@
 
                                                         {/* Duration Block - Lower Z-Index */}
                                                         {showDuration && cast.duration > 0 && (
-                                                            <div 
+                                                            <div
                                                                 className="absolute left-0 z-10 shadow-sm"
-                                                                style={{ 
-                                                                    left: `${iconSize - 1}px`, 
+                                                                style={{
+                                                                    left: `${iconSize - 1}px`,
                                                                     width: `${cast.duration * zoom}px`,
-                                                                    height: `${iconSize}px`, 
+                                                                    height: `${iconSize}px`,
                                                                     backgroundColor: spell.color,
                                                                     opacity: 0.6
                                                                 }}
                                                             />
                                                         )}
-                                                        
+
                                                         {showCooldown && (
                                                             <div className="absolute left-0 h-px bg-gray-600/50 z-0" style={{ left: `${iconSize}px`, width: `${spell.cd * zoom}px`, top: '50%' }} />
                                                         )}
