@@ -1,0 +1,2100 @@
+{
+  "name": "Wuju Smorc",
+  "source_id": 4,
+  "class": "redmage",
+  "spec": "redmage-redmage",
+  "role": "rdps",
+  "total": 43526,
+  "casts": [
+    {
+      "spell_id": 25856,
+      "timestamp": 401,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 1025,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7561,
+      "timestamp": 1693,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 34603669,
+      "timestamp": 2358,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 3516,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7517,
+      "timestamp": 4186,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 4186,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7518,
+      "timestamp": 4898,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 6014,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7520,
+      "timestamp": 6638,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7521,
+      "timestamp": 7216,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 7659,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 45960,
+      "timestamp": 8505,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7519,
+      "timestamp": 9084,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 45961,
+      "timestamp": 10022,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 16527,
+      "timestamp": 10602,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 11137,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 45962,
+      "timestamp": 11493,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7506,
+      "timestamp": 12119,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 25857,
+      "timestamp": 12832,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7525,
+      "timestamp": 13722,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7560,
+      "timestamp": 14301,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 14614,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 37007,
+      "timestamp": 15013,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 16530,
+      "timestamp": 16174,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 37005,
+      "timestamp": 16798,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7506,
+      "timestamp": 17420,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 18087,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 25858,
+      "timestamp": 18667,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 16527,
+      "timestamp": 19202,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 37006,
+      "timestamp": 21161,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 21561,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 7518,
+      "timestamp": 22452,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7510,
+      "timestamp": 25126,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 37006,
+      "timestamp": 26149,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 26548,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 28639,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7517,
+      "timestamp": 29174,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 30020,
+      "duration": null,
+      "counter": 8
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 31133,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 33493,
+      "duration": null,
+      "counter": 9
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 35097,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 36168,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 38486,
+      "duration": null,
+      "counter": 10
+    },
+    {
+      "spell_id": 7510,
+      "timestamp": 40090,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 41115,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7561,
+      "timestamp": 42004,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 43473,
+      "duration": null,
+      "counter": 11
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 43651,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7519,
+      "timestamp": 44273,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 3,
+      "timestamp": 44807,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 47615,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 48463,
+      "duration": null,
+      "counter": 12
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 48640,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 16527,
+      "timestamp": 50069,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 52565,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 53458,
+      "duration": null,
+      "counter": 13
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 53635,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 7517,
+      "timestamp": 54436,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7510,
+      "timestamp": 57599,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 58444,
+      "duration": null,
+      "counter": 14
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 58621,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 7506,
+      "timestamp": 59287,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7518,
+      "timestamp": 59955,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 61115,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 61917,
+      "duration": null,
+      "counter": 15
+    },
+    {
+      "spell_id": 7510,
+      "timestamp": 65079,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 66103,
+      "duration": null,
+      "counter": 8
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 66904,
+      "duration": null,
+      "counter": 16
+    },
+    {
+      "spell_id": 37006,
+      "timestamp": 68596,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 70377,
+      "duration": null,
+      "counter": 17
+    },
+    {
+      "spell_id": 7527,
+      "timestamp": 71048,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7528,
+      "timestamp": 72518,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 73858,
+      "duration": null,
+      "counter": 18
+    },
+    {
+      "spell_id": 7529,
+      "timestamp": 74036,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7526,
+      "timestamp": 76263,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 77332,
+      "duration": null,
+      "counter": 19
+    },
+    {
+      "spell_id": 16530,
+      "timestamp": 78761,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7519,
+      "timestamp": 79384,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7517,
+      "timestamp": 80009,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 80810,
+      "duration": null,
+      "counter": 20
+    },
+    {
+      "spell_id": 25858,
+      "timestamp": 81255,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7561,
+      "timestamp": 82415,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 83751,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 87674,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 88743,
+      "duration": null,
+      "counter": 9
+    },
+    {
+      "spell_id": 7510,
+      "timestamp": 92706,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 93731,
+      "duration": null,
+      "counter": 8
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 97696,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 98722,
+      "duration": null,
+      "counter": 9
+    },
+    {
+      "spell_id": 7506,
+      "timestamp": 99478,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 16527,
+      "timestamp": 100104,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 100104,
+      "duration": null,
+      "counter": 21
+    },
+    {
+      "spell_id": 37004,
+      "timestamp": 102687,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 103714,
+      "duration": null,
+      "counter": 10
+    },
+    {
+      "spell_id": 7560,
+      "timestamp": 104292,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7517,
+      "timestamp": 105006,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 105094,
+      "duration": null,
+      "counter": 22
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 107636,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 108659,
+      "duration": null,
+      "counter": 10
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 110084,
+      "duration": null,
+      "counter": 23
+    },
+    {
+      "spell_id": 37004,
+      "timestamp": 112628,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 113652,
+      "duration": null,
+      "counter": 11
+    },
+    {
+      "spell_id": 7519,
+      "timestamp": 114411,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 115079,
+      "duration": null,
+      "counter": 24
+    },
+    {
+      "spell_id": 7510,
+      "timestamp": 117575,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 118556,
+      "duration": null,
+      "counter": 11
+    },
+    {
+      "spell_id": 7518,
+      "timestamp": 119938,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 120071,
+      "duration": null,
+      "counter": 25
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 121053,
+      "duration": null,
+      "counter": 12
+    },
+    {
+      "spell_id": 37006,
+      "timestamp": 123546,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 123546,
+      "duration": null,
+      "counter": 26
+    },
+    {
+      "spell_id": 7527,
+      "timestamp": 126042,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7520,
+      "timestamp": 126621,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 127024,
+      "duration": null,
+      "counter": 27
+    },
+    {
+      "spell_id": 7528,
+      "timestamp": 127560,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7529,
+      "timestamp": 129029,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7517,
+      "timestamp": 129964,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 130498,
+      "duration": null,
+      "counter": 28
+    },
+    {
+      "spell_id": 7521,
+      "timestamp": 130633,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7525,
+      "timestamp": 131255,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7562,
+      "timestamp": 132060,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 16530,
+      "timestamp": 133709,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 133974,
+      "duration": null,
+      "counter": 29
+    },
+    {
+      "spell_id": 7506,
+      "timestamp": 134244,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 16527,
+      "timestamp": 134911,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 25858,
+      "timestamp": 136248,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 37007,
+      "timestamp": 136827,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 37005,
+      "timestamp": 137405,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 137448,
+      "duration": null,
+      "counter": 30
+    },
+    {
+      "spell_id": 45960,
+      "timestamp": 138741,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 45961,
+      "timestamp": 140212,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 140925,
+      "duration": null,
+      "counter": 31
+    },
+    {
+      "spell_id": 45962,
+      "timestamp": 141683,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7526,
+      "timestamp": 143907,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 144398,
+      "duration": null,
+      "counter": 32
+    },
+    {
+      "spell_id": 16530,
+      "timestamp": 146398,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 147868,
+      "duration": null,
+      "counter": 33
+    },
+    {
+      "spell_id": 25858,
+      "timestamp": 148938,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7519,
+      "timestamp": 150008,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 151346,
+      "duration": null,
+      "counter": 34
+    },
+    {
+      "spell_id": 7510,
+      "timestamp": 152864,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 153933,
+      "duration": null,
+      "counter": 12
+    },
+    {
+      "spell_id": 7517,
+      "timestamp": 155001,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 156338,
+      "duration": null,
+      "counter": 35
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 157900,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 158923,
+      "duration": null,
+      "counter": 13
+    },
+    {
+      "spell_id": 16527,
+      "timestamp": 159593,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 3,
+      "timestamp": 160219,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 161333,
+      "duration": null,
+      "counter": 36
+    },
+    {
+      "spell_id": 7510,
+      "timestamp": 162848,
+      "duration": null,
+      "counter": 8
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 163873,
+      "duration": null,
+      "counter": 13
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 167835,
+      "duration": null,
+      "counter": 8
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 168859,
+      "duration": null,
+      "counter": 14
+    },
+    {
+      "spell_id": 7506,
+      "timestamp": 169748,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 169883,
+      "duration": null,
+      "counter": 37
+    },
+    {
+      "spell_id": 7510,
+      "timestamp": 172824,
+      "duration": null,
+      "counter": 9
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 173848,
+      "duration": null,
+      "counter": 14
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 174872,
+      "duration": null,
+      "counter": 38
+    },
+    {
+      "spell_id": 7527,
+      "timestamp": 176346,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7528,
+      "timestamp": 177907,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 178353,
+      "duration": null,
+      "counter": 39
+    },
+    {
+      "spell_id": 7529,
+      "timestamp": 179378,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7517,
+      "timestamp": 179958,
+      "duration": null,
+      "counter": 8
+    },
+    {
+      "spell_id": 7526,
+      "timestamp": 181605,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 181827,
+      "duration": null,
+      "counter": 40
+    },
+    {
+      "spell_id": 16530,
+      "timestamp": 184101,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 7519,
+      "timestamp": 184994,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 185304,
+      "duration": null,
+      "counter": 41
+    },
+    {
+      "spell_id": 25857,
+      "timestamp": 185572,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 25858,
+      "timestamp": 186598,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 188781,
+      "duration": null,
+      "counter": 42
+    },
+    {
+      "spell_id": 7510,
+      "timestamp": 190564,
+      "duration": null,
+      "counter": 10
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 191588,
+      "duration": null,
+      "counter": 15
+    },
+    {
+      "spell_id": 7506,
+      "timestamp": 192613,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 16527,
+      "timestamp": 193193,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 193773,
+      "duration": null,
+      "counter": 43
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 195511,
+      "duration": null,
+      "counter": 9
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 196536,
+      "duration": null,
+      "counter": 15
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 198763,
+      "duration": null,
+      "counter": 44
+    },
+    {
+      "spell_id": 7510,
+      "timestamp": 200501,
+      "duration": null,
+      "counter": 11
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 201526,
+      "duration": null,
+      "counter": 16
+    },
+    {
+      "spell_id": 7561,
+      "timestamp": 202550,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 203753,
+      "duration": null,
+      "counter": 45
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 204021,
+      "duration": null,
+      "counter": 17
+    },
+    {
+      "spell_id": 7517,
+      "timestamp": 205000,
+      "duration": null,
+      "counter": 9
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 207984,
+      "duration": null,
+      "counter": 10
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 208739,
+      "duration": null,
+      "counter": 46
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 209007,
+      "duration": null,
+      "counter": 16
+    },
+    {
+      "spell_id": 7518,
+      "timestamp": 215146,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 222365,
+      "duration": null,
+      "counter": 17
+    },
+    {
+      "spell_id": 7519,
+      "timestamp": 223212,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 223212,
+      "duration": null,
+      "counter": 47
+    },
+    {
+      "spell_id": 37006,
+      "timestamp": 224905,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 3,
+      "timestamp": 225930,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 226688,
+      "duration": null,
+      "counter": 48
+    },
+    {
+      "spell_id": 7527,
+      "timestamp": 227401,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7560,
+      "timestamp": 228159,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7528,
+      "timestamp": 228871,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 230161,
+      "duration": null,
+      "counter": 49
+    },
+    {
+      "spell_id": 7529,
+      "timestamp": 230384,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7517,
+      "timestamp": 230964,
+      "duration": null,
+      "counter": 10
+    },
+    {
+      "spell_id": 7525,
+      "timestamp": 232566,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 234660,
+      "duration": null,
+      "counter": 50
+    },
+    {
+      "spell_id": 16530,
+      "timestamp": 235062,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 25858,
+      "timestamp": 237557,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 7506,
+      "timestamp": 238136,
+      "duration": null,
+      "counter": 8
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 238136,
+      "duration": null,
+      "counter": 51
+    },
+    {
+      "spell_id": 16527,
+      "timestamp": 238715,
+      "duration": null,
+      "counter": 8
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 241522,
+      "duration": null,
+      "counter": 11
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 242547,
+      "duration": null,
+      "counter": 18
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 243125,
+      "duration": null,
+      "counter": 52
+    },
+    {
+      "spell_id": 7518,
+      "timestamp": 243925,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 37006,
+      "timestamp": 245037,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 246598,
+      "duration": null,
+      "counter": 53
+    },
+    {
+      "spell_id": 7520,
+      "timestamp": 246997,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7527,
+      "timestamp": 247622,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 7528,
+      "timestamp": 249093,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 250074,
+      "duration": null,
+      "counter": 54
+    },
+    {
+      "spell_id": 7529,
+      "timestamp": 250609,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 7521,
+      "timestamp": 251321,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7525,
+      "timestamp": 252791,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 253548,
+      "duration": null,
+      "counter": 55
+    },
+    {
+      "spell_id": 16530,
+      "timestamp": 255286,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 7517,
+      "timestamp": 256222,
+      "duration": null,
+      "counter": 11
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 257025,
+      "duration": null,
+      "counter": 56
+    },
+    {
+      "spell_id": 25858,
+      "timestamp": 257827,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 7519,
+      "timestamp": 258496,
+      "duration": null,
+      "counter": 8
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 260320,
+      "duration": null,
+      "counter": 19
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 260498,
+      "duration": null,
+      "counter": 57
+    },
+    {
+      "spell_id": 37007,
+      "timestamp": 260944,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 37005,
+      "timestamp": 261567,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 45960,
+      "timestamp": 262816,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 263969,
+      "duration": null,
+      "counter": 58
+    },
+    {
+      "spell_id": 45961,
+      "timestamp": 264282,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 45962,
+      "timestamp": 265800,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7525,
+      "timestamp": 267984,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 7506,
+      "timestamp": 268830,
+      "duration": null,
+      "counter": 9
+    },
+    {
+      "spell_id": 16527,
+      "timestamp": 269365,
+      "duration": null,
+      "counter": 9
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 269499,
+      "duration": null,
+      "counter": 59
+    },
+    {
+      "spell_id": 16530,
+      "timestamp": 270480,
+      "duration": null,
+      "counter": 8
+    },
+    {
+      "spell_id": 25858,
+      "timestamp": 272973,
+      "duration": null,
+      "counter": 8
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 272973,
+      "duration": null,
+      "counter": 60
+    },
+    {
+      "spell_id": 7562,
+      "timestamp": 273551,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 7561,
+      "timestamp": 274174,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 275467,
+      "duration": null,
+      "counter": 18
+    },
+    {
+      "spell_id": 7510,
+      "timestamp": 279434,
+      "duration": null,
+      "counter": 12
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 280459,
+      "duration": null,
+      "counter": 19
+    },
+    {
+      "spell_id": 7517,
+      "timestamp": 281214,
+      "duration": null,
+      "counter": 12
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 284420,
+      "duration": null,
+      "counter": 12
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 285403,
+      "duration": null,
+      "counter": 20
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 289365,
+      "duration": null,
+      "counter": 13
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 290390,
+      "duration": null,
+      "counter": 21
+    },
+    {
+      "spell_id": 7518,
+      "timestamp": 291506,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 37006,
+      "timestamp": 292930,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 293286,
+      "duration": null,
+      "counter": 61
+    },
+    {
+      "spell_id": 7519,
+      "timestamp": 293551,
+      "duration": null,
+      "counter": 9
+    },
+    {
+      "spell_id": 7510,
+      "timestamp": 296892,
+      "duration": null,
+      "counter": 13
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 297873,
+      "duration": null,
+      "counter": 22
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 298273,
+      "duration": null,
+      "counter": 62
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 300368,
+      "duration": null,
+      "counter": 20
+    },
+    {
+      "spell_id": 7506,
+      "timestamp": 300902,
+      "duration": null,
+      "counter": 10
+    },
+    {
+      "spell_id": 16527,
+      "timestamp": 301568,
+      "duration": null,
+      "counter": 10
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 301746,
+      "duration": null,
+      "counter": 63
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 304328,
+      "duration": null,
+      "counter": 14
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 305355,
+      "duration": null,
+      "counter": 23
+    },
+    {
+      "spell_id": 7517,
+      "timestamp": 306287,
+      "duration": null,
+      "counter": 13
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 306732,
+      "duration": null,
+      "counter": 64
+    },
+    {
+      "spell_id": 7510,
+      "timestamp": 309318,
+      "duration": null,
+      "counter": 14
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 310343,
+      "duration": null,
+      "counter": 21
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 311723,
+      "duration": null,
+      "counter": 65
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 314306,
+      "duration": null,
+      "counter": 15
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 315331,
+      "duration": null,
+      "counter": 24
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 316713,
+      "duration": null,
+      "counter": 66
+    },
+    {
+      "spell_id": 7527,
+      "timestamp": 317783,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 7528,
+      "timestamp": 319300,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 320191,
+      "duration": null,
+      "counter": 67
+    },
+    {
+      "spell_id": 7529,
+      "timestamp": 320816,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 7525,
+      "timestamp": 323005,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 323672,
+      "duration": null,
+      "counter": 68
+    },
+    {
+      "spell_id": 16530,
+      "timestamp": 325500,
+      "duration": null,
+      "counter": 9
+    },
+    {
+      "spell_id": 25858,
+      "timestamp": 327992,
+      "duration": null,
+      "counter": 9
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 328171,
+      "duration": null,
+      "counter": 69
+    },
+    {
+      "spell_id": 7519,
+      "timestamp": 328662,
+      "duration": null,
+      "counter": 10
+    },
+    {
+      "spell_id": 7561,
+      "timestamp": 329329,
+      "duration": null,
+      "counter": 6
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 330487,
+      "duration": null,
+      "counter": 25
+    },
+    {
+      "spell_id": 7517,
+      "timestamp": 331288,
+      "duration": null,
+      "counter": 14
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 331646,
+      "duration": null,
+      "counter": 70
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 334408,
+      "duration": null,
+      "counter": 16
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 335431,
+      "duration": null,
+      "counter": 26
+    },
+    {
+      "spell_id": 7562,
+      "timestamp": 336011,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 336633,
+      "duration": null,
+      "counter": 71
+    },
+    {
+      "spell_id": 25857,
+      "timestamp": 336944,
+      "duration": null,
+      "counter": 3
+    },
+    {
+      "spell_id": 7510,
+      "timestamp": 339391,
+      "duration": null,
+      "counter": 15
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 340416,
+      "duration": null,
+      "counter": 22
+    },
+    {
+      "spell_id": 7506,
+      "timestamp": 341085,
+      "duration": null,
+      "counter": 11
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 341620,
+      "duration": null,
+      "counter": 72
+    },
+    {
+      "spell_id": 16527,
+      "timestamp": 341665,
+      "duration": null,
+      "counter": 11
+    },
+    {
+      "spell_id": 7511,
+      "timestamp": 344381,
+      "duration": null,
+      "counter": 17
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 345408,
+      "duration": null,
+      "counter": 27
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 346612,
+      "duration": null,
+      "counter": 73
+    },
+    {
+      "spell_id": 7518,
+      "timestamp": 347013,
+      "duration": null,
+      "counter": 8
+    },
+    {
+      "spell_id": 37006,
+      "timestamp": 347950,
+      "duration": null,
+      "counter": 8
+    },
+    {
+      "spell_id": 25855,
+      "timestamp": 350442,
+      "duration": null,
+      "counter": 23
+    },
+    {
+      "spell_id": 3,
+      "timestamp": 351778,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7510,
+      "timestamp": 354405,
+      "duration": null,
+      "counter": 16
+    },
+    {
+      "spell_id": 25856,
+      "timestamp": 355430,
+      "duration": null,
+      "counter": 28
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 355696,
+      "duration": null,
+      "counter": 74
+    },
+    {
+      "spell_id": 7517,
+      "timestamp": 356365,
+      "duration": null,
+      "counter": 15
+    },
+    {
+      "spell_id": 7559,
+      "timestamp": 356944,
+      "duration": null,
+      "counter": 1
+    },
+    {
+      "spell_id": 7527,
+      "timestamp": 357922,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 359168,
+      "duration": null,
+      "counter": 75
+    },
+    {
+      "spell_id": 7528,
+      "timestamp": 359391,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 7529,
+      "timestamp": 360908,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 362645,
+      "duration": null,
+      "counter": 76
+    },
+    {
+      "spell_id": 7525,
+      "timestamp": 363091,
+      "duration": null,
+      "counter": 7
+    },
+    {
+      "spell_id": 34603669,
+      "timestamp": 364252,
+      "duration": null,
+      "counter": 2
+    },
+    {
+      "spell_id": 16530,
+      "timestamp": 365589,
+      "duration": null,
+      "counter": 10
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 366124,
+      "duration": null,
+      "counter": 77
+    },
+    {
+      "spell_id": 7519,
+      "timestamp": 366169,
+      "duration": null,
+      "counter": 11
+    },
+    {
+      "spell_id": 7520,
+      "timestamp": 367060,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 25858,
+      "timestamp": 368042,
+      "duration": null,
+      "counter": 10
+    },
+    {
+      "spell_id": 7521,
+      "timestamp": 368623,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7506,
+      "timestamp": 369425,
+      "duration": null,
+      "counter": 12
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 369605,
+      "duration": null,
+      "counter": 78
+    },
+    {
+      "spell_id": 45960,
+      "timestamp": 370538,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7560,
+      "timestamp": 371072,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 45961,
+      "timestamp": 372007,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 16527,
+      "timestamp": 372587,
+      "duration": null,
+      "counter": 12
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 373075,
+      "duration": null,
+      "counter": 79
+    },
+    {
+      "spell_id": 45962,
+      "timestamp": 373522,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7526,
+      "timestamp": 375795,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 37007,
+      "timestamp": 376419,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 376552,
+      "duration": null,
+      "counter": 80
+    },
+    {
+      "spell_id": 37005,
+      "timestamp": 376998,
+      "duration": null,
+      "counter": 4
+    },
+    {
+      "spell_id": 16530,
+      "timestamp": 378247,
+      "duration": null,
+      "counter": 11
+    },
+    {
+      "spell_id": 25858,
+      "timestamp": 380744,
+      "duration": null,
+      "counter": 11
+    },
+    {
+      "spell_id": 7517,
+      "timestamp": 382082,
+      "duration": null,
+      "counter": 16
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 383109,
+      "duration": null,
+      "counter": 81
+    },
+    {
+      "spell_id": 45960,
+      "timestamp": 383243,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 45961,
+      "timestamp": 384759,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 45962,
+      "timestamp": 386226,
+      "duration": null,
+      "counter": 5
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 386582,
+      "duration": null,
+      "counter": 82
+    },
+    {
+      "spell_id": 7525,
+      "timestamp": 388455,
+      "duration": null,
+      "counter": 8
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 390059,
+      "duration": null,
+      "counter": 83
+    },
+    {
+      "spell_id": 16530,
+      "timestamp": 390950,
+      "duration": null,
+      "counter": 12
+    },
+    {
+      "spell_id": 25858,
+      "timestamp": 393402,
+      "duration": null,
+      "counter": 12
+    },
+    {
+      "spell_id": 7,
+      "timestamp": 393535,
+      "duration": null,
+      "counter": 84
+    }
+  ],
+  "deaths": [],
+  "resurrects": []
+}

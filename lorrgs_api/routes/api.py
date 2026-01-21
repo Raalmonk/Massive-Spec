@@ -15,6 +15,7 @@ from lorrgs_api.routes import (
     api_world_data,
     auth,
     debug,
+    api_fight_analysis,
 )
 
 
@@ -31,6 +32,8 @@ router.include_router(api_user_reports.router, prefix="/user_reports")
 router.include_router(api_world_data.router)
 router.include_router(auth.router, prefix="/auth")
 router.include_router(debug.router)
+
+router.include_router(api_fight_analysis.router)
 
 
 ################################################################################
