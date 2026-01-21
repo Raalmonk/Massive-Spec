@@ -31,14 +31,17 @@ async def get_spec_ranking(
 
     logger.info(f"{spec_slug}/{boss_slug} | start ({difficulty}/{metric})")
 
-    if refresh:
-        await load_spec_rankings(
-            boss_slug=boss_slug,
-            spec_slug=spec_slug,
-            difficulty=difficulty,
-            metric=metric,
-            clear=True,
-        )
+    # --- FORCED UPDATE FOR DEBUGGING ---
+    logger.info("Forcing synchronous update for local dev...")
+    await load_spec_rankings(
+        spec_slug=spec_slug,
+        boss_slug=boss_slug,
+        difficulty=difficulty,
+        metric=metric,
+        limit=5,      # Force limit to 5 as requested
+        clear=True    # Force clear cache
+    )
+    # -----------------------------------
 
     # shorter cache timeout for the start of the tier (where frequent changes happen)
     response.headers["Cache-Control"] = "max-age=300"
