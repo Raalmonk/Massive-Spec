@@ -1,53 +1,54 @@
-# lorgs/data/classes/scholar.py
+"""Define the Scholar Class and its Spec and Spells."""
+
+# pylint: disable=line-too-long
+# pylint: disable=bad-whitespace
+# pylint: disable=wildcard-import
+# pylint: disable=unused-wildcard-import
+# fmt: off
+
+# IMPORT LOCAL LIBRARIES
 from lorgs.data.constants import *
 from lorgs.data.roles import *
 from lorgs.models.wow_class import WowClass
 from lorgs.models.wow_spec import WowSpec
-from lorgs.models.wow_spell import SpellTag, WowSpell
+from lorgs.models.wow_spell import SpellTag
 
-# Define the Class (Color: FFLogs Scholar Purple)
+
+################################################################################
+# Class
+#
 SCHOLAR = WowClass(id=28, name="Scholar", color="#8657FF")
 
-# Define the Spec (Role: Healer)
+################################################################################
+# Specs
+#
 SCHOLAR_MAIN = WowSpec(role=HEAL, wow_class=SCHOLAR, name="Scholar")
 
-# --- Spells ---
 
-# Chain Stratagem (Debuff, 15s duration, 120s CD)
-SCHOLAR_MAIN.add_debuff(
-    spell_id=7436,
-    cooldown=120,
-    duration=15,
-    name="Chain Stratagem",
-    icon="sch_chain_stratagem.jpg",
-    tags=[SpellTag.RAID_CD]
-)
+################################################################################
+# Spells
+#
 
-# Expedient (Buff, 20s duration, 120s CD)
-SCHOLAR_MAIN.add_spell(
-    spell_id=25868,
-    cooldown=120,
-    duration=20,
-    name="Expedient",
-    icon="sch_expedient.jpg",
-    tags=[SpellTag.RAID_CD, SpellTag.MOVE]
-)
+# Burst / Cooldowns
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Aetherflow", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Chain Stratagem", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Dissipation", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
 
-# Dissipation (Buff, 30s duration, 180s CD)
-SCHOLAR_MAIN.add_spell(
-    spell_id=3587,
-    cooldown=180,
-    duration=30,
-    name="Dissipation",
-    icon="sch_dissipation.jpg"
-)
+# Self Mitigation
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Excogitation", icon="placeholder.jpg", tags=[SpellTag.DEFENSIVE])
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Aetherpact", icon="placeholder.jpg", tags=[SpellTag.DEFENSIVE])
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Lustrate", icon="placeholder.jpg", tags=[SpellTag.DEFENSIVE])
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Recitation", icon="placeholder.jpg", tags=[SpellTag.DEFENSIVE])
 
-# Summon Seraph (Pet/Buff, 22s duration, 120s CD)
-SCHOLAR_MAIN.add_spell(
-    spell_id=16545,
-    cooldown=120,
-    duration=22,
-    name="Summon Seraph",
-    icon="sch_summon_seraph.jpg",
-    tags=[SpellTag.RAID_CD]
-)
+# Party Mitigation
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Sacred Soil", icon="placeholder.jpg", tags=[SpellTag.RAID_CD])
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Indomitability", icon="placeholder.jpg", tags=[SpellTag.RAID_CD])
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Deployment Tactics", icon="placeholder.jpg", tags=[SpellTag.RAID_CD])
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Fey Blessing", icon="placeholder.jpg", tags=[SpellTag.RAID_CD])
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Summon Seraph", icon="placeholder.jpg", tags=[SpellTag.RAID_CD])
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Consolation", icon="placeholder.jpg", tags=[SpellTag.RAID_CD])
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Expedient", icon="placeholder.jpg", tags=[SpellTag.RAID_CD])
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Seraphism", icon="placeholder.jpg", tags=[SpellTag.RAID_CD])
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Fey Illumination", icon="placeholder.jpg", tags=[SpellTag.RAID_CD])
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Concitation", icon="placeholder.jpg", tags=[SpellTag.RAID_CD])
+SCHOLAR_MAIN.add_spell(spell_id=0, cooldown=0, name="Accession", icon="placeholder.jpg", tags=[SpellTag.RAID_CD])
