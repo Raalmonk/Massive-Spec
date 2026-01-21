@@ -123,30 +123,101 @@
             return spellMap;
         };
 
-        // 2. fetchFightData (API)
-        const fetchFightData = async (reportId, fightId, spellMap) => {
-            // 接口：/api/fight_analysis/{report_id}/{fight_id}
-            const res = await fetch(`${API_BASE}/api/fight_analysis/${reportId}/${fightId}?spec=redmage-redmage`);
-            const data = await res.json();
+        // 2. fetchRankings (New Function with Caching)
+        const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = []) => {
+            console.log('[FFLorrgs] Starting fetch for:', specSlug, bossSlug);
 
-            // 映射到 React State 需要的结构 (rankData)
-            // 后端返回的是 { players: [...] }
-            return data.players.map((player, index) => ({
-                rank: index + 1,
-                id: `player-${player.source_id}`,
-                name: player.name,
-                job: 'RDM',
-                killTime: '6:20',
-                partner: null,
-                // 关键映射：后端 timestamp 是毫秒，前端时间轴用的是秒
-                casts: player.casts.map(c => ({
-                    spellId: c.spell_id,
-                    timestamp: c.timestamp / 1000,
-                    // FIX: Use duration from static data if cast duration is missing
-                    duration: c.duration || (spellMap[c.spell_id] ? spellMap[c.spell_id].duration : 0)
-                })),
-                deaths: []
-            }));
+            try {
+                // Fetch from endpoint: /api/spec_ranking/{specSlug}/{bossSlug}
+                const res = await fetch(`${API_BASE}/api/spec_ranking/${specSlug}/${bossSlug}`);
+                const data = await res.json();
+                console.log('[FFLorrgs] Raw response received:', data);
+
+                // Implement Data Processing
+                // Flatten SpecRanking -> reports -> fights -> players
+                const allPlayers = [];
+                if (data.reports) {
+                    data.reports.forEach(report => {
+                        if (report.fights) {
+                            report.fights.forEach(fight => {
+                                if (fight.players) {
+                                    fight.players.forEach(player => {
+                                        // Attach metadata needed for mapping
+                                        player.fightDuration = fight.duration; // ms
+                                        player.fightId = fight.fight_id;
+                                        player.reportId = report.report_id;
+                                        allPlayers.push(player);
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+
+                // Sort by DPS (total) and slice top 5
+                // assuming 'total' is the metric (DPS or HPS usually normalized to amount)
+                allPlayers.sort((a, b) => b.total - a.total);
+                const topPlayers = allPlayers.slice(0, 5);
+
+                // Map to rankData format with Caching
+                const rankData = topPlayers.map((player, index) => {
+                     const id = `player-${player.source_id || index}`;
+
+                     // Helper: Derive Job Name from specSlug
+                     // e.g. "redmage-redmage" -> "Red Mage" (approx) or just "RDM"
+                     // Mapping based on known slugs:
+                     const JOB_MAP = {
+                        'redmage-redmage': 'RDM',
+                        'summoner-summoner': 'SMN',
+                        'blackmage-blackmage': 'BLM'
+                     };
+                     const job = JOB_MAP[specSlug] || specSlug.split('-')[0].toUpperCase();
+
+                     const dps = player.total;
+
+                     // --- Smart Caching Check ---
+                     const existing = currentRankData.find(p => p.id === id);
+
+                     if (existing) {
+                        const dpsMatch = Math.abs((existing.dps || 0) - dps) < 0.1;
+                        const jobMatch = existing.job === job;
+
+                        if (jobMatch && dpsMatch) {
+                            console.log('[FFLorrgs] Cache hit (ID+Job+DPS match) - reusing data for:', player.name);
+                            // Return shallow copy with updated rank, reusing expensive 'casts'
+                            return { ...existing, rank: index + 1 };
+                        }
+                     }
+
+                     // New Data Mapping
+                     // Duration is in ms. KillTime formatted as M:SS
+                     const durationSeconds = player.fightDuration / 1000;
+                     const m = Math.floor(durationSeconds / 60);
+                     const s = Math.floor(durationSeconds % 60).toString().padStart(2, '0');
+
+                     return {
+                        rank: index + 1,
+                        id: id,
+                        name: player.name,
+                        job: job,
+                        dps: dps, // Stored for caching
+                        killTime: `${m}:${s}`,
+                        partner: null,
+                        casts: (player.casts || []).map(c => ({
+                            spellId: c.spell_id,
+                            timestamp: c.timestamp / 1000,
+                            duration: c.duration || (spellMap[c.spell_id] ? spellMap[c.spell_id].duration : 0)
+                        })),
+                        deaths: []
+                    };
+                });
+
+                console.log('[FFLorrgs] Final Top 5 Players (updated):', rankData);
+                return rankData;
+            } catch (error) {
+                console.error('[FFLorrgs] Error fetching rankings:', error);
+                return [];
+            }
         };
 
         const parseTime = (timeStr) => {
@@ -241,7 +312,7 @@
             const [isCollapsed, setIsCollapsed] = useState(true); // Default: Collapsed (Stacked)
             const [viewMode, setViewMode] = useState('damage');
             const [selectedBoss, setSelectedBoss] = useState('vamp-fatale');
-            const [selectedSpec, setSelectedSpec] = useState('Red Mage');
+            const [selectedSpec, setSelectedSpec] = useState('redmage-redmage');
             
             const [spellCategories, setSpellCategories] = useState({});
             const [spells, setSpells] = useState({});
@@ -262,13 +333,11 @@
                 const load = async () => {
                     setLoading(true);
                     const cats = await fetchSpellCategories();
-                    const sps = await fetchSpellData();
+                    const sps = await fetchSpellData(selectedSpec);
                     const mechs = await fetchBossMechanics(selectedBoss);
 
-                    // 2. 加载真实战斗 (使用测试 ID)
-                    // Report: vyHg3TtcKp614LkD, Fight: 33
-                    // PASS 'sps' into fetchFightData
-                    const ranks = await fetchFightData('vyHg3TtcKp614LkD', 33, sps);
+                    // Call fetchRankings with current rankData for "Smart Caching"
+                    const ranks = await fetchRankings(selectedSpec, selectedBoss, sps, rankData);
 
                     setSpellCategories(cats); setSpells(sps); setBossMechanics(mechs); setRankData(ranks);
                     setSelectedSpells(new Set(Object.values(sps).map(s => s.id)));
@@ -321,7 +390,9 @@
                             <span className="w-px h-3 bg-gray-600 mx-1"></span>
                             <span className="text-gray-400">Spec:</span>
                             <select value={selectedSpec} onChange={(e) => setSelectedSpec(e.target.value)} className="bg-transparent font-medium focus:outline-none focus:text-[#00FF96] cursor-pointer" style={{ color: JOB_COLOR_RDM }}>
-                                <option>Red Mage</option><option>Summoner</option><option>Black Mage</option>
+                                <option value="redmage-redmage">Red Mage</option>
+                                <option value="summoner-summoner">Summoner</option>
+                                <option value="blackmage-blackmage">Black Mage</option>
                             </select>
                         </div>
                     </div>
