@@ -1,4 +1,5 @@
 import csv
+import json
 import os
 
 # Map Job Codes (from CSV) to Metadata
@@ -38,6 +39,11 @@ TYPO_FIXES = {
     "Painlfare": "Painflare",
     "Enshround": "Enshroud",
     "Recitaion": "Recitation",
+    "Summon Bahamut ": "Summon Bahamut",
+    "Summon Solar BahaMut": "Summon Solar Bahamut",
+    "Embloden": "Embolden",
+    "Geirskougul": "Geirskogul",
+    "Shake it Off": "Shake It Off",
 }
 
 def clean_spell_name(name):
@@ -45,6 +51,13 @@ def clean_spell_name(name):
     if not name:
         return None
     return TYPO_FIXES.get(name, name)
+
+def load_spell_data(filepath="spell_data.json"):
+    if not os.path.exists(filepath):
+        print(f"Warning: {filepath} not found.")
+        return {}
+    with open(filepath, 'r') as f:
+        return json.load(f)
 
 def parse_csv(filepath):
     # CSV Structure based on analysis:
@@ -83,7 +96,7 @@ def parse_csv(filepath):
 
     return jobs_spells
 
-def generate_job_file(job_code, spells):
+def generate_job_file(job_code, spells, spell_data):
     job_data = JOBS[job_code]
     class_var = job_data["name"].upper().replace(" ", "_")
     spec_var = f"{class_var}_MAIN"
@@ -123,15 +136,27 @@ from lorgs.models.wow_spell import SpellTag
     def add_spells(spell_list, tags=None):
         out = ""
         for spell_name in spell_list:
+            s_data = spell_data.get(spell_name)
+            if not s_data:
+                print(f"Warning: No data for spell '{spell_name}'")
+                s_id = 0
+                s_cooldown = 0
+                s_icon = "placeholder.jpg"
+            else:
+                s_id = s_data.get("id", 0)
+                s_cooldown = s_data.get("cooldown", 0)
+                s_icon = s_data.get("icon", "placeholder.jpg")
+
             tag_str = ""
             if tags:
                 tag_list = [f"SpellTag.{t}" for t in tags]
                 tag_str = f", tags=[{', '.join(tag_list)}]"
 
-            # Using placeholder ID and Icon
-            # We use show=False by default for some? No, default is True.
-            # But the csv implies they are important.
-            out += f'{spec_var}.add_spell(spell_id=0, cooldown=0, name="{spell_name}", icon="placeholder.jpg"{tag_str})\n'
+            cd_str = f"{s_cooldown}"
+            if isinstance(s_cooldown, float) and s_cooldown.is_integer():
+                cd_str = str(int(s_cooldown))
+
+            out += f'{spec_var}.add_spell(spell_id={s_id}, cooldown={cd_str}, name="{spell_name}", icon="{s_icon}"{tag_str})\n'
         return out
 
     # Burst -> DAMAGE
@@ -153,10 +178,11 @@ from lorgs.models.wow_spell import SpellTag
 
 def main():
     parsed_spells = parse_csv("fflorrgs.csv")
+    spell_data = load_spell_data()
 
     for job_code, spells in parsed_spells.items():
         job_data = JOBS[job_code]
-        content = generate_job_file(job_code, spells)
+        content = generate_job_file(job_code, spells, spell_data)
 
         filepath = os.path.join("lorgs", "data", "classes", job_data["filename"])
         print(f"Generating {filepath}...")

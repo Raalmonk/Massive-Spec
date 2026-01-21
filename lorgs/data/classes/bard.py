@@ -30,18 +30,18 @@ BARD_MAIN = WowSpec(role=RDPS, wow_class=BARD, name="Bard")
 #
 
 # Burst / Cooldowns
-BARD_MAIN.add_spell(spell_id=0, cooldown=0, name="Apex Arrow", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-BARD_MAIN.add_spell(spell_id=0, cooldown=0, name="Sidewinder", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-BARD_MAIN.add_spell(spell_id=0, cooldown=0, name="Raging Strikes", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-BARD_MAIN.add_spell(spell_id=0, cooldown=0, name="Radiant Finale", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-BARD_MAIN.add_spell(spell_id=0, cooldown=0, name="Battle Voice", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-BARD_MAIN.add_spell(spell_id=0, cooldown=0, name="The Wanderer's Minuet", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-BARD_MAIN.add_spell(spell_id=0, cooldown=0, name="Mage's Ballad", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-BARD_MAIN.add_spell(spell_id=0, cooldown=0, name="Army's Paeon", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
+BARD_MAIN.add_spell(spell_id=17747, cooldown=2.4, name="Apex Arrow", icon="Apex_Arrow.png", tags=[SpellTag.DAMAGE])
+BARD_MAIN.add_spell(spell_id=8841, cooldown=60, name="Sidewinder", icon="Sidewinder.png", tags=[SpellTag.DAMAGE])
+BARD_MAIN.add_spell(spell_id=11942, cooldown=120, name="Raging Strikes", icon="Raging_Strikes.png", tags=[SpellTag.DAMAGE])
+BARD_MAIN.add_spell(spell_id=25785, cooldown=110, name="Radiant Finale", icon="Radiant_Finale.png", tags=[SpellTag.DAMAGE])
+BARD_MAIN.add_spell(spell_id=118, cooldown=120, name="Battle Voice", icon="Battle_Voice.png", tags=[SpellTag.DAMAGE])
+BARD_MAIN.add_spell(spell_id=8843, cooldown=120, name="The Wanderer's Minuet", icon="The_Wanderer's_Minuet.png", tags=[SpellTag.DAMAGE])
+BARD_MAIN.add_spell(spell_id=114, cooldown=120, name="Mage's Ballad", icon="Mage's_Ballad.png", tags=[SpellTag.DAMAGE])
+BARD_MAIN.add_spell(spell_id=8844, cooldown=120, name="Army's Paeon", icon="Army's_Paeon.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-BARD_MAIN.add_spell(spell_id=0, cooldown=0, name="Second Wind", icon="placeholder.jpg", tags=[SpellTag.DEFENSIVE])
-BARD_MAIN.add_spell(spell_id=0, cooldown=0, name="Troubadour", icon="placeholder.jpg", tags=[SpellTag.DEFENSIVE])
+BARD_MAIN.add_spell(spell_id=21306, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
+BARD_MAIN.add_spell(spell_id=10023, cooldown=90, name="Troubadour", icon="Troubadour.png", tags=[SpellTag.DEFENSIVE])
 
 # Party Mitigation
-BARD_MAIN.add_spell(spell_id=0, cooldown=0, name="Nature's Minne", icon="placeholder.jpg", tags=[SpellTag.RAID_CD])
+BARD_MAIN.add_spell(spell_id=19071, cooldown=120, name="Nature's Minne", icon="Nature's_Minne.png", tags=[SpellTag.RAID_CD])

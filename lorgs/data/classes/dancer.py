@@ -30,16 +30,16 @@ DANCER_MAIN = WowSpec(role=RDPS, wow_class=DANCER, name="Dancer")
 #
 
 # Burst / Cooldowns
-DANCER_MAIN.add_spell(spell_id=0, cooldown=0, name="Standard Step", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-DANCER_MAIN.add_spell(spell_id=0, cooldown=0, name="Flourish", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-DANCER_MAIN.add_spell(spell_id=0, cooldown=0, name="Technical Step", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-DANCER_MAIN.add_spell(spell_id=0, cooldown=0, name="Saber Dance", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-DANCER_MAIN.add_spell(spell_id=0, cooldown=0, name="Devilment", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
+DANCER_MAIN.add_spell(spell_id=17766, cooldown=30, name="Standard Step", icon="Standard_Step.png", tags=[SpellTag.DAMAGE])
+DANCER_MAIN.add_spell(spell_id=16013, cooldown=60, name="Flourish", icon="Flourish.png", tags=[SpellTag.DAMAGE])
+DANCER_MAIN.add_spell(spell_id=17838, cooldown=17, name="Technical Step", icon="Technical_Step.png", tags=[SpellTag.DAMAGE])
+DANCER_MAIN.add_spell(spell_id=18136, cooldown=1, name="Saber Dance", icon="Saber_Dance.png", tags=[SpellTag.DAMAGE])
+DANCER_MAIN.add_spell(spell_id=17953, cooldown=120, name="Devilment", icon="Devilment.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-DANCER_MAIN.add_spell(spell_id=0, cooldown=0, name="Second Wind", icon="placeholder.jpg", tags=[SpellTag.DEFENSIVE])
-DANCER_MAIN.add_spell(spell_id=0, cooldown=0, name="Shield Samba", icon="placeholder.jpg", tags=[SpellTag.DEFENSIVE])
+DANCER_MAIN.add_spell(spell_id=21306, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
+DANCER_MAIN.add_spell(spell_id=17954, cooldown=90, name="Shield Samba", icon="Shield_Samba.png", tags=[SpellTag.DEFENSIVE])
 
 # Party Mitigation
-DANCER_MAIN.add_spell(spell_id=0, cooldown=0, name="Curing Waltz", icon="placeholder.jpg", tags=[SpellTag.RAID_CD])
-DANCER_MAIN.add_spell(spell_id=0, cooldown=0, name="Improvisation", icon="placeholder.jpg", tags=[SpellTag.RAID_CD])
+DANCER_MAIN.add_spell(spell_id=17763, cooldown=60, name="Curing Waltz", icon="Curing_Waltz.png", tags=[SpellTag.RAID_CD])
+DANCER_MAIN.add_spell(spell_id=16014, cooldown=120, name="Improvisation", icon="Improvisation.png", tags=[SpellTag.RAID_CD])

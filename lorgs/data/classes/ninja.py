@@ -30,15 +30,15 @@ NINJA_MAIN = WowSpec(role=MDPS, wow_class=NINJA, name="Ninja")
 #
 
 # Burst / Cooldowns
-NINJA_MAIN.add_spell(spell_id=0, cooldown=0, name="Raiton", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-NINJA_MAIN.add_spell(spell_id=0, cooldown=0, name="Kassatsu", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-NINJA_MAIN.add_spell(spell_id=0, cooldown=0, name="Ten Chi Jin", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-NINJA_MAIN.add_spell(spell_id=0, cooldown=0, name="Bunshin", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-NINJA_MAIN.add_spell(spell_id=0, cooldown=0, name="Dokumori", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-NINJA_MAIN.add_spell(spell_id=0, cooldown=0, name="True North", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
+NINJA_MAIN.add_spell(spell_id=41109, cooldown=1.5, name="Raiton", icon="Raiton.png", tags=[SpellTag.DAMAGE])
+NINJA_MAIN.add_spell(spell_id=2264, cooldown=60, name="Kassatsu", icon="Kassatsu.png", tags=[SpellTag.DAMAGE])
+NINJA_MAIN.add_spell(spell_id=7403, cooldown=120, name="Ten Chi Jin", icon="Ten_Chi_Jin.png", tags=[SpellTag.DAMAGE])
+NINJA_MAIN.add_spell(spell_id=33662, cooldown=90, name="Bunshin", icon="Bunshin.png", tags=[SpellTag.DAMAGE])
+NINJA_MAIN.add_spell(spell_id=36957, cooldown=120, name="Dokumori", icon="Dokumori.png", tags=[SpellTag.DAMAGE])
+NINJA_MAIN.add_spell(spell_id=7546, cooldown=45, name="True North", icon="True_North.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-NINJA_MAIN.add_spell(spell_id=0, cooldown=0, name="Second Wind", icon="placeholder.jpg", tags=[SpellTag.DEFENSIVE])
-NINJA_MAIN.add_spell(spell_id=0, cooldown=0, name="Bloodbath", icon="placeholder.jpg", tags=[SpellTag.DEFENSIVE])
-NINJA_MAIN.add_spell(spell_id=0, cooldown=0, name="Shade Shift", icon="placeholder.jpg", tags=[SpellTag.DEFENSIVE])
-NINJA_MAIN.add_spell(spell_id=0, cooldown=0, name="Feint", icon="placeholder.jpg", tags=[SpellTag.DEFENSIVE])
+NINJA_MAIN.add_spell(spell_id=21306, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
+NINJA_MAIN.add_spell(spell_id=33013, cooldown=90, name="Bloodbath", icon="Bloodbath.png", tags=[SpellTag.DEFENSIVE])
+NINJA_MAIN.add_spell(spell_id=2241, cooldown=120, name="Shade Shift", icon="Shade_Shift.png", tags=[SpellTag.DEFENSIVE])
+NINJA_MAIN.add_spell(spell_id=28324, cooldown=90, name="Feint", icon="Feint.png", tags=[SpellTag.DEFENSIVE])

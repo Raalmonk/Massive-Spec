@@ -30,17 +30,17 @@ MONK_MAIN = WowSpec(role=MDPS, wow_class=MONK, name="Monk")
 #
 
 # Burst / Cooldowns
-MONK_MAIN.add_spell(spell_id=0, cooldown=0, name="Perfect Balance", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-MONK_MAIN.add_spell(spell_id=0, cooldown=0, name="Riddle of Fire", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-MONK_MAIN.add_spell(spell_id=0, cooldown=0, name="Riddle of Wind", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-MONK_MAIN.add_spell(spell_id=0, cooldown=0, name="Brotherhood", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
-MONK_MAIN.add_spell(spell_id=0, cooldown=0, name="True North", icon="placeholder.jpg", tags=[SpellTag.DAMAGE])
+MONK_MAIN.add_spell(spell_id=69, cooldown=40, name="Perfect Balance", icon="Perfect_Balance.png", tags=[SpellTag.DAMAGE])
+MONK_MAIN.add_spell(spell_id=9639, cooldown=60, name="Riddle of Fire", icon="Riddle_of_Fire.png", tags=[SpellTag.DAMAGE])
+MONK_MAIN.add_spell(spell_id=25766, cooldown=90, name="Riddle of Wind", icon="Riddle_of_Wind.png", tags=[SpellTag.DAMAGE])
+MONK_MAIN.add_spell(spell_id=18915, cooldown=120, name="Brotherhood", icon="Brotherhood.png", tags=[SpellTag.DAMAGE])
+MONK_MAIN.add_spell(spell_id=7546, cooldown=45, name="True North", icon="True_North.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-MONK_MAIN.add_spell(spell_id=0, cooldown=0, name="Second Wind", icon="placeholder.jpg", tags=[SpellTag.DEFENSIVE])
-MONK_MAIN.add_spell(spell_id=0, cooldown=0, name="Bloodbath", icon="placeholder.jpg", tags=[SpellTag.DEFENSIVE])
-MONK_MAIN.add_spell(spell_id=0, cooldown=0, name="Riddle of Earth", icon="placeholder.jpg", tags=[SpellTag.DEFENSIVE])
-MONK_MAIN.add_spell(spell_id=0, cooldown=0, name="Feint", icon="placeholder.jpg", tags=[SpellTag.DEFENSIVE])
+MONK_MAIN.add_spell(spell_id=21306, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
+MONK_MAIN.add_spell(spell_id=33013, cooldown=90, name="Bloodbath", icon="Bloodbath.png", tags=[SpellTag.DEFENSIVE])
+MONK_MAIN.add_spell(spell_id=8788, cooldown=120, name="Riddle of Earth", icon="Riddle_of_Earth.png", tags=[SpellTag.DEFENSIVE])
+MONK_MAIN.add_spell(spell_id=28324, cooldown=90, name="Feint", icon="Feint.png", tags=[SpellTag.DEFENSIVE])
 
 # Party Mitigation
-MONK_MAIN.add_spell(spell_id=0, cooldown=0, name="Mantra", icon="placeholder.jpg", tags=[SpellTag.RAID_CD])
+MONK_MAIN.add_spell(spell_id=65, cooldown=90, name="Mantra", icon="Mantra.png", tags=[SpellTag.RAID_CD])
