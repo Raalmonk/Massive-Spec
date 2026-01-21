@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFLorrgs Timeline Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 100%;
+            overflow-x: auto; /* 允许横向滚动 */
+            padding-bottom: 50px;
+            background: #252526;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .timeline-header {
+            padding: 20px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timeline-track {
+            position: relative;
+            height: 120px; /* 轨道高度 */
+            width: 3000px; /* 时间轴总宽度，根据战斗时长动态调整会更好，这里先固定 */
+            background: repeating-linear-gradient(
+                90deg,
+                #2d2d2d,
+                #2d2d2d 99px,
+                #333 100px
+            ); /* 简单的刻度线背景 */
+            margin-top: 20px;
+            border-top: 1px solid #444;
+            border-bottom: 1px solid #444;
+        }
+
+        .cast-event {
+            position: absolute;
+            top: 20px; /* 图标距离轨道顶部的距离 */
+            transform: translateX(-50%); /* 居中对齐时间点 */
+            cursor: pointer;
+            transition: transform 0.1s, z-index 0.1s;
+        }
+
+        .cast-event:hover {
+            transform: translateX(-50%) scale(1.2);
+            z-index: 10;
+        }
+
+        .cast-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            border: 1px solid #000;
+            background-color: #444; /* 图标加载失败时的占位色 */
+        }
+        
+        /* 简单的 Tooltip */
+        .cast-event::after {
+            content: attr(data-time) " - " attr(data-name);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: pre;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            margin-bottom: 5px;
+            z-index: 20;
+            width: max-content;
+        }
+
+        .cast-event:hover::after {
+            opacity: 1;
+        }
+
+        .time-marker {
+            position: absolute;
+            bottom: 0;
+            font-size: 10px;
+            color: #888;
+            transform: translateX(-50%);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="timeline-header">
+        <h2 id="report-title">Fight Analysis</h2>
+        <div id="fight-info">Loading...</div>
+    </div>
+
+    <div class="container">
+        <div class="timeline-track" id="track">
+            </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. 数据准备 (直接使用你提供的数据)
+        // ==========================================
+        
+        // 简化的 spell_data (你需要确保这些图片在 icons/ 文件夹下，或者修改 ICON_BASE_URL)
+        const spellDataRaw = {
+          "Acceleration": { "id": 7518, "icon": "Acceleration.png" },
+          "Addle": { "id": 7560, "icon": "Addle.png" },
+          "Aetherflow": { "id": 166, "icon": "Aetherflow.png" },
+          "Amborosia": { "id": 34603669, "icon": "Potion.png", "name": "Potion" }, // 手动修复药水 ID
+          "Sprint": { "id": 3, "icon": "Sprint.png", "name": "Sprint" }, // 手动修复疾跑
+          // ... 实际上应该加载完整的 spell_data.json
+        };
+        
+        // 为了演示，我把你的完整 JSON 字符串粘贴到这里 (部分)
+        // 实际上你会通过 fetch('/api/fight_analysis/...') 获取
+        const fightData = {"report_id":"vyHg3TtcKp614LkD","fight_id":33,"percent":0.0,"kill":true,"duration":394251,"time":"2026-01-18T19:00:35.155000+00:00","boss":{"name":"lindwurm","casts":[]},"players":[{"name":"Wuju Smorc","source_id":4,"class":"redmage","spec":"redmage-redmage","role":"rdps","total":43526,"casts":[{"spell_id":25856,"timestamp":401,"duration":null,"counter":1},{"spell_id":25855,"timestamp":1025,"duration":null,"counter":1},{"spell_id":7561,"timestamp":1693,"duration":null,"counter":1},{"spell_id":34603669,"timestamp":2358,"duration":null,"counter":1},{"spell_id":25856,"timestamp":3516,"duration":null,"counter":2},{"spell_id":7517,"timestamp":4186,"duration":null,"counter":1},{"spell_id":7,"timestamp":4186,"duration":null,"counter":1},{"spell_id":7518,"timestamp":4898,"duration":null,"counter":1},{"spell_id":25856,"timestamp":6014,"duration":null,"counter":3},{"spell_id":7520,"timestamp":6638,"duration":null,"counter":1},{"spell_id":7521,"timestamp":7216,"duration":null,"counter":1},{"spell_id":7,"timestamp":7659,"duration":null,"counter":2}]}]};
+
+        // 完整的 Spell Data (你需要把你的 spell_data.json 内容完整放在这里，或者 fetch 加载)
+        // 这里我写一个辅助函数来处理 ID 映射，因为你的 casts 用的是 ID
+        // ==========================================
+        
+        // 模拟图标的基础路径，你需要创建一个 icons 文件夹放图片，或者改为网络路径
+        const ICON_BASE_URL = "./icons/"; 
+        // 也可以尝试使用 XIVAPI 的镜像（如果文件名匹配的话），例如：
+        // const ICON_BASE_URL = "https://xivapi.com/i/000000/"; 
+        // 但注意：spell_data.json 里的文件名是自定义的，可能和 XIVAPI 不完全一致。
+
+        // 构建 ID 到 Icon 的映射表
+        const spellIdMap = {};
+        
+        // 1.1 手动补全你提供的 JSON 中缺少的映射 (Debug 用)
+        // 你提供的 spell_data.json 很全，但我们需要把它转换成 ID -> Data 的格式
+        // 这里我只把演示用到的几个写进去，实际项目中你应该遍历完整的 spell_data
+        const fullSpellData = {
+             "Acceleration": { "name": "Acceleration", "id": 7518, "icon": "Acceleration.png" },
+             "Verthunder III": { "name": "Verthunder III", "id": 25856, "icon": "Verthunder_III.png" }, // 假设文件名
+             "Veraero III": { "name": "Veraero III", "id": 25855, "icon": "Veraero_III.png" },
+             "Swiftcast": { "name": "Swiftcast", "id": 7561, "icon": "Swiftcast.png" },
+             "Fleche": { "name": "Fleche", "id": 7517, "icon": "Fleche.png" },
+             "Embolden": { "name": "Embolden", "id": 7520, "icon": "Embolden.png" },
+             "Manafication": { "name": "Manafication", "id": 7521, "icon": "Manafication.png" }
+             // ... 更多
+        };
+        
+        // 将 Name-Keyed 对象转换为 ID-Keyed 对象
+        // 注意：这里我们使用一个简单的 Proxy 或者查找逻辑，实际代码中你应该遍历完整的 spell_data.json
+        function getSpellInfo(id) {
+            // 简单查找
+            for (const key in fullSpellData) {
+                if (fullSpellData[key].id === id) return fullSpellData[key];
+            }
+            // 如果找不到，返回默认
+            return { name: "Unknown Spell " + id, icon: "default.png" };
+        }
+
+        // ==========================================
+        // 2. 渲染逻辑
+        // ==========================================
+
+        function renderTimeline() {
+            const track = document.getElementById('track');
+            const player = fightData.players[0]; // 取第一个玩家 Wuju Smorc
+            const duration = fightData.duration;
+            
+            // 更新标题
+            document.getElementById('report-title').innerText = `${player.name} (${player.spec})`;
+            document.getElementById('fight-info').innerText = `Duration: ${(duration/1000).toFixed(1)}s`;
+
+            // 设置轨道宽度：每秒 10px
+            const pixelsPerSecond = 20; 
+            const trackWidth = (duration / 1000) * pixelsPerSecond;
+            track.style.width = `${trackWidth}px`;
+
+            // 渲染每一个 Cast
+            player.casts.forEach(cast => {
+                const spellInfo = getSpellInfo(cast.spell_id);
+                const el = document.createElement('div');
+                el.className = 'cast-event';
+                
+                // 计算位置
+                const left = (cast.timestamp / duration) * trackWidth;
+                el.style.left = `${left}px`;
+                
+                // 设置 Tooltip 数据
+                const timeStr = (cast.timestamp / 1000).toFixed(1) + "s";
+                el.setAttribute('data-time', timeStr);
+                el.setAttribute('data-name', spellInfo.name);
+
+                // 图标
+                const img = document.createElement('img');
+                img.src = ICON_BASE_URL + spellInfo.icon;
+                img.className = 'cast-icon';
+                img.onerror = function() { this.style.backgroundColor = '#555'; this.src=''; }; // 图片加载失败处理
+                
+                el.appendChild(img);
+                track.appendChild(el);
+            });
+
+            // 添加时间刻度 (每 30 秒)
+            for (let t = 0; t < duration; t += 30000) {
+                const marker = document.createElement('div');
+                marker.className = 'time-marker';
+                marker.style.left = `${(t / duration) * trackWidth}px`;
+                marker.innerText = `${t/1000}s`;
+                track.appendChild(marker);
+            }
+        }
+
+        // 初始化
+        renderTimeline();
+
+    </script>
+</body>
+</html>
