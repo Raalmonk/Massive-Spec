@@ -9,9 +9,6 @@ from lorgs.clients import sqs
 from lorgs.logger import logger
 from lorgs.models import warcraftlogs_ranking
 from lorgs.models.wow_spec import WowSpec
-from lorrgs_sqs.task_handlers.load_spec_rankings import load_spec_rankings
-
-
 router = fastapi.APIRouter(tags=["spec_ranking"], prefix="/spec_ranking")
 
 
@@ -33,30 +30,20 @@ async def get_spec_ranking(
 
     # --- FORCED UPDATE FOR DEBUGGING ---
     logger.info("Forcing synchronous update for local dev...")
-    await load_spec_rankings(
-        spec_slug=spec_slug,
+
+    ranking = warcraftlogs_ranking.SpecRanking.get_or_create(
         boss_slug=boss_slug,
+        spec_slug=spec_slug,
         difficulty=difficulty,
         metric=metric,
-        limit=5,      # Force limit to 5 as requested
-        clear=True    # Force clear cache
     )
+    await ranking.load(limit=5, clear_old=True)
     # -----------------------------------
 
     # shorter cache timeout for the start of the tier (where frequent changes happen)
     response.headers["Cache-Control"] = "max-age=300"
 
-    try:
-        # Fetch the json directly for performance reasons.
-        # this avoids parsing the json into a model just to dump it back to json right away
-        return warcraftlogs_ranking.SpecRanking.get_json(
-            boss_slug=boss_slug,
-            spec_slug=spec_slug,
-            difficulty=difficulty,
-            metric=metric,
-        )
-    except KeyError:
-        return "Not found.", 404
+    return ranking.model_dump(exclude_unset=True, by_alias=True)
 
 
 ################################################################################
