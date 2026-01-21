@@ -30,16 +30,16 @@ WARRIOR_MAIN = WowSpec(role=TANK, wow_class=WARRIOR, name="Warrior")
 #
 
 # Burst / Cooldowns
-WARRIOR_MAIN.add_spell(spell_id=8768, cooldown=60, name="Inner Release", icon="Inner_Release.png", tags=[SpellTag.DAMAGE])
+WARRIOR_MAIN.add_spell(spell_id=7389, cooldown=60, name="Inner Release", icon="Inner_Release.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
 WARRIOR_MAIN.add_spell(spell_id=36923, cooldown=120, name="Damnation", icon="Damnation.png", tags=[SpellTag.DEFENSIVE])
-WARRIOR_MAIN.add_spell(spell_id=29297, cooldown=90, name="Thrill of Battle", icon="Thrill_of_Battle.png", tags=[SpellTag.DEFENSIVE])
-WARRIOR_MAIN.add_spell(spell_id=46778, cooldown=90, name="Rampart", icon="Rampart.png", tags=[SpellTag.DEFENSIVE])
+WARRIOR_MAIN.add_spell(spell_id=40, cooldown=90, name="Thrill of Battle", icon="Thrill_of_Battle.png", tags=[SpellTag.DEFENSIVE])
+WARRIOR_MAIN.add_spell(spell_id=10, cooldown=90, name="Rampart", icon="Rampart.png", tags=[SpellTag.DEFENSIVE])
 WARRIOR_MAIN.add_spell(spell_id=25751, cooldown=25, name="Bloodwhetting", icon="Bloodwhetting.png", tags=[SpellTag.DEFENSIVE])
-WARRIOR_MAIN.add_spell(spell_id=17889, cooldown=25, name="Nascent Flash", icon="Nascent_Flash.png", tags=[SpellTag.DEFENSIVE])
-WARRIOR_MAIN.add_spell(spell_id=29298, cooldown=240, name="Holmgang", icon="Holmgang.png", tags=[SpellTag.DEFENSIVE])
-WARRIOR_MAIN.add_spell(spell_id=40061, cooldown=60, name="Reprisal", icon="Reprisal.png", tags=[SpellTag.DEFENSIVE])
+WARRIOR_MAIN.add_spell(spell_id=1061, cooldown=25, name="Nascent Flash", icon="Nascent_Flash.png", tags=[SpellTag.DEFENSIVE])
+WARRIOR_MAIN.add_spell(spell_id=43, cooldown=240, name="Holmgang", icon="Holmgang.png", tags=[SpellTag.DEFENSIVE])
+WARRIOR_MAIN.add_spell(spell_id=3626, cooldown=60, name="Reprisal", icon="Reprisal.png", tags=[SpellTag.DEFENSIVE])
 
 # Party Mitigation
-WARRIOR_MAIN.add_spell(spell_id=17699, cooldown=90, name="Shake It Off", icon="Shake_It_Off.png", tags=[SpellTag.RAID_CD])
+WARRIOR_MAIN.add_spell(spell_id=7388, cooldown=90, name="Shake It Off", icon="Shake_It_Off.png", tags=[SpellTag.RAID_CD])

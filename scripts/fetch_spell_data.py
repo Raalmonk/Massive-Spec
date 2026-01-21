@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 CSV_FILE = "fflorrgs.csv"
 DATA_FILE = "spell_data.json"
 WIKI_BASE_URL = "https://ffxiv.consolegameswiki.com/wiki/"
-ACTION_CSV_FILE = "ffxiv-datamining/csv/en/Action.csv"
+ACTION_CSV_FILE = "Action.csv"
 
 # Typo fixes
 TYPO_FIXES = {
@@ -60,6 +60,9 @@ def load_action_csv(filepath):
             try:
                 name = row.get('Name')
                 if not name:
+                    continue
+
+                if name in mapping:
                     continue
 
                 is_pvp = row.get('IsPvP', 'False').lower() == 'true'

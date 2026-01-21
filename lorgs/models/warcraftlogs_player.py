@@ -2,6 +2,7 @@ from __future__ import annotations
 
 # IMPORT STANRD LIBRARIES
 import typing
+from typing import Optional
 
 # IMPORT LOCAL LIBRARIES
 from lorgs.clients import wcl
@@ -64,24 +65,34 @@ class Player(BaseActor):
 
     def get_sub_query(self):
 
+        def get_filter(target_type="source"):
+            if self.source_id > 0:
+                return f"{target_type}.id={self.source_id}"
+            elif self.name:
+                return f"{target_type}.name='{self.name}'"
+            return ""
+
+        source_filter = get_filter("source")
+        target_filter = get_filter("target")
+
         # Casts
         casts_query = build_spell_query(*self.actor_type.all_spells)
-        if casts_query and self.name:
-            casts_query = f"source.name='{self.name}' and ({casts_query})"
+        if casts_query and source_filter:
+            casts_query = f"{source_filter} and ({casts_query})"
 
         # Auras
         auras_query = build_spell_query(*self.actor_type.all_buffs, *self.actor_type.all_debuffs)
-        if auras_query and self.name:
-            auras_query = f"target.name='{self.name}' and ({auras_query})"
+        if auras_query and target_filter:
+            auras_query = f"{target_filter} and ({auras_query})"
 
         # Events
         events_query = build_spell_query(*self.actor_type.all_events)
-        if events_query and self.name:
-            events_query = f"source.name='{self.name}' and ({events_query})"
+        if events_query and source_filter:
+            events_query = f"{source_filter} and ({events_query})"
 
         resurrection_query = ""
-        if self.resurrects and self.name:
-            resurrection_query = f"target.name='{self.name}' and type='resurrect'"
+        if self.resurrects and target_filter:
+            resurrection_query = f"{target_filter} and type='resurrect'"
 
         return self.combine_queries(casts_query, auras_query, events_query, resurrection_query)
 
