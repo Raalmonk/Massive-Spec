@@ -215,6 +215,7 @@ class Fight(warcraftlogs_base.BaseModel):
                 class_slug=spec.wow_class.name_slug,
                 spec_slug=spec.full_name_slug,
                 total=int(total),
+                guid=composition_data.guid,
             )
             player.fight = self
             player.process_death_events(summary_data.deathEvents)

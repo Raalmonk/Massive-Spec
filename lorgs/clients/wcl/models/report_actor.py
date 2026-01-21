@@ -27,5 +27,5 @@ class ReportActor(BaseModel):
     # petOwner: typing.Optional[int]
     # """The report ID of the actor's owner if the actor is a pet."""
 
-    # gameID: float
-    # """,The game ID of the actor."""
+    gameID: int = 0
+    """,The game ID of the actor."""

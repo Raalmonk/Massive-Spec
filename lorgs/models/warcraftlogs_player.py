@@ -18,6 +18,7 @@ class Player(BaseActor):
     name: str = ""
     class_slug: str = ""
     spec_slug: str = ""
+    guid: int = 0
 
     total: float = 0
 
@@ -66,6 +67,8 @@ class Player(BaseActor):
     def get_sub_query(self):
 
         def get_filter(target_type="source"):
+            if self.guid > 0:
+                return f"{target_type}.id={self.guid}"
             if self.source_id > 0:
                 return f"{target_type}.id={self.source_id}"
             elif self.name:

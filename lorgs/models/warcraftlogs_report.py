@@ -131,6 +131,7 @@ class Report(warcraftlogs_base.BaseModel):
             name=actor_data.name,
             class_slug=actor_data.subType.lower(),
             spec_slug=spec_slug,
+            guid=actor_data.gameID,
         )
 
         if player.class_ == None:
@@ -168,6 +169,7 @@ class Report(warcraftlogs_base.BaseModel):
                     {{
                         name
                         id
+                        gameID
                         subType
                         icon    # the icon includes the spec name
                     }}
