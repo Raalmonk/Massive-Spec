@@ -9,6 +9,7 @@ from lorgs.clients import sqs
 from lorgs.logger import logger
 from lorgs.models import warcraftlogs_ranking
 from lorgs.models.wow_spec import WowSpec
+from lorrgs_sqs.task_handlers.load_spec_rankings import load_spec_rankings
 
 
 router = fastapi.APIRouter(tags=["spec_ranking"], prefix="/spec_ranking")
@@ -21,6 +22,7 @@ async def get_spec_ranking(
     boss_slug: str,
     difficulty: str = "mythic",
     metric: str = "",
+    refresh: bool = False,
 ):
     """Get the Rankings for a given Spec and Boss."""
     if not metric:
@@ -28,6 +30,15 @@ async def get_spec_ranking(
         metric = spec.role.metric if spec else "dps"
 
     logger.info(f"{spec_slug}/{boss_slug} | start ({difficulty}/{metric})")
+
+    if refresh:
+        await load_spec_rankings(
+            boss_slug=boss_slug,
+            spec_slug=spec_slug,
+            difficulty=difficulty,
+            metric=metric,
+            clear=True,
+        )
 
     # shorter cache timeout for the start of the tier (where frequent changes happen)
     response.headers["Cache-Control"] = "max-age=300"
