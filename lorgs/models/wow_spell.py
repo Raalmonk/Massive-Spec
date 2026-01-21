@@ -4,7 +4,7 @@ from __future__ import annotations
 
 # IMPORT STANDARD LIBRARIES
 from collections import defaultdict
-from typing import Any, ClassVar, Optional
+from typing import Any, ClassVar, Optional, Union
 import typing
 
 
@@ -57,6 +57,9 @@ class SpellTag:
     TANK = "tank"
     """Tag for Tank Mitigation Cooldowns."""
 
+    TANK_MIT = "tank_mit"
+    """Tag for Tank Mitigation Cooldowns (Boss)."""
+
     MOVE = "move"
     """Tag for Movement Cooldowns. Roar, Windrush, Time Spiral, etc"""
 
@@ -73,20 +76,21 @@ class SpellTag:
 class WowSpell(base.MemoryModel):
     """Container to define a spell."""
 
-    spell_variations: ClassVar[dict[(int, str), int]] = {}
+    spell_variations: ClassVar[dict[tuple[Union[int, str], str], Union[int, str]]] = {}
     """Map to track spell variations and their "master"-spells.
         `[key: id of the variation] = id of the "master"-spell`
     """
 
-    spell_id: int
+    spell_id: Union[int, str]
     cooldown: float = 0.0
     duration: float = 0.0
     icon: str = ""
     name: str = ""
     color: str = ""
     show: bool = True
+    desc: str = ""
 
-    variations: list[int] = []
+    variations: list[Union[int, str]] = []
     """Spell IDs for Variants of the same Spell. Eg.: Glyphs or Talents sometimes change the Spell ID."""
 
     spell_type: str = ""
@@ -98,7 +102,7 @@ class WowSpell(base.MemoryModel):
 
     event_type: str = "cast"
     """type of event (eg.: "cast", "applybuff", "applydebuffstack").
-    
+
     Can be a comma separated list to define multiple events, eg.:
     >>> "applybuff, applybuffstack"
     """
@@ -124,12 +128,18 @@ class WowSpell(base.MemoryModel):
         return super().post_init()
 
     @staticmethod
-    def spell_ids(spells: list["WowSpell"]) -> list[int]:
+    def spell_ids(spells: list["WowSpell"]) -> list[Union[int, str]]:
         """Converts a list of Spells to their spell_ids."""
         ids = []  # [spell.spell_id for spell in spells]
         for spell in spells:
             ids += [spell.spell_id] + spell.variations
-        ids = sorted(list(set(ids)))
+
+        def sort_key(v):
+            if isinstance(v, int):
+                return (0, v)
+            return (1, str(v))
+
+        ids = sorted(list(set(ids)), key=sort_key)
         return ids
 
     @classmethod
@@ -146,7 +156,7 @@ class WowSpell(base.MemoryModel):
         return ",".join(str(spell_id) for spell_id in spell_ids)
 
     @classmethod
-    def resolve_spell_id(cls, spell_id: int, event_type: str = "cast") -> int:
+    def resolve_spell_id(cls, spell_id: Union[int, str], event_type: str = "cast") -> Union[int, str]:
         """Resolve a Spell ID for a spell variation to its main-spell."""
         return cls.spell_variations.get((spell_id, event_type)) or spell_id
 
@@ -175,9 +185,10 @@ class WowSpell(base.MemoryModel):
             "tooltip": self.tooltip,
             "tooltip_info": self.wowhead_data,
             "tags": self.tags,
+            "desc": self.desc,
         }
 
-    def add_variation(self, spell_id: int, event_type: str = ""):
+    def add_variation(self, spell_id: Union[int, str], event_type: str = ""):
         """Add an additional spell ids for the "same" spell.
 
         eg.: glyphed versions of the spell
@@ -187,7 +198,7 @@ class WowSpell(base.MemoryModel):
         self.variations.append(spell_id)
         self.spell_variations[(spell_id, event_type or self.event_type)] = self.spell_id
 
-    def add_variations(self, *spell_ids: int):
+    def add_variations(self, *spell_ids: Union[int, str]):
         for spell_id in spell_ids:
             self.add_variation(spell_id)
 
@@ -214,6 +225,8 @@ def build_spell_query(*spells: WowSpell) -> str:
     if not spells:
         return ""
 
+    # Filter out spells with string IDs as they are for visualization only
+    spells = [s for s in spells if isinstance(s.spell_id, int)]
     spells = [spells for spells in spells if spells.query]
 
     spells = utils.flatten([spell.expand_events() for spell in spells])
@@ -239,7 +252,7 @@ def build_spell_query(*spells: WowSpell) -> str:
     for event_type, event_spells in spells_by_type.items():
         spell_ids = WowSpell.spell_ids_str(event_spells)
         if event_type == "cast":
-            event_query = f"type='{event_type}'" 
+            event_query = f"type='{event_type}'"
         else:
             event_query = f"type='{event_type}' and ability.gameID in ({spell_ids})"
         event_query = f"({event_query})"
