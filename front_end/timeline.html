@@ -89,7 +89,7 @@
                 spellMap[spell.spell_id] = {
                     id: spell.spell_id,      // 注意：后端是 int
                     name: spell.name,
-                    image: `/lorrgs_assets/images/spells/${spell.icon}`,
+                    image: 'http://127.0.0.1:5000/lorrgs_assets/images/spells/' + spell.icon,
                     cd: spell.cooldown || 0,
                     duration: spell.duration || 0,
                     color: spell.color || '#ffcc00',
