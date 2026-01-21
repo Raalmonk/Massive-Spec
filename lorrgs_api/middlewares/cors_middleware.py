@@ -15,6 +15,7 @@ ORIGINS = [
     "https://*.lorrgs-frontend.pages.dev",  # CloudFlare Pages preview Builds
     "http://127.0.0.1:5500",  # Live Server Default Port
     "http://localhost:5500",
+    "*",
 ]
 
 if DEBUG:
