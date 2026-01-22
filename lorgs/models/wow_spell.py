@@ -253,10 +253,8 @@ def build_spell_query(*spells: WowSpell) -> str:
 
     for event_type, event_spells in spells_by_type.items():
         spell_ids = WowSpell.spell_ids_str(event_spells)
-        if event_type == "cast":
-            event_query = f"type='{event_type}'"
-        else:
-            event_query = f"type='{event_type}' and ability.gameID in ({spell_ids})"
+        # Always filter by spell IDs to avoid fetching unmapped spells (e.g. Auto Attacks)
+        event_query = f"type='{event_type}' and ability.gameID in ({spell_ids})"
         event_query = f"({event_query})"
 
         queries.append(event_query)

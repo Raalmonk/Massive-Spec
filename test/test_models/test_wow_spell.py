@@ -85,6 +85,12 @@ class TestBuildQuery:
         # assert build_spell_query(spec.all_spells) == ""
         # assert build_spell_query(spec.all_buffs) == ""
 
+    def test_build_query__cast_event(self) -> None:
+        """Verify that cast events are filtered by spell ID."""
+        spell = WowSpell(spell_id=123, event_type="cast")
+        result = build_spell_query(spell)
+        assert result == "(type='cast' and ability.gameID in (123))"
+
 
 if __name__ == "__main__":
     pytest.main(sys.argv)
