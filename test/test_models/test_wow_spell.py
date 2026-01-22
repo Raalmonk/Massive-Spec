@@ -39,7 +39,7 @@ class TestBuildQuery:
         spell = WowSpell(spell_id=10, event_type="foo")
 
         result = build_spell_query(spell)
-        assert result == "(type='foo' and ability.gameID in (10))"
+        assert result == "(type='foo' and ability.id in (10))"
 
     def test_build_query__multiple_spells_same_type(self) -> None:
 
@@ -50,7 +50,7 @@ class TestBuildQuery:
         ]
 
         result = build_spell_query(*spells)
-        assert result == "(type='foo' and ability.gameID in (10,20,30))"
+        assert result == "(type='foo' and ability.id in (10,20,30))"
 
     def test_build_query__multiple_spells_diff_type(self) -> None:
 
@@ -60,7 +60,7 @@ class TestBuildQuery:
             WowSpell(spell_id=20, event_type="foo"),
         ]
 
-        expected = "(type='foo' and ability.gameID in (10,20)) or (type='bar' and ability.gameID in (30))"
+        expected = "(type='foo' and ability.id in (10,20)) or (type='bar' and ability.id in (30))"
 
         result = build_spell_query(*spells)
         assert result == expected
@@ -71,7 +71,7 @@ class TestBuildQuery:
         spell = WowSpell(spell_id=10, event_type="applybuff")
         print(spell.expand_events())
 
-        expected = "(type='applybuff' and ability.gameID in (10)) or (type='removebuff' and ability.gameID in (10))"
+        expected = "(type='applybuff' and ability.id in (10)) or (type='removebuff' and ability.id in (10))"
 
         result = build_spell_query(spell)
         assert result == expected
@@ -89,7 +89,7 @@ class TestBuildQuery:
         """Verify that cast events are filtered by spell ID."""
         spell = WowSpell(spell_id=123, event_type="cast")
         result = build_spell_query(spell)
-        assert result == "(type='cast' and ability.gameID in (123))"
+        assert result == "(type='cast' and ability.id in (123))"
 
 
 if __name__ == "__main__":

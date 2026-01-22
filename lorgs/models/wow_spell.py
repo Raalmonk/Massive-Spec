@@ -241,7 +241,8 @@ def build_spell_query(*spells: WowSpell) -> str:
 
     for spell in spells_with_extra_filter:
         for event_type in spell.event_types:
-            event_query = f"type='{spell.event_type}' and ability.gameID = {spell.spell_id} and {spell.extra_filter}"
+            # FIX: Use 'ability.id' instead of 'ability.gameID' for the filter expression
+            event_query = f"type='{spell.event_type}' and ability.id = {spell.spell_id} and {spell.extra_filter}"
             event_query = f"({event_query})"
             queries.append(event_query)
 
@@ -253,8 +254,10 @@ def build_spell_query(*spells: WowSpell) -> str:
 
     for event_type, event_spells in spells_by_type.items():
         spell_ids = WowSpell.spell_ids_str(event_spells)
-        # Always filter by spell IDs to avoid fetching unmapped spells (e.g. Auto Attacks)
-        event_query = f"type='{event_type}' and ability.gameID in ({spell_ids})"
+
+        # FIX: Use 'ability.id' instead of 'ability.gameID'
+        # We also apply the ID filter to ALL event types (including 'cast') to prevent fetching auto-attacks
+        event_query = f"type='{event_type}' and ability.id in ({spell_ids})"
         event_query = f"({event_query})"
 
         queries.append(event_query)
