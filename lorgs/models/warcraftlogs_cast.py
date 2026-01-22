@@ -45,7 +45,7 @@ MRT_EVENT_ABBREVIATION = {
 class Cast(base.BaseModel):
     """An Instance of a Cast of a specific Spell in a Fight."""
 
-    spell_id: int = pydantic.Field(alias="id")
+    spell_id: int = pydantic.Field(validation_alias=pydantic.AliasChoices("id", "spell_id"), serialization_alias="spell_id")
     """ID of the spell/aura."""
 
     timestamp: int = pydantic.Field(alias="ts")

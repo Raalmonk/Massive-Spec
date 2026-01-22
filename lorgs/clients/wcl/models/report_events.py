@@ -1,5 +1,5 @@
 # IMPORT THIRD PARTY LIBRARIES
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, AliasChoices
 
 
 class ReportEvent(BaseModel):
@@ -15,6 +15,6 @@ class ReportEvent(BaseModel):
 
     targetID: int = 0
 
-    abilityGameID: int = Field(0)
+    abilityGameID: int = Field(0, validation_alias=AliasChoices("abilityID", "abilityGameID"))
 
     fight: int = 0
