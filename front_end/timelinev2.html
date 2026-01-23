@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFLorrgs - Timeline</title>
+
+    <!-- 1. Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 2. Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- 3. Environment Setup -->
+    <script>
+        window.process = { env: { NODE_ENV: 'production' } };
+    </script>
+
+    <!-- 4. API Client (Placeholder/Mock) -->
+    <script src="api.js"></script>
+
+    <style>
+        /* Scrollbar Styling */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+            background: #121212;
+        }
+        .custom-scrollbar::-webkit-scrollbar-corner {
+            background: #121212;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #333;
+            border: 3px solid #121212;
+            border-radius: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #00FF96;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        body { margin: 0; overflow: hidden; background-color: #121212; user-select: none; }
+
+        /* Custom Drag Cursor */
+        .cursor-grab { cursor: grab; }
+        .cursor-grabbing { cursor: grabbing; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- 4. React App -->
+    <script type="text/babel" data-type="module">
+        import React, { useState, useRef, useEffect, useMemo, useCallback } from 'https://esm.sh/react@18.2.0?dev';
+        import { createRoot } from 'https://esm.sh/react-dom@18.2.0/client?dev';
+        import { ZoomIn, ZoomOut, Search, Menu, Skull, Clock, Hourglass, Shield, ShieldAlert, Zap, Swords, MoreHorizontal, Layers, Minimize2, Maximize2, ChevronDown } from 'https://esm.sh/lucide-react@0.263.1?dev';
+
+        // --- Configuration ---
+        const THEME_COLOR = '#00FF96';
+        const JOB_COLOR_RDM = '#E87B7B';
+        const FIGHT_DURATION = 1200; // Increased to 10 minutes (600s) to fix the "7 minute" overflow issue
+        const API_BASE = 'http://127.0.0.1:5000';
+        const LEFT_PANEL_WIDTH = 260; 
+
+        // Palette for Duration Bars (Sequential assignment)
+        const DURATION_PALETTE = [
+            '#F87171', '#FB923C', '#FACC15', '#A3E635', 
+            '#34D399', '#22D3EE', '#60A5FA', '#818CF8', 
+            '#A78BFA', '#E879F9', '#FB7185', '#F472B6'
+        ];
+
+        // --- Mock Data Layer ---
+        const fetchSpellCategories = async () => ({
+            // defaultActive: controls if spells in this category are shown by default
+            MAJOR: { label: 'CD', color: '#E87B7B', iconType: 'swords', defaultActive: true },
+            SINGLE_MIT: { label: 'Single Mit', color: '#4facfe', iconType: 'shield', defaultActive: false },
+            RAID_MIT: { label: 'Group Mit', color: '#8657FF', iconType: 'shieldAlert', defaultActive: true },
+            UTILITY: { label: 'Utility', color: '#E6B33D', iconType: 'zap', defaultActive: false },
+        });
+
+        // 1. fetchSpellData (API)
+        const fetchSpellData = async (specSlug = 'redmage-redmage') => {
+            const res = await fetch(`${API_BASE}/api/specs/${specSlug}/spells`);
+            const data = await res.json();
+
+            const resolveCategory = (tags, spellName) => {
+                const lowerName = spellName ? spellName.toLowerCase() : '';
+                if (lowerName.includes('sprint') || lowerName.includes('gemdraught') || lowerName.includes('potion')) {
+                    return 'UTILITY';
+                }
+                if (!tags || tags.length === 0) return 'MAJOR';
+                const tagSet = new Set(tags.map(t => String(t).toLowerCase()));
+                if (tagSet.has('raid_mit') || tagSet.has('raid_cd')) return 'RAID_MIT';
+                if (tagSet.has('single_mit') || tagSet.has('tank_mit')) return 'SINGLE_MIT';
+                if (tagSet.has('utility') || tagSet.has('potion')) return 'UTILITY';
+                return 'MAJOR';
+            };
+
+            const spellMap = {};
+            Object.values(data).forEach(spell => {
+                spellMap[spell.spell_id] = {
+                    id: spell.spell_id,
+                    name: spell.name,
+                    image: spell.icon.startsWith('http') ? spell.icon : `${API_BASE}/lorrgs_assets/images/spells/` + spell.icon,
+                    cd: spell.cooldown || 0,
+                    duration: spell.duration || 0,
+                    color: spell.color || '#ffcc00',
+                    desc: spell.desc || '',
+                    category: resolveCategory(spell.tags, spell.name)
+                };
+            });
+            return spellMap;
+        };
+
+        // Helper to determine role and random partner
+        const getPartnerInfo = (specSlug) => {
+            const tanks = ['🛡️', '🪓', '🌑', '🔫'];
+            const healers = ['⚕️', '🧚', '✨', '🤖'];
+            
+            let role = 'dps';
+            if (specSlug.includes('paladin') || specSlug.includes('warrior') || specSlug.includes('darkknight') || specSlug.includes('gunbreaker')) role = 'tank';
+            if (specSlug.includes('whitemage') || specSlug.includes('scholar') || specSlug.includes('astrologian') || specSlug.includes('sage')) role = 'healer';
+
+            if (role === 'tank') return { role, icon: tanks[Math.floor(Math.random() * tanks.length)] };
+            if (role === 'healer') return { role, icon: healers[Math.floor(Math.random() * healers.length)] };
+            return { role: 'dps', icon: null };
+        };
+
+        // 2. fetchRankings (API with Region & Partner Mock)
+        const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = []) => {
+            console.log('[FFLorrgs] Starting fetch for:', specSlug, bossSlug);
+
+            try {
+                const res = await fetch(`${API_BASE}/api/spec_ranking/${specSlug}/${bossSlug}`);
+                const data = await res.json();
+                
+                const allPlayers = [];
+                if (data.reports) {
+                    data.reports.forEach(report => {
+                        if (report.fights) {
+                            report.fights.forEach(fight => {
+                                if (fight.players) {
+                                    fight.players.forEach(player => {
+                                        player.fightDuration = fight.duration;
+                                        player.fightId = fight.fight_id;
+                                        player.reportId = report.report_id;
+                                        allPlayers.push(player);
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+
+                allPlayers.sort((a, b) => b.total - a.total);
+                const topPlayers = allPlayers.slice(0, 20); 
+
+                const REGIONS = ['NA', 'JP', 'EU', 'CN', 'KR'];
+                const { role, icon: partnerIcon } = getPartnerInfo(specSlug);
+
+                const rankData = topPlayers.map((player, index) => {
+                     const id = `player-${player.source_id || index}`;
+                     
+                     // Region Mock logic
+                     const region = REGIONS[Math.floor(Math.random() * REGIONS.length)];
+                     // Partner Mock Logic (randomize slightly per player for visual variety if tank/healer)
+                     const finalPartner = (role === 'tank' || role === 'healer') ? partnerIcon : null;
+
+                     const existing = currentRankData.find(p => p.id === id);
+                     if (existing) {
+                         // Simple cache check
+                         if (Math.abs((existing.dps || 0) - player.total) < 0.1) {
+                            return { ...existing, rank: index + 1 };
+                         }
+                     }
+
+                     const durationSeconds = player.fightDuration / 1000;
+                     const m = Math.floor(durationSeconds / 60);
+                     const s = Math.floor(durationSeconds % 60).toString().padStart(2, '0');
+
+                     return {
+                        rank: index + 1,
+                        id: id,
+                        name: player.name,
+                        region: region, 
+                        partner: finalPartner, // New Field
+                        dps: player.total,
+                        killTime: `${m}:${s}`,
+                        casts: (player.casts || []).map(c => ({
+                            spellId: c.spell_id,
+                            timestamp: c.ts ? c.ts / 1000 : (c.timestamp || 0),
+                            duration: c.duration || (spellMap[c.spell_id] ? spellMap[c.spell_id].duration : 0)
+                        })),
+                        deaths: []
+                    };
+                });
+                return rankData;
+            } catch (error) {
+                console.error('[FFLorrgs] Error fetching rankings:', error);
+                return [];
+            }
+        };
+
+        const parseTime = (timeStr) => {
+            if (!timeStr) return 0;
+            const parts = timeStr.split(':');
+            if (parts.length === 2) {
+                return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+            }
+            return parseInt(timeStr);
+        };
+
+        const fetchBossMechanics = async (bossSlug) => {
+            if (!bossSlug) return [];
+            try {
+                const res = await fetch(`${API_BASE}/api/bosses/${bossSlug}/spells`);
+                const data = await res.json();
+                return Object.values(data)
+                    .filter(spell => spell.time)
+                    .map(spell => {
+                        let color = '#4da6ff';
+                        const tags = spell.tags || [];
+                        const tagSet = new Set(tags.map(t => String(t).toLowerCase()));
+                        if (tagSet.has('raid_mit') || tagSet.has('raid_cd')) color = '#8657FF';
+                        else if (tagSet.has('tank_mit') || tagSet.has('tank')) color = '#ff944d';
+                        else if (tagSet.has('utility')) color = '#E6B33D';
+                        return {
+                            time: parseTime(spell.time),
+                            duration: spell.duration || 0, // Ensure default 0 if null
+                            name: spell.name,
+                            icon: spell.icon ? (spell.icon.startsWith('http') ? spell.icon : `${API_BASE}/lorrgs_assets/images/spells/` + spell.icon) : null,
+                            type: 'mech',
+                            color: color
+                        };
+                    })
+                    .sort((a, b) => a.time - b.time);
+            } catch (e) {
+                console.error("Failed to fetch boss mechanics", e);
+                return [];
+            }
+        };
+
+        const calculateCastTracks = (casts) => {
+            if (!casts || casts.length === 0) return { tracks: [], maxTracks: 1 };
+            // Sort by timestamp for proper overlap rendering
+            const sortedCasts = [...casts].sort((a, b) => a.timestamp - b.timestamp);
+
+            const tracks = [];
+            const results = [];
+
+            sortedCasts.forEach(cast => {
+                // Heuristic for visual overlap prevention
+                const castEnd = cast.timestamp + Math.max(cast.duration || 0, 5) + 2; 
+                let placed = false;
+                for (let i = 0; i < tracks.length; i++) {
+                    if (tracks[i] <= cast.timestamp) {
+                        tracks[i] = castEnd;
+                        results.push({ ...cast, trackIndex: i });
+                        placed = true;
+                        break;
+                    }
+                }
+                if (!placed) {
+                    results.push({ ...cast, trackIndex: tracks.length });
+                    tracks.push(castEnd);
+                }
+            });
+
+            return { processedCasts: results, maxTracks: Math.max(1, tracks.length) };
+        };
+
+        // --- Components ---
+        const CategoryIcon = ({ type }) => {
+            switch(type) {
+                case 'swords': return <Swords size={14} />;
+                case 'shield': return <Shield size={14} />;
+                case 'shieldAlert': return <ShieldAlert size={14} />;
+                case 'zap': return <Zap size={14} />;
+                default: return <MoreHorizontal size={14} />;
+            }
+        };
+
+        const RenderIcon = ({ spell, className }) => {
+            // Check spell.image (player spells) or spell.icon (boss mechanics)
+            const imgUrl = spell.image || spell.icon;
+            if (imgUrl) return <img src={imgUrl} alt={spell.name} className={`w-full h-full object-cover ${className}`} />;
+            return <div className={`flex items-center justify-center w-full h-full text-sm select-none bg-gray-700 ${className}`}>{spell.char || (spell.name ? spell.name[0] : '?')}</div>;
+        };
+
+        // Custom Spec Selector
+        const SpecSelector = ({ selectedSpec, onChange }) => {
+            const [isOpen, setIsOpen] = useState(false);
+            const ref = useRef(null);
+
+            // Mock Data for Specs
+            const SPECS = [
+                { label: 'Tanks', items: [{id:'paladin-paladin', e:'🛡️', n:'Paladin'}, {id:'warrior-warrior', e:'🪓', n:'Warrior'}, {id:'darkknight-darkknight', e:'🌑', n:'Dark Knight'}, {id:'gunbreaker-gunbreaker', e:'🔫', n:'Gunbreaker'}] },
+                { label: 'Healers', items: [{id:'whitemage-whitemage', e:'⚕️', n:'White Mage'}, {id:'scholar-scholar', e:'🧚', n:'Scholar'}, {id:'astrologian-astrologian', e:'✨', n:'Astrologian'}, {id:'sage-sage', e:'🤖', n:'Sage'}] },
+                { label: 'Melee', items: [{id:'monk-monk', e:'🥊', n:'Monk'}, {id:'dragoon-dragoon', e:'🐉', n:'Dragoon'}, {id:'ninja-ninja', e:'🥷', n:'Ninja'}, {id:'samurai-samurai', e:'⚔️', n:'Samurai'}, {id:'reaper-reaper', e:'👻', n:'Reaper'}] },
+                { label: 'Physical Ranged', items: [{id:'bard-bard', e:'🏹', n:'Bard'}, {id:'machinist-machinist', e:'🔫', n:'Machinist'}, {id:'dancer-dancer', e:'💃', n:'Dancer'}] },
+                { label: 'Magical Ranged', items: [{id:'blackmage-blackmage', e:'🔥', n:'Black Mage'}, {id:'summoner-summoner', e:'📖', n:'Summoner'}, {id:'redmage-redmage', e:'🌹', n:'Red Mage'}, {id:'pictomancer-pictomancer', e:'🎨', n:'Pictomancer'}] },
+            ];
+            
+            // Helper to get emoji for current spec
+            const currentEmoji = SPECS.flatMap(g => g.items).find(i => i.id === selectedSpec)?.e || '🌹';
+            const currentName = SPECS.flatMap(g => g.items).find(i => i.id === selectedSpec)?.n || 'Red Mage';
+
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (ref.current && !ref.current.contains(event.target)) setIsOpen(false);
+                };
+                document.addEventListener('mousedown', handleClickOutside);
+                return () => document.removeEventListener('mousedown', handleClickOutside);
+            }, []);
+
+            return (
+                <div className="relative" ref={ref}>
+                    <button 
+                        onClick={() => setIsOpen(!isOpen)} 
+                        className="flex items-center gap-2 px-3 py-1.5 bg-black/30 border border-gray-700 rounded-md text-sm hover:border-[#00FF96] transition-colors"
+                    >
+                        <span className="text-[#E87B7B]">{currentEmoji}</span>
+                        <span className="font-medium text-white">{currentName}</span>
+                        <ChevronDown size={14} className="text-gray-400" />
+                    </button>
+
+                    {isOpen && (
+                        <div className="absolute top-full left-0 mt-2 w-64 bg-[#1a1a1a] border border-gray-700 rounded-lg shadow-xl z-[70] p-2 flex flex-col gap-2 max-h-[400px] overflow-y-auto custom-scrollbar">
+                            {SPECS.map((group, idx) => (
+                                <div key={idx} className="flex flex-col gap-1">
+                                    <span className="text-[10px] uppercase text-gray-500 font-bold px-1">{group.label}</span>
+                                    <div className="flex flex-wrap gap-1">
+                                        {group.items.map(item => (
+                                            <button 
+                                                key={item.id}
+                                                onClick={() => { onChange(item.id); setIsOpen(false); }}
+                                                className={`w-8 h-8 flex items-center justify-center rounded text-lg border transition-all ${selectedSpec === item.id ? 'bg-[#333] border-[#00FF96] text-white' : 'bg-[#252525] border-transparent hover:bg-[#333] hover:text-[#00FF96] hover:border-[#00FF96]'}`}
+                                                title={item.n}
+                                            >
+                                                {item.e}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        // --- Main App ---
+        const App = () => {
+            const [zoom, setZoom] = useState(15);
+            const [isCollapsed, setIsCollapsed] = useState(true); // Default to Collapsed
+            const [viewMode, setViewMode] = useState('damage');
+            const [selectedBoss, setSelectedBoss] = useState('vamp-fatale');
+            const [selectedSpec, setSelectedSpec] = useState('redmage-redmage');
+            
+            const [spellCategories, setSpellCategories] = useState({});
+            const [spells, setSpells] = useState({});
+            const [bossMechanics, setBossMechanics] = useState([]);
+            const [rankData, setRankData] = useState([]);
+            const [loading, setLoading] = useState(true);
+
+            const [showDuration, setShowDuration] = useState(true);
+            const [showCooldown, setShowCooldown] = useState(true);
+            const [showDeaths, setShowDeaths] = useState(true);
+            const [showPhases, setShowPhases] = useState(true);
+            const [showBossRow, setShowBossRow] = useState(true);
+
+            const [selectedSpells, setSelectedSpells] = useState(new Set());
+            const scrollContainerRef = useRef(null);
+
+            // Drag State (Refactored to Refs for robustness)
+            const [isDraggingState, setIsDraggingState] = useState(false); // Only for UI cursor update
+            const dragInfo = useRef({
+                isDown: false,
+                startX: 0,
+                scrollLeft: 0
+            });
+
+            useEffect(() => {
+                const load = async () => {
+                    setLoading(true);
+                    const cats = await fetchSpellCategories();
+                    const sps = await fetchSpellData(selectedSpec);
+                    const mechs = await fetchBossMechanics(selectedBoss);
+                    const ranks = await fetchRankings(selectedSpec, selectedBoss, sps, rankData);
+
+                    setSpellCategories(cats); setSpells(sps); setBossMechanics(mechs); setRankData(ranks);
+                    
+                    // Filter default active spells
+                    const defaultSelectedIds = Object.values(sps)
+                        .filter(s => cats[s.category] && cats[s.category].defaultActive)
+                        .map(s => s.id);
+                    setSelectedSpells(new Set(defaultSelectedIds));
+
+                    setLoading(false);
+                };
+                load();
+            }, [selectedBoss, selectedSpec]);
+
+            const toggleSpell = (spellId) => {
+                const newSet = new Set(selectedSpells);
+                if (newSet.has(spellId)) newSet.delete(spellId); else newSet.add(spellId);
+                setSelectedSpells(newSet);
+            };
+
+            const toggleCategory = (catKey) => {
+                const spellsInCat = Object.values(spells).filter(s => s.category === catKey);
+                // Determine logic: if ANY are unselected, select ALL. If ALL are selected, deselect ALL.
+                const allSelected = spellsInCat.every(s => selectedSpells.has(s.id));
+                const newSet = new Set(selectedSpells);
+                spellsInCat.forEach(s => {
+                    if (allSelected) newSet.delete(s.id); else newSet.add(s.id);
+                });
+                setSelectedSpells(newSet);
+            };
+
+            const handleZoomIn = () => setZoom(prev => Math.min(prev + 5, 100));
+            const handleZoomOut = () => setZoom(prev => Math.max(prev - 5, 5));
+            const formatTime = (s) => `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
+
+            // --- Robust Drag Implementation ---
+            const onMouseDown = useCallback((e) => {
+                dragInfo.current = {
+                    isDown: true,
+                    startX: e.pageX,
+                    scrollLeft: scrollContainerRef.current.scrollLeft
+                };
+                setIsDraggingState(true);
+                
+                // Add listeners to window to catch movements outside the container
+                window.addEventListener('mousemove', onMouseMove);
+                window.addEventListener('mouseup', onMouseUp);
+                
+                // Prevent text selection
+                e.preventDefault(); 
+            }, []);
+
+            const onMouseMove = useCallback((e) => {
+                if (!dragInfo.current.isDown) return;
+                e.preventDefault();
+                
+                const x = e.pageX;
+                const walk = (x - dragInfo.current.startX) * 1.5; // Scroll speed multiplier
+                if (scrollContainerRef.current) {
+                    scrollContainerRef.current.scrollLeft = dragInfo.current.scrollLeft - walk;
+                }
+            }, []);
+
+            const onMouseUp = useCallback(() => {
+                dragInfo.current.isDown = false;
+                setIsDraggingState(false);
+                
+                // Clean up window listeners
+                window.removeEventListener('mousemove', onMouseMove);
+                window.removeEventListener('mouseup', onMouseUp);
+            }, [onMouseMove]);
+
+            // Cleanup on unmount
+            useEffect(() => {
+                return () => {
+                    window.removeEventListener('mousemove', onMouseMove);
+                    window.removeEventListener('mouseup', onMouseUp);
+                };
+            }, [onMouseMove, onMouseUp]);
+
+
+            if (loading) return <div className="h-screen bg-[#121212] flex items-center justify-center text-[#00FF96]">Loading...</div>;
+
+            return (
+                <div className="flex flex-col h-screen bg-[#121212] text-gray-300 font-sans overflow-hidden">
+
+                {/* Navbar */}
+                <nav className="h-14 bg-[#1a1a1a] border-b border-gray-800 flex items-center justify-between px-4 shrink-0 z-[60]">
+                    <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-2">
+                            <div className="text-xl font-bold tracking-tight text-white flex items-center select-none"><span style={{ color: THEME_COLOR }} className="mr-1">FF</span>LORRGS</div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-gray-400 text-sm">Boss:</span>
+                            <select value={selectedBoss} onChange={(e) => setSelectedBoss(e.target.value)} className="bg-black/30 border border-gray-700 text-white text-sm rounded px-2 py-1.5 focus:outline-none focus:border-[#00FF96] cursor-pointer">
+                                <option value="vamp-fatale">M9S: Vamp Fatale</option>
+                                <option value="red-hot-and-deep-blue">M10S: Red Hot and Deep Blue</option>
+                                <option value="the-tyrant">M11S: The Tyrant</option>
+                                <option value="lindwurm">M12S P1: Lindwurm</option>
+                            </select>
+                            <span className="w-px h-3 bg-gray-600 mx-2"></span>
+                            <span className="text-gray-400 text-sm">Spec:</span>
+                            <SpecSelector selectedSpec={selectedSpec} onChange={setSelectedSpec} />
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                    </div>
+                </nav>
+
+                {/* Control Bar */}
+                <div className="bg-[#181818] border-b border-gray-800 px-4 py-2 shrink-0 flex items-center gap-4 overflow-x-auto no-scrollbar shadow-md z-50">
+                    <div className="flex flex-col gap-1 border-r border-gray-700 pr-4 shrink-0">
+                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Display</span>
+                        <div className="flex items-center gap-1">
+                            <button title="Duration" onClick={() => setShowDuration(!showDuration)} className={`w-8 h-6 flex items-center justify-center text-sm rounded border transition-colors ${showDuration ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>⏳</button>
+                            <button title="Cooldown" onClick={() => setShowCooldown(!showCooldown)} className={`w-8 h-6 flex items-center justify-center text-sm rounded border transition-colors ${showCooldown ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>💿</button>
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-1 border-r border-gray-700 pr-4 shrink-0">
+                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Boss</span>
+                        <div className="flex items-center gap-2">
+                            <div className={`w-8 h-8 rounded border-2 overflow-hidden cursor-pointer transition ${showBossRow ? 'border-[#00FF96] opacity-100' : 'border-gray-700 opacity-50 grayscale'}`} onClick={() => setShowBossRow(!showBossRow)} title="Toggle Boss Row">
+                                <img src="https://xivapi.com/i/068000/068057.png" alt="Boss" className="w-full h-full object-cover" />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-6">
+                        {Object.entries(spellCategories).map(([catKey, category]) => (
+                            <div key={catKey} className="flex flex-col gap-1">
+                                <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-white" onClick={() => toggleCategory(catKey)}>
+                                    <CategoryIcon type={category.iconType} /> {category.label}
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                    {Object.values(spells).filter(spell => spell.category === catKey).map(spell => {
+                                        const isSelected = selectedSpells.has(spell.id);
+                                        return (
+                                            <button
+                                                key={spell.id}
+                                                onClick={() => toggleSpell(spell.id)}
+                                                className={`relative w-8 h-8 rounded border transition-all duration-200 group overflow-hidden ${isSelected ? 'border-transparent opacity-100 shadow-[0_0_10px_rgba(255,255,255,0.1)] grayscale-0' : 'border-gray-800 opacity-30 grayscale hover:opacity-70 hover:border-gray-600'}`}
+                                                title={spell.name}
+                                            >
+                                                <RenderIcon spell={spell} />
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex-1"></div>
+                    <div className="flex items-center gap-2 bg-black/20 p-1 rounded-lg border border-gray-800 shrink-0">
+                        <button
+                            onClick={() => setIsCollapsed(!isCollapsed)}
+                            className={`p-1.5 rounded transition ${!isCollapsed ? 'text-[#00FF96] bg-gray-700' : 'text-gray-400 hover:text-white hover:bg-gray-700'}`}
+                            title={isCollapsed ? "Expand Rows (Split lines)" : "Collapse Rows"}
+                        >
+                            <Layers size={16} />
+                        </button>
+                        <div className="w-px h-4 bg-gray-700 mx-1"></div>
+                        <button onClick={handleZoomOut} className="p-1.5 hover:bg-gray-700 rounded text-gray-400 hover:text-[#00FF96] transition"><ZoomOut size={16} /></button>
+                        <button onClick={handleZoomIn} className="p-1.5 hover:bg-gray-700 rounded text-gray-400 hover:text-[#00FF96] transition"><ZoomIn size={16} /></button>
+                    </div>
+                </div>
+
+                {/* Timeline Area */}
+                <div className="flex-1 flex overflow-hidden relative">
+                    <div 
+                        className={`flex-1 overflow-auto bg-[#121212] custom-scrollbar relative ${isDraggingState ? 'cursor-grabbing' : 'cursor-grab'}`} 
+                        ref={scrollContainerRef}
+                        onMouseDown={onMouseDown}
+                    >
+                        <div className="min-w-fit pb-10">
+
+                            {/* Sticky Header: Time Ruler */}
+                            <div className="sticky top-0 z-50 flex h-8 bg-[#202020] border-b border-gray-800">
+                                <div className="sticky left-0 bg-[#202020] border-r border-gray-800 shrink-0 flex items-center px-4 text-xs font-bold text-gray-500 uppercase z-[60] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
+                                    <div className="w-8 text-center mr-2 text-[#00FF96]">Rank</div>
+                                    <div className="flex-1 text-left">Player</div>
+                                    <div className="w-8 text-center text-gray-600">Reg</div>
+                                    <div className="w-8 text-center text-gray-600">Pair</div>
+                                </div>
+                                <div className="relative h-full" style={{ width: `${FIGHT_DURATION * zoom}px` }}>
+                                    {Array.from({ length: Math.ceil(FIGHT_DURATION / 30) + 1 }).map((_, i) => (
+                                        <div key={i} className="absolute bottom-0 border-l border-gray-600 pl-1 pb-1 text-[10px] text-gray-500 font-mono select-none" style={{ left: `${i * 30 * zoom}px` }}>{formatTime(i * 30)}</div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Phase Lines */}
+                            {showPhases && (
+                                <div className="absolute top-10 bottom-0 right-0 pointer-events-none z-0" style={{ left: `${LEFT_PANEL_WIDTH}px` }}>
+                                    {bossMechanics.filter(m => m.type === 'phase' || m.type === 'window').map((mech, i) => (
+                                        <div key={i} className="absolute top-0 bottom-0 border-l border-dashed z-0" style={{ left: `${mech.time * zoom}px`, borderColor: mech.color || 'rgba(255,255,255,0.1)' }} />
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Boss Timeline - Explicitly placed above players */}
+                            {showBossRow && (
+                                <div className="flex h-12 border-b border-gray-800/60 bg-[#151515] hover:bg-[#1a1a1a] transition-colors group relative sticky top-8 z-40">
+                                    <div className="sticky left-0 bg-[#181818] border-r border-gray-800 shrink-0 flex items-center px-4 z-50 shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
+                                        <div className="flex-1 font-bold text-gray-300">Boss Timeline</div>
+                                    </div>
+                                    <div className="relative h-full z-10" style={{ width: `${FIGHT_DURATION * zoom}px` }}>
+                                        {bossMechanics.map((mech, i) => (
+                                            mech.duration > 0 ? (
+                                                /* Standard Boss Bar for duration mechanics */
+                                                <div 
+                                                    key={i} 
+                                                    className="absolute top-1/2 -translate-y-1/2 h-6 rounded border border-white/10 flex items-center justify-center text-[10px] text-white/90 overflow-hidden shadow-sm" 
+                                                    style={{ left: `${mech.time * zoom}px`, width: `${Math.max(mech.duration * zoom, 20)}px`, backgroundColor: mech.color }} 
+                                                    title={`${mech.name} (${formatTime(mech.time)}) - ${mech.duration}s`}
+                                                >
+                                                    <span className="truncate px-1">{mech.name}</span>
+                                                </div>
+                                            ) : (
+                                                /* Icon Box for instant mechanics */
+                                                <div 
+                                                    key={i} 
+                                                    className="absolute top-1/2 -translate-y-1/2 h-6 w-6 rounded border border-white/20 flex items-center justify-center shadow-sm overflow-hidden" 
+                                                    style={{ left: `${mech.time * zoom}px`, backgroundColor: '#333' }}
+                                                    title={`${mech.name} (${formatTime(mech.time)})`}
+                                                >
+                                                    <RenderIcon spell={mech} />
+                                                </div>
+                                            )
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Player Rows */}
+                            {rankData.map((row) => {
+                                const visibleCasts = row.casts.filter(cast => selectedSpells.has(cast.spellId));
+                                const { processedCasts, maxTracks } = isCollapsed
+                                    ? { processedCasts: visibleCasts.map(c => ({ ...c, trackIndex: 0 })), maxTracks: 1 }
+                                    : calculateCastTracks(visibleCasts);
+
+                                // COMPACT MODE: 32px height per row
+                                const rowHeight = 32;
+                                const trackHeight = 30; // Height per sub-row when expanded
+                                const totalHeight = isCollapsed ? rowHeight : Math.max(rowHeight, maxTracks * trackHeight);
+
+                                return (
+                                    <div key={row.id} className="flex border-b border-gray-800/40 hover:bg-[#1a1a1a] transition-colors group relative" style={{ height: `${totalHeight}px` }}>
+                                        {/* Sticky Left Panel - Adjusted for Compact Height */}
+                                        <div className="sticky left-0 bg-[#161616] group-hover:bg-[#1e1e1e] border-r border-gray-800 shrink-0 flex items-center px-4 z-40 transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.2)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
+                                            <div className="w-8 text-center mr-2 font-mono text-gray-500 text-xs">#{row.rank}</div>
+                                            <div className="flex-1 flex flex-col justify-center truncate pr-2">
+                                                <span className="text-xs font-medium text-gray-200 truncate">{row.name}</span>
+                                                {/* Hidden DPS on very compact rows if needed, or keep small */}
+                                                {!isCollapsed && <span className="text-[10px] text-gray-500">{Math.round(row.dps/100)/10}k DPS</span>}
+                                            </div>
+                                            <div className="w-8 text-center text-[10px] font-mono font-bold text-gray-500 bg-[#222] rounded px-1 py-0.5">{row.region}</div>
+                                            
+                                            {/* Partner Column - Only shows for Tank/Healer */}
+                                            <div className="w-8 text-center flex justify-center items-center ml-1">
+                                                {row.partner && <span className="text-sm">{row.partner}</span>}
+                                            </div>
+                                        </div>
+
+                                        {/* Right Panel: Casts */}
+                                        <div className="relative h-full z-10" style={{ width: `${FIGHT_DURATION * zoom}px` }}>
+                                            {/* Grid Lines */}
+                                            {Array.from({ length: Math.ceil(FIGHT_DURATION / 30) + 1 }).map((_, i) => (
+                                                <div key={i} className="absolute top-0 bottom-0 border-l border-gray-800/20 pointer-events-none" style={{ left: `${i * 30 * zoom}px` }} />
+                                            ))}
+                                            
+                                            {/* Deaths */}
+                                            {showDeaths && row.deaths.map((deathTime, dIdx) => (
+                                                <div key={dIdx} className="absolute top-1/2 -translate-y-1/2 text-gray-600 z-0" style={{ left: `${deathTime * zoom}px` }}><Skull size={14} /></div>
+                                            ))}
+
+                                            {processedCasts.map((cast, cIdx) => {
+                                                const spell = spells[cast.spellId];
+                                                if (!spell) return null;
+
+                                                // Vertical positioning
+                                                const currentTrackHeight = isCollapsed ? totalHeight : trackHeight;
+                                                const topPos = isCollapsed ? 0 : cast.trackIndex * trackHeight;
+
+                                                // Dimensions - Adjusted for Compactness
+                                                // In compact mode (32px), icon should be small. 85% of 32 = ~27px
+                                                const iconHeight = currentTrackHeight * 0.85; 
+                                                const durationWidth = Math.max((cast.duration || 0) * zoom, iconHeight); 
+                                                const cdWidth = (spell.cd || 0) * zoom;
+
+                                                // Color Assignment (Order based)
+                                                // We use cIdx to cycle through palette
+                                                const barColor = DURATION_PALETTE[cIdx % DURATION_PALETTE.length];
+
+                                                // Hex color to RGBA for lighter CD bar (using the assigned barColor)
+                                                const hexToRgba = (hex, alpha) => {
+                                                    // Handle simple hex codes
+                                                    if (!hex) return `rgba(255,255,255,${alpha})`;
+                                                    if (hex.startsWith('#')) {
+                                                        let r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+                                                        return `rgba(${r},${g},${b},${alpha})`;
+                                                    }
+                                                    return hex; // fallback if already rgb/rgba
+                                                };
+
+                                                return (
+                                                    <div
+                                                        key={cIdx}
+                                                        className="absolute flex items-center group/icon select-none"
+                                                        style={{
+                                                            left: `${cast.timestamp * zoom}px`,
+                                                            top: `${topPos}px`,
+                                                            height: `${currentTrackHeight}px`,
+                                                            zIndex: 10 + cIdx // Right skills cover left skills
+                                                        }}
+                                                    >
+                                                        <div className="relative w-full h-full flex items-center">
+                                                            
+                                                            {/* 1. Cooldown Bar - Lighter version of the ASSIGNED BAR COLOR */}
+                                                            {showCooldown && spell.cd > 0 && (
+                                                                <div 
+                                                                    className="absolute top-1/2 -translate-y-1/2 h-1/3 rounded-r-sm z-0"
+                                                                    style={{
+                                                                        left: `${iconHeight/2}px`, 
+                                                                        width: `${cdWidth}px`,
+                                                                        backgroundColor: hexToRgba(barColor, 0.2)
+                                                                    }}
+                                                                />
+                                                            )}
+
+                                                            {/* 2. Duration Bar - Uses ASSIGNED BAR COLOR */}
+                                                            {showDuration && (
+                                                                <div
+                                                                    className="absolute left-0 z-10 rounded-sm shadow-sm"
+                                                                    style={{
+                                                                        width: `${durationWidth}px`,
+                                                                        height: '90%',
+                                                                        backgroundColor: barColor, // Use palette color
+                                                                        opacity: 0.9
+                                                                    }}
+                                                                />
+                                                            )}
+
+                                                            {/* 3. Icon */}
+                                                            <div
+                                                                className="relative z-20 flex items-center justify-center overflow-hidden rounded-sm bg-black/50"
+                                                                style={{
+                                                                    height: `${iconHeight}px`,
+                                                                    width: `${iconHeight}px`,
+                                                                    minWidth: `${iconHeight}px`
+                                                                }}
+                                                            >
+                                                                <RenderIcon spell={spell} className="opacity-100" />
+                                                            </div>
+
+                                                            {/* 4. Timestamp Text */}
+                                                            <span 
+                                                                className="ml-1 font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] z-30 pointer-events-none"
+                                                                style={{ fontSize: `${iconHeight * 0.7}px`, lineHeight: 1 }}
+                                                            >
+                                                                {formatTime(cast.timestamp)}
+                                                            </span>
+
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+                </div>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
