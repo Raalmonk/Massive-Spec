@@ -117,20 +117,6 @@
             return spellMap;
         };
 
-        // Helper to determine role and random partner
-        const getPartnerInfo = (specSlug) => {
-            const tanks = ['🛡️', '🪓', '🌑', '🔫'];
-            const healers = ['⚕️', '🧚', '✨', '🤖'];
-            
-            let role = 'dps';
-            if (specSlug.includes('paladin') || specSlug.includes('warrior') || specSlug.includes('darkknight') || specSlug.includes('gunbreaker')) role = 'tank';
-            if (specSlug.includes('whitemage') || specSlug.includes('scholar') || specSlug.includes('astrologian') || specSlug.includes('sage')) role = 'healer';
-
-            if (role === 'tank') return { role, icon: tanks[Math.floor(Math.random() * tanks.length)] };
-            if (role === 'healer') return { role, icon: healers[Math.floor(Math.random() * healers.length)] };
-            return { role: 'dps', icon: null };
-        };
-
         // 2. fetchRankings (API with Region & Partner Mock)
         const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = []) => {
             console.log('[FFLorrgs] Starting fetch for:', specSlug, bossSlug);
@@ -150,6 +136,7 @@
                                         player.fightId = fight.fight_id;
                                         player.reportId = report.report_id;
                                         player.region = report.region;
+                                        player.combatantInfo = fight.combatant_info;
                                         allPlayers.push(player);
                                     });
                                 }
@@ -161,14 +148,34 @@
                 allPlayers.sort((a, b) => b.total - a.total);
                 const topPlayers = allPlayers.slice(0, 20); 
 
-                const { role, icon: partnerIcon } = getPartnerInfo(specSlug);
+                const myRole = getSpecRole(specSlug);
 
                 const rankData = topPlayers.map((player, index) => {
                      const id = `player-${player.source_id || index}`;
                      
                      const region = player.region || '??';
-                     // Partner Mock Logic (randomize slightly per player for visual variety if tank/healer)
-                     const finalPartner = (role === 'tank' || role === 'healer') ? partnerIcon : null;
+
+                     // Partner Logic
+                     let finalPartner = null;
+                     if ((myRole === 'tank' || myRole === 'healer') && player.combatantInfo) {
+                        const otherSpecs = [...player.combatantInfo];
+                        // Remove one instance of myself
+                        const myIndex = otherSpecs.indexOf(specSlug);
+                        if (myIndex > -1) otherSpecs.splice(myIndex, 1);
+
+                        // Find partner
+                        const partnerSpec = otherSpecs.find(s => getSpecRole(s) === myRole);
+                        if (partnerSpec) {
+                            const info = getSpecInfo(partnerSpec);
+                            if (info) {
+                                const SHORT_NAMES = {
+                                    'paladin-paladin': 'PLD', 'warrior-warrior': 'WAR', 'darkknight-darkknight': 'DRK', 'gunbreaker-gunbreaker': 'GNB',
+                                    'whitemage-whitemage': 'WHM', 'scholar-scholar': 'SCH', 'astrologian-astrologian': 'AST', 'sage-sage': 'SGE'
+                                };
+                                finalPartner = SHORT_NAMES[partnerSpec] || '??';
+                            }
+                        }
+                     }
 
                      const existing = currentRankData.find(p => p.id === id);
                      if (existing) {
@@ -291,47 +298,53 @@
             return <div className={`flex items-center justify-center w-full h-full text-sm select-none bg-gray-700 ${className}`}>{spell.char || (spell.name ? spell.name[0] : '?')}</div>;
         };
 
+        // Global Specs Data
+        const SPECS = [
+            { label: 'Tanks', role: 'tank', items: [
+                {id:'paladin-paladin', icon:'paladin.png', n:'Paladin'},
+                {id:'warrior-warrior', icon:'warrior.png', n:'Warrior'},
+                {id:'darkknight-darkknight', icon:'Dark_Knight.png', n:'Dark Knight'},
+                {id:'gunbreaker-gunbreaker', icon:'Gunbreaker.png', n:'Gunbreaker'}
+            ]},
+            { label: 'Healers', role: 'healer', items: [
+                {id:'whitemage-whitemage', icon:'White_Mage.png', n:'White Mage'},
+                {id:'scholar-scholar', icon:'Scholar.png', n:'Scholar'},
+                {id:'astrologian-astrologian', icon:'Astrologian.png', n:'Astrologian'},
+                {id:'sage-sage', icon:'Sage.png', n:'Sage'}
+            ]},
+            { label: 'Melee', role: 'dps', items: [
+                {id:'monk-monk', icon:'monk.png', n:'Monk'},
+                {id:'dragoon-dragoon', icon:'Dragoon.png', n:'Dragoon'},
+                {id:'ninja-ninja', icon:'Ninja.png', n:'Ninja'},
+                {id:'samurai-samurai', icon:'Samurai.png', n:'Samurai'},
+                {id:'reaper-reaper', icon:'Reaper.png', n:'Reaper'},
+                {id:'viper-viper', icon:'Viper.png', n:'Viper'}
+            ]},
+            { label: 'Physical Ranged', role: 'dps', items: [
+                {id:'bard-bard', icon:'Bard.png', n:'Bard'},
+                {id:'machinist-machinist', icon:'Machinist.png', n:'Machinist'},
+                {id:'dancer-dancer', icon:'Dancer.png', n:'Dancer'}
+            ]},
+            { label: 'Magical Ranged', role: 'dps', items: [
+                {id:'blackmage-blackmage', icon:'Black_Mage.png', n:'Black Mage'},
+                {id:'summoner-summoner', icon:'Summoner.png', n:'Summoner'},
+                {id:'redmage-redmage', icon:'Red_Mage.png', n:'Red Mage'},
+                {id:'pictomancer-pictomancer', icon:'Pictomancer.png', n:'Pictomancer'}
+            ]},
+        ];
+
+        const getSpecInfo = (specId) => SPECS.flatMap(g => g.items).find(i => i.id === specId);
+        const getSpecRole = (specId) => {
+            const group = SPECS.find(g => g.items.some(i => i.id === specId));
+            return group ? group.role : 'dps';
+        };
+
         // Custom Spec Selector
         const SpecSelector = ({ selectedSpec, onChange }) => {
             const [isOpen, setIsOpen] = useState(false);
             const ref = useRef(null);
 
-            // Mock Data for Specs
-            const SPECS = [
-                { label: 'Tanks', items: [
-                    {id:'paladin-paladin', icon:'paladin.png', n:'Paladin'},
-                    {id:'warrior-warrior', icon:'warrior.png', n:'Warrior'},
-                    {id:'darkknight-darkknight', icon:'Dark_Knight.png', n:'Dark Knight'},
-                    {id:'gunbreaker-gunbreaker', icon:'Gunbreaker.png', n:'Gunbreaker'}
-                ]},
-                { label: 'Healers', items: [
-                    {id:'whitemage-whitemage', icon:'White_Mage.png', n:'White Mage'},
-                    {id:'scholar-scholar', icon:'Scholar.png', n:'Scholar'},
-                    {id:'astrologian-astrologian', icon:'Astrologian.png', n:'Astrologian'},
-                    {id:'sage-sage', icon:'Sage.png', n:'Sage'}
-                ]},
-                { label: 'Melee', items: [
-                    {id:'monk-monk', icon:'monk.png', n:'Monk'},
-                    {id:'dragoon-dragoon', icon:'Dragoon.png', n:'Dragoon'},
-                    {id:'ninja-ninja', icon:'Ninja.png', n:'Ninja'},
-                    {id:'samurai-samurai', icon:'Samurai.png', n:'Samurai'},
-                    {id:'reaper-reaper', icon:'Reaper.png', n:'Reaper'},
-                    {id:'viper-viper', icon:'Viper.png', n:'Viper'}
-                ]},
-                { label: 'Physical Ranged', items: [
-                    {id:'bard-bard', icon:'Bard.png', n:'Bard'},
-                    {id:'machinist-machinist', icon:'Machinist.png', n:'Machinist'},
-                    {id:'dancer-dancer', icon:'Dancer.png', n:'Dancer'}
-                ]},
-                { label: 'Magical Ranged', items: [
-                    {id:'blackmage-blackmage', icon:'Black_Mage.png', n:'Black Mage'},
-                    {id:'summoner-summoner', icon:'Summoner.png', n:'Summoner'},
-                    {id:'redmage-redmage', icon:'Red_Mage.png', n:'Red Mage'},
-                    {id:'pictomancer-pictomancer', icon:'Pictomancer.png', n:'Pictomancer'}
-                ]},
-            ];
-            
-            const currentSpecItem = SPECS.flatMap(g => g.items).find(i => i.id === selectedSpec);
+            const currentSpecItem = getSpecInfo(selectedSpec);
             const currentIcon = currentSpecItem?.icon || 'Red_Mage.png';
             const currentName = currentSpecItem?.n || 'Red Mage';
 

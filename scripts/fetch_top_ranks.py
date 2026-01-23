@@ -38,6 +38,10 @@ async def fetch_top_ranks(boss_slug, spec_slug, limit=5, difficulty="mythic", me
         logger.error(f"Spec not found: {spec_slug}")
         return
 
+    # Force Metric for Healers
+    if spec.role.code == "heal":
+        metric = "dps"
+
     # 2. Query Rankings
     client = wcl.WarcraftlogsClient.get_instance()
 
@@ -45,29 +49,47 @@ async def fetch_top_ranks(boss_slug, spec_slug, limit=5, difficulty="mythic", me
     if difficulty == "heroic": difficulty_id = 4
     elif difficulty == "normal": difficulty_id = 3
 
-    query = f"""
-    worldData
-    {{
-        encounter(id: {boss.id})
+    def build_query(region=None):
+        region_arg = f'serverRegion: "{region}"' if region else ""
+        return f"""
+        worldData
         {{
-            characterRankings(
-                className: "{spec.wow_class.name_slug_cap}"
-                specName: "{spec.name_slug_cap}"
-                metric: {metric}
-                difficulty: {difficulty_id}
-                includeCombatantInfo: true
-                page: 1
-            )
+            encounter(id: {boss.id})
+            {{
+                characterRankings(
+                    className: "{spec.wow_class.name_slug_cap}"
+                    specName: "{spec.name_slug_cap}"
+                    metric: {metric}
+                    difficulty: {difficulty_id}
+                    includeCombatantInfo: true
+                    page: 1
+                    {region_arg}
+                )
+            }}
         }}
-    }}
-    """
+        """
 
-    logger.info(f"Fetching top {limit} ranks for {boss.name} - {spec.name}...")
-    result = await client.query(query)
-    rankings = result.get("worldData", {}).get("encounter", {}).get("characterRankings", {}).get("rankings", [])
+    logger.info(f"Fetching rankings for {boss.name} - {spec.name}...")
 
-    # Slice to limit
-    rankings = rankings[:limit]
+    # Dual Fetch: Global (Top 5) + CN (Top 10)
+    q_global = build_query(region="Global")
+    q_cn = build_query(region="CN")
+
+    results = await asyncio.gather(client.query(q_global), client.query(q_cn), return_exceptions=True)
+
+    rankings = []
+
+    # Process Global
+    res_global = results[0]
+    if isinstance(res_global, dict):
+        r = res_global.get("worldData", {}).get("encounter", {}).get("characterRankings", {}).get("rankings", [])
+        rankings.extend(r[:5])
+
+    # Process CN
+    res_cn = results[1]
+    if isinstance(res_cn, dict):
+        r = res_cn.get("worldData", {}).get("encounter", {}).get("characterRankings", {}).get("rankings", [])
+        rankings.extend(r[:10])
 
     for i, rank in enumerate(rankings):
         report_id = rank.get("report", {}).get("code")

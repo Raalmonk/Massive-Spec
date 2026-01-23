@@ -90,6 +90,7 @@ class Fight(warcraftlogs_base.BaseModel):
         return {
             **self.summary(),
             "players": [player.as_dict() for player in players],
+            "combatant_info": self.combatant_info,
             "boss": self.boss.as_dict() if self.boss else {},
         }
 

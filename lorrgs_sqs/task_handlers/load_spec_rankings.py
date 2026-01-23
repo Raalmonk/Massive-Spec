@@ -9,6 +9,7 @@ import json
 # IMPORT LOCAL LIBRARIES
 from lorgs import data  # pylint: disable=unused-import
 from lorgs.models import warcraftlogs_ranking
+from lorgs.models.wow_spec import WowSpec
 
 
 async def load_spec_rankings(
@@ -22,6 +23,11 @@ async def load_spec_rankings(
     """Load the Spec Ranking Data from Warcraftlogs and save it to the Database."""
     ################################
     # Get inputs
+
+    # Force Metric for Healers
+    spec = WowSpec.get(full_name_slug=spec_slug)
+    if spec and spec.role.code == "heal":
+        metric = "dps"
 
     # fmt: off
     print(f"loading: {boss_slug} vs {spec_slug} | (difficulty={difficulty} / metric={metric} / limit={limit} / clear={clear})")

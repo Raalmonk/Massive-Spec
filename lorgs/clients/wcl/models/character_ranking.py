@@ -65,6 +65,8 @@ class CharacterRanking(BaseModel):
 
     server: CharacterRankingReportServerData = CharacterRankingReportServerData()
 
+    combatantInfo: list = []
+
 
 class CharacterRankings(BaseModel):
     page: int = 1
