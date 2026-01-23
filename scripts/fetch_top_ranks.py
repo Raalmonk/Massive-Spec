@@ -51,10 +51,15 @@ async def fetch_top_ranks(boss_slug, spec_slug, limit=5, difficulty="mythic", me
     elif difficulty == "normal": difficulty_id = 3
 
     def build_rankings_query(args=""):
+        # Viper (Class==Spec) Fix:
+        spec_name_arg = f'specName: "{spec.name_slug_cap}"'
+        if spec.wow_class.name_slug_cap == spec.name_slug_cap:
+             spec_name_arg = ""
+
         return f"""
             characterRankings(
                 className: "{spec.wow_class.name_slug_cap}"
-                specName: "{spec.name_slug_cap}"
+                {spec_name_arg}
                 metric: {metric}
                 difficulty: {difficulty_id}
                 includeCombatantInfo: true
@@ -81,6 +86,8 @@ async def fetch_top_ranks(boss_slug, spec_slug, limit=5, difficulty="mythic", me
     global_rankings = encounter_data.get("characterRankings", {}).get("rankings", [])
     cn_rankings = encounter_data.get("cn", {}).get("rankings", [])
 
+    logger.info(f"CN Rankings found: {len(cn_rankings)}")
+
     # Merge: Global (limit) + CN (10)
     rankings = global_rankings[:limit] + cn_rankings[:10]
 
@@ -93,21 +100,25 @@ async def fetch_top_ranks(boss_slug, spec_slug, limit=5, difficulty="mythic", me
         player_name = rank.get("name")
         amount = rank.get("amount") # Player DPS
 
-        # Extract party composition
-        combatant_info = []
-        # Assumption: combatantInfo is a list of objects with 'spec' or 'icon' that we can map to slugs
-        # WCL API v2: combatantInfo is not always documented clearly for this endpoint,
-        # but let's try to extract it if present.
-        # Based on previous knowledge, characterRankings with includeCombatantInfo: true
-        # *should* have it, but sometimes it might be missing or different format.
-        # Use a safe extraction.
-
-        # Note: If combatantInfo is not directly usable to match exactly, we rely on report_id+fight_id
-        # and checking if the cached fight has *any* combatant info.
-
-        # Let's inspect the rank object for debug if needed, but here we just proceed.
-
         logger.info(f"[{i+1}/{limit}] Checking Report: {report_id} Fight: {fight_id} ({player_name})")
+
+        # Partners
+        partners = []
+        if spec.role.code in ("tank", "heal") and rank.get("combatantInfo"):
+            for c in rank.get("combatantInfo"):
+                c_name = c.get("name")
+                if c_name == player_name: continue
+
+                # Resolve Spec/Role
+                c_spec_name = c.get("spec") or c.get("type") # Handle Jobs with no spec
+                c_spec = WowSpec.get(name_slug_cap=c_spec_name)
+                if not c_spec: c_spec = WowSpec.get(name_slug_cap=c.get("type"))
+
+                if c_spec and c_spec.role == spec.role:
+                    partners.append(f"{c_name} ({c_spec.name})")
+
+        if partners:
+            logger.info(f"   -> Partner(s): {', '.join(partners)}")
 
         # Check Cache
         try:
