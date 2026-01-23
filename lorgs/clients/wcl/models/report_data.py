@@ -9,6 +9,7 @@ from pydantic import BaseModel, root_validator, validator
 
 # IMPORT LOCAL LIBRARIES
 from .guild import Guild
+from .region import Region
 from .report_events import ReportEvent
 from .report_fight import ReportFight
 from .report_master_data import ReportMasterData
@@ -52,6 +53,8 @@ class Report(BaseModel):
 
     guild: typing.Optional[Guild] = None
     """The guild that the report belongs to. If this is null, then the report was uploaded to the user's personal logs."""
+
+    region: typing.Optional[Region] = None
 
     @validator("events", pre=True)
     def unwrap_event_data(cls, v):

@@ -154,6 +154,7 @@ class Report(warcraftlogs_base.BaseModel):
             report(code: "{self.report_id}")
             {{
                 title
+                region {{ slug }}
                 zone {{name id}}
                 startTime
 
@@ -216,6 +217,9 @@ class Report(warcraftlogs_base.BaseModel):
 
         guild = report.guild
         self.guild = guild.name if guild else ""
+
+        if report.region:
+            self.region = report.region.slug.upper()
 
         if report.masterData:
             self.process_master_data(report.masterData)

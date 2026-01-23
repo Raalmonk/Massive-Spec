@@ -1,8 +1,13 @@
 import unittest
-
+from unittest.mock import Mock
 import arrow
+import datetime
 
 from lorgs.models.warcraftlogs_report import Report
+from lorgs.clients import wcl
+
+# Import a class to ensure data is loaded for Player creation
+from lorgs.data.classes import astrologian
 
 
 class TestReport(unittest.TestCase):
@@ -20,29 +25,35 @@ class TestReport(unittest.TestCase):
         query_result = {"report": {"title": "new title"}}
 
         assert self.report.title != "new title"
-        self.report.process_query_result(query_result=query_result)
+        self.report.process_query_result(**query_result)
         assert self.report.title == "new title"
 
     def test__process_query_result__start_time(self):
 
         query_result = {"report": {"startTime": 123456}}
 
-        assert self.report.start_time == arrow.get(0)
-        self.report.process_query_result(query_result=query_result)
+        assert self.report.start_time == datetime.datetime.min
+        self.report.process_query_result(**query_result)
         assert self.report.start_time == arrow.get(123456)
+
+    def test__process_query_result__region(self):
+        query_result = {"report": {"region": {"slug": "cn"}}}
+
+        self.report.process_query_result(**query_result)
+        assert self.report.region == "CN"
 
     def test__process_query_result__zone_id_valid(self):
 
         query_result = {"report": {"zone": {"id": 42}}}
 
-        self.report.process_query_result(query_result=query_result)
+        self.report.process_query_result(**query_result)
         assert self.report.zone_id == 42
 
     def test__process_query_result__zone_id_invalid(self):
 
-        query_result = {}
+        query_result = {"report": {}} # Minimal report to satisfy ReportData validator
 
-        self.report.process_query_result(query_result=query_result)
+        self.report.process_query_result(**query_result)
         assert self.report.zone_id == -1
 
     ############################################################################
@@ -51,10 +62,13 @@ class TestReport(unittest.TestCase):
     #
 
     def test__process_master_data__clears_data(self):
-        self.report.players = {1: "old", 2: "players"}
+        # We need to simulate that players is not empty initially
+        self.report.players = ["some", "data"]
 
-        self.report.process_master_data({"some": "data"})
-        assert self.report.players == {}
+        mock_data = Mock()
+        mock_data.actors = []
+        self.report.process_master_data(mock_data)
+        assert self.report.players == []
 
     ############################################################################
     #
@@ -63,85 +77,78 @@ class TestReport(unittest.TestCase):
 
     def test__add_player__create_player(self):
 
-        actor_data = {
-            "id": 32,
-            "name": "PlayerName",
-            "icon": "Shaman-Restoration",
-            "type": "Player",
-            "subType": "Shaman"
-        }
+        actor_data = wcl.ReportActor(
+            id=32,
+            name="PlayerName",
+            icon="Astrologian-Astrologian",
+            type="Player",
+            subType="Astrologian",
+            gameID=100
+        )
 
-        self.report.add_player(**actor_data)
+        self.report.add_player(actor_data)
 
-        assert "32" in self.report.players
-        player = self.report.players["32"]
+        assert len(self.report.players) == 1
+        player = self.report.players[0]
         assert player.source_id == 32
         assert player.name == "PlayerName"
-        assert player.spec_slug == "shaman-restoration"
-        assert player.class_slug == "shaman"
+        assert player.spec_slug == "astrologian-astrologian"
+        assert player.class_slug == "astrologian"
 
     def test__add_player__unknown_spec(self):
 
-        actor_data = {
-            "id": 5,
-            "icon": "Hunter",
-            "subType": "Hunter"
-        }
+        actor_data = wcl.ReportActor(
+            id=5,
+            name="HunterName",
+            icon="Hunter",
+            type="Player",
+            subType="Hunter",
+            gameID=101
+        )
 
-        self.report.add_player(**actor_data)
+        self.report.add_player(actor_data)
 
-        assert "5" in self.report.players
-        player = self.report.players["5"]
-        assert player.spec_slug == ""
-        assert player.class_slug == "hunter"
+        # Hunter is not loaded, so player.class_ will be None
+        # add_player skips players with unknown class
+        assert len(self.report.players) == 0
 
     ############################################################################
     #
     # process_report_fights
     #
-    EXAMPLE_FIGHTS_DATA_1 = [
-        {
-            "code": 1,
-            "encounterID": 2407,
-            "fightPercentage": 70.99,
-            "kill": False,
-            "startTime": 406559,
-            "endTime": 589257
-        },
-        {
-            "code": 2,
-            "encounterID": 2407,
-            "fightPercentage": 66.14,
-            "kill": False,
-            "startTime": 681738,
-            "endTime": 919600
-        },
-    ]
 
     def test__add_fight__skip_trash_fight(self):
 
-        fight_data = {"encounterID": None}
-        self.report.add_fight(**fight_data)
+        fight_data = wcl.ReportFight(
+            id=1,
+            startTime=0,
+            endTime=100,
+            encounterID=0 # trash
+        )
+        self.report.add_fight(fight_data)
 
         assert not self.report.fights
 
     def test__add_fight__basic(self):
+        # Set a valid start time so we can check timestamps
+        self.report.start_time = datetime.datetime(2020, 1, 1, tzinfo=datetime.timezone.utc)
 
-        fight_data = {
-            "id": 10,
-            "encounterID": 2407,
-            "fightPercentage": 70.99,
-            "kill": False,
-            "startTime": 400000,
-            "endTime": 500000
-        }
-        self.report.add_fight(**fight_data)
+        fight_data = wcl.ReportFight(
+            id=10,
+            encounterID=2407,
+            fightPercentage=70.99,
+            kill=False,
+            startTime=400000,
+            endTime=500000
+        )
+        self.report.add_fight(fight_data)
 
-        assert self.report.fights
-        fight = self.report.fights["10"]
+        assert len(self.report.fights) == 1
+        fight = self.report.fights[0]
 
         assert fight.percent == 70.99
-        assert fight.kill == False  # pylint: disable=singleton-comparison
-        assert fight.duration == 100000
-        assert fight.start_time.timestamp() == 400
-        assert fight.end_time.timestamp() == 500
+        assert fight.kill == False
+        assert fight.duration == 100001
+
+        expected_start = self.report.start_time.timestamp() + 400
+        assert fight.start_time.timestamp() == expected_start

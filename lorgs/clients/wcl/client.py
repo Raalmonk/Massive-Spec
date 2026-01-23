@@ -90,6 +90,7 @@ class WarcraftlogsClient(BaseClient):
 
     # FF Logs API v2 Endpoints
     URL_API = "https://www.fflogs.com/api/v2/client"
+    URL_API_CN = "https://cn.fflogs.com/api/v2/client"
     URL_AUTH = "https://www.fflogs.com/oauth/token"
 
     def __init__(self, client_id: str = "", client_secret: str = "") -> None:
@@ -175,21 +176,37 @@ class WarcraftlogsClient(BaseClient):
                 # print(query)
                 raise ValueError(msg)
 
-    async def query(self, query: str, raise_errors=True) -> dict[str, typing.Any]:
+    async def query(self, query: str, raise_errors=True, region: str = "") -> dict[str, typing.Any]:
 
         # Format Inputs
         if not query:
             return {}
-        query = f"query {{ {query} }}"
+        gql_query = f"query {{ {query} }}"
 
-        # Run
-        result = await super().query(self.URL_API, query)
+        # 1. Select URL
+        url = self.URL_API_CN if region == "CN" else self.URL_API
 
-        # Check for Errors
-        if raise_errors:
-            self.raise_errors(result)
+        try:
+            # 2. Run
+            result = await super().query(url, gql_query)
 
-        return result.get("data", {})  # type: ignore
+            # Check for Errors
+            if raise_errors:
+                self.raise_errors(result)
+
+            return result.get("data", {})  # type: ignore
+
+        except InvalidReport:
+            # 3. Retry on CN
+            if not region and url == self.URL_API:
+                logger.info("[WCL] Report not found on Global. Retrying on CN endpoint...")
+                result = await super().query(self.URL_API_CN, gql_query)
+
+                if raise_errors:
+                    self.raise_errors(result)
+
+                return result.get("data", {})
+            raise
 
     async def multiquery(self, queries: list[str], raise_errors=True) -> list[typing.Any]:
         """Execute a list of queries as a batch.
