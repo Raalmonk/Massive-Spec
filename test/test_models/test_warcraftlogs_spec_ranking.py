@@ -41,14 +41,15 @@ class TestSpecRanking(unittest.TestCase):
         assert 'difficulty: 101' in query
         # check if cn alias is present (ignoring whitespace)
         assert 'cn:' in query
-        assert 'serverRegion: "CN"' in query
+        assert 'global:' in query
+        assert 'partition: 3' in query
 
     def test__process_query_result_one(self):
 
         data = {
             "worldData": {
                 "encounter": {
-                    "characterRankings": {
+                    "global": {
                         "rankings": [
                             {
                                 "name": "PlayerName",

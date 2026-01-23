@@ -1,7 +1,7 @@
 {
 	"worldData": {
 		"encounter": {
-			"characterRankings": {
+			"global": {
 				"page": 1,
 				"hasMorePages": true,
 				"count": 100,
@@ -157,7 +157,13 @@
 						"soulbindID": 9
 					}
 				]
-			}
+			},
+            "cn": {
+				"page": 1,
+				"hasMorePages": false,
+				"count": 0,
+				"rankings": []
+            }
 		}
 	}
 }
