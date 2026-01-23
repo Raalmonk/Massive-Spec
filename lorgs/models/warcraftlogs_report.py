@@ -68,6 +68,7 @@ class Report(warcraftlogs_base.BaseModel):
             "zone_id": self.zone_id,
             "guild": self.guild,
             "owner": self.owner,
+            "region": self.region,
         }
 
         # for players and fights we only include essential data

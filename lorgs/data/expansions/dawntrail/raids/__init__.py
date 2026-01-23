@@ -7,4 +7,9 @@ from .m12s_p2 import *
 
 __all__ = [
     "ARCADION_HEAVYWEIGHT",
+    "VAMP_FATALE",
+    "RED_HOT_AND_DEEP_BLUE",
+    "THE_TYRANT",
+    "LINDWURM",
+    "LINDWURM_II",
 ]

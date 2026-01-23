@@ -11,6 +11,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 from lorgs import data  # pylint: disable=unused-import
 from lorrgs_api.middlewares import cache_middleware, cors_middleware
 from lorrgs_api.routes import api
+from lorrgs_api.routes import views
 
 
 def create_app() -> fastapi.FastAPI:
@@ -28,6 +29,7 @@ def create_app() -> fastapi.FastAPI:
     )
 
     app.include_router(api.router, prefix="/api")
+    app.include_router(views.router)
     app.mount("/lorrgs_assets", StaticFiles(directory="lorrgs_assets"), name="assets")
 
     cors_middleware.init(app)

@@ -96,7 +96,7 @@
                 if (!tags || tags.length === 0) return 'MAJOR';
                 const tagSet = new Set(tags.map(t => String(t).toLowerCase()));
                 if (tagSet.has('raid_mit') || tagSet.has('raid_cd')) return 'RAID_MIT';
-                if (tagSet.has('single_mit') || tagSet.has('tank_mit')) return 'SINGLE_MIT';
+                if (tagSet.has('single_mit') || tagSet.has('tank_mit') || tagSet.has('defensive')) return 'SINGLE_MIT';
                 if (tagSet.has('utility') || tagSet.has('potion')) return 'UTILITY';
                 return 'MAJOR';
             };
@@ -149,6 +149,7 @@
                                         player.fightDuration = fight.duration;
                                         player.fightId = fight.fight_id;
                                         player.reportId = report.report_id;
+                                        player.region = report.region;
                                         allPlayers.push(player);
                                     });
                                 }
@@ -160,14 +161,12 @@
                 allPlayers.sort((a, b) => b.total - a.total);
                 const topPlayers = allPlayers.slice(0, 20); 
 
-                const REGIONS = ['NA', 'JP', 'EU', 'CN', 'KR'];
                 const { role, icon: partnerIcon } = getPartnerInfo(specSlug);
 
                 const rankData = topPlayers.map((player, index) => {
                      const id = `player-${player.source_id || index}`;
                      
-                     // Region Mock logic
-                     const region = REGIONS[Math.floor(Math.random() * REGIONS.length)];
+                     const region = player.region || '??';
                      // Partner Mock Logic (randomize slightly per player for visual variety if tank/healer)
                      const finalPartner = (role === 'tank' || role === 'healer') ? partnerIcon : null;
 
@@ -299,16 +298,42 @@
 
             // Mock Data for Specs
             const SPECS = [
-                { label: 'Tanks', items: [{id:'paladin-paladin', e:'🛡️', n:'Paladin'}, {id:'warrior-warrior', e:'🪓', n:'Warrior'}, {id:'darkknight-darkknight', e:'🌑', n:'Dark Knight'}, {id:'gunbreaker-gunbreaker', e:'🔫', n:'Gunbreaker'}] },
-                { label: 'Healers', items: [{id:'whitemage-whitemage', e:'⚕️', n:'White Mage'}, {id:'scholar-scholar', e:'🧚', n:'Scholar'}, {id:'astrologian-astrologian', e:'✨', n:'Astrologian'}, {id:'sage-sage', e:'🤖', n:'Sage'}] },
-                { label: 'Melee', items: [{id:'monk-monk', e:'🥊', n:'Monk'}, {id:'dragoon-dragoon', e:'🐉', n:'Dragoon'}, {id:'ninja-ninja', e:'🥷', n:'Ninja'}, {id:'samurai-samurai', e:'⚔️', n:'Samurai'}, {id:'reaper-reaper', e:'👻', n:'Reaper'}] },
-                { label: 'Physical Ranged', items: [{id:'bard-bard', e:'🏹', n:'Bard'}, {id:'machinist-machinist', e:'🔫', n:'Machinist'}, {id:'dancer-dancer', e:'💃', n:'Dancer'}] },
-                { label: 'Magical Ranged', items: [{id:'blackmage-blackmage', e:'🔥', n:'Black Mage'}, {id:'summoner-summoner', e:'📖', n:'Summoner'}, {id:'redmage-redmage', e:'🌹', n:'Red Mage'}, {id:'pictomancer-pictomancer', e:'🎨', n:'Pictomancer'}] },
+                { label: 'Tanks', items: [
+                    {id:'paladin-paladin', icon:'paladin.png', n:'Paladin'},
+                    {id:'warrior-warrior', icon:'warrior.png', n:'Warrior'},
+                    {id:'darkknight-darkknight', icon:'Dark_Knight.png', n:'Dark Knight'},
+                    {id:'gunbreaker-gunbreaker', icon:'Gunbreaker.png', n:'Gunbreaker'}
+                ]},
+                { label: 'Healers', items: [
+                    {id:'whitemage-whitemage', icon:'White_Mage.png', n:'White Mage'},
+                    {id:'scholar-scholar', icon:'Scholar.png', n:'Scholar'},
+                    {id:'astrologian-astrologian', icon:'Astrologian.png', n:'Astrologian'},
+                    {id:'sage-sage', icon:'Sage.png', n:'Sage'}
+                ]},
+                { label: 'Melee', items: [
+                    {id:'monk-monk', icon:'monk.png', n:'Monk'},
+                    {id:'dragoon-dragoon', icon:'Dragoon.png', n:'Dragoon'},
+                    {id:'ninja-ninja', icon:'Ninja.png', n:'Ninja'},
+                    {id:'samurai-samurai', icon:'Samurai.png', n:'Samurai'},
+                    {id:'reaper-reaper', icon:'Reaper.png', n:'Reaper'},
+                    {id:'viper-viper', icon:'Viper.png', n:'Viper'}
+                ]},
+                { label: 'Physical Ranged', items: [
+                    {id:'bard-bard', icon:'Bard.png', n:'Bard'},
+                    {id:'machinist-machinist', icon:'Machinist.png', n:'Machinist'},
+                    {id:'dancer-dancer', icon:'Dancer.png', n:'Dancer'}
+                ]},
+                { label: 'Magical Ranged', items: [
+                    {id:'blackmage-blackmage', icon:'Black_Mage.png', n:'Black Mage'},
+                    {id:'summoner-summoner', icon:'Summoner.png', n:'Summoner'},
+                    {id:'redmage-redmage', icon:'Red_Mage.png', n:'Red Mage'},
+                    {id:'pictomancer-pictomancer', icon:'Pictomancer.png', n:'Pictomancer'}
+                ]},
             ];
             
-            // Helper to get emoji for current spec
-            const currentEmoji = SPECS.flatMap(g => g.items).find(i => i.id === selectedSpec)?.e || '🌹';
-            const currentName = SPECS.flatMap(g => g.items).find(i => i.id === selectedSpec)?.n || 'Red Mage';
+            const currentSpecItem = SPECS.flatMap(g => g.items).find(i => i.id === selectedSpec);
+            const currentIcon = currentSpecItem?.icon || 'Red_Mage.png';
+            const currentName = currentSpecItem?.n || 'Red Mage';
 
             useEffect(() => {
                 const handleClickOutside = (event) => {
@@ -324,7 +349,7 @@
                         onClick={() => setIsOpen(!isOpen)} 
                         className="flex items-center gap-2 px-3 py-1.5 bg-black/30 border border-gray-700 rounded-md text-sm hover:border-[#00FF96] transition-colors"
                     >
-                        <span className="text-[#E87B7B]">{currentEmoji}</span>
+                        <img src={`${API_BASE}/lorrgs_assets/images/classes/${currentIcon}`} alt={currentName} className="w-5 h-5 object-contain" />
                         <span className="font-medium text-white">{currentName}</span>
                         <ChevronDown size={14} className="text-gray-400" />
                     </button>
@@ -339,10 +364,10 @@
                                             <button 
                                                 key={item.id}
                                                 onClick={() => { onChange(item.id); setIsOpen(false); }}
-                                                className={`w-8 h-8 flex items-center justify-center rounded text-lg border transition-all ${selectedSpec === item.id ? 'bg-[#333] border-[#00FF96] text-white' : 'bg-[#252525] border-transparent hover:bg-[#333] hover:text-[#00FF96] hover:border-[#00FF96]'}`}
+                                                className={`w-8 h-8 flex items-center justify-center rounded border transition-all overflow-hidden ${selectedSpec === item.id ? 'bg-[#333] border-[#00FF96]' : 'bg-[#252525] border-transparent hover:bg-[#333] hover:border-[#00FF96]'}`}
                                                 title={item.n}
                                             >
-                                                {item.e}
+                                                <img src={`${API_BASE}/lorrgs_assets/images/classes/${item.icon}`} alt={item.n} className="w-full h-full object-cover" />
                                             </button>
                                         ))}
                                     </div>
@@ -376,6 +401,20 @@
 
             const [selectedSpells, setSelectedSpells] = useState(new Set());
             const scrollContainerRef = useRef(null);
+
+            // consistent spell coloring
+            const spellColorMap = useMemo(() => {
+                const map = {};
+                let colorIdx = 0;
+                // Sort spells by ID to ensure consistency
+                const sortedSpellIds = Object.keys(spells).sort();
+
+                sortedSpellIds.forEach(spellId => {
+                    map[spellId] = DURATION_PALETTE[colorIdx % DURATION_PALETTE.length];
+                    colorIdx++;
+                });
+                return map;
+            }, [spells]);
 
             // Drag State (Refactored to Refs for robustness)
             const [isDraggingState, setIsDraggingState] = useState(false); // Only for UI cursor update
@@ -680,9 +719,8 @@
                                                 const durationWidth = Math.max((cast.duration || 0) * zoom, iconHeight); 
                                                 const cdWidth = (spell.cd || 0) * zoom;
 
-                                                // Color Assignment (Order based)
-                                                // We use cIdx to cycle through palette
-                                                const barColor = DURATION_PALETTE[cIdx % DURATION_PALETTE.length];
+                                                // Color Assignment (Consistent per spell)
+                                                const barColor = spellColorMap[cast.spellId] || '#ffffff';
 
                                                 // Hex color to RGBA for lighter CD bar (using the assigned barColor)
                                                 const hexToRgba = (hex, alpha) => {
