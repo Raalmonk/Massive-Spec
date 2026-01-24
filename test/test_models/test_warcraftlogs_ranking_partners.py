@@ -86,10 +86,14 @@ class TestSpecRankingPartners(unittest.TestCase):
         report = self.spec_ranking.reports[0]
         fight = report.fights[0]
 
-        # Expecting 2 players: MainHealer + PartnerHealer
-        self.assertEqual(len(fight.players), 2)
+        # Expecting 3 players: MainHealer + PartnerHealer + TankPartner
+        self.assertEqual(len(fight.players), 3)
 
         player_names = [p.name for p in fight.players]
         self.assertIn("MainHealer", player_names)
         self.assertIn("PartnerHealer", player_names)
-        self.assertNotIn("TankPartner", player_names)
+        self.assertIn("TankPartner", player_names)
+
+        # Check composition
+        expected_composition = ["healer-spec", "other-healer-spec", "tank-spec"]
+        self.assertEqual(fight.composition, expected_composition)

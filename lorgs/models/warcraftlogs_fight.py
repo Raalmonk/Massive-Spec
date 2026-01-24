@@ -45,6 +45,8 @@ class Fight(warcraftlogs_base.BaseModel):
     boss: Optional[Boss] = None
     phases: list[Phase] = []
 
+    composition: list[str] = []
+
     deaths: int = 0
     damage_taken: int = 0
     damage_done: int = 0

@@ -177,8 +177,8 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                 if not spec:
                     continue
 
-                if spec.role.code != self.spec.role.code:
-                    continue
+                # if spec.role.code != self.spec.role.code:
+                #     continue
 
                 p = Player(
                     source_id=combatant.get("id"),
@@ -188,6 +188,9 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                 )
                 p.fight = fight
                 fight.players.append(p)
+
+        # Populate the composition list with spec slugs
+        fight.composition = [p.spec_slug for p in fight.players]
 
         ################
         # Report
