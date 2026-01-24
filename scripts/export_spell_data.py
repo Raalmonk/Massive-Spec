@@ -18,7 +18,7 @@ def main():
     # (though keying by name implicitly handles duplicates)
 
     count = 0
-    for spec in data.classes.ALL_SPECS:
+    for spec in sorted(data.classes.ALL_SPECS):
         for spell in spec.spells:
             # Convert to dict
             d = spell.as_dict()
@@ -42,7 +42,7 @@ def main():
     # Write to file
     output_file = "spell_data.json"
     with open(output_file, "w") as f:
-        json.dump(spells_dict, f, indent=2, sort_keys=True)
+        json.dump(spells_dict, f, indent=2)
 
     print(f"Exported {len(spells_dict)} unique spells to {output_file}.")
 
