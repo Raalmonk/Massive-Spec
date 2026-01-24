@@ -112,7 +112,7 @@
                     color: spell.color || '#ffcc00',
                     desc: spell.desc || '',
                     category: resolveCategory(spell.tags, spell.name),
-                    show: spell.show !== undefined ? spell.show : true,
+                    show: spell.show,
                     load_order: spell.load_order !== undefined ? spell.load_order : index
                 };
             });
@@ -459,7 +459,9 @@
                     // Filter default active spells
                     const defaultSelectedIds = Object.values(sps)
                         .filter(s => {
-                            if (s.show === false) return false;
+                            if (s.show !== null && s.show !== undefined) {
+                                return s.show;
+                            }
                             const cat = cats[s.category];
                             return cat ? cat.defaultActive : true;
                         })

@@ -88,7 +88,7 @@ class WowSpell(base.MemoryModel):
     name: str = ""
     time: str = ""
     color: str = ""
-    show: bool = True
+    show: Optional[bool] = None
     """Whether the spell is shown on the timeline by default."""
     desc: str = ""
 
