@@ -4,1371 +4,1567 @@
     "duration": 20.0,
     "icon": "Acceleration.png",
     "id": 7518,
-    "name": "Acceleration"
+    "name": "Acceleration",
+    "show": true
   },
   "Accession": {
     "cooldown": 2.5,
     "duration": 30.0,
     "icon": "Accession.png",
     "id": 37016,
-    "name": "Accession"
+    "name": "Accession",
+    "show": true
   },
   "Addle": {
     "cooldown": 90.0,
     "duration": 15.0,
     "icon": "Addle.png",
     "id": 7560,
-    "name": "Addle"
+    "name": "Addle",
+    "show": true
   },
   "Aetherflow": {
     "cooldown": 60.0,
     "duration": 0.0,
     "icon": "Aetherflow.png",
     "id": 166,
-    "name": "Aetherflow"
+    "name": "Aetherflow",
+    "show": true
   },
   "Aetherpact": {
     "cooldown": 3.0,
     "duration": 0.0,
     "icon": "Aetherpact.png",
     "id": 7423,
-    "name": "Aetherpact"
+    "name": "Aetherpact",
+    "show": true
   },
   "Afflatus Misery": {
     "cooldown": 2.5,
     "duration": 0.0,
     "icon": "Afflatus_Misery.png",
     "id": 16535,
-    "name": "Afflatus Misery"
+    "name": "Afflatus Misery",
+    "show": true
   },
   "Air Anchor": {
     "cooldown": 40.0,
     "duration": 0.0,
     "icon": "Air_Anchor.png",
     "id": 16500,
-    "name": "Air Anchor"
+    "name": "Air Anchor",
+    "show": true
   },
   "Apex Arrow": {
     "cooldown": 2.5,
     "duration": 0.0,
     "icon": "Apex_Arrow.png",
     "id": 16496,
-    "name": "Apex Arrow"
+    "name": "Apex Arrow",
+    "show": true
   },
   "Aquaveil": {
     "cooldown": 60.0,
     "duration": 8.0,
     "icon": "Aquaveil.png",
     "id": 25861,
-    "name": "Aquaveil"
+    "name": "Aquaveil",
+    "show": true
   },
   "Arcane Circle": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Arcane_Circle.png",
     "id": 24405,
-    "name": "Arcane Circle"
+    "name": "Arcane Circle",
+    "show": true
   },
   "Arcane Crest": {
     "cooldown": 30.0,
     "duration": 15.0,
     "icon": "Arcane_Crest.png",
     "id": 24404,
-    "name": "Arcane Crest"
+    "name": "Arcane Crest",
+    "show": true
   },
   "Army's Paeon": {
     "cooldown": 120.0,
     "duration": 45.0,
     "icon": "Army's_Paeon.png",
     "id": 116,
-    "name": "Army's Paeon"
+    "name": "Army's Paeon",
+    "show": true
   },
   "Assize": {
     "cooldown": 40.0,
     "duration": 0.0,
     "icon": "Assize.png",
     "id": 3571,
-    "name": "Assize"
+    "name": "Assize",
+    "show": true
   },
   "Aurora": {
     "cooldown": 60.0,
     "duration": 18.0,
     "icon": "Aurora.png",
     "id": 16151,
-    "name": "Aurora"
+    "name": "Aurora",
+    "show": true
   },
   "Automaton Queen": {
     "cooldown": 6.0,
     "duration": 12.0,
     "icon": "Automaton_Queen.png",
     "id": 16501,
-    "name": "Automaton Queen"
+    "name": "Automaton Queen",
+    "show": true
   },
   "Barrel Stabilizer": {
     "cooldown": 120.0,
     "duration": 0.0,
     "icon": "Barrel_Stabilizer.png",
     "id": 7414,
-    "name": "Barrel Stabilizer"
+    "name": "Barrel Stabilizer",
+    "show": true
   },
   "Battle Litany": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Battle_Litany.png",
     "id": 3557,
-    "name": "Battle Litany"
+    "name": "Battle Litany",
+    "show": true
   },
   "Battle Voice": {
     "cooldown": 120.0,
     "duration": 15.0,
     "icon": "Battle_Voice.png",
     "id": 118,
-    "name": "Battle Voice"
+    "name": "Battle Voice",
+    "show": true
   },
   "Bloodbath": {
     "cooldown": 90.0,
     "duration": 20.0,
     "icon": "Bloodbath.png",
     "id": 34,
-    "name": "Bloodbath"
+    "name": "Bloodbath",
+    "show": true
   },
   "Bloodfest": {
     "cooldown": 60.0,
     "duration": 0.0,
     "icon": "Bloodfest.png",
     "id": 16164,
-    "name": "Bloodfest"
+    "name": "Bloodfest",
+    "show": true
   },
   "Bloodwhetting": {
     "cooldown": 25.0,
     "duration": 4.0,
     "icon": "Bloodwhetting.png",
     "id": 25751,
-    "name": "Bloodwhetting"
+    "name": "Bloodwhetting",
+    "show": true
   },
   "Brotherhood": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Brotherhood.png",
     "id": 7396,
-    "name": "Brotherhood"
+    "name": "Brotherhood",
+    "show": true
   },
   "Bulwark": {
     "cooldown": 90.0,
     "duration": 10.0,
     "icon": "Bulwark.png",
     "id": 22,
-    "name": "Bulwark"
+    "name": "Bulwark",
+    "show": true
   },
   "Bunshin": {
     "cooldown": 90.0,
     "duration": 30.0,
     "icon": "Bunshin.png",
     "id": 9167,
-    "name": "Bunshin"
+    "name": "Bunshin",
+    "show": true
   },
   "Camouflage": {
     "cooldown": 90.0,
     "duration": 20.0,
     "icon": "Camouflage.png",
     "id": 16140,
-    "name": "Camouflage"
+    "name": "Camouflage",
+    "show": true
   },
   "Celestial Intersection": {
     "cooldown": 30.0,
     "duration": 30.0,
     "icon": "Celestial_Intersection.png",
     "id": 16556,
-    "name": "Celestial Intersection"
+    "name": "Celestial Intersection",
+    "show": true
   },
   "Celestial Opposition": {
     "cooldown": 60.0,
     "duration": 15.0,
     "icon": "Celestial_Opposition.png",
     "id": 3616,
-    "name": "Celestial Opposition"
+    "name": "Celestial Opposition",
+    "show": true
   },
   "Chain Saw": {
     "cooldown": 60.0,
     "duration": 0.0,
     "icon": "Chain_Saw.png",
     "id": 25788,
-    "name": "Chain Saw"
+    "name": "Chain Saw",
+    "show": true
   },
   "Chain Stratagem": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Chain_Stratagem.png",
     "id": 7436,
-    "name": "Chain Stratagem"
+    "name": "Chain Stratagem",
+    "show": true
   },
   "Collective Unconscious": {
     "cooldown": 60.0,
     "duration": 20.0,
     "icon": "Collective_Unconscious.png",
     "id": 3613,
-    "name": "Collective Unconscious"
+    "name": "Collective Unconscious",
+    "show": true
   },
   "Comet in Black": {
     "cooldown": 3.3,
     "duration": 0.0,
     "icon": "Comet_in_Black.png",
     "id": 34663,
-    "name": "Comet in Black"
+    "name": "Comet in Black",
+    "show": true
   },
   "Concitation": {
     "cooldown": 2.5,
     "duration": 30.0,
     "icon": "Concitation.png",
     "id": 37013,
-    "name": "Concitation"
+    "name": "Concitation",
+    "show": true
   },
   "Consolation": {
     "cooldown": 20.0,
     "duration": 30.0,
     "icon": "Consolation.png",
     "id": 16546,
-    "name": "Consolation"
+    "name": "Consolation",
+    "show": true
   },
   "Contre Sixte": {
     "cooldown": 35.0,
     "duration": 0.0,
     "icon": "Contre_Sixte.png",
     "id": 7519,
-    "name": "Contre Sixte"
+    "name": "Contre Sixte",
+    "show": true
   },
   "Cover": {
     "cooldown": 120.0,
-    "duration": 12.0,
+    "duration": 0.0,
     "icon": "Cover.png",
     "id": 27,
-    "name": "Cover"
+    "name": "Cover",
+    "show": false
   },
   "Curing Waltz": {
     "cooldown": 60.0,
     "duration": 0.0,
     "icon": "Curing_Waltz.png",
     "id": 16015,
-    "name": "Curing Waltz"
+    "name": "Curing Waltz",
+    "show": true
   },
   "Damnation": {
     "cooldown": 120.0,
     "duration": 15.0,
     "icon": "Damnation.png",
     "id": 36923,
-    "name": "Damnation"
+    "name": "Damnation",
+    "show": true
   },
   "Dark Mind": {
     "cooldown": 60.0,
     "duration": 10.0,
     "icon": "Dark_Mind.png",
     "id": 3634,
-    "name": "Dark Mind"
+    "name": "Dark Mind",
+    "show": true
   },
   "Dark Missionary": {
     "cooldown": 90.0,
     "duration": 15.0,
     "icon": "Dark_Missionary.png",
     "id": 16471,
-    "name": "Dark Missionary"
+    "name": "Dark Missionary",
+    "show": true
   },
   "Delirium": {
     "cooldown": 60.0,
     "duration": 15.0,
     "icon": "Delirium.png",
     "id": 3637,
-    "name": "Delirium"
+    "name": "Delirium",
+    "show": true
   },
   "Deployment Tactics": {
     "cooldown": 90.0,
     "duration": 0.0,
     "icon": "Deployment_Tactics.png",
     "id": 3585,
-    "name": "Deployment Tactics"
+    "name": "Deployment Tactics",
+    "show": true
   },
   "Devilment": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Devilment.png",
     "id": 16011,
-    "name": "Devilment"
+    "name": "Devilment",
+    "show": true
   },
   "Dismantle": {
     "cooldown": 120.0,
     "duration": 10.0,
     "icon": "Dismantle.png",
     "id": 2887,
-    "name": "Dismantle"
+    "name": "Dismantle",
+    "show": true
   },
   "Dissipation": {
     "cooldown": 180.0,
     "duration": 30.0,
     "icon": "Dissipation.png",
     "id": 3587,
-    "name": "Dissipation"
+    "name": "Dissipation",
+    "show": true
   },
   "Divination": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Divination.png",
     "id": 16552,
-    "name": "Divination"
+    "name": "Divination",
+    "show": true
   },
   "Divine Benison": {
     "cooldown": 30.0,
     "duration": 15.0,
     "icon": "Divine_Benison.png",
     "id": 7432,
-    "name": "Divine Benison"
+    "name": "Divine Benison",
+    "show": true
   },
   "Divine Caress": {
     "cooldown": 1.0,
     "duration": 10.0,
     "icon": "Divine_Caress.png",
     "id": 37011,
-    "name": "Divine Caress"
+    "name": "Divine Caress",
+    "show": true
   },
   "Divine Veil": {
     "cooldown": 90.0,
-    "duration": 30.0,
+    "duration": 0.0,
     "icon": "Divine_Veil.png",
     "id": 3540,
-    "name": "Divine Veil"
+    "name": "Divine Veil",
+    "show": true
   },
   "Dokumori": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Dokumori.png",
     "id": 36957,
-    "name": "Dokumori"
+    "name": "Dokumori",
+    "show": true
   },
   "Drill": {
     "cooldown": 20.0,
     "duration": 0.0,
     "icon": "Drill.png",
     "id": 16498,
-    "name": "Drill"
+    "name": "Drill",
+    "show": true
   },
   "Druochole": {
     "cooldown": 1.0,
     "duration": 0.0,
     "icon": "Druochole.png",
     "id": 24296,
-    "name": "Druochole"
+    "name": "Druochole",
+    "show": true
   },
   "Earthly Star": {
     "cooldown": 60.0,
     "duration": 20.0,
     "icon": "Earthly_Star.png",
     "id": 7439,
-    "name": "Earthly Star"
+    "name": "Earthly Star",
+    "show": true
   },
   "Embolden": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Embolden.png",
     "id": 7520,
-    "name": "Embolden"
+    "name": "Embolden",
+    "show": true
   },
   "Enchanted Reprise": {
     "cooldown": 2.5,
     "duration": 0.0,
     "icon": "Enchanted_Reprise.png",
     "id": 16528,
-    "name": "Enchanted Reprise"
+    "name": "Enchanted Reprise",
+    "show": true
   },
   "Enchanted Riposte": {
     "cooldown": 1.5,
     "duration": 0.0,
     "icon": "Enchanted_Riposte.png",
     "id": 7527,
-    "name": "Enchanted Riposte"
+    "name": "Enchanted Riposte",
+    "show": true
   },
   "Enshroud": {
     "cooldown": 5.0,
     "duration": 30.0,
     "icon": "Enshroud.png",
     "id": 24394,
-    "name": "Enshroud"
+    "name": "Enshroud",
+    "show": true
   },
   "Essential Dignity": {
     "cooldown": 40.0,
     "duration": 0.0,
     "icon": "Essential_Dignity.png",
     "id": 3614,
-    "name": "Essential Dignity"
+    "name": "Essential Dignity",
+    "show": true
   },
   "Eukrasian Prognosis II": {
     "cooldown": 1.5,
     "duration": 30.0,
     "icon": "Eukrasian_Prognosis_II.png",
     "id": 37034,
-    "name": "Eukrasian Prognosis II"
+    "name": "Eukrasian Prognosis II",
+    "show": true
   },
   "Exaltation": {
     "cooldown": 60.0,
     "duration": 8.0,
     "icon": "Exaltation.png",
     "id": 25873,
-    "name": "Exaltation"
+    "name": "Exaltation",
+    "show": true
   },
   "Excogitation": {
     "cooldown": 45.0,
     "duration": 45.0,
     "icon": "Excogitation.png",
     "id": 7434,
-    "name": "Excogitation"
+    "name": "Excogitation",
+    "show": true
   },
   "Expedient": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Expedient.png",
     "id": 25868,
-    "name": "Expedient"
+    "name": "Expedient",
+    "show": true
   },
   "Feint": {
     "cooldown": 90.0,
     "duration": 15.0,
     "icon": "Feint.png",
     "id": 76,
-    "name": "Feint"
+    "name": "Feint",
+    "show": true
   },
   "Fey Blessing": {
     "cooldown": 60.0,
     "duration": 0.0,
     "icon": "Fey_Blessing.png",
     "id": 16543,
-    "name": "Fey Blessing"
+    "name": "Fey Blessing",
+    "show": true
   },
   "Fey Illumination": {
     "cooldown": 0.0,
     "duration": 20.0,
     "icon": "Fey_Illumination.png",
     "id": 805,
-    "name": "Fey Illumination"
+    "name": "Fey Illumination",
+    "show": true
   },
   "Fight or Flight": {
     "cooldown": 60.0,
     "duration": 20.0,
     "icon": "Fight_or_Flight.png",
     "id": 20,
-    "name": "Fight or Flight"
+    "name": "Fight or Flight",
+    "show": true
   },
   "Flare": {
     "cooldown": 2.5,
     "duration": 0.0,
     "icon": "Flare.png",
     "id": 162,
-    "name": "Flare"
+    "name": "Flare",
+    "show": true
   },
   "Flare Star": {
     "cooldown": 0.0,
     "duration": 0.0,
     "icon": "Flare_Star.png",
     "id": 3003,
-    "name": "Flare Star"
+    "name": "Flare Star",
+    "show": true
   },
   "Fleche": {
     "cooldown": 25.0,
     "duration": 0.0,
     "icon": "Fleche.png",
     "id": 7517,
-    "name": "Fleche"
+    "name": "Fleche",
+    "show": true
   },
   "Flourish": {
     "cooldown": 60.0,
     "duration": 20.0,
     "icon": "Flourish.png",
     "id": 16013,
-    "name": "Flourish"
+    "name": "Flourish",
+    "show": true
   },
   "Foul": {
     "cooldown": 2.5,
     "duration": 0.0,
     "icon": "Foul.png",
     "id": 7422,
-    "name": "Foul"
+    "name": "Foul",
+    "show": true
   },
   "Geirskogul": {
     "cooldown": 60.0,
     "duration": 20.0,
     "icon": "Geirskogul.png",
     "id": 3555,
-    "name": "Geirskogul"
+    "name": "Geirskogul",
+    "show": true
   },
   "Gluttony": {
     "cooldown": 60.0,
     "duration": 25.0,
     "icon": "Gluttony.png",
     "id": 24393,
-    "name": "Gluttony"
+    "name": "Gluttony",
+    "show": true
   },
   "Grade 4 Gemdraught of Intelligence [HQ]": {
     "cooldown": 270,
     "duration": 30.0,
     "icon": "Grade_4_gemdraught_of_intelligence_icon1.png",
     "id": 34603669,
-    "name": "Grade 4 Gemdraught of Intelligence [HQ]"
+    "name": "Grade 4 Gemdraught of Intelligence [HQ]",
+    "show": false
   },
   "Great Nebula": {
     "cooldown": 120.0,
     "duration": 15.0,
     "icon": "Great_Nebula.png",
     "id": 36935,
-    "name": "Great Nebula"
+    "name": "Great Nebula",
+    "show": true
   },
   "Guardian": {
     "cooldown": 120.0,
     "duration": 15.0,
     "icon": "Guardian.png",
     "id": 36920,
-    "name": "Guardian"
+    "name": "Guardian",
+    "show": true
   },
   "Haima": {
     "cooldown": 120.0,
     "duration": 15.0,
     "icon": "Haima.png",
     "id": 24305,
-    "name": "Haima"
+    "name": "Haima",
+    "show": true
   },
   "Hallowed Ground": {
     "cooldown": 420.0,
     "duration": 10.0,
     "icon": "Hallowed_Ground.png",
     "id": 30,
-    "name": "Hallowed Ground"
+    "name": "Hallowed Ground",
+    "show": true
   },
   "Heart of Corundum": {
     "cooldown": 25.0,
     "duration": 8.0,
     "icon": "Heart_of_Corundum.png",
     "id": 25758,
-    "name": "Heart of Corundum"
+    "name": "Heart of Corundum",
+    "show": true
   },
   "Heart of Light": {
     "cooldown": 90.0,
     "duration": 15.0,
     "icon": "Heart_of_Light.png",
     "id": 16160,
-    "name": "Heart of Light"
+    "name": "Heart of Light",
+    "show": true
   },
   "Higanbana": {
     "cooldown": 2.5,
     "duration": 60.0,
     "icon": "Higanbana.png",
     "id": 7489,
-    "name": "Higanbana"
+    "name": "Higanbana",
+    "show": true
   },
   "High Jump": {
     "cooldown": 30.0,
     "duration": 0.0,
     "icon": "High_Jump.png",
     "id": 6062,
-    "name": "High Jump"
+    "name": "High Jump",
+    "show": true
   },
   "Holmgang": {
     "cooldown": 240.0,
     "duration": 10.0,
     "icon": "Holmgang.png",
     "id": 43,
-    "name": "Holmgang"
+    "name": "Holmgang",
+    "show": true
   },
   "Holos": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Holos.png",
     "id": 24310,
-    "name": "Holos"
+    "name": "Holos",
+    "show": true
   },
   "Holy Sheltron": {
     "cooldown": 5.0,
-    "duration": 8.0,
+    "duration": 4.0,
     "icon": "Holy_Sheltron.png",
     "id": 25746,
-    "name": "Holy Sheltron"
+    "name": "Holy Sheltron",
+    "show": false
   },
   "Holy in White": {
     "cooldown": 2.5,
     "duration": 0.0,
     "icon": "Holy_in_White.png",
     "id": 34662,
-    "name": "Holy in White"
+    "name": "Holy in White",
+    "show": true
   },
   "Ikishoten": {
     "cooldown": 120.0,
     "duration": 30.0,
     "icon": "Ikishoten.png",
     "id": 16482,
-    "name": "Ikishoten"
+    "name": "Ikishoten",
+    "show": true
   },
   "Improvisation": {
     "cooldown": 120.0,
     "duration": 15.0,
     "icon": "Improvisation.png",
     "id": 16014,
-    "name": "Improvisation"
+    "name": "Improvisation",
+    "show": true
   },
   "Indomitability": {
     "cooldown": 30.0,
     "duration": 0.0,
     "icon": "Indomitability.png",
     "id": 3583,
-    "name": "Indomitability"
+    "name": "Indomitability",
+    "show": true
   },
   "Inner Release": {
     "cooldown": 60.0,
     "duration": 0.0,
     "icon": "Inner_Release.png",
     "id": 7389,
-    "name": "Inner Release"
+    "name": "Inner Release",
+    "show": true
   },
   "Intervention": {
     "cooldown": 10.0,
-    "duration": 8.0,
+    "duration": 4.0,
     "icon": "Intervention.png",
     "id": 7382,
-    "name": "Intervention"
+    "name": "Intervention",
+    "show": false
   },
   "Ixochole": {
     "cooldown": 30.0,
     "duration": 0.0,
     "icon": "Ixochole.png",
     "id": 24299,
-    "name": "Ixochole"
+    "name": "Ixochole",
+    "show": true
   },
   "Kassatsu": {
     "cooldown": 60.0,
     "duration": 15.0,
     "icon": "Kassatsu.png",
     "id": 2264,
-    "name": "Kassatsu"
+    "name": "Kassatsu",
+    "show": true
   },
   "Kerachole": {
     "cooldown": 30.0,
     "duration": 15.0,
     "icon": "Kerachole.png",
     "id": 24298,
-    "name": "Kerachole"
+    "name": "Kerachole",
+    "show": true
   },
   "Krasis": {
     "cooldown": 60.0,
     "duration": 10.0,
     "icon": "Krasis.png",
     "id": 24317,
-    "name": "Krasis"
+    "name": "Krasis",
+    "show": true
   },
   "Lady of Crowns": {
     "cooldown": 1.0,
     "duration": 0.0,
     "icon": "Lady_of_Crowns.png",
     "id": 7445,
-    "name": "Lady of Crowns"
+    "name": "Lady of Crowns",
+    "show": true
   },
   "Lance Charge": {
     "cooldown": 60.0,
     "duration": 20.0,
     "icon": "Lance_Charge.png",
     "id": 85,
-    "name": "Lance Charge"
+    "name": "Lance Charge",
+    "show": true
   },
   "Ley Lines": {
     "cooldown": 120.0,
     "duration": 30.0,
     "icon": "Ley_Lines.png",
     "id": 3573,
-    "name": "Ley Lines"
+    "name": "Ley Lines",
+    "show": true
   },
   "Lightspeed": {
     "cooldown": 60.0,
     "duration": 15.0,
     "icon": "Lightspeed.png",
     "id": 3606,
-    "name": "Lightspeed"
+    "name": "Lightspeed",
+    "show": true
   },
   "Liturgy of the Bell": {
     "cooldown": 180.0,
     "duration": 20.0,
     "icon": "Liturgy_of_the_Bell.png",
     "id": 25862,
-    "name": "Liturgy of the Bell"
+    "name": "Liturgy of the Bell",
+    "show": true
   },
   "Living Dead": {
     "cooldown": 300.0,
     "duration": 10.0,
     "icon": "Living_Dead.png",
     "id": 3638,
-    "name": "Living Dead"
+    "name": "Living Dead",
+    "show": true
   },
   "Living Shadow": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Living_Shadow.png",
     "id": 16472,
-    "name": "Living Shadow"
+    "name": "Living Shadow",
+    "show": true
   },
   "Lord of Crowns": {
     "cooldown": 1.0,
     "duration": 0.0,
     "icon": "Lord_of_Crowns.png",
     "id": 7444,
-    "name": "Lord of Crowns"
+    "name": "Lord of Crowns",
+    "show": true
   },
   "Lustrate": {
     "cooldown": 1.0,
     "duration": 0.0,
     "icon": "Lustrate.png",
     "id": 189,
-    "name": "Lustrate"
+    "name": "Lustrate",
+    "show": true
   },
   "Macrocosmos": {
     "cooldown": 180.0,
     "duration": 15.0,
     "icon": "Macrocosmos.png",
     "id": 25874,
-    "name": "Macrocosmos"
+    "name": "Macrocosmos",
+    "show": true
   },
   "Mage's Ballad": {
     "cooldown": 120.0,
     "duration": 45.0,
     "icon": "Mage's_Ballad.png",
     "id": 114,
-    "name": "Mage's Ballad"
+    "name": "Mage's Ballad",
+    "show": true
   },
   "Magick Barrier": {
     "cooldown": 120.0,
     "duration": 10.0,
     "icon": "Magick_Barrier.png",
     "id": 25857,
-    "name": "Magick Barrier"
+    "name": "Magick Barrier",
+    "show": true
   },
   "Manafication": {
     "cooldown": 110.0,
     "duration": 15.0,
     "icon": "Manafication.png",
     "id": 7521,
-    "name": "Manafication"
+    "name": "Manafication",
+    "show": true
   },
   "Manafont": {
     "cooldown": 100.0,
     "duration": 0.0,
     "icon": "Manafont.png",
     "id": 158,
-    "name": "Manafont"
+    "name": "Manafont",
+    "show": true
   },
   "Manaward": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Manaward.png",
     "id": 157,
-    "name": "Manaward"
+    "name": "Manaward",
+    "show": true
   },
   "Mantra": {
     "cooldown": 90.0,
     "duration": 15.0,
     "icon": "Mantra.png",
     "id": 65,
-    "name": "Mantra"
+    "name": "Mantra",
+    "show": true
   },
   "Meikyo Shisui": {
     "cooldown": 55.0,
     "duration": 20.0,
     "icon": "Meikyo_Shisui.png",
     "id": 7499,
-    "name": "Meikyo Shisui"
+    "name": "Meikyo Shisui",
+    "show": true
   },
   "Mog of the Ages": {
     "cooldown": 30.0,
     "duration": 0.0,
     "icon": "Mog_of_the_Ages.png",
     "id": 34676,
-    "name": "Mog of the Ages"
+    "name": "Mog of the Ages",
+    "show": true
   },
   "Nascent Flash": {
     "cooldown": 25.0,
     "duration": 20.0,
     "icon": "Nascent_Flash.png",
     "id": 16464,
-    "name": "Nascent Flash"
+    "name": "Nascent Flash",
+    "show": true
   },
   "Nature's Minne": {
     "cooldown": 120.0,
     "duration": 15.0,
     "icon": "Nature's_Minne.png",
     "id": 7408,
-    "name": "Nature's Minne"
+    "name": "Nature's Minne",
+    "show": true
   },
   "Necrotize": {
     "cooldown": 1.0,
     "duration": 0.0,
     "icon": "Necrotize.png",
     "id": 36990,
-    "name": "Necrotize"
+    "name": "Necrotize",
+    "show": true
   },
   "Neutral Sect": {
     "cooldown": 120.0,
     "duration": 30.0,
     "icon": "Neutral_Sect.png",
     "id": 16559,
-    "name": "Neutral Sect"
+    "name": "Neutral Sect",
+    "show": true
   },
   "No Mercy": {
     "cooldown": 60.0,
     "duration": 20.0,
     "icon": "No_Mercy.png",
     "id": 16138,
-    "name": "No Mercy"
+    "name": "No Mercy",
+    "show": true
   },
   "Oblation": {
     "cooldown": 60.0,
     "duration": 10.0,
     "icon": "Oblation.png",
     "id": 25754,
-    "name": "Oblation"
+    "name": "Oblation",
+    "show": true
   },
   "Painflare": {
     "cooldown": 1.0,
     "duration": 0.0,
     "icon": "Painflare.png",
     "id": 1295,
-    "name": "Painflare"
+    "name": "Painflare",
+    "show": true
   },
   "Panhaima": {
     "cooldown": 120.0,
     "duration": 15.0,
     "icon": "Panhaima.png",
     "id": 24311,
-    "name": "Panhaima"
+    "name": "Panhaima",
+    "show": true
   },
   "Paradox": {
     "cooldown": 0.0,
     "duration": 0.0,
     "icon": "Paradox.png",
     "id": 4325,
-    "name": "Paradox"
+    "name": "Paradox",
+    "show": true
   },
   "Passage of Arms": {
     "cooldown": 120.0,
-    "duration": 18.0,
+    "duration": 0.0,
     "icon": "Passage_of_Arms.png",
     "id": 7385,
-    "name": "Passage of Arms"
+    "name": "Passage of Arms",
+    "show": true
   },
   "Perfect Balance": {
     "cooldown": 40.0,
     "duration": 20.0,
     "icon": "Perfect_Balance.png",
     "id": 69,
-    "name": "Perfect Balance"
+    "name": "Perfect Balance",
+    "show": true
   },
   "Philosophia": {
     "cooldown": 180.0,
     "duration": 20.0,
     "icon": "Philosophia.png",
     "id": 37035,
-    "name": "Philosophia"
+    "name": "Philosophia",
+    "show": true
   },
   "Phlegma III": {
     "cooldown": 40.0,
     "duration": 0.0,
     "icon": "Phlegma_III.png",
     "id": 24313,
-    "name": "Phlegma III"
+    "name": "Phlegma III",
+    "show": true
   },
   "Physis II": {
     "cooldown": 60.0,
     "duration": 15.0,
     "icon": "Physis_II.png",
     "id": 24302,
-    "name": "Physis II"
+    "name": "Physis II",
+    "show": true
   },
   "Plenary Indulgence": {
     "cooldown": 60.0,
     "duration": 10.0,
     "icon": "Plenary_Indulgence.png",
     "id": 7433,
-    "name": "Plenary Indulgence"
+    "name": "Plenary Indulgence",
+    "show": true
   },
   "Pneuma": {
     "cooldown": 120.0,
     "duration": 0.0,
     "icon": "Pneuma.png",
     "id": 24318,
-    "name": "Pneuma"
+    "name": "Pneuma",
+    "show": true
   },
   "Presence of Mind": {
     "cooldown": 120.0,
     "duration": 15.0,
     "icon": "Presence_of_Mind.png",
     "id": 136,
-    "name": "Presence of Mind"
+    "name": "Presence of Mind",
+    "show": true
   },
   "Psyche": {
     "cooldown": 60.0,
     "duration": 0.0,
     "icon": "Psyche.png",
     "id": 37033,
-    "name": "Psyche"
+    "name": "Psyche",
+    "show": true
   },
   "Radiant Aegis": {
     "cooldown": 60.0,
     "duration": 30.0,
     "icon": "Radiant_Aegis.png",
     "id": 25799,
-    "name": "Radiant Aegis"
+    "name": "Radiant Aegis",
+    "show": true
   },
   "Radiant Finale": {
     "cooldown": 110.0,
     "duration": 15.0,
     "icon": "Radiant_Finale.png",
     "id": 25785,
-    "name": "Radiant Finale"
+    "name": "Radiant Finale",
+    "show": true
   },
   "Raging Strikes": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Raging_Strikes.png",
     "id": 101,
-    "name": "Raging Strikes"
+    "name": "Raging Strikes",
+    "show": true
   },
   "Raiton": {
     "cooldown": 1.5,
     "duration": 0.0,
     "icon": "Raiton.png",
     "id": 2267,
-    "name": "Raiton"
+    "name": "Raiton",
+    "show": true
   },
   "Rampart": {
     "cooldown": 90.0,
     "duration": 20.0,
     "icon": "Rampart.png",
     "id": 10,
-    "name": "Rampart"
+    "name": "Rampart",
+    "show": true
   },
   "Reassemble": {
     "cooldown": 55.0,
     "duration": 5.0,
     "icon": "Reassemble.png",
     "id": 2876,
-    "name": "Reassemble"
+    "name": "Reassemble",
+    "show": true
   },
   "Reawaken": {
     "cooldown": 2.2,
     "duration": 30.0,
     "icon": "Reawaken.png",
     "id": 34626,
-    "name": "Reawaken"
+    "name": "Reawaken",
+    "show": true
   },
   "Recitation": {
     "cooldown": 60.0,
     "duration": 15.0,
     "icon": "Recitation.png",
     "id": 16542,
-    "name": "Recitation"
+    "name": "Recitation",
+    "show": true
   },
   "Rekindle": {
     "cooldown": 20.0,
     "duration": 30.0,
     "icon": "Rekindle.png",
     "id": 12853,
-    "name": "Rekindle"
+    "name": "Rekindle",
+    "show": true
   },
   "Reprisal": {
     "cooldown": 60.0,
     "duration": 15.0,
     "icon": "Reprisal.png",
     "id": 3626,
-    "name": "Reprisal"
+    "name": "Reprisal",
+    "show": true
   },
   "Retribution of the Madeen": {
     "cooldown": 30.0,
     "duration": 0.0,
     "icon": "Retribution_of_the_Madeen.png",
     "id": 34677,
-    "name": "Retribution of the Madeen"
+    "name": "Retribution of the Madeen",
+    "show": true
   },
   "Riddle of Earth": {
     "cooldown": 120.0,
     "duration": 10.0,
     "icon": "Riddle_of_Earth.png",
     "id": 7394,
-    "name": "Riddle of Earth"
+    "name": "Riddle of Earth",
+    "show": true
   },
   "Riddle of Fire": {
     "cooldown": 60.0,
     "duration": 20.0,
     "icon": "Riddle_of_Fire.png",
     "id": 7395,
-    "name": "Riddle of Fire"
+    "name": "Riddle of Fire",
+    "show": true
   },
   "Riddle of Wind": {
     "cooldown": 90.0,
     "duration": 15.0,
     "icon": "Riddle_of_Wind.png",
     "id": 7868,
-    "name": "Riddle of Wind"
+    "name": "Riddle of Wind",
+    "show": true
   },
   "Saber Dance": {
     "cooldown": 2.5,
     "duration": 0.0,
     "icon": "Saber_Dance.png",
     "id": 16005,
-    "name": "Saber Dance"
+    "name": "Saber Dance",
+    "show": true
   },
   "Sacred Soil": {
     "cooldown": 30.0,
     "duration": 15.0,
     "icon": "Sacred_Soil.png",
     "id": 188,
-    "name": "Sacred Soil"
+    "name": "Sacred Soil",
+    "show": true
   },
   "Salted Earth": {
     "cooldown": 90.0,
     "duration": 15.0,
     "icon": "Salted_Earth.png",
     "id": 3639,
-    "name": "Salted Earth"
+    "name": "Salted Earth",
+    "show": true
   },
   "Searing Light": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Searing_Light.png",
     "id": 25801,
-    "name": "Searing Light"
+    "name": "Searing Light",
+    "show": true
   },
   "Second Wind": {
     "cooldown": 120.0,
     "duration": 0.0,
     "icon": "Second_Wind.png",
     "id": 57,
-    "name": "Second Wind"
+    "name": "Second Wind",
+    "show": true
   },
   "Seraphism": {
     "cooldown": 180.0,
     "duration": 20.0,
     "icon": "Seraphism.png",
     "id": 37014,
-    "name": "Seraphism"
+    "name": "Seraphism",
+    "show": true
   },
   "Serpent's Ire": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Serpent's_Ire.png",
     "id": 34647,
-    "name": "Serpent's Ire"
+    "name": "Serpent's Ire",
+    "show": true
   },
   "Shade Shift": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Shade_Shift.png",
     "id": 2241,
-    "name": "Shade Shift"
+    "name": "Shade Shift",
+    "show": true
   },
   "Shadowbringer": {
     "cooldown": 60.0,
     "duration": 0.0,
     "icon": "Shadowbringer.png",
     "id": 25757,
-    "name": "Shadowbringer"
+    "name": "Shadowbringer",
+    "show": true
   },
   "Shadowed Vigil": {
     "cooldown": 120.0,
     "duration": 15.0,
     "icon": "Shadowed_Vigil.png",
     "id": 36927,
-    "name": "Shadowed Vigil"
+    "name": "Shadowed Vigil",
+    "show": true
   },
   "Shake It Off": {
     "cooldown": 90.0,
     "duration": 0.0,
     "icon": "Shake_It_Off.png",
     "id": 7388,
-    "name": "Shake It Off"
+    "name": "Shake It Off",
+    "show": true
   },
   "Shield Samba": {
     "cooldown": 90.0,
     "duration": 15.0,
     "icon": "Shield_Samba.png",
     "id": 16012,
-    "name": "Shield Samba"
+    "name": "Shield Samba",
+    "show": true
   },
   "Sidewinder": {
     "cooldown": 60.0,
     "duration": 0.0,
     "icon": "Sidewinder.png",
     "id": 3562,
-    "name": "Sidewinder"
+    "name": "Sidewinder",
+    "show": true
   },
   "Soteria": {
     "cooldown": 60.0,
     "duration": 15.0,
     "icon": "Soteria.png",
     "id": 24294,
-    "name": "Soteria"
+    "name": "Soteria",
+    "show": true
   },
   "Soul Slice": {
     "cooldown": 30.0,
     "duration": 0.0,
     "icon": "Soul_Slice.png",
     "id": 24380,
-    "name": "Soul Slice"
+    "name": "Soul Slice",
+    "show": true
   },
   "Sprint": {
     "cooldown": 60.0,
     "duration": 10.0,
     "icon": "Sprint_icon1.png",
     "id": 3,
-    "name": "Sprint"
+    "name": "Sprint",
+    "show": true
   },
   "Standard Step": {
     "cooldown": 30.0,
     "duration": 60.0,
     "icon": "Standard_Step.png",
     "id": 15997,
-    "name": "Standard Step"
+    "name": "Standard Step",
+    "show": true
   },
   "Starry Muse": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Starry_Muse.png",
     "id": 34675,
-    "name": "Starry Muse"
+    "name": "Starry Muse",
+    "show": true
   },
   "Striking Muse": {
     "cooldown": 60.0,
     "duration": 0.0,
     "icon": "Striking_Muse.png",
     "id": 34674,
-    "name": "Striking Muse"
+    "name": "Striking Muse",
+    "show": true
   },
   "Subtractive Palette": {
     "cooldown": 1.0,
     "duration": 30.0,
     "icon": "Subtractive_Palette.png",
     "id": 34683,
-    "name": "Subtractive Palette"
+    "name": "Subtractive Palette",
+    "show": true
   },
   "Summon Bahamut": {
     "cooldown": 60.0,
     "duration": 15.0,
     "icon": "Summon_Bahamut.png",
     "id": 7427,
-    "name": "Summon Bahamut"
+    "name": "Summon Bahamut",
+    "show": true
   },
   "Summon Garuda II": {
     "cooldown": 2.5,
     "duration": 0.0,
     "icon": "Summon_Garuda_II.png",
     "id": 25840,
-    "name": "Summon Garuda II"
+    "name": "Summon Garuda II",
+    "show": true
   },
   "Summon Ifrit II": {
     "cooldown": 2.5,
     "duration": 0.0,
     "icon": "Summon_Ifrit_II.png",
     "id": 25838,
-    "name": "Summon Ifrit II"
+    "name": "Summon Ifrit II",
+    "show": true
   },
   "Summon Phoenix": {
     "cooldown": 60.0,
     "duration": 15.0,
     "icon": "Summon_Phoenix.png",
     "id": 25831,
-    "name": "Summon Phoenix"
+    "name": "Summon Phoenix",
+    "show": true
   },
   "Summon Seraph": {
     "cooldown": 120.0,
     "duration": 22.0,
     "icon": "Summon_Seraph.png",
     "id": 16545,
-    "name": "Summon Seraph"
+    "name": "Summon Seraph",
+    "show": true
   },
   "Summon Solar Bahamut": {
     "cooldown": 60.0,
     "duration": 15.0,
     "icon": "Summon_Solar_Bahamut.png",
     "id": 36992,
-    "name": "Summon Solar Bahamut"
+    "name": "Summon Solar Bahamut",
+    "show": true
   },
   "Summon Titan II": {
     "cooldown": 2.5,
     "duration": 0.0,
     "icon": "Summon_Titan_II.png",
     "id": 25839,
-    "name": "Summon Titan II"
+    "name": "Summon Titan II",
+    "show": true
   },
   "Sun Sign": {
     "cooldown": 1.0,
     "duration": 15.0,
     "icon": "Sun_Sign.png",
     "id": 37031,
-    "name": "Sun Sign"
+    "name": "Sun Sign",
+    "show": true
   },
   "Superbolide": {
     "cooldown": 360.0,
     "duration": 10.0,
     "icon": "Superbolide.png",
     "id": 16152,
-    "name": "Superbolide"
+    "name": "Superbolide",
+    "show": true
   },
   "Swiftcast": {
     "cooldown": 40.0,
     "duration": 10.0,
     "icon": "Swiftcast.png",
     "id": 150,
-    "name": "Swiftcast"
+    "name": "Swiftcast",
+    "show": true
   },
   "Tactician": {
     "cooldown": 90.0,
     "duration": 15.0,
     "icon": "Tactician.png",
     "id": 7555,
-    "name": "Tactician"
+    "name": "Tactician",
+    "show": true
   },
   "Taurochole": {
     "cooldown": 45.0,
     "duration": 15.0,
     "icon": "Taurochole.png",
     "id": 24303,
-    "name": "Taurochole"
+    "name": "Taurochole",
+    "show": true
   },
   "Technical Step": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Technical_Step.png",
     "id": 15998,
-    "name": "Technical Step"
+    "name": "Technical Step",
+    "show": true
   },
   "Tempera Coat": {
     "cooldown": 120.0,
     "duration": 10.0,
     "icon": "Tempera_Coat.png",
     "id": 34685,
-    "name": "Tempera Coat"
+    "name": "Tempera Coat",
+    "show": true
   },
   "Tempera Grassa": {
     "cooldown": 1.0,
     "duration": 10.0,
     "icon": "Tempera_Grassa.png",
     "id": 34686,
-    "name": "Tempera Grassa"
+    "name": "Tempera Grassa",
+    "show": true
   },
   "Temperance": {
     "cooldown": 120.0,
     "duration": 20.0,
     "icon": "Temperance.png",
     "id": 16536,
-    "name": "Temperance"
+    "name": "Temperance",
+    "show": true
   },
   "Ten Chi Jin": {
     "cooldown": 120.0,
     "duration": 6.0,
     "icon": "Ten_Chi_Jin.png",
     "id": 7403,
-    "name": "Ten Chi Jin"
+    "name": "Ten Chi Jin",
+    "show": true
   },
   "Tengentsu": {
     "cooldown": 15.0,
     "duration": 4.0,
     "icon": "Tengentsu.png",
     "id": 36962,
-    "name": "Tengentsu"
+    "name": "Tengentsu",
+    "show": true
   },
   "Tetragrammaton": {
     "cooldown": 60.0,
     "duration": 0.0,
     "icon": "Tetragrammaton.png",
     "id": 3570,
-    "name": "Tetragrammaton"
+    "name": "Tetragrammaton",
+    "show": true
   },
   "The Blackest Night": {
     "cooldown": 15.0,
     "duration": 7.0,
     "icon": "The_Blackest_Night.png",
     "id": 7393,
-    "name": "The Blackest Night"
+    "name": "The Blackest Night",
+    "show": true
   },
   "The Wanderer's Minuet": {
     "cooldown": 120.0,
     "duration": 45.0,
     "icon": "The_Wanderer's_Minuet.png",
     "id": 8843,
-    "name": "The Wanderer's Minuet"
+    "name": "The Wanderer's Minuet",
+    "show": true
   },
   "Thrill of Battle": {
     "cooldown": 90.0,
     "duration": 10.0,
     "icon": "Thrill_of_Battle.png",
     "id": 40,
-    "name": "Thrill of Battle"
+    "name": "Thrill of Battle",
+    "show": true
   },
   "Transpose": {
     "cooldown": 5.0,
     "duration": 0.0,
     "icon": "Transpose.png",
     "id": 149,
-    "name": "Transpose"
+    "name": "Transpose",
+    "show": true
   },
   "Triplecast": {
     "cooldown": 60.0,
     "duration": 15.0,
     "icon": "Triplecast.png",
     "id": 7421,
-    "name": "Triplecast"
+    "name": "Triplecast",
+    "show": true
   },
   "Troubadour": {
     "cooldown": 90.0,
     "duration": 15.0,
     "icon": "Troubadour.png",
     "id": 7405,
-    "name": "Troubadour"
+    "name": "Troubadour",
+    "show": true
   },
   "True North": {
     "cooldown": 45.0,
     "duration": 10.0,
     "icon": "True_North.png",
     "id": 7546,
-    "name": "True North"
+    "name": "True North",
+    "show": true
   },
   "Uncoiled Fury": {
     "cooldown": 3.5,
     "duration": 0.0,
     "icon": "Uncoiled_Fury.png",
     "id": 34633,
-    "name": "Uncoiled Fury"
+    "name": "Uncoiled Fury",
+    "show": true
   },
   "Vercure": {
     "cooldown": 2.5,
     "duration": 0.0,
     "icon": "Vercure.png",
     "id": 7514,
-    "name": "Vercure"
+    "name": "Vercure",
+    "show": true
   },
   "Vicewinder": {
     "cooldown": 40.0,
     "duration": 0.0,
     "icon": "Vicewinder.png",
     "id": 34620,
-    "name": "Vicewinder"
+    "name": "Vicewinder",
+    "show": true
   },
   "Wildfire": {
     "cooldown": 120.0,
     "duration": 10.0,
     "icon": "Wildfire.png",
     "id": 2878,
-    "name": "Wildfire"
+    "name": "Wildfire",
+    "show": true
   },
   "Xenoglossy": {
     "cooldown": 2.5,
     "duration": 0.0,
     "icon": "Xenoglossy.png",
     "id": 16507,
-    "name": "Xenoglossy"
+    "name": "Xenoglossy",
+    "show": true
   },
   "Zoe": {
     "cooldown": 90.0,
     "duration": 30.0,
     "icon": "Zoe.png",
     "id": 24300,
-    "name": "Zoe"
+    "name": "Zoe",
+    "show": true
   }
 }
