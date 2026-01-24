@@ -165,6 +165,17 @@
             return 'dps';
         };
 
+        const getDetailedRole = (specSlug) => {
+            const group = SPECS.find(g => g.items.some(i => i.id === specSlug));
+            if (!group) return 'dps';
+            if (group.label === 'Tanks') return 'tank';
+            if (group.label === 'Healers') return 'healer';
+            if (group.label === 'Melee') return 'melee';
+            if (group.label === 'Physical Ranged') return 'phys_ranged';
+            if (group.label === 'Magical Ranged') return 'magic_ranged';
+            return 'dps';
+        };
+
         // 2. fetchRankings (API with Region & Partner Logic)
         const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = []) => {
             console.log('[FFLorrgs] Starting fetch for:', specSlug, bossSlug);
@@ -184,6 +195,7 @@
                                         player.fightId = fight.fight_id;
                                         player.reportId = report.report_id;
                                         player.region = report.region;
+                                        player.composition = fight.composition || []; // New: composition
                                         allPlayers.push(player);
                                     });
                                 }
@@ -208,28 +220,39 @@
                      
                      const region = player.region || '??';
 
+                     // Smart Partner Logic
                      let partnerIcon = null;
-                     if (userRole === 'tank' || userRole === 'healer') {
-                         const partners = allPlayers.filter(p =>
-                            p.reportId === player.reportId &&
-                            p.fightId === player.fightId &&
-                            p.source_id !== player.source_id
-                         );
-                         const partner = partners.find(p => getRole(p.spec_slug) === userRole);
-                         if (partner) {
-                              const iconName = getIconForSpec(partner.spec_slug);
-                              if (iconName) {
-                                  partnerIcon = `${API_BASE}/lorrgs_assets/images/classes/${iconName}`;
-                              }
+                     const composition = player.composition || [];
+                     const myDetailedRole = getDetailedRole(player.spec_slug);
+
+                     // Count players with same detailed role
+                     const sameRoleSpecs = composition.filter(s => getDetailedRole(s) === myDetailedRole);
+
+                     if (sameRoleSpecs.length === 2) {
+                         // Exactly one partner
+                         // Find the other spec.
+                         // Logic: make a copy, remove current player's spec once, take the remaining one.
+                         const partners = [...sameRoleSpecs];
+                         const myIndex = partners.indexOf(player.spec_slug);
+                         if (myIndex > -1) {
+                             partners.splice(myIndex, 1);
+                         }
+                         const partnerSpec = partners[0];
+                         if (partnerSpec) {
+                            const iconName = getIconForSpec(partnerSpec);
+                            if (iconName) {
+                                partnerIcon = `${API_BASE}/lorrgs_assets/images/classes/${iconName}`;
+                            }
                          }
                      }
+
                      const finalPartner = partnerIcon;
 
                      const existing = currentRankData.find(p => p.id === id);
                      if (existing) {
                          // Simple cache check
                          if (Math.abs((existing.dps || 0) - player.total) < 0.1) {
-                            return { ...existing, rank: index + 1 };
+                            return { ...existing, rank: index + 1, composition: composition, partner: finalPartner };
                          }
                      }
 
@@ -243,6 +266,7 @@
                         name: player.name,
                         region: region, 
                         partner: finalPartner, // New Field
+                        composition: composition,
                         dps: player.total,
                         killTime: `${m}:${s}`,
                         casts: (player.casts || []).map(c => ({
@@ -346,6 +370,80 @@
             return <div className={`flex items-center justify-center w-full h-full text-sm select-none bg-gray-700 ${className}`}>{spell.char || (spell.name ? spell.name[0] : '?')}</div>;
         };
 
+        // Composition Filter Component
+        const CompositionFilter = ({ activeFilterSpecs, onApply }) => {
+            const [isOpen, setIsOpen] = useState(false);
+            const [tempSelected, setTempSelected] = useState(new Set(activeFilterSpecs));
+            const ref = useRef(null);
+
+            useEffect(() => {
+                if (isOpen) setTempSelected(new Set(activeFilterSpecs));
+            }, [isOpen, activeFilterSpecs]);
+
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (ref.current && !ref.current.contains(event.target)) setIsOpen(false);
+                };
+                document.addEventListener('mousedown', handleClickOutside);
+                return () => document.removeEventListener('mousedown', handleClickOutside);
+            }, []);
+
+            const toggleSpec = (specId) => {
+                const newSet = new Set(tempSelected);
+                if (newSet.has(specId)) newSet.delete(specId); else newSet.add(specId);
+                setTempSelected(newSet);
+            };
+
+            const handleApply = () => {
+                onApply(tempSelected);
+                setIsOpen(false);
+            };
+
+            return (
+                <div className="relative" ref={ref}>
+                    <button
+                        onClick={() => setIsOpen(!isOpen)}
+                        className={`flex items-center gap-2 px-3 py-1.5 border rounded-md text-sm transition-colors ${activeFilterSpecs.size > 0 ? 'bg-[#00FF96]/20 border-[#00FF96] text-white' : 'bg-black/30 border-gray-700 text-gray-400 hover:border-[#00FF96]'}`}
+                    >
+                        <span>With... {activeFilterSpecs.size > 0 && `(${activeFilterSpecs.size})`}</span>
+                        <ChevronDown size={14} />
+                    </button>
+
+                    {isOpen && (
+                        <div className="absolute top-full left-0 mt-2 w-80 bg-[#1a1a1a] border border-gray-700 rounded-lg shadow-xl z-[70] p-4 flex flex-col gap-4 max-h-[500px] overflow-y-auto custom-scrollbar">
+                            <div className="flex flex-col gap-4">
+                                {SPECS.map((group, idx) => (
+                                    <div key={idx} className="flex flex-col gap-2">
+                                        <span className="text-[10px] uppercase text-gray-500 font-bold">{group.label}</span>
+                                        <div className="flex flex-wrap gap-2">
+                                            {group.items.map(item => {
+                                                const isSelected = tempSelected.has(item.id);
+                                                return (
+                                                    <button
+                                                        key={item.id}
+                                                        onClick={() => toggleSpec(item.id)}
+                                                        className={`w-9 h-9 flex items-center justify-center rounded border transition-all relative ${isSelected ? 'bg-[#333] border-[#00FF96]' : 'bg-[#252525] border-transparent hover:bg-[#333]'}`}
+                                                        title={item.n}
+                                                    >
+                                                        <img src={`${API_BASE}/lorrgs_assets/images/classes/${item.icon}`} alt={item.n} className="w-full h-full object-cover rounded-sm" />
+                                                        {isSelected && <div className="absolute inset-0 border-2 border-[#00FF96] rounded pointer-events-none"></div>}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="flex items-center justify-between pt-2 border-t border-gray-700">
+                                <button onClick={() => setIsOpen(false)} className="text-xs text-gray-400 hover:text-white px-2 py-1">Cancel</button>
+                                <button onClick={handleApply} className="text-xs bg-[#00FF96] text-black font-bold px-3 py-1.5 rounded hover:bg-[#00cc78]">Confirm</button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
         // Custom Spec Selector
         const SpecSelector = ({ selectedSpec, onChange }) => {
             const [isOpen, setIsOpen] = useState(false);
@@ -408,6 +506,7 @@
             const [viewMode, setViewMode] = useState('damage');
             const [selectedBoss, setSelectedBoss] = useState('vamp-fatale');
             const [selectedSpec, setSelectedSpec] = useState('redmage-redmage');
+            const [activeFilterSpecs, setActiveFilterSpecs] = useState(new Set()); // New State
             
             const [spellCategories, setSpellCategories] = useState({});
             const [spells, setSpells] = useState({});
@@ -562,6 +661,8 @@
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
                             <span className="text-gray-400 text-sm">Spec:</span>
                             <SpecSelector selectedSpec={selectedSpec} onChange={setSelectedSpec} />
+                            <span className="w-px h-3 bg-gray-600 mx-2"></span>
+                            <CompositionFilter activeFilterSpecs={activeFilterSpecs} onApply={setActiveFilterSpecs} />
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
@@ -692,7 +793,17 @@
                             )}
 
                             {/* Player Rows */}
-                            {rankData.map((row) => {
+                            {rankData
+                                .filter(row => {
+                                    if (activeFilterSpecs.size === 0) return true;
+                                    const comp = row.composition || [];
+                                    // Check if all activeFilterSpecs are present in comp
+                                    for (let spec of activeFilterSpecs) {
+                                        if (!comp.includes(spec)) return false;
+                                    }
+                                    return true;
+                                })
+                                .map((row) => {
                                 const visibleCasts = row.casts.filter(cast => selectedSpells.has(cast.spellId));
                                 const { processedCasts, maxTracks } = isCollapsed
                                     ? { processedCasts: visibleCasts.map(c => ({ ...c, trackIndex: 0 })), maxTracks: 1 }
