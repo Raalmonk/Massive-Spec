@@ -43,6 +43,7 @@ class TestSpecRanking(unittest.TestCase):
         assert 'global:' in query
         assert 'cn:' in query
         assert 'partition: 5' in query
+        assert 'serverRegion: "CN"' in query
 
     def test__process_query_result_one(self):
 
