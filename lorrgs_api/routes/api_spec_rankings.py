@@ -37,7 +37,7 @@ async def get_spec_ranking(
         difficulty=difficulty,
         metric=metric,
     )
-    await ranking.load(limit=5, clear_old=True)
+    await ranking.load(limit=80, clear_old=True)
     # -----------------------------------
 
     # shorter cache timeout for the start of the tier (where frequent changes happen)

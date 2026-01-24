@@ -221,7 +221,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
 
         # 1. Global (Top 5)
         global_data = encounter_data.get("global", {})
-        global_rankings = wcl.CharacterRankings(**global_data).rankings[:5]
+        global_rankings = wcl.CharacterRankings(**global_data).rankings[:20]
 
         # 2. CN (Top 10)
         cn_data = encounter_data.get("cn", {})
