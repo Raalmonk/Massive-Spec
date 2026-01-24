@@ -85,7 +85,7 @@
 
         // 1. fetchSpellData (API)
         const fetchSpellData = async (specSlug = 'redmage-redmage') => {
-            const res = await fetch(`${API_BASE}/spell_data.json`);
+            const res = await fetch(`${API_BASE}/api/specs/${specSlug}/spells`);
             const data = await res.json();
 
             const resolveCategory = (tags, spellName) => {
@@ -102,20 +102,19 @@
             };
 
             const spellMap = {};
-            Object.values(data).forEach(spell => {
-                if (spell.specs && spell.specs.includes(specSlug)) {
-                    spellMap[spell.id] = {
-                        id: spell.id,
-                        name: spell.name,
-                        image: spell.icon.startsWith('http') ? spell.icon : `${API_BASE}/lorrgs_assets/images/spells/` + spell.icon,
-                        cd: spell.cooldown || 0,
-                        duration: spell.duration || 0,
-                        color: spell.color || '#ffcc00',
-                        desc: spell.desc || '',
-                        category: resolveCategory(spell.tags, spell.name),
-                        show: spell.show !== undefined ? spell.show : true
-                    };
-                }
+            data.forEach((spell, index) => {
+                spellMap[spell.spell_id] = {
+                    id: spell.spell_id,
+                    name: spell.name,
+                    image: spell.icon.startsWith('http') ? spell.icon : `${API_BASE}/lorrgs_assets/images/spells/` + spell.icon,
+                    cd: spell.cooldown || 0,
+                    duration: spell.duration || 0,
+                    color: spell.color || '#ffcc00',
+                    desc: spell.desc || '',
+                    category: resolveCategory(spell.tags, spell.name),
+                    show: spell.show !== undefined ? spell.show : true,
+                    load_order: spell.load_order !== undefined ? spell.load_order : index
+                };
             });
             return spellMap;
         };
@@ -461,7 +460,8 @@
                     const defaultSelectedIds = Object.values(sps)
                         .filter(s => {
                             if (s.show === false) return false;
-                            return cats[s.category] && cats[s.category].defaultActive;
+                            const cat = cats[s.category];
+                            return cat ? cat.defaultActive : true;
                         })
                         .map(s => s.id);
                     setSelectedSpells(new Set(defaultSelectedIds));
@@ -590,7 +590,7 @@
                                     <CategoryIcon type={category.iconType} /> {category.label}
                                 </div>
                                 <div className="flex items-center gap-1.5">
-                                    {Object.values(spells).filter(spell => spell.category === catKey).map(spell => {
+                                    {Object.values(spells).sort((a, b) => a.load_order - b.load_order).filter(spell => spell.category === catKey).map(spell => {
                                         const isSelected = selectedSpells.has(spell.id);
                                         return (
                                             <button
