@@ -72,9 +72,9 @@ class WowSpec(WowActor):
     ##########################
     # Methods
     #
-    def add_spell(self, spell: typing.Optional[WowSpell] = None, **kwargs: typing.Any) -> WowSpell:
+    def add_spell(self, spell: typing.Optional[WowSpell] = None, show: bool = True, **kwargs: typing.Any) -> WowSpell:
         kwargs.setdefault("color", self.wow_class.color)
-        return super().add_spell(spell, **kwargs)
+        return super().add_spell(spell, show=show, **kwargs)
 
     def add_buff(self, spell: typing.Optional[WowSpell] = None, **kwargs) -> WowSpell:
         kwargs.setdefault("color", self.wow_class.color)

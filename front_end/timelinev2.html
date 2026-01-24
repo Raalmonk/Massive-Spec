@@ -111,7 +111,8 @@
                     duration: spell.duration || 0,
                     color: spell.color || '#ffcc00',
                     desc: spell.desc || '',
-                    category: resolveCategory(spell.tags, spell.name)
+                    category: resolveCategory(spell.tags, spell.name),
+                    show: spell.show !== undefined ? spell.show : true
                 };
             });
             return spellMap;
@@ -456,7 +457,10 @@
                     
                     // Filter default active spells
                     const defaultSelectedIds = Object.values(sps)
-                        .filter(s => cats[s.category] && cats[s.category].defaultActive)
+                        .filter(s => {
+                            if (s.show === false) return false;
+                            return cats[s.category] && cats[s.category].defaultActive;
+                        })
                         .map(s => s.id);
                     setSelectedSpells(new Set(defaultSelectedIds));
 

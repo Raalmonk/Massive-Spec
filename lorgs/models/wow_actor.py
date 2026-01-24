@@ -56,11 +56,12 @@ class WowActor(base.MemoryModel):
     ##########################
     # Methods
     #
-    def add_spell(self, spell: Optional[WowSpell] = None, **kwargs: Any) -> WowSpell:
+    def add_spell(self, spell: Optional[WowSpell] = None, show: bool = True, **kwargs: Any) -> WowSpell:
         """Add a spell to the actor."""
         if not spell:
             kwargs.setdefault("event_type", "cast")
             kwargs.setdefault("spell_type", self.full_name_slug)
+            kwargs["show"] = show
             spell = WowSpell(**kwargs)
 
         self.spells.append(spell)

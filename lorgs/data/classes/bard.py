@@ -40,7 +40,7 @@ BARD_MAIN.add_spell(spell_id=114, cooldown=120, duration=45, name="Mage's Ballad
 BARD_MAIN.add_spell(spell_id=116, cooldown=120, duration=45, name="Army's Paeon", icon="Army's_Paeon.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-BARD_MAIN.add_spell(spell_id=57, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
+BARD_MAIN.add_spell(spell_id=57, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE], show=False)
 BARD_MAIN.add_spell(spell_id=7405, cooldown=90, duration=15, name="Troubadour", icon="Troubadour.png", tags=[SpellTag.DEFENSIVE])
 
 # Party Mitigation
