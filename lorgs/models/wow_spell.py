@@ -89,6 +89,7 @@ class WowSpell(base.MemoryModel):
     time: str = ""
     color: str = ""
     show: bool = True
+    """Whether the spell is shown on the timeline by default."""
     desc: str = ""
 
     variations: list[Union[int, str]] = []

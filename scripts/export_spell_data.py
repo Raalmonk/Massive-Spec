@@ -32,7 +32,8 @@ def main():
                 "id": d["spell_id"],
                 "cooldown": d["cooldown"],
                 "icon": d["icon"],
-                "duration": d.get("duration", 0)
+                "duration": d.get("duration", 0),
+                "show": d.get("show", True),
             }
 
             spells_dict[name] = entry
