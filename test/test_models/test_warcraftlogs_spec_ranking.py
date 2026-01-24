@@ -40,15 +40,16 @@ class TestSpecRanking(unittest.TestCase):
         assert 'metric: metric' in query
         assert 'difficulty: 101' in query
         # check if cn alias is present (ignoring whitespace)
+        assert 'global:' in query
         assert 'cn:' in query
-        assert 'serverRegion: "CN"' in query
+        assert 'partition: 5' in query
 
     def test__process_query_result_one(self):
 
         data = {
             "worldData": {
                 "encounter": {
-                    "characterRankings": {
+                    "global": {
                         "rankings": [
                             {
                                 "name": "PlayerName",
@@ -89,7 +90,11 @@ class TestSpecRanking(unittest.TestCase):
     def test__process_query_result_fixture(self):
 
         data = load_fixture("spec_rankings_1.json")
-        # data = data.get("data")
+
+        # Manually move data to match new structure
+        # (The fixture has the old structure with "characterRankings")
+        encounter = data["worldData"]["encounter"]
+        encounter["global"] = encounter.pop("characterRankings")
 
         self.spec_ranking.process_query_result(**data)
 

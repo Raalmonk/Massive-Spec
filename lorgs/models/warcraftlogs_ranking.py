@@ -92,7 +92,8 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         """Return the Query to load the rankings for this Spec & Boss."""
         difficulty_id = DIFFICULTY_IDS.get(self.difficulty) or 101
 
-        def build_rankings_query(args=""):
+        # Helper to inject arguments
+        def build_rankings_query(extra_args: str = ""):
             return f"""
                 characterRankings(
                     className: "{self.spec.wow_class.name_slug_cap}"
@@ -100,18 +101,19 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                     metric: {self.metric}
                     difficulty: {difficulty_id}
                     includeCombatantInfo: true
-                    {args}
+                    {extra_args}
                 )
             """
 
+        # CRITICAL FIX: Use partition: 5 for CN data
         return textwrap.dedent(
             f"""\
         worldData
         {{
             encounter(id: {self.boss.id})
             {{
-                {build_rankings_query()}
-                cn: {build_rankings_query('serverRegion: "CN"')}
+                global: {build_rankings_query()}
+                cn: {build_rankings_query("partition: 5")}
             }}
         }}
         """
@@ -213,12 +215,16 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         encounter_data = query_result.get("worldData", {}).get("encounter", {})
 
         # 1. Global (Top 5)
-        global_data = encounter_data.get("characterRankings", {})
+        global_data = encounter_data.get("global", {})
         global_rankings = wcl.CharacterRankings(**global_data).rankings[:5]
 
         # 2. CN (Top 10)
         cn_data = encounter_data.get("cn", {})
         cn_rankings = wcl.CharacterRankings(**cn_data).rankings[:10]
+
+        # Log check to confirm we got CN names
+        if cn_rankings:
+            logger.info(f"[CN Data Check] First CN Player: {cn_rankings[0].name}")
 
         # Merge
         rankings = global_rankings + cn_rankings
@@ -227,10 +233,12 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
 
     async def load_rankings(self) -> None:
         """Fetch the current Ranking Data"""
-        # Build and run the query
         query = self.get_query()
-        query_result = await self.client.query(query)
-        self.process_query_result(**query_result)
+
+        # Single query to Global API handles both regions now
+        # We DO NOT need to switch endpoints or tokens.
+        result = await self.client.query(query)
+        self.process_query_result(**result)
 
     ############################################################################
     # Query: Fights
