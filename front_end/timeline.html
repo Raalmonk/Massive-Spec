@@ -72,10 +72,10 @@
 
         // --- Mock Data Layer ---
         const fetchSpellCategories = async () => ({
-            MAJOR: { label: 'CD', color: '#E87B7B', iconType: 'swords' },
-            SINGLE_MIT: { label: 'Single Mit', color: '#4facfe', iconType: 'shield' },
-            RAID_MIT: { label: 'Group Mit', color: '#8657FF', iconType: 'shieldAlert' },
-            UTILITY: { label: 'Utility', color: '#E6B33D', iconType: 'zap' },
+            MAJOR: { label: 'CD', color: '#E87B7B', iconType: 'swords', defaultActive: true },
+            SINGLE_MIT: { label: 'Single Mit', color: '#4facfe', iconType: 'shield', defaultActive: false },
+            RAID_MIT: { label: 'Group Mit', color: '#8657FF', iconType: 'shieldAlert', defaultActive: true },
+            UTILITY: { label: 'Utility', color: '#E6B33D', iconType: 'zap', defaultActive: false },
         });
 
         // 1. fetchSpellData (API)
@@ -118,7 +118,7 @@
                     color: spell.color || '#ffcc00',
                     desc: spell.desc || '',
                     show: spell.show !== undefined ? spell.show : true, // Default visibility
-                    order: index, // Preserve definition order
+                    load_order: spell.load_order !== undefined ? spell.load_order : index, // Use explicit load order
 
                     // Fix: Dynamic Category
                     category: resolveCategory(spell.tags, spell.name)
@@ -346,7 +346,21 @@
                     setSpellCategories(cats); setSpells(sps); setBossMechanics(mechs); setRankData(ranks);
 
                     // Only select spells that are shown by default
-                    setSelectedSpells(new Set(Object.values(sps).filter(s => s.show !== false).map(s => s.id)));
+                    // 1. Check Python's 'show' attribute (explicit hide)
+                    // 2. Check Category's 'defaultActive' (group hide)
+                    const defaultSelectedIds = Object.values(sps)
+                        .filter(s => {
+                            // If Python says NO, it's NO.
+                            if (s.show === false) return false;
+
+                            // Otherwise, respect the Category's default preference
+                            // (e.g. SINGLE_MIT is false by default, MAJOR is true)
+                            const cat = cats[s.category];
+                            return cat ? cat.defaultActive : true;
+                        })
+                        .map(s => s.id);
+
+                    setSelectedSpells(new Set(defaultSelectedIds));
                     setLoading(false);
                 };
                 load();
@@ -441,7 +455,7 @@
                                     <CategoryIcon type={category.iconType} /> {category.label}
                                 </div>
                                 <div className="flex items-center gap-1.5">
-                                    {Object.values(spells).sort((a, b) => a.order - b.order).filter(spell => spell.category === catKey).map(spell => {
+                                    {Object.values(spells).sort((a, b) => a.load_order - b.load_order).filter(spell => spell.category === catKey).map(spell => {
                                         const isSelected = selectedSpells.has(spell.id);
                                         return (
                                             <button
