@@ -181,6 +181,29 @@
       "paladin-paladin"
     ]
   },
+  "Grade 4 Gemdraught of Strength": {
+    "name": "Grade 4 Gemdraught of Strength",
+    "id": 34603666,
+    "cooldown": 270,
+    "icon": "Grade_4_gemdraught_of_strength_icon1.png",
+    "duration": 30.0,
+    "show": false,
+    "color": "#b576e8",
+    "desc": "",
+    "tags": [
+      "utility"
+    ],
+    "specs": [
+      "paladin-paladin",
+      "warrior-warrior",
+      "darkknight-darkknight",
+      "gunbreaker-gunbreaker",
+      "monk-monk",
+      "dragoon-dragoon",
+      "samurai-samurai",
+      "reaper-reaper"
+    ]
+  },
   "Sprint": {
     "name": "Sprint",
     "id": 3,
@@ -655,7 +678,7 @@
     "cooldown": 60.0,
     "icon": "Tetragrammaton.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#FFF0F5",
     "desc": "",
     "tags": [
@@ -671,7 +694,7 @@
     "cooldown": 60.0,
     "icon": "Aquaveil.png",
     "duration": 8.0,
-    "show": true,
+    "show": false,
     "color": "#FFF0F5",
     "desc": "",
     "tags": [
@@ -686,8 +709,8 @@
     "id": 7432,
     "cooldown": 30.0,
     "icon": "Divine_Benison.png",
-    "duration": 15.0,
-    "show": true,
+    "duration": 0.0,
+    "show": false,
     "color": "#FFF0F5",
     "desc": "",
     "tags": [
@@ -702,7 +725,7 @@
     "id": 25862,
     "cooldown": 180.0,
     "icon": "Liturgy_of_the_Bell.png",
-    "duration": 20.0,
+    "duration": 0.0,
     "show": true,
     "color": "#FFF0F5",
     "desc": "",
@@ -750,8 +773,8 @@
     "id": 37011,
     "cooldown": 1.0,
     "icon": "Divine_Caress.png",
-    "duration": 10.0,
-    "show": true,
+    "duration": 0.0,
+    "show": false,
     "color": "#FFF0F5",
     "desc": "",
     "tags": [
@@ -767,7 +790,7 @@
     "cooldown": 40.0,
     "icon": "Assize.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#FFF0F5",
     "desc": "",
     "tags": [
@@ -775,6 +798,25 @@
     ],
     "specs": [
       "whitemage-whitemage"
+    ]
+  },
+  "Grade 4 Gemdraught of Mind": {
+    "name": "Grade 4 Gemdraught of Mind",
+    "id": 34603670,
+    "cooldown": 270,
+    "icon": "Grade_4_gemdraught_of_mind_icon1.png",
+    "duration": 30.0,
+    "show": false,
+    "color": "#b576e8",
+    "desc": "",
+    "tags": [
+      "utility"
+    ],
+    "specs": [
+      "whitemage-whitemage",
+      "scholar-scholar",
+      "astrologian-astrologian",
+      "sage-sage"
     ]
   },
   "Aetherflow": {
@@ -825,33 +867,17 @@
       "scholar-scholar"
     ]
   },
-  "Excogitation": {
-    "name": "Excogitation",
-    "id": 7434,
-    "cooldown": 45.0,
-    "icon": "Excogitation.png",
-    "duration": 45.0,
-    "show": true,
-    "color": "#8657FF",
-    "desc": "",
-    "tags": [
-      "defensive"
-    ],
-    "specs": [
-      "scholar-scholar"
-    ]
-  },
-  "Aetherpact": {
-    "name": "Aetherpact",
-    "id": 7423,
-    "cooldown": 3.0,
-    "icon": "Aetherpact.png",
+  "Recitation": {
+    "name": "Recitation",
+    "id": 16542,
+    "cooldown": 60.0,
+    "icon": "Recitation.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#8657FF",
     "desc": "",
     "tags": [
-      "defensive"
+      "dps"
     ],
     "specs": [
       "scholar-scholar"
@@ -863,7 +889,7 @@
     "cooldown": 1.0,
     "icon": "Lustrate.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#8657FF",
     "desc": "",
     "tags": [
@@ -873,13 +899,13 @@
       "scholar-scholar"
     ]
   },
-  "Recitation": {
-    "name": "Recitation",
-    "id": 16542,
-    "cooldown": 60.0,
-    "icon": "Recitation.png",
-    "duration": 15.0,
-    "show": true,
+  "Excogitation": {
+    "name": "Excogitation",
+    "id": 7434,
+    "cooldown": 45.0,
+    "icon": "Excogitation.png",
+    "duration": 0.0,
+    "show": false,
     "color": "#8657FF",
     "desc": "",
     "tags": [
@@ -889,60 +915,28 @@
       "scholar-scholar"
     ]
   },
-  "Sacred Soil": {
-    "name": "Sacred Soil",
-    "id": 188,
-    "cooldown": 30.0,
-    "icon": "Sacred_Soil.png",
-    "duration": 15.0,
-    "show": true,
+  "Aetherpact": {
+    "name": "Aetherpact",
+    "id": 7437,
+    "cooldown": 3.0,
+    "icon": "Aetherpact.png",
+    "duration": 0.0,
+    "show": false,
     "color": "#8657FF",
     "desc": "",
     "tags": [
-      "raid_cd"
+      "defensive"
     ],
     "specs": [
       "scholar-scholar"
     ]
   },
-  "Indomitability": {
-    "name": "Indomitability",
-    "id": 3583,
-    "cooldown": 30.0,
-    "icon": "Indomitability.png",
-    "duration": 0.0,
-    "show": true,
-    "color": "#8657FF",
-    "desc": "",
-    "tags": [
-      "raid_cd"
-    ],
-    "specs": [
-      "scholar-scholar"
-    ]
-  },
-  "Deployment Tactics": {
-    "name": "Deployment Tactics",
-    "id": 3585,
-    "cooldown": 90.0,
-    "icon": "Deployment_Tactics.png",
-    "duration": 0.0,
-    "show": true,
-    "color": "#8657FF",
-    "desc": "",
-    "tags": [
-      "raid_cd"
-    ],
-    "specs": [
-      "scholar-scholar"
-    ]
-  },
-  "Fey Blessing": {
-    "name": "Fey Blessing",
-    "id": 16543,
-    "cooldown": 60.0,
-    "icon": "Fey_Blessing.png",
-    "duration": 0.0,
+  "Expedient": {
+    "name": "Expedient",
+    "id": 25868,
+    "cooldown": 120.0,
+    "icon": "Expedient.png",
+    "duration": 20.0,
     "show": true,
     "color": "#8657FF",
     "desc": "",
@@ -974,7 +968,23 @@
     "id": 16546,
     "cooldown": 20.0,
     "icon": "Consolation.png",
-    "duration": 30.0,
+    "duration": 0.0,
+    "show": false,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
+  },
+  "Deployment Tactics": {
+    "name": "Deployment Tactics",
+    "id": 3585,
+    "cooldown": 90.0,
+    "icon": "Deployment_Tactics.png",
+    "duration": 0.0,
     "show": true,
     "color": "#8657FF",
     "desc": "",
@@ -985,13 +995,13 @@
       "scholar-scholar"
     ]
   },
-  "Expedient": {
-    "name": "Expedient",
-    "id": 25868,
-    "cooldown": 120.0,
-    "icon": "Expedient.png",
-    "duration": 20.0,
-    "show": true,
+  "Sacred Soil": {
+    "name": "Sacred Soil",
+    "id": 188,
+    "cooldown": 30.0,
+    "icon": "Sacred_Soil.png",
+    "duration": 17.0,
+    "show": false,
     "color": "#8657FF",
     "desc": "",
     "tags": [
@@ -1019,11 +1029,43 @@
   },
   "Fey Illumination": {
     "name": "Fey Illumination",
-    "id": 805,
-    "cooldown": 0.0,
+    "id": 16538,
+    "cooldown": 120.0,
     "icon": "Fey_Illumination.png",
     "duration": 20.0,
-    "show": true,
+    "show": false,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
+  },
+  "Indomitability": {
+    "name": "Indomitability",
+    "id": 3583,
+    "cooldown": 30.0,
+    "icon": "Indomitability.png",
+    "duration": 0.0,
+    "show": false,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
+  },
+  "Fey Blessing": {
+    "name": "Fey Blessing",
+    "id": 16543,
+    "cooldown": 60.0,
+    "icon": "Fey_Blessing.png",
+    "duration": 0.0,
+    "show": false,
     "color": "#8657FF",
     "desc": "",
     "tags": [
@@ -1038,8 +1080,8 @@
     "id": 37013,
     "cooldown": 2.5,
     "icon": "Concitation.png",
-    "duration": 30.0,
-    "show": true,
+    "duration": 0.0,
+    "show": false,
     "color": "#8657FF",
     "desc": "",
     "tags": [
@@ -1054,8 +1096,8 @@
     "id": 37016,
     "cooldown": 2.5,
     "icon": "Accession.png",
-    "duration": 30.0,
-    "show": true,
+    "duration": 0.0,
+    "show": false,
     "color": "#8657FF",
     "desc": "",
     "tags": [
@@ -1063,22 +1105,6 @@
     ],
     "specs": [
       "scholar-scholar"
-    ]
-  },
-  "Lightspeed": {
-    "name": "Lightspeed",
-    "id": 3606,
-    "cooldown": 60.0,
-    "icon": "Lightspeed.png",
-    "duration": 15.0,
-    "show": true,
-    "color": "#FFE74A",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "astrologian-astrologian"
     ]
   },
   "Divination": {
@@ -1097,13 +1123,29 @@
       "astrologian-astrologian"
     ]
   },
+  "Lightspeed": {
+    "name": "Lightspeed",
+    "id": 3606,
+    "cooldown": 60.0,
+    "icon": "Lightspeed.png",
+    "duration": 15.0,
+    "show": true,
+    "color": "#FFE74A",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "astrologian-astrologian"
+    ]
+  },
   "Lord of Crowns": {
     "name": "Lord of Crowns",
     "id": 7444,
     "cooldown": 1.0,
     "icon": "Lord_of_Crowns.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#FFE74A",
     "desc": "",
     "tags": [
@@ -1119,7 +1161,7 @@
     "cooldown": 40.0,
     "icon": "Essential_Dignity.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#FFE74A",
     "desc": "",
     "tags": [
@@ -1135,7 +1177,7 @@
     "cooldown": 60.0,
     "icon": "Exaltation.png",
     "duration": 8.0,
-    "show": true,
+    "show": false,
     "color": "#FFE74A",
     "desc": "",
     "tags": [
@@ -1150,8 +1192,8 @@
     "id": 16556,
     "cooldown": 30.0,
     "icon": "Celestial_Intersection.png",
-    "duration": 30.0,
-    "show": true,
+    "duration": 0.0,
+    "show": false,
     "color": "#FFE74A",
     "desc": "",
     "tags": [
@@ -1166,12 +1208,12 @@
     "id": 25874,
     "cooldown": 180.0,
     "icon": "Macrocosmos.png",
-    "duration": 15.0,
+    "duration": 0.0,
     "show": true,
     "color": "#FFE74A",
     "desc": "",
     "tags": [
-      "defensive"
+      "raid_cd"
     ],
     "specs": [
       "astrologian-astrologian"
@@ -1193,13 +1235,29 @@
       "astrologian-astrologian"
     ]
   },
+  "Earthly Star": {
+    "name": "Earthly Star",
+    "id": 7439,
+    "cooldown": 60.0,
+    "icon": "Earthly_Star.png",
+    "duration": 0.0,
+    "show": true,
+    "color": "#FFE74A",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "astrologian-astrologian"
+    ]
+  },
   "Collective Unconscious": {
     "name": "Collective Unconscious",
     "id": 3613,
     "cooldown": 60.0,
     "icon": "Collective_Unconscious.png",
-    "duration": 20.0,
-    "show": true,
+    "duration": 0.0,
+    "show": false,
     "color": "#FFE74A",
     "desc": "",
     "tags": [
@@ -1211,11 +1269,11 @@
   },
   "Celestial Opposition": {
     "name": "Celestial Opposition",
-    "id": 3616,
+    "id": 16553,
     "cooldown": 60.0,
     "icon": "Celestial_Opposition.png",
     "duration": 15.0,
-    "show": true,
+    "show": false,
     "color": "#FFE74A",
     "desc": "",
     "tags": [
@@ -1231,7 +1289,7 @@
     "cooldown": 1.0,
     "icon": "Lady_of_Crowns.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#FFE74A",
     "desc": "",
     "tags": [
@@ -1247,23 +1305,7 @@
     "cooldown": 1.0,
     "icon": "Sun_Sign.png",
     "duration": 15.0,
-    "show": true,
-    "color": "#FFE74A",
-    "desc": "",
-    "tags": [
-      "raid_cd"
-    ],
-    "specs": [
-      "astrologian-astrologian"
-    ]
-  },
-  "Earthly Star": {
-    "name": "Earthly Star",
-    "id": 7439,
-    "cooldown": 60.0,
-    "icon": "Earthly_Star.png",
-    "duration": 20.0,
-    "show": true,
+    "show": false,
     "color": "#FFE74A",
     "desc": "",
     "tags": [
@@ -1279,7 +1321,7 @@
     "cooldown": 60.0,
     "icon": "Psyche.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#80A0F0",
     "desc": "",
     "tags": [
@@ -1295,7 +1337,23 @@
     "cooldown": 40.0,
     "icon": "Phlegma_III.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
+  },
+  "Zoe": {
+    "name": "Zoe",
+    "id": 24300,
+    "cooldown": 90.0,
+    "icon": "Zoe.png",
+    "duration": 30.0,
+    "show": false,
     "color": "#80A0F0",
     "desc": "",
     "tags": [
@@ -1311,7 +1369,7 @@
     "cooldown": 45.0,
     "icon": "Taurochole.png",
     "duration": 15.0,
-    "show": true,
+    "show": false,
     "color": "#80A0F0",
     "desc": "",
     "tags": [
@@ -1327,7 +1385,7 @@
     "cooldown": 120.0,
     "icon": "Haima.png",
     "duration": 15.0,
-    "show": true,
+    "show": false,
     "color": "#80A0F0",
     "desc": "",
     "tags": [
@@ -1343,7 +1401,7 @@
     "cooldown": 1.0,
     "icon": "Druochole.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#80A0F0",
     "desc": "",
     "tags": [
@@ -1359,7 +1417,7 @@
     "cooldown": 60.0,
     "icon": "Soteria.png",
     "duration": 15.0,
-    "show": true,
+    "show": false,
     "color": "#80A0F0",
     "desc": "",
     "tags": [
@@ -1375,7 +1433,7 @@
     "cooldown": 60.0,
     "icon": "Krasis.png",
     "duration": 10.0,
-    "show": true,
+    "show": false,
     "color": "#80A0F0",
     "desc": "",
     "tags": [
@@ -1385,44 +1443,12 @@
       "sage-sage"
     ]
   },
-  "Zoe": {
-    "name": "Zoe",
-    "id": 24300,
-    "cooldown": 90.0,
-    "icon": "Zoe.png",
-    "duration": 30.0,
-    "show": true,
-    "color": "#80A0F0",
-    "desc": "",
-    "tags": [
-      "defensive"
-    ],
-    "specs": [
-      "sage-sage"
-    ]
-  },
-  "Kerachole": {
-    "name": "Kerachole",
-    "id": 24298,
-    "cooldown": 30.0,
-    "icon": "Kerachole.png",
-    "duration": 15.0,
-    "show": true,
-    "color": "#80A0F0",
-    "desc": "",
-    "tags": [
-      "raid_cd"
-    ],
-    "specs": [
-      "sage-sage"
-    ]
-  },
-  "Ixochole": {
-    "name": "Ixochole",
-    "id": 24299,
-    "cooldown": 30.0,
-    "icon": "Ixochole.png",
-    "duration": 0.0,
+  "Philosophia": {
+    "name": "Philosophia",
+    "id": 37035,
+    "cooldown": 180.0,
+    "icon": "Philosophia.png",
+    "duration": 20.0,
     "show": true,
     "color": "#80A0F0",
     "desc": "",
@@ -1439,22 +1465,6 @@
     "cooldown": 120.0,
     "icon": "Holos.png",
     "duration": 20.0,
-    "show": true,
-    "color": "#80A0F0",
-    "desc": "",
-    "tags": [
-      "raid_cd"
-    ],
-    "specs": [
-      "sage-sage"
-    ]
-  },
-  "Physis II": {
-    "name": "Physis II",
-    "id": 24302,
-    "cooldown": 60.0,
-    "icon": "Physis_II.png",
-    "duration": 15.0,
     "show": true,
     "color": "#80A0F0",
     "desc": "",
@@ -1497,13 +1507,45 @@
       "sage-sage"
     ]
   },
-  "Philosophia": {
-    "name": "Philosophia",
-    "id": 37035,
-    "cooldown": 180.0,
-    "icon": "Philosophia.png",
-    "duration": 20.0,
-    "show": true,
+  "Kerachole": {
+    "name": "Kerachole",
+    "id": 24298,
+    "cooldown": 30.0,
+    "icon": "Kerachole.png",
+    "duration": 15.0,
+    "show": false,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
+  },
+  "Ixochole": {
+    "name": "Ixochole",
+    "id": 24299,
+    "cooldown": 30.0,
+    "icon": "Ixochole.png",
+    "duration": 0.0,
+    "show": false,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
+  },
+  "Physis II": {
+    "name": "Physis II",
+    "id": 24302,
+    "cooldown": 60.0,
+    "icon": "Physis_II.png",
+    "duration": 15.0,
+    "show": false,
     "color": "#80A0F0",
     "desc": "",
     "tags": [
@@ -1518,8 +1560,8 @@
     "id": 37034,
     "cooldown": 1.5,
     "icon": "Eukrasian_Prognosis_II.png",
-    "duration": 30.0,
-    "show": true,
+    "duration": 0.0,
+    "show": false,
     "color": "#80A0F0",
     "desc": "",
     "tags": [
@@ -1639,7 +1681,7 @@
   },
   "Bloodbath": {
     "name": "Bloodbath",
-    "id": 34,
+    "id": 7542,
     "cooldown": 90.0,
     "icon": "Bloodbath.png",
     "duration": 20.0,
@@ -1676,7 +1718,7 @@
   },
   "Feint": {
     "name": "Feint",
-    "id": 76,
+    "id": 7549,
     "cooldown": 90.0,
     "icon": "Feint.png",
     "duration": 15.0,
@@ -1684,7 +1726,7 @@
     "color": "#D69C00",
     "desc": "",
     "tags": [
-      "defensive"
+      "raid_cd"
     ],
     "specs": [
       "monk-monk",
@@ -1711,12 +1753,12 @@
       "monk-monk"
     ]
   },
-  "High Jump": {
-    "name": "High Jump",
-    "id": 6062,
-    "cooldown": 30.0,
-    "icon": "High_Jump.png",
-    "duration": 0.0,
+  "Battle Litany": {
+    "name": "Battle Litany",
+    "id": 3557,
+    "cooldown": 120.0,
+    "icon": "Battle_Litany.png",
+    "duration": 20.0,
     "show": true,
     "color": "#4164CD",
     "desc": "",
@@ -1743,100 +1785,36 @@
       "dragoon-dragoon"
     ]
   },
+  "High Jump": {
+    "name": "High Jump",
+    "id": 6062,
+    "cooldown": 30.0,
+    "icon": "High_Jump.png",
+    "duration": 0.0,
+    "show": true,
+    "color": "#4164CD",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "dragoon-dragoon"
+    ]
+  },
   "Lance Charge": {
     "name": "Lance Charge",
     "id": 85,
     "cooldown": 60.0,
     "icon": "Lance_Charge.png",
-    "duration": 20.0,
-    "show": true,
-    "color": "#4164CD",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "dragoon-dragoon"
-    ]
-  },
-  "Battle Litany": {
-    "name": "Battle Litany",
-    "id": 3557,
-    "cooldown": 120.0,
-    "icon": "Battle_Litany.png",
-    "duration": 20.0,
-    "show": true,
-    "color": "#4164CD",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "dragoon-dragoon"
-    ]
-  },
-  "Raiton": {
-    "name": "Raiton",
-    "id": 2267,
-    "cooldown": 1.5,
-    "icon": "Raiton.png",
     "duration": 0.0,
-    "show": true,
-    "color": "#AF1964",
+    "show": false,
+    "color": "#4164CD",
     "desc": "",
     "tags": [
       "dps"
     ],
     "specs": [
-      "ninja-ninja"
-    ]
-  },
-  "Kassatsu": {
-    "name": "Kassatsu",
-    "id": 2264,
-    "cooldown": 60.0,
-    "icon": "Kassatsu.png",
-    "duration": 15.0,
-    "show": true,
-    "color": "#AF1964",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "ninja-ninja"
-    ]
-  },
-  "Ten Chi Jin": {
-    "name": "Ten Chi Jin",
-    "id": 7403,
-    "cooldown": 120.0,
-    "icon": "Ten_Chi_Jin.png",
-    "duration": 6.0,
-    "show": true,
-    "color": "#AF1964",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "ninja-ninja"
-    ]
-  },
-  "Bunshin": {
-    "name": "Bunshin",
-    "id": 9167,
-    "cooldown": 90.0,
-    "icon": "Bunshin.png",
-    "duration": 30.0,
-    "show": true,
-    "color": "#AF1964",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "ninja-ninja"
+      "dragoon-dragoon"
     ]
   },
   "Dokumori": {
@@ -1855,13 +1833,77 @@
       "ninja-ninja"
     ]
   },
+  "Ten Chi Jin": {
+    "name": "Ten Chi Jin",
+    "id": 7403,
+    "cooldown": 120.0,
+    "icon": "Ten_Chi_Jin.png",
+    "duration": 0.0,
+    "show": false,
+    "color": "#AF1964",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "ninja-ninja"
+    ]
+  },
+  "Bunshin": {
+    "name": "Bunshin",
+    "id": 16493,
+    "cooldown": 90.0,
+    "icon": "Bunshin.png",
+    "duration": 0.0,
+    "show": true,
+    "color": "#AF1964",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "ninja-ninja"
+    ]
+  },
+  "Kassatsu": {
+    "name": "Kassatsu",
+    "id": 2264,
+    "cooldown": 60.0,
+    "icon": "Kassatsu.png",
+    "duration": 0.0,
+    "show": true,
+    "color": "#AF1964",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "ninja-ninja"
+    ]
+  },
+  "Raiton": {
+    "name": "Raiton",
+    "id": 2267,
+    "cooldown": 0.0,
+    "icon": "Raiton.png",
+    "duration": 0.0,
+    "show": false,
+    "color": "#AF1964",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "ninja-ninja"
+    ]
+  },
   "Shade Shift": {
     "name": "Shade Shift",
     "id": 2241,
     "cooldown": 120.0,
     "icon": "Shade_Shift.png",
-    "duration": 20.0,
-    "show": true,
+    "duration": 0.0,
+    "show": false,
     "color": "#AF1964",
     "desc": "",
     "tags": [
@@ -1871,12 +1913,32 @@
       "ninja-ninja"
     ]
   },
-  "Meikyo Shisui": {
-    "name": "Meikyo Shisui",
-    "id": 7499,
-    "cooldown": 55.0,
-    "icon": "Meikyo_Shisui.png",
-    "duration": 20.0,
+  "Grade 4 Gemdraught of Dexterity": {
+    "name": "Grade 4 Gemdraught of Dexterity",
+    "id": 34603667,
+    "cooldown": 270,
+    "icon": "Grade_4_gemdraught_of_dexterity_icon1.png",
+    "duration": 30.0,
+    "show": false,
+    "color": "#b576e8",
+    "desc": "",
+    "tags": [
+      "utility"
+    ],
+    "specs": [
+      "ninja-ninja",
+      "viper-viper",
+      "bard-bard",
+      "machinist-machinist",
+      "dancer-dancer"
+    ]
+  },
+  "Ikishoten": {
+    "name": "Ikishoten",
+    "id": 16482,
+    "cooldown": 120.0,
+    "icon": "Ikishoten.png",
+    "duration": 0.0,
     "show": true,
     "color": "#E46D04",
     "desc": "",
@@ -1903,12 +1965,12 @@
       "samurai-samurai"
     ]
   },
-  "Ikishoten": {
-    "name": "Ikishoten",
-    "id": 16482,
-    "cooldown": 120.0,
-    "icon": "Ikishoten.png",
-    "duration": 30.0,
+  "Meikyo Shisui": {
+    "name": "Meikyo Shisui",
+    "id": 7499,
+    "cooldown": 55.0,
+    "icon": "Meikyo_Shisui.png",
+    "duration": 0.0,
     "show": true,
     "color": "#E46D04",
     "desc": "",
@@ -1925,7 +1987,7 @@
     "cooldown": 15.0,
     "icon": "Tengentsu.png",
     "duration": 4.0,
-    "show": true,
+    "show": false,
     "color": "#E46D04",
     "desc": "",
     "tags": [
@@ -1933,54 +1995,6 @@
     ],
     "specs": [
       "samurai-samurai"
-    ]
-  },
-  "Soul Slice": {
-    "name": "Soul Slice",
-    "id": 24380,
-    "cooldown": 30.0,
-    "icon": "Soul_Slice.png",
-    "duration": 0.0,
-    "show": true,
-    "color": "#965A90",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "reaper-reaper"
-    ]
-  },
-  "Gluttony": {
-    "name": "Gluttony",
-    "id": 24393,
-    "cooldown": 60.0,
-    "icon": "Gluttony.png",
-    "duration": 25.0,
-    "show": true,
-    "color": "#965A90",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "reaper-reaper"
-    ]
-  },
-  "Enshroud": {
-    "name": "Enshroud",
-    "id": 24394,
-    "cooldown": 5.0,
-    "icon": "Enshroud.png",
-    "duration": 30.0,
-    "show": true,
-    "color": "#965A90",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "reaper-reaper"
     ]
   },
   "Arcane Circle": {
@@ -1999,13 +2013,61 @@
       "reaper-reaper"
     ]
   },
+  "Enshroud": {
+    "name": "Enshroud",
+    "id": 24394,
+    "cooldown": 5.0,
+    "icon": "Enshroud.png",
+    "duration": 0.0,
+    "show": true,
+    "color": "#965A90",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "reaper-reaper"
+    ]
+  },
+  "Gluttony": {
+    "name": "Gluttony",
+    "id": 24393,
+    "cooldown": 60.0,
+    "icon": "Gluttony.png",
+    "duration": 0.0,
+    "show": true,
+    "color": "#965A90",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "reaper-reaper"
+    ]
+  },
+  "Soul Slice": {
+    "name": "Soul Slice",
+    "id": 24380,
+    "cooldown": 30.0,
+    "icon": "Soul_Slice.png",
+    "duration": 0.0,
+    "show": false,
+    "color": "#965A90",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "reaper-reaper"
+    ]
+  },
   "Arcane Crest": {
     "name": "Arcane Crest",
     "id": 24404,
     "cooldown": 30.0,
     "icon": "Arcane_Crest.png",
-    "duration": 15.0,
-    "show": true,
+    "duration": 0.0,
+    "show": false,
     "color": "#965A90",
     "desc": "",
     "tags": [
@@ -2020,7 +2082,7 @@
     "id": 34626,
     "cooldown": 2.2,
     "icon": "Reawaken.png",
-    "duration": 30.0,
+    "duration": 0.0,
     "show": true,
     "color": "#108010",
     "desc": "",
@@ -2052,7 +2114,7 @@
     "id": 34647,
     "cooldown": 120.0,
     "icon": "Serpent's_Ire.png",
-    "duration": 20.0,
+    "duration": 0.0,
     "show": true,
     "color": "#108010",
     "desc": "",
@@ -2807,60 +2869,12 @@
       "redmage-redmage"
     ]
   },
-  "Fleche": {
-    "name": "Fleche",
-    "id": 7517,
-    "cooldown": 25.0,
-    "icon": "Fleche.png",
-    "duration": 0.0,
-    "show": true,
-    "color": "#E87B7B",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "redmage-redmage"
-    ]
-  },
-  "Contre Sixte": {
-    "name": "Contre Sixte",
-    "id": 7519,
-    "cooldown": 35.0,
-    "icon": "Contre_Sixte.png",
-    "duration": 0.0,
-    "show": true,
-    "color": "#E87B7B",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "redmage-redmage"
-    ]
-  },
   "Manafication": {
     "name": "Manafication",
     "id": 7521,
     "cooldown": 110.0,
     "icon": "Manafication.png",
     "duration": 15.0,
-    "show": true,
-    "color": "#E87B7B",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "redmage-redmage"
-    ]
-  },
-  "Acceleration": {
-    "name": "Acceleration",
-    "id": 7518,
-    "cooldown": 55.0,
-    "icon": "Acceleration.png",
-    "duration": 20.0,
     "show": true,
     "color": "#E87B7B",
     "desc": "",
@@ -2887,13 +2901,61 @@
       "redmage-redmage"
     ]
   },
+  "Fleche": {
+    "name": "Fleche",
+    "id": 7517,
+    "cooldown": 25.0,
+    "icon": "Fleche.png",
+    "duration": 0.0,
+    "show": false,
+    "color": "#E87B7B",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "redmage-redmage"
+    ]
+  },
+  "Contre Sixte": {
+    "name": "Contre Sixte",
+    "id": 7519,
+    "cooldown": 35.0,
+    "icon": "Contre_Sixte.png",
+    "duration": 0.0,
+    "show": false,
+    "color": "#E87B7B",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "redmage-redmage"
+    ]
+  },
+  "Acceleration": {
+    "name": "Acceleration",
+    "id": 7518,
+    "cooldown": 55.0,
+    "icon": "Acceleration.png",
+    "duration": 0.0,
+    "show": false,
+    "color": "#E87B7B",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "redmage-redmage"
+    ]
+  },
   "Enchanted Reprise": {
     "name": "Enchanted Reprise",
     "id": 16528,
     "cooldown": 2.5,
     "icon": "Enchanted_Reprise.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#E87B7B",
     "desc": "",
     "tags": [
@@ -2909,7 +2971,7 @@
     "cooldown": 2.5,
     "icon": "Vercure.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#E87B7B",
     "desc": "",
     "tags": [
@@ -2925,7 +2987,7 @@
     "cooldown": 120.0,
     "icon": "Magick_Barrier.png",
     "duration": 10.0,
-    "show": true,
+    "show": false,
     "color": "#E87B7B",
     "desc": "",
     "tags": [
