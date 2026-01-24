@@ -30,17 +30,17 @@ WARRIOR_MAIN = WowSpec(role=TANK, wow_class=WARRIOR, name="Warrior")
 #
 
 # Burst / Cooldowns
-WARRIOR_MAIN.add_spell(spell_id=7389, cooldown=60, name="Inner Release", icon="Inner_Release.png", tags=[SpellTag.DAMAGE])
+WARRIOR_MAIN.add_spell(spell_id=7389, cooldown=60, name="Inner Release", show=True, icon="Inner_Release.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-WARRIOR_MAIN.add_spell(spell_id=36923, cooldown=120, name="Damnation", duration=15, icon="Damnation.png", tags=[SpellTag.DEFENSIVE])
-WARRIOR_MAIN.add_spell(spell_id=40, cooldown=90, duration=10,name="Thrill of Battle", icon="Thrill_of_Battle.png", tags=[SpellTag.DEFENSIVE])
-WARRIOR_MAIN.add_spell(spell_id=7531, cooldown=90, duration=20, name="Rampart", icon="Rampart.png", tags=[SpellTag.DEFENSIVE])
-WARRIOR_MAIN.add_spell(spell_id=25751, cooldown=25, name="Bloodwhetting", duration=4,icon="Bloodwhetting.png", tags=[SpellTag.DEFENSIVE])
-WARRIOR_MAIN.add_spell(spell_id=16464, cooldown=25, name="Nascent Flash", duration=20,icon="Nascent_Flash.png", tags=[SpellTag.DEFENSIVE])
-WARRIOR_MAIN.add_spell(spell_id=43, cooldown=240, name="Holmgang", duration=10,icon="Holmgang.png", tags=[SpellTag.DEFENSIVE])
+WARRIOR_MAIN.add_spell(spell_id=36923, cooldown=120, name="Damnation", duration=15, show=True, icon="Damnation.png", tags=[SpellTag.DEFENSIVE])
+WARRIOR_MAIN.add_spell(spell_id=7531, cooldown=90, duration=20, name="Rampart", show=True, icon="Rampart.png", tags=[SpellTag.DEFENSIVE])
+WARRIOR_MAIN.add_spell(spell_id=40, cooldown=90, duration=10,name="Thrill of Battle", show=True, icon="Thrill_of_Battle.png", tags=[SpellTag.DEFENSIVE])
+WARRIOR_MAIN.add_spell(spell_id=25751, cooldown=25, name="Bloodwhetting", show=False, icon="Bloodwhetting.png", tags=[SpellTag.DEFENSIVE])
+WARRIOR_MAIN.add_spell(spell_id=16464, cooldown=25, name="Nascent Flash", show=False, icon="Nascent_Flash.png", tags=[SpellTag.DEFENSIVE])
+WARRIOR_MAIN.add_spell(spell_id=43, cooldown=240, name="Holmgang", duration=10,show=True, icon="Holmgang.png", tags=[SpellTag.DEFENSIVE])
 
 
 # Party Mitigation
-WARRIOR_MAIN.add_spell(spell_id=7388, cooldown=90, name="Shake It Off", icon="Shake_It_Off.png", tags=[SpellTag.RAID_CD])
-WARRIOR_MAIN.add_spell(spell_id=7535, cooldown=60, duration=15,name="Reprisal", icon="Reprisal.png", tags=[SpellTag.RAID_CD])
+WARRIOR_MAIN.add_spell(spell_id=7535, cooldown=60, duration=15,name="Reprisal", show=True, icon="Reprisal.png", tags=[SpellTag.RAID_CD])
+WARRIOR_MAIN.add_spell(spell_id=7388, cooldown=90, name="Shake It Off", show=True, icon="Shake_It_Off.png", tags=[SpellTag.RAID_CD])

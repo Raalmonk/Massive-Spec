@@ -44,5 +44,5 @@ PALADIN_MAIN.add_spell(spell_id=27, cooldown=120, name="Cover",show=False,  icon
 
 # Party Mitigation
 PALADIN_MAIN.add_spell(spell_id=7535, cooldown=60, duration=15, show=True, name="Reprisal", icon="Reprisal.png", tags=[SpellTag.RAID_CD])
-PALADIN_MAIN.add_spell(spell_id=3540, cooldown=90, name="Divine Veil", icon="Divine_Veil.png", tags=[SpellTag.RAID_CD])
-PALADIN_MAIN.add_spell(spell_id=7385, cooldown=120, name="Passage of Arms", icon="Passage_of_Arms.png", tags=[SpellTag.RAID_CD])
+PALADIN_MAIN.add_spell(spell_id=3540, cooldown=90, name="Divine Veil", show=True, icon="Divine_Veil.png", tags=[SpellTag.RAID_CD])
+PALADIN_MAIN.add_spell(spell_id=7385, cooldown=120, name="Passage of Arms", show=True, icon="Passage_of_Arms.png", tags=[SpellTag.RAID_CD])

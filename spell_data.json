@@ -270,8 +270,8 @@
     "id": 25751,
     "cooldown": 25.0,
     "icon": "Bloodwhetting.png",
-    "duration": 4.0,
-    "show": true,
+    "duration": 0.0,
+    "show": false,
     "color": "#CF2621",
     "desc": "",
     "tags": [
@@ -286,8 +286,8 @@
     "id": 16464,
     "cooldown": 25.0,
     "icon": "Nascent_Flash.png",
-    "duration": 20.0,
-    "show": true,
+    "duration": 0.0,
+    "show": false,
     "color": "#CF2621",
     "desc": "",
     "tags": [
@@ -329,28 +329,12 @@
       "warrior-warrior"
     ]
   },
-  "Delirium": {
-    "name": "Delirium",
-    "id": 3637,
-    "cooldown": 60.0,
-    "icon": "Delirium.png",
-    "duration": 15.0,
-    "show": true,
-    "color": "#D126CC",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "darkknight-darkknight"
-    ]
-  },
   "Living Shadow": {
     "name": "Living Shadow",
     "id": 16472,
     "cooldown": 120.0,
     "icon": "Living_Shadow.png",
-    "duration": 20.0,
+    "duration": 0.0,
     "show": true,
     "color": "#D126CC",
     "desc": "",
@@ -361,11 +345,11 @@
       "darkknight-darkknight"
     ]
   },
-  "Shadowbringer": {
-    "name": "Shadowbringer",
-    "id": 25757,
+  "Delirium": {
+    "name": "Delirium",
+    "id": 7390,
     "cooldown": 60.0,
-    "icon": "Shadowbringer.png",
+    "icon": "Delirium.png",
     "duration": 0.0,
     "show": true,
     "color": "#D126CC",
@@ -384,6 +368,22 @@
     "icon": "Salted_Earth.png",
     "duration": 15.0,
     "show": true,
+    "color": "#D126CC",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "darkknight-darkknight"
+    ]
+  },
+  "Shadowbringer": {
+    "name": "Shadowbringer",
+    "id": 25757,
+    "cooldown": 60.0,
+    "icon": "Shadowbringer.png",
+    "duration": 0.0,
+    "show": false,
     "color": "#D126CC",
     "desc": "",
     "tags": [
@@ -430,8 +430,8 @@
     "id": 7393,
     "cooldown": 15.0,
     "icon": "The_Blackest_Night.png",
-    "duration": 7.0,
-    "show": true,
+    "duration": 0.0,
+    "show": false,
     "color": "#D126CC",
     "desc": "",
     "tags": [
@@ -447,7 +447,7 @@
     "cooldown": 60.0,
     "icon": "Oblation.png",
     "duration": 10.0,
-    "show": true,
+    "show": false,
     "color": "#D126CC",
     "desc": "",
     "tags": [
