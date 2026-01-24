@@ -104,7 +104,9 @@
             };
 
             const spellMap = {};
-            Object.values(data).forEach(spell => {
+            // data is now an array (list) from the API, preserving definition order.
+            // We iterate and assign an 'order' property to maintain this sort order in the frontend.
+            Object.values(data).forEach((spell, index) => {
                 spellMap[spell.spell_id] = {
                     id: spell.spell_id,
                     name: spell.name,
@@ -115,6 +117,8 @@
                     duration: spell.duration || 0,
                     color: spell.color || '#ffcc00',
                     desc: spell.desc || '',
+                    show: spell.show !== undefined ? spell.show : true, // Default visibility
+                    order: index, // Preserve definition order
 
                     // Fix: Dynamic Category
                     category: resolveCategory(spell.tags, spell.name)
@@ -340,7 +344,9 @@
                     const ranks = await fetchRankings(selectedSpec, selectedBoss, sps, rankData);
 
                     setSpellCategories(cats); setSpells(sps); setBossMechanics(mechs); setRankData(ranks);
-                    setSelectedSpells(new Set(Object.values(sps).map(s => s.id)));
+
+                    // Only select spells that are shown by default
+                    setSelectedSpells(new Set(Object.values(sps).filter(s => s.show !== false).map(s => s.id)));
                     setLoading(false);
                 };
                 load();
@@ -435,7 +441,7 @@
                                     <CategoryIcon type={category.iconType} /> {category.label}
                                 </div>
                                 <div className="flex items-center gap-1.5">
-                                    {Object.values(spells).filter(spell => spell.category === catKey).map(spell => {
+                                    {Object.values(spells).sort((a, b) => a.order - b.order).filter(spell => spell.category === catKey).map(spell => {
                                         const isSelected = selectedSpells.has(spell.id);
                                         return (
                                             <button

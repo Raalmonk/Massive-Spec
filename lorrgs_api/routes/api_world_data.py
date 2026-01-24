@@ -70,7 +70,7 @@ async def get_spec(spec_slug: str) -> WowSpec:
 
 
 @router.get("/specs/{spec_slug}/spells", tags=["specs"])
-async def get_spec_spells(spec_slug: str) -> dict[Union[int, str], dict]:
+async def get_spec_spells(spec_slug: str) -> list[dict]:
     """Get all spells for a given spec.
 
     Args:
@@ -82,7 +82,7 @@ async def get_spec_spells(spec_slug: str) -> dict[Union[int, str], dict]:
         raise fastapi.HTTPException(status_code=404, detail="Invalid Spec.")
 
     abilities = spec.all_spells + spec.all_buffs + spec.all_debuffs + spec.all_events
-    return {spell.spell_id: spell.as_dict() for spell in abilities}
+    return [spell.as_dict() for spell in abilities]
 
 
 ###############################################################################
