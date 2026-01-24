@@ -85,7 +85,7 @@
 
         // 1. fetchSpellData (API)
         const fetchSpellData = async (specSlug = 'redmage-redmage') => {
-            const res = await fetch(`${API_BASE}/api/specs/${specSlug}/spells`);
+            const res = await fetch(`${API_BASE}/spell_data.json`);
             const data = await res.json();
 
             const resolveCategory = (tags, spellName) => {
@@ -103,17 +103,19 @@
 
             const spellMap = {};
             Object.values(data).forEach(spell => {
-                spellMap[spell.spell_id] = {
-                    id: spell.spell_id,
-                    name: spell.name,
-                    image: spell.icon.startsWith('http') ? spell.icon : `${API_BASE}/lorrgs_assets/images/spells/` + spell.icon,
-                    cd: spell.cooldown || 0,
-                    duration: spell.duration || 0,
-                    color: spell.color || '#ffcc00',
-                    desc: spell.desc || '',
-                    category: resolveCategory(spell.tags, spell.name),
-                    show: spell.show !== undefined ? spell.show : true
-                };
+                if (spell.specs && spell.specs.includes(specSlug)) {
+                    spellMap[spell.id] = {
+                        id: spell.id,
+                        name: spell.name,
+                        image: spell.icon.startsWith('http') ? spell.icon : `${API_BASE}/lorrgs_assets/images/spells/` + spell.icon,
+                        cd: spell.cooldown || 0,
+                        duration: spell.duration || 0,
+                        color: spell.color || '#ffcc00',
+                        desc: spell.desc || '',
+                        category: resolveCategory(spell.tags, spell.name),
+                        show: spell.show !== undefined ? spell.show : true
+                    };
+                }
             });
             return spellMap;
         };

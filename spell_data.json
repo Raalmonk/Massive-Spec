@@ -5,7 +5,15 @@
     "cooldown": 60.0,
     "icon": "Fight_or_Flight.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#A8D2E6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "paladin-paladin"
+    ]
   },
   "Guardian": {
     "name": "Guardian",
@@ -13,15 +21,34 @@
     "cooldown": 120.0,
     "icon": "Guardian.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#A8D2E6",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "paladin-paladin"
+    ]
   },
   "Rampart": {
     "name": "Rampart",
-    "id": 10,
+    "id": 7531,
     "cooldown": 90.0,
     "icon": "Rampart.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#A8D2E6",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "paladin-paladin",
+      "warrior-warrior",
+      "darkknight-darkknight",
+      "gunbreaker-gunbreaker"
+    ]
   },
   "Bulwark": {
     "name": "Bulwark",
@@ -29,7 +56,15 @@
     "cooldown": 90.0,
     "icon": "Bulwark.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#A8D2E6",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "paladin-paladin"
+    ]
   },
   "Holy Sheltron": {
     "name": "Holy Sheltron",
@@ -37,7 +72,15 @@
     "cooldown": 5.0,
     "icon": "Holy_Sheltron.png",
     "duration": 4.0,
-    "show": false
+    "show": false,
+    "color": "#A8D2E6",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "paladin-paladin"
+    ]
   },
   "Intervention": {
     "name": "Intervention",
@@ -45,7 +88,15 @@
     "cooldown": 10.0,
     "icon": "Intervention.png",
     "duration": 4.0,
-    "show": false
+    "show": false,
+    "color": "#A8D2E6",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "paladin-paladin"
+    ]
   },
   "Hallowed Ground": {
     "name": "Hallowed Ground",
@@ -53,7 +104,15 @@
     "cooldown": 420.0,
     "icon": "Hallowed_Ground.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#A8D2E6",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "paladin-paladin"
+    ]
   },
   "Cover": {
     "name": "Cover",
@@ -61,15 +120,34 @@
     "cooldown": 120.0,
     "icon": "Cover.png",
     "duration": 0.0,
-    "show": false
+    "show": false,
+    "color": "#A8D2E6",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "paladin-paladin"
+    ]
   },
   "Reprisal": {
     "name": "Reprisal",
-    "id": 3626,
+    "id": 7535,
     "cooldown": 60.0,
     "icon": "Reprisal.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#A8D2E6",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "paladin-paladin",
+      "warrior-warrior",
+      "darkknight-darkknight",
+      "gunbreaker-gunbreaker"
+    ]
   },
   "Divine Veil": {
     "name": "Divine Veil",
@@ -77,7 +155,15 @@
     "cooldown": 90.0,
     "icon": "Divine_Veil.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#A8D2E6",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "paladin-paladin"
+    ]
   },
   "Passage of Arms": {
     "name": "Passage of Arms",
@@ -85,7 +171,15 @@
     "cooldown": 120.0,
     "icon": "Passage_of_Arms.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#A8D2E6",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "paladin-paladin"
+    ]
   },
   "Sprint": {
     "name": "Sprint",
@@ -93,7 +187,35 @@
     "cooldown": 60.0,
     "icon": "Sprint_icon1.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#666666",
+    "desc": "",
+    "tags": [
+      "utility"
+    ],
+    "specs": [
+      "paladin-paladin",
+      "warrior-warrior",
+      "darkknight-darkknight",
+      "gunbreaker-gunbreaker",
+      "whitemage-whitemage",
+      "scholar-scholar",
+      "astrologian-astrologian",
+      "sage-sage",
+      "monk-monk",
+      "dragoon-dragoon",
+      "ninja-ninja",
+      "samurai-samurai",
+      "reaper-reaper",
+      "viper-viper",
+      "bard-bard",
+      "blackmage-blackmage",
+      "summoner-summoner",
+      "machinist-machinist",
+      "redmage-redmage",
+      "dancer-dancer",
+      "pictomancer-pictomancer"
+    ]
   },
   "Inner Release": {
     "name": "Inner Release",
@@ -101,7 +223,15 @@
     "cooldown": 60.0,
     "icon": "Inner_Release.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#CF2621",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "warrior-warrior"
+    ]
   },
   "Damnation": {
     "name": "Damnation",
@@ -109,7 +239,15 @@
     "cooldown": 120.0,
     "icon": "Damnation.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#CF2621",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "warrior-warrior"
+    ]
   },
   "Thrill of Battle": {
     "name": "Thrill of Battle",
@@ -117,7 +255,15 @@
     "cooldown": 90.0,
     "icon": "Thrill_of_Battle.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#CF2621",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "warrior-warrior"
+    ]
   },
   "Bloodwhetting": {
     "name": "Bloodwhetting",
@@ -125,7 +271,15 @@
     "cooldown": 25.0,
     "icon": "Bloodwhetting.png",
     "duration": 4.0,
-    "show": true
+    "show": true,
+    "color": "#CF2621",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "warrior-warrior"
+    ]
   },
   "Nascent Flash": {
     "name": "Nascent Flash",
@@ -133,7 +287,15 @@
     "cooldown": 25.0,
     "icon": "Nascent_Flash.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#CF2621",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "warrior-warrior"
+    ]
   },
   "Holmgang": {
     "name": "Holmgang",
@@ -141,7 +303,15 @@
     "cooldown": 240.0,
     "icon": "Holmgang.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#CF2621",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "warrior-warrior"
+    ]
   },
   "Shake It Off": {
     "name": "Shake It Off",
@@ -149,7 +319,15 @@
     "cooldown": 90.0,
     "icon": "Shake_It_Off.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#CF2621",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "warrior-warrior"
+    ]
   },
   "Delirium": {
     "name": "Delirium",
@@ -157,7 +335,15 @@
     "cooldown": 60.0,
     "icon": "Delirium.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#D126CC",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "darkknight-darkknight"
+    ]
   },
   "Living Shadow": {
     "name": "Living Shadow",
@@ -165,7 +351,15 @@
     "cooldown": 120.0,
     "icon": "Living_Shadow.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#D126CC",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "darkknight-darkknight"
+    ]
   },
   "Shadowbringer": {
     "name": "Shadowbringer",
@@ -173,7 +367,15 @@
     "cooldown": 60.0,
     "icon": "Shadowbringer.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#D126CC",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "darkknight-darkknight"
+    ]
   },
   "Salted Earth": {
     "name": "Salted Earth",
@@ -181,7 +383,15 @@
     "cooldown": 90.0,
     "icon": "Salted_Earth.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#D126CC",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "darkknight-darkknight"
+    ]
   },
   "Shadowed Vigil": {
     "name": "Shadowed Vigil",
@@ -189,7 +399,15 @@
     "cooldown": 120.0,
     "icon": "Shadowed_Vigil.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#D126CC",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "darkknight-darkknight"
+    ]
   },
   "Dark Mind": {
     "name": "Dark Mind",
@@ -197,7 +415,15 @@
     "cooldown": 60.0,
     "icon": "Dark_Mind.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#D126CC",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "darkknight-darkknight"
+    ]
   },
   "The Blackest Night": {
     "name": "The Blackest Night",
@@ -205,7 +431,15 @@
     "cooldown": 15.0,
     "icon": "The_Blackest_Night.png",
     "duration": 7.0,
-    "show": true
+    "show": true,
+    "color": "#D126CC",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "darkknight-darkknight"
+    ]
   },
   "Oblation": {
     "name": "Oblation",
@@ -213,7 +447,15 @@
     "cooldown": 60.0,
     "icon": "Oblation.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#D126CC",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "darkknight-darkknight"
+    ]
   },
   "Living Dead": {
     "name": "Living Dead",
@@ -221,7 +463,15 @@
     "cooldown": 300.0,
     "icon": "Living_Dead.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#D126CC",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "darkknight-darkknight"
+    ]
   },
   "Dark Missionary": {
     "name": "Dark Missionary",
@@ -229,7 +479,15 @@
     "cooldown": 90.0,
     "icon": "Dark_Missionary.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#D126CC",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "darkknight-darkknight"
+    ]
   },
   "No Mercy": {
     "name": "No Mercy",
@@ -237,7 +495,15 @@
     "cooldown": 60.0,
     "icon": "No_Mercy.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#796D30",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "gunbreaker-gunbreaker"
+    ]
   },
   "Bloodfest": {
     "name": "Bloodfest",
@@ -245,7 +511,15 @@
     "cooldown": 60.0,
     "icon": "Bloodfest.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#796D30",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "gunbreaker-gunbreaker"
+    ]
   },
   "Great Nebula": {
     "name": "Great Nebula",
@@ -253,7 +527,15 @@
     "cooldown": 120.0,
     "icon": "Great_Nebula.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#796D30",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "gunbreaker-gunbreaker"
+    ]
   },
   "Camouflage": {
     "name": "Camouflage",
@@ -261,7 +543,15 @@
     "cooldown": 90.0,
     "icon": "Camouflage.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#796D30",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "gunbreaker-gunbreaker"
+    ]
   },
   "Heart of Corundum": {
     "name": "Heart of Corundum",
@@ -269,7 +559,15 @@
     "cooldown": 25.0,
     "icon": "Heart_of_Corundum.png",
     "duration": 8.0,
-    "show": true
+    "show": true,
+    "color": "#796D30",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "gunbreaker-gunbreaker"
+    ]
   },
   "Aurora": {
     "name": "Aurora",
@@ -277,7 +575,15 @@
     "cooldown": 60.0,
     "icon": "Aurora.png",
     "duration": 18.0,
-    "show": true
+    "show": true,
+    "color": "#796D30",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "gunbreaker-gunbreaker"
+    ]
   },
   "Superbolide": {
     "name": "Superbolide",
@@ -285,7 +591,15 @@
     "cooldown": 360.0,
     "icon": "Superbolide.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#796D30",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "gunbreaker-gunbreaker"
+    ]
   },
   "Heart of Light": {
     "name": "Heart of Light",
@@ -293,7 +607,15 @@
     "cooldown": 90.0,
     "icon": "Heart_of_Light.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#796D30",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "gunbreaker-gunbreaker"
+    ]
   },
   "Presence of Mind": {
     "name": "Presence of Mind",
@@ -301,7 +623,15 @@
     "cooldown": 120.0,
     "icon": "Presence_of_Mind.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#FFF0F5",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "whitemage-whitemage"
+    ]
   },
   "Afflatus Misery": {
     "name": "Afflatus Misery",
@@ -309,7 +639,15 @@
     "cooldown": 2.5,
     "icon": "Afflatus_Misery.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#FFF0F5",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "whitemage-whitemage"
+    ]
   },
   "Tetragrammaton": {
     "name": "Tetragrammaton",
@@ -317,7 +655,15 @@
     "cooldown": 60.0,
     "icon": "Tetragrammaton.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#FFF0F5",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "whitemage-whitemage"
+    ]
   },
   "Aquaveil": {
     "name": "Aquaveil",
@@ -325,7 +671,15 @@
     "cooldown": 60.0,
     "icon": "Aquaveil.png",
     "duration": 8.0,
-    "show": true
+    "show": true,
+    "color": "#FFF0F5",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "whitemage-whitemage"
+    ]
   },
   "Divine Benison": {
     "name": "Divine Benison",
@@ -333,7 +687,15 @@
     "cooldown": 30.0,
     "icon": "Divine_Benison.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#FFF0F5",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "whitemage-whitemage"
+    ]
   },
   "Liturgy of the Bell": {
     "name": "Liturgy of the Bell",
@@ -341,7 +703,15 @@
     "cooldown": 180.0,
     "icon": "Liturgy_of_the_Bell.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#FFF0F5",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "whitemage-whitemage"
+    ]
   },
   "Temperance": {
     "name": "Temperance",
@@ -349,7 +719,15 @@
     "cooldown": 120.0,
     "icon": "Temperance.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#FFF0F5",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "whitemage-whitemage"
+    ]
   },
   "Plenary Indulgence": {
     "name": "Plenary Indulgence",
@@ -357,7 +735,15 @@
     "cooldown": 60.0,
     "icon": "Plenary_Indulgence.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#FFF0F5",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "whitemage-whitemage"
+    ]
   },
   "Divine Caress": {
     "name": "Divine Caress",
@@ -365,7 +751,15 @@
     "cooldown": 1.0,
     "icon": "Divine_Caress.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#FFF0F5",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "whitemage-whitemage"
+    ]
   },
   "Assize": {
     "name": "Assize",
@@ -373,7 +767,15 @@
     "cooldown": 40.0,
     "icon": "Assize.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#FFF0F5",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "whitemage-whitemage"
+    ]
   },
   "Aetherflow": {
     "name": "Aetherflow",
@@ -381,7 +783,15 @@
     "cooldown": 60.0,
     "icon": "Aetherflow.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Chain Stratagem": {
     "name": "Chain Stratagem",
@@ -389,7 +799,15 @@
     "cooldown": 120.0,
     "icon": "Chain_Stratagem.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Dissipation": {
     "name": "Dissipation",
@@ -397,7 +815,15 @@
     "cooldown": 180.0,
     "icon": "Dissipation.png",
     "duration": 30.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Excogitation": {
     "name": "Excogitation",
@@ -405,7 +831,15 @@
     "cooldown": 45.0,
     "icon": "Excogitation.png",
     "duration": 45.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Aetherpact": {
     "name": "Aetherpact",
@@ -413,7 +847,15 @@
     "cooldown": 3.0,
     "icon": "Aetherpact.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Lustrate": {
     "name": "Lustrate",
@@ -421,7 +863,15 @@
     "cooldown": 1.0,
     "icon": "Lustrate.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Recitation": {
     "name": "Recitation",
@@ -429,7 +879,15 @@
     "cooldown": 60.0,
     "icon": "Recitation.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Sacred Soil": {
     "name": "Sacred Soil",
@@ -437,7 +895,15 @@
     "cooldown": 30.0,
     "icon": "Sacred_Soil.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Indomitability": {
     "name": "Indomitability",
@@ -445,7 +911,15 @@
     "cooldown": 30.0,
     "icon": "Indomitability.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Deployment Tactics": {
     "name": "Deployment Tactics",
@@ -453,7 +927,15 @@
     "cooldown": 90.0,
     "icon": "Deployment_Tactics.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Fey Blessing": {
     "name": "Fey Blessing",
@@ -461,7 +943,15 @@
     "cooldown": 60.0,
     "icon": "Fey_Blessing.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Summon Seraph": {
     "name": "Summon Seraph",
@@ -469,7 +959,15 @@
     "cooldown": 120.0,
     "icon": "Summon_Seraph.png",
     "duration": 22.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Consolation": {
     "name": "Consolation",
@@ -477,7 +975,15 @@
     "cooldown": 20.0,
     "icon": "Consolation.png",
     "duration": 30.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Expedient": {
     "name": "Expedient",
@@ -485,7 +991,15 @@
     "cooldown": 120.0,
     "icon": "Expedient.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Seraphism": {
     "name": "Seraphism",
@@ -493,7 +1007,15 @@
     "cooldown": 180.0,
     "icon": "Seraphism.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Fey Illumination": {
     "name": "Fey Illumination",
@@ -501,7 +1023,15 @@
     "cooldown": 0.0,
     "icon": "Fey_Illumination.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Concitation": {
     "name": "Concitation",
@@ -509,7 +1039,15 @@
     "cooldown": 2.5,
     "icon": "Concitation.png",
     "duration": 30.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Accession": {
     "name": "Accession",
@@ -517,7 +1055,15 @@
     "cooldown": 2.5,
     "icon": "Accession.png",
     "duration": 30.0,
-    "show": true
+    "show": true,
+    "color": "#8657FF",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "scholar-scholar"
+    ]
   },
   "Lightspeed": {
     "name": "Lightspeed",
@@ -525,7 +1071,15 @@
     "cooldown": 60.0,
     "icon": "Lightspeed.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#FFE74A",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "astrologian-astrologian"
+    ]
   },
   "Divination": {
     "name": "Divination",
@@ -533,7 +1087,15 @@
     "cooldown": 120.0,
     "icon": "Divination.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#FFE74A",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "astrologian-astrologian"
+    ]
   },
   "Lord of Crowns": {
     "name": "Lord of Crowns",
@@ -541,7 +1103,15 @@
     "cooldown": 1.0,
     "icon": "Lord_of_Crowns.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#FFE74A",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "astrologian-astrologian"
+    ]
   },
   "Essential Dignity": {
     "name": "Essential Dignity",
@@ -549,7 +1119,15 @@
     "cooldown": 40.0,
     "icon": "Essential_Dignity.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#FFE74A",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "astrologian-astrologian"
+    ]
   },
   "Exaltation": {
     "name": "Exaltation",
@@ -557,7 +1135,15 @@
     "cooldown": 60.0,
     "icon": "Exaltation.png",
     "duration": 8.0,
-    "show": true
+    "show": true,
+    "color": "#FFE74A",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "astrologian-astrologian"
+    ]
   },
   "Celestial Intersection": {
     "name": "Celestial Intersection",
@@ -565,7 +1151,15 @@
     "cooldown": 30.0,
     "icon": "Celestial_Intersection.png",
     "duration": 30.0,
-    "show": true
+    "show": true,
+    "color": "#FFE74A",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "astrologian-astrologian"
+    ]
   },
   "Macrocosmos": {
     "name": "Macrocosmos",
@@ -573,7 +1167,15 @@
     "cooldown": 180.0,
     "icon": "Macrocosmos.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#FFE74A",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "astrologian-astrologian"
+    ]
   },
   "Neutral Sect": {
     "name": "Neutral Sect",
@@ -581,7 +1183,15 @@
     "cooldown": 120.0,
     "icon": "Neutral_Sect.png",
     "duration": 30.0,
-    "show": true
+    "show": true,
+    "color": "#FFE74A",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "astrologian-astrologian"
+    ]
   },
   "Collective Unconscious": {
     "name": "Collective Unconscious",
@@ -589,7 +1199,15 @@
     "cooldown": 60.0,
     "icon": "Collective_Unconscious.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#FFE74A",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "astrologian-astrologian"
+    ]
   },
   "Celestial Opposition": {
     "name": "Celestial Opposition",
@@ -597,7 +1215,15 @@
     "cooldown": 60.0,
     "icon": "Celestial_Opposition.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#FFE74A",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "astrologian-astrologian"
+    ]
   },
   "Lady of Crowns": {
     "name": "Lady of Crowns",
@@ -605,7 +1231,15 @@
     "cooldown": 1.0,
     "icon": "Lady_of_Crowns.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#FFE74A",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "astrologian-astrologian"
+    ]
   },
   "Sun Sign": {
     "name": "Sun Sign",
@@ -613,7 +1247,15 @@
     "cooldown": 1.0,
     "icon": "Sun_Sign.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#FFE74A",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "astrologian-astrologian"
+    ]
   },
   "Earthly Star": {
     "name": "Earthly Star",
@@ -621,7 +1263,15 @@
     "cooldown": 60.0,
     "icon": "Earthly_Star.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#FFE74A",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "astrologian-astrologian"
+    ]
   },
   "Psyche": {
     "name": "Psyche",
@@ -629,7 +1279,15 @@
     "cooldown": 60.0,
     "icon": "Psyche.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
   },
   "Phlegma III": {
     "name": "Phlegma III",
@@ -637,7 +1295,15 @@
     "cooldown": 40.0,
     "icon": "Phlegma_III.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
   },
   "Taurochole": {
     "name": "Taurochole",
@@ -645,7 +1311,15 @@
     "cooldown": 45.0,
     "icon": "Taurochole.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
   },
   "Haima": {
     "name": "Haima",
@@ -653,7 +1327,15 @@
     "cooldown": 120.0,
     "icon": "Haima.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
   },
   "Druochole": {
     "name": "Druochole",
@@ -661,7 +1343,15 @@
     "cooldown": 1.0,
     "icon": "Druochole.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
   },
   "Soteria": {
     "name": "Soteria",
@@ -669,7 +1359,15 @@
     "cooldown": 60.0,
     "icon": "Soteria.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
   },
   "Krasis": {
     "name": "Krasis",
@@ -677,7 +1375,15 @@
     "cooldown": 60.0,
     "icon": "Krasis.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
   },
   "Zoe": {
     "name": "Zoe",
@@ -685,7 +1391,15 @@
     "cooldown": 90.0,
     "icon": "Zoe.png",
     "duration": 30.0,
-    "show": true
+    "show": true,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
   },
   "Kerachole": {
     "name": "Kerachole",
@@ -693,7 +1407,15 @@
     "cooldown": 30.0,
     "icon": "Kerachole.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
   },
   "Ixochole": {
     "name": "Ixochole",
@@ -701,7 +1423,15 @@
     "cooldown": 30.0,
     "icon": "Ixochole.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
   },
   "Holos": {
     "name": "Holos",
@@ -709,7 +1439,15 @@
     "cooldown": 120.0,
     "icon": "Holos.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
   },
   "Physis II": {
     "name": "Physis II",
@@ -717,7 +1455,15 @@
     "cooldown": 60.0,
     "icon": "Physis_II.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
   },
   "Panhaima": {
     "name": "Panhaima",
@@ -725,7 +1471,15 @@
     "cooldown": 120.0,
     "icon": "Panhaima.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
   },
   "Pneuma": {
     "name": "Pneuma",
@@ -733,7 +1487,15 @@
     "cooldown": 120.0,
     "icon": "Pneuma.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
   },
   "Philosophia": {
     "name": "Philosophia",
@@ -741,7 +1503,15 @@
     "cooldown": 180.0,
     "icon": "Philosophia.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
   },
   "Eukrasian Prognosis II": {
     "name": "Eukrasian Prognosis II",
@@ -749,7 +1519,15 @@
     "cooldown": 1.5,
     "icon": "Eukrasian_Prognosis_II.png",
     "duration": 30.0,
-    "show": true
+    "show": true,
+    "color": "#80A0F0",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "sage-sage"
+    ]
   },
   "Perfect Balance": {
     "name": "Perfect Balance",
@@ -757,7 +1535,15 @@
     "cooldown": 40.0,
     "icon": "Perfect_Balance.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#D69C00",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "monk-monk"
+    ]
   },
   "Riddle of Fire": {
     "name": "Riddle of Fire",
@@ -765,7 +1551,15 @@
     "cooldown": 60.0,
     "icon": "Riddle_of_Fire.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#D69C00",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "monk-monk"
+    ]
   },
   "Riddle of Wind": {
     "name": "Riddle of Wind",
@@ -773,7 +1567,15 @@
     "cooldown": 90.0,
     "icon": "Riddle_of_Wind.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#D69C00",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "monk-monk"
+    ]
   },
   "Brotherhood": {
     "name": "Brotherhood",
@@ -781,7 +1583,15 @@
     "cooldown": 120.0,
     "icon": "Brotherhood.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#D69C00",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "monk-monk"
+    ]
   },
   "True North": {
     "name": "True North",
@@ -789,7 +1599,19 @@
     "cooldown": 45.0,
     "icon": "True_North.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#D69C00",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "monk-monk",
+      "dragoon-dragoon",
+      "ninja-ninja",
+      "samurai-samurai",
+      "reaper-reaper"
+    ]
   },
   "Second Wind": {
     "name": "Second Wind",
@@ -797,7 +1619,23 @@
     "cooldown": 120.0,
     "icon": "Second_Wind.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#D69C00",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "monk-monk",
+      "dragoon-dragoon",
+      "ninja-ninja",
+      "samurai-samurai",
+      "reaper-reaper",
+      "viper-viper",
+      "bard-bard",
+      "machinist-machinist",
+      "dancer-dancer"
+    ]
   },
   "Bloodbath": {
     "name": "Bloodbath",
@@ -805,7 +1643,20 @@
     "cooldown": 90.0,
     "icon": "Bloodbath.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#D69C00",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "monk-monk",
+      "dragoon-dragoon",
+      "ninja-ninja",
+      "samurai-samurai",
+      "reaper-reaper",
+      "viper-viper"
+    ]
   },
   "Riddle of Earth": {
     "name": "Riddle of Earth",
@@ -813,7 +1664,15 @@
     "cooldown": 120.0,
     "icon": "Riddle_of_Earth.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#D69C00",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "monk-monk"
+    ]
   },
   "Feint": {
     "name": "Feint",
@@ -821,7 +1680,20 @@
     "cooldown": 90.0,
     "icon": "Feint.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#D69C00",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "monk-monk",
+      "dragoon-dragoon",
+      "ninja-ninja",
+      "samurai-samurai",
+      "reaper-reaper",
+      "viper-viper"
+    ]
   },
   "Mantra": {
     "name": "Mantra",
@@ -829,7 +1701,15 @@
     "cooldown": 90.0,
     "icon": "Mantra.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#D69C00",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "monk-monk"
+    ]
   },
   "High Jump": {
     "name": "High Jump",
@@ -837,7 +1717,15 @@
     "cooldown": 30.0,
     "icon": "High_Jump.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#4164CD",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "dragoon-dragoon"
+    ]
   },
   "Geirskogul": {
     "name": "Geirskogul",
@@ -845,7 +1733,15 @@
     "cooldown": 60.0,
     "icon": "Geirskogul.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#4164CD",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "dragoon-dragoon"
+    ]
   },
   "Lance Charge": {
     "name": "Lance Charge",
@@ -853,7 +1749,15 @@
     "cooldown": 60.0,
     "icon": "Lance_Charge.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#4164CD",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "dragoon-dragoon"
+    ]
   },
   "Battle Litany": {
     "name": "Battle Litany",
@@ -861,7 +1765,15 @@
     "cooldown": 120.0,
     "icon": "Battle_Litany.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#4164CD",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "dragoon-dragoon"
+    ]
   },
   "Raiton": {
     "name": "Raiton",
@@ -869,7 +1781,15 @@
     "cooldown": 1.5,
     "icon": "Raiton.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#AF1964",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "ninja-ninja"
+    ]
   },
   "Kassatsu": {
     "name": "Kassatsu",
@@ -877,7 +1797,15 @@
     "cooldown": 60.0,
     "icon": "Kassatsu.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#AF1964",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "ninja-ninja"
+    ]
   },
   "Ten Chi Jin": {
     "name": "Ten Chi Jin",
@@ -885,7 +1813,15 @@
     "cooldown": 120.0,
     "icon": "Ten_Chi_Jin.png",
     "duration": 6.0,
-    "show": true
+    "show": true,
+    "color": "#AF1964",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "ninja-ninja"
+    ]
   },
   "Bunshin": {
     "name": "Bunshin",
@@ -893,7 +1829,15 @@
     "cooldown": 90.0,
     "icon": "Bunshin.png",
     "duration": 30.0,
-    "show": true
+    "show": true,
+    "color": "#AF1964",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "ninja-ninja"
+    ]
   },
   "Dokumori": {
     "name": "Dokumori",
@@ -901,7 +1845,15 @@
     "cooldown": 120.0,
     "icon": "Dokumori.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#AF1964",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "ninja-ninja"
+    ]
   },
   "Shade Shift": {
     "name": "Shade Shift",
@@ -909,7 +1861,15 @@
     "cooldown": 120.0,
     "icon": "Shade_Shift.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#AF1964",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "ninja-ninja"
+    ]
   },
   "Meikyo Shisui": {
     "name": "Meikyo Shisui",
@@ -917,7 +1877,15 @@
     "cooldown": 55.0,
     "icon": "Meikyo_Shisui.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#E46D04",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "samurai-samurai"
+    ]
   },
   "Higanbana": {
     "name": "Higanbana",
@@ -925,7 +1893,15 @@
     "cooldown": 2.5,
     "icon": "Higanbana.png",
     "duration": 60.0,
-    "show": true
+    "show": true,
+    "color": "#E46D04",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "samurai-samurai"
+    ]
   },
   "Ikishoten": {
     "name": "Ikishoten",
@@ -933,7 +1909,15 @@
     "cooldown": 120.0,
     "icon": "Ikishoten.png",
     "duration": 30.0,
-    "show": true
+    "show": true,
+    "color": "#E46D04",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "samurai-samurai"
+    ]
   },
   "Tengentsu": {
     "name": "Tengentsu",
@@ -941,7 +1925,15 @@
     "cooldown": 15.0,
     "icon": "Tengentsu.png",
     "duration": 4.0,
-    "show": true
+    "show": true,
+    "color": "#E46D04",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "samurai-samurai"
+    ]
   },
   "Soul Slice": {
     "name": "Soul Slice",
@@ -949,7 +1941,15 @@
     "cooldown": 30.0,
     "icon": "Soul_Slice.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#965A90",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "reaper-reaper"
+    ]
   },
   "Gluttony": {
     "name": "Gluttony",
@@ -957,7 +1957,15 @@
     "cooldown": 60.0,
     "icon": "Gluttony.png",
     "duration": 25.0,
-    "show": true
+    "show": true,
+    "color": "#965A90",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "reaper-reaper"
+    ]
   },
   "Enshroud": {
     "name": "Enshroud",
@@ -965,7 +1973,15 @@
     "cooldown": 5.0,
     "icon": "Enshroud.png",
     "duration": 30.0,
-    "show": true
+    "show": true,
+    "color": "#965A90",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "reaper-reaper"
+    ]
   },
   "Arcane Circle": {
     "name": "Arcane Circle",
@@ -973,7 +1989,15 @@
     "cooldown": 120.0,
     "icon": "Arcane_Circle.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#965A90",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "reaper-reaper"
+    ]
   },
   "Arcane Crest": {
     "name": "Arcane Crest",
@@ -981,7 +2005,15 @@
     "cooldown": 30.0,
     "icon": "Arcane_Crest.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#965A90",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "reaper-reaper"
+    ]
   },
   "Reawaken": {
     "name": "Reawaken",
@@ -989,7 +2021,15 @@
     "cooldown": 2.2,
     "icon": "Reawaken.png",
     "duration": 30.0,
-    "show": true
+    "show": true,
+    "color": "#108010",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "viper-viper"
+    ]
   },
   "Vicewinder": {
     "name": "Vicewinder",
@@ -997,7 +2037,15 @@
     "cooldown": 40.0,
     "icon": "Vicewinder.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#108010",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "viper-viper"
+    ]
   },
   "Serpent's Ire": {
     "name": "Serpent's Ire",
@@ -1005,7 +2053,15 @@
     "cooldown": 120.0,
     "icon": "Serpent's_Ire.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#108010",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "viper-viper"
+    ]
   },
   "Uncoiled Fury": {
     "name": "Uncoiled Fury",
@@ -1013,7 +2069,15 @@
     "cooldown": 3.5,
     "icon": "Uncoiled_Fury.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#108010",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "viper-viper"
+    ]
   },
   "Apex Arrow": {
     "name": "Apex Arrow",
@@ -1021,7 +2085,15 @@
     "cooldown": 2.5,
     "icon": "Apex_Arrow.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#91BA5E",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "bard-bard"
+    ]
   },
   "Sidewinder": {
     "name": "Sidewinder",
@@ -1029,7 +2101,15 @@
     "cooldown": 60.0,
     "icon": "Sidewinder.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#91BA5E",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "bard-bard"
+    ]
   },
   "Raging Strikes": {
     "name": "Raging Strikes",
@@ -1037,7 +2117,15 @@
     "cooldown": 120.0,
     "icon": "Raging_Strikes.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#91BA5E",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "bard-bard"
+    ]
   },
   "Radiant Finale": {
     "name": "Radiant Finale",
@@ -1045,7 +2133,15 @@
     "cooldown": 110.0,
     "icon": "Radiant_Finale.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#91BA5E",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "bard-bard"
+    ]
   },
   "Battle Voice": {
     "name": "Battle Voice",
@@ -1053,7 +2149,15 @@
     "cooldown": 120.0,
     "icon": "Battle_Voice.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#91BA5E",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "bard-bard"
+    ]
   },
   "The Wanderer's Minuet": {
     "name": "The Wanderer's Minuet",
@@ -1061,7 +2165,15 @@
     "cooldown": 120.0,
     "icon": "The_Wanderer's_Minuet.png",
     "duration": 45.0,
-    "show": true
+    "show": true,
+    "color": "#91BA5E",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "bard-bard"
+    ]
   },
   "Mage's Ballad": {
     "name": "Mage's Ballad",
@@ -1069,7 +2181,15 @@
     "cooldown": 120.0,
     "icon": "Mage's_Ballad.png",
     "duration": 45.0,
-    "show": true
+    "show": true,
+    "color": "#91BA5E",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "bard-bard"
+    ]
   },
   "Army's Paeon": {
     "name": "Army's Paeon",
@@ -1077,7 +2197,15 @@
     "cooldown": 120.0,
     "icon": "Army's_Paeon.png",
     "duration": 45.0,
-    "show": true
+    "show": true,
+    "color": "#91BA5E",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "bard-bard"
+    ]
   },
   "Troubadour": {
     "name": "Troubadour",
@@ -1085,7 +2213,15 @@
     "cooldown": 90.0,
     "icon": "Troubadour.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#91BA5E",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "bard-bard"
+    ]
   },
   "Nature's Minne": {
     "name": "Nature's Minne",
@@ -1093,7 +2229,15 @@
     "cooldown": 120.0,
     "icon": "Nature's_Minne.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#91BA5E",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "bard-bard"
+    ]
   },
   "Transpose": {
     "name": "Transpose",
@@ -1101,7 +2245,15 @@
     "cooldown": 5.0,
     "icon": "Transpose.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#A579D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "blackmage-blackmage"
+    ]
   },
   "Flare": {
     "name": "Flare",
@@ -1109,7 +2261,15 @@
     "cooldown": 2.5,
     "icon": "Flare.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#A579D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "blackmage-blackmage"
+    ]
   },
   "Flare Star": {
     "name": "Flare Star",
@@ -1117,7 +2277,15 @@
     "cooldown": 0.0,
     "icon": "Flare_Star.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#A579D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "blackmage-blackmage"
+    ]
   },
   "Xenoglossy": {
     "name": "Xenoglossy",
@@ -1125,7 +2293,15 @@
     "cooldown": 2.5,
     "icon": "Xenoglossy.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#A579D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "blackmage-blackmage"
+    ]
   },
   "Foul": {
     "name": "Foul",
@@ -1133,7 +2309,15 @@
     "cooldown": 2.5,
     "icon": "Foul.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#A579D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "blackmage-blackmage"
+    ]
   },
   "Ley Lines": {
     "name": "Ley Lines",
@@ -1141,7 +2325,15 @@
     "cooldown": 120.0,
     "icon": "Ley_Lines.png",
     "duration": 30.0,
-    "show": true
+    "show": true,
+    "color": "#A579D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "blackmage-blackmage"
+    ]
   },
   "Triplecast": {
     "name": "Triplecast",
@@ -1149,7 +2341,15 @@
     "cooldown": 60.0,
     "icon": "Triplecast.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#A579D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "blackmage-blackmage"
+    ]
   },
   "Swiftcast": {
     "name": "Swiftcast",
@@ -1157,7 +2357,17 @@
     "cooldown": 40.0,
     "icon": "Swiftcast.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#A579D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "blackmage-blackmage",
+      "redmage-redmage",
+      "pictomancer-pictomancer"
+    ]
   },
   "Manafont": {
     "name": "Manafont",
@@ -1165,7 +2375,15 @@
     "cooldown": 100.0,
     "icon": "Manafont.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#A579D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "blackmage-blackmage"
+    ]
   },
   "Paradox": {
     "name": "Paradox",
@@ -1173,7 +2391,15 @@
     "cooldown": 0.0,
     "icon": "Paradox.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#A579D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "blackmage-blackmage"
+    ]
   },
   "Manaward": {
     "name": "Manaward",
@@ -1181,7 +2407,15 @@
     "cooldown": 120.0,
     "icon": "Manaward.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#A579D6",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "blackmage-blackmage"
+    ]
   },
   "Addle": {
     "name": "Addle",
@@ -1189,7 +2423,18 @@
     "cooldown": 90.0,
     "icon": "Addle.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#A579D6",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "blackmage-blackmage",
+      "summoner-summoner",
+      "redmage-redmage",
+      "pictomancer-pictomancer"
+    ]
   },
   "Grade 4 Gemdraught of Intelligence [HQ]": {
     "name": "Grade 4 Gemdraught of Intelligence [HQ]",
@@ -1197,7 +2442,18 @@
     "cooldown": 270,
     "icon": "Grade_4_gemdraught_of_intelligence_icon1.png",
     "duration": 30.0,
-    "show": false
+    "show": false,
+    "color": "#b576e8",
+    "desc": "",
+    "tags": [
+      "utility"
+    ],
+    "specs": [
+      "blackmage-blackmage",
+      "summoner-summoner",
+      "redmage-redmage",
+      "pictomancer-pictomancer"
+    ]
   },
   "Searing Light": {
     "name": "Searing Light",
@@ -1205,7 +2461,15 @@
     "cooldown": 120.0,
     "icon": "Searing_Light.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#2D9B78",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "summoner-summoner"
+    ]
   },
   "Summon Bahamut": {
     "name": "Summon Bahamut",
@@ -1213,7 +2477,15 @@
     "cooldown": 60.0,
     "icon": "Summon_Bahamut.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#2D9B78",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "summoner-summoner"
+    ]
   },
   "Summon Phoenix": {
     "name": "Summon Phoenix",
@@ -1221,7 +2493,15 @@
     "cooldown": 60.0,
     "icon": "Summon_Phoenix.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#2D9B78",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "summoner-summoner"
+    ]
   },
   "Summon Solar Bahamut": {
     "name": "Summon Solar Bahamut",
@@ -1229,7 +2509,15 @@
     "cooldown": 60.0,
     "icon": "Summon_Solar_Bahamut.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#2D9B78",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "summoner-summoner"
+    ]
   },
   "Summon Ifrit II": {
     "name": "Summon Ifrit II",
@@ -1237,7 +2525,15 @@
     "cooldown": 2.5,
     "icon": "Summon_Ifrit_II.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#2D9B78",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "summoner-summoner"
+    ]
   },
   "Summon Titan II": {
     "name": "Summon Titan II",
@@ -1245,7 +2541,15 @@
     "cooldown": 2.5,
     "icon": "Summon_Titan_II.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#2D9B78",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "summoner-summoner"
+    ]
   },
   "Summon Garuda II": {
     "name": "Summon Garuda II",
@@ -1253,7 +2557,15 @@
     "cooldown": 2.5,
     "icon": "Summon_Garuda_II.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#2D9B78",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "summoner-summoner"
+    ]
   },
   "Necrotize": {
     "name": "Necrotize",
@@ -1261,7 +2573,15 @@
     "cooldown": 1.0,
     "icon": "Necrotize.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#2D9B78",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "summoner-summoner"
+    ]
   },
   "Painflare": {
     "name": "Painflare",
@@ -1269,7 +2589,15 @@
     "cooldown": 1.0,
     "icon": "Painflare.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#2D9B78",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "summoner-summoner"
+    ]
   },
   "Radiant Aegis": {
     "name": "Radiant Aegis",
@@ -1277,7 +2605,15 @@
     "cooldown": 60.0,
     "icon": "Radiant_Aegis.png",
     "duration": 30.0,
-    "show": true
+    "show": true,
+    "color": "#2D9B78",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "summoner-summoner"
+    ]
   },
   "Rekindle": {
     "name": "Rekindle",
@@ -1285,7 +2621,15 @@
     "cooldown": 20.0,
     "icon": "Rekindle.png",
     "duration": 30.0,
-    "show": true
+    "show": true,
+    "color": "#2D9B78",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "summoner-summoner"
+    ]
   },
   "Drill": {
     "name": "Drill",
@@ -1293,7 +2637,15 @@
     "cooldown": 20.0,
     "icon": "Drill.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#6EE1D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "machinist-machinist"
+    ]
   },
   "Air Anchor": {
     "name": "Air Anchor",
@@ -1301,7 +2653,15 @@
     "cooldown": 40.0,
     "icon": "Air_Anchor.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#6EE1D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "machinist-machinist"
+    ]
   },
   "Chain Saw": {
     "name": "Chain Saw",
@@ -1309,7 +2669,15 @@
     "cooldown": 60.0,
     "icon": "Chain_Saw.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#6EE1D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "machinist-machinist"
+    ]
   },
   "Barrel Stabilizer": {
     "name": "Barrel Stabilizer",
@@ -1317,7 +2685,15 @@
     "cooldown": 120.0,
     "icon": "Barrel_Stabilizer.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#6EE1D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "machinist-machinist"
+    ]
   },
   "Wildfire": {
     "name": "Wildfire",
@@ -1325,7 +2701,15 @@
     "cooldown": 120.0,
     "icon": "Wildfire.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#6EE1D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "machinist-machinist"
+    ]
   },
   "Reassemble": {
     "name": "Reassemble",
@@ -1333,7 +2717,15 @@
     "cooldown": 55.0,
     "icon": "Reassemble.png",
     "duration": 5.0,
-    "show": true
+    "show": true,
+    "color": "#6EE1D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "machinist-machinist"
+    ]
   },
   "Automaton Queen": {
     "name": "Automaton Queen",
@@ -1341,7 +2733,15 @@
     "cooldown": 6.0,
     "icon": "Automaton_Queen.png",
     "duration": 12.0,
-    "show": true
+    "show": true,
+    "color": "#6EE1D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "machinist-machinist"
+    ]
   },
   "Tactician": {
     "name": "Tactician",
@@ -1349,7 +2749,15 @@
     "cooldown": 90.0,
     "icon": "Tactician.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#6EE1D6",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "machinist-machinist"
+    ]
   },
   "Dismantle": {
     "name": "Dismantle",
@@ -1357,7 +2765,15 @@
     "cooldown": 120.0,
     "icon": "Dismantle.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#6EE1D6",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "machinist-machinist"
+    ]
   },
   "Embolden": {
     "name": "Embolden",
@@ -1365,7 +2781,15 @@
     "cooldown": 120.0,
     "icon": "Embolden.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#E87B7B",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "redmage-redmage"
+    ]
   },
   "Fleche": {
     "name": "Fleche",
@@ -1373,7 +2797,15 @@
     "cooldown": 25.0,
     "icon": "Fleche.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#E87B7B",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "redmage-redmage"
+    ]
   },
   "Contre Sixte": {
     "name": "Contre Sixte",
@@ -1381,7 +2813,15 @@
     "cooldown": 35.0,
     "icon": "Contre_Sixte.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#E87B7B",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "redmage-redmage"
+    ]
   },
   "Manafication": {
     "name": "Manafication",
@@ -1389,7 +2829,15 @@
     "cooldown": 110.0,
     "icon": "Manafication.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#E87B7B",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "redmage-redmage"
+    ]
   },
   "Acceleration": {
     "name": "Acceleration",
@@ -1397,7 +2845,15 @@
     "cooldown": 55.0,
     "icon": "Acceleration.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#E87B7B",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "redmage-redmage"
+    ]
   },
   "Enchanted Riposte": {
     "name": "Enchanted Riposte",
@@ -1405,7 +2861,15 @@
     "cooldown": 1.5,
     "icon": "Enchanted_Riposte.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#E87B7B",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "redmage-redmage"
+    ]
   },
   "Enchanted Reprise": {
     "name": "Enchanted Reprise",
@@ -1413,7 +2877,15 @@
     "cooldown": 2.5,
     "icon": "Enchanted_Reprise.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#E87B7B",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "redmage-redmage"
+    ]
   },
   "Vercure": {
     "name": "Vercure",
@@ -1421,7 +2893,15 @@
     "cooldown": 2.5,
     "icon": "Vercure.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#E87B7B",
+    "desc": "",
+    "tags": [
+      "SINGLE_MIT"
+    ],
+    "specs": [
+      "redmage-redmage"
+    ]
   },
   "Magick Barrier": {
     "name": "Magick Barrier",
@@ -1429,7 +2909,15 @@
     "cooldown": 120.0,
     "icon": "Magick_Barrier.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#E87B7B",
+    "desc": "",
+    "tags": [
+      "RAID_MIT"
+    ],
+    "specs": [
+      "redmage-redmage"
+    ]
   },
   "Standard Step": {
     "name": "Standard Step",
@@ -1437,7 +2925,15 @@
     "cooldown": 30.0,
     "icon": "Standard_Step.png",
     "duration": 60.0,
-    "show": true
+    "show": true,
+    "color": "#E2B0AF",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "dancer-dancer"
+    ]
   },
   "Flourish": {
     "name": "Flourish",
@@ -1445,7 +2941,15 @@
     "cooldown": 60.0,
     "icon": "Flourish.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#E2B0AF",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "dancer-dancer"
+    ]
   },
   "Technical Step": {
     "name": "Technical Step",
@@ -1453,7 +2957,15 @@
     "cooldown": 120.0,
     "icon": "Technical_Step.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#E2B0AF",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "dancer-dancer"
+    ]
   },
   "Saber Dance": {
     "name": "Saber Dance",
@@ -1461,7 +2973,15 @@
     "cooldown": 2.5,
     "icon": "Saber_Dance.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#E2B0AF",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "dancer-dancer"
+    ]
   },
   "Devilment": {
     "name": "Devilment",
@@ -1469,7 +2989,15 @@
     "cooldown": 120.0,
     "icon": "Devilment.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#E2B0AF",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "dancer-dancer"
+    ]
   },
   "Shield Samba": {
     "name": "Shield Samba",
@@ -1477,7 +3005,15 @@
     "cooldown": 90.0,
     "icon": "Shield_Samba.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#E2B0AF",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "dancer-dancer"
+    ]
   },
   "Curing Waltz": {
     "name": "Curing Waltz",
@@ -1485,7 +3021,15 @@
     "cooldown": 60.0,
     "icon": "Curing_Waltz.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#E2B0AF",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "dancer-dancer"
+    ]
   },
   "Improvisation": {
     "name": "Improvisation",
@@ -1493,7 +3037,15 @@
     "cooldown": 120.0,
     "icon": "Improvisation.png",
     "duration": 15.0,
-    "show": true
+    "show": true,
+    "color": "#E2B0AF",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "dancer-dancer"
+    ]
   },
   "Holy in White": {
     "name": "Holy in White",
@@ -1501,7 +3053,15 @@
     "cooldown": 2.5,
     "icon": "Holy_in_White.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#E060E0",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "pictomancer-pictomancer"
+    ]
   },
   "Comet in Black": {
     "name": "Comet in Black",
@@ -1509,7 +3069,15 @@
     "cooldown": 3.3,
     "icon": "Comet_in_Black.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#E060E0",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "pictomancer-pictomancer"
+    ]
   },
   "Subtractive Palette": {
     "name": "Subtractive Palette",
@@ -1517,7 +3085,15 @@
     "cooldown": 1.0,
     "icon": "Subtractive_Palette.png",
     "duration": 30.0,
-    "show": true
+    "show": true,
+    "color": "#E060E0",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "pictomancer-pictomancer"
+    ]
   },
   "Starry Muse": {
     "name": "Starry Muse",
@@ -1525,7 +3101,15 @@
     "cooldown": 120.0,
     "icon": "Starry_Muse.png",
     "duration": 20.0,
-    "show": true
+    "show": true,
+    "color": "#E060E0",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "pictomancer-pictomancer"
+    ]
   },
   "Striking Muse": {
     "name": "Striking Muse",
@@ -1533,7 +3117,15 @@
     "cooldown": 60.0,
     "icon": "Striking_Muse.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#E060E0",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "pictomancer-pictomancer"
+    ]
   },
   "Retribution of the Madeen": {
     "name": "Retribution of the Madeen",
@@ -1541,7 +3133,15 @@
     "cooldown": 30.0,
     "icon": "Retribution_of_the_Madeen.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#E060E0",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "pictomancer-pictomancer"
+    ]
   },
   "Mog of the Ages": {
     "name": "Mog of the Ages",
@@ -1549,7 +3149,15 @@
     "cooldown": 30.0,
     "icon": "Mog_of_the_Ages.png",
     "duration": 0.0,
-    "show": true
+    "show": true,
+    "color": "#E060E0",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "pictomancer-pictomancer"
+    ]
   },
   "Tempera Coat": {
     "name": "Tempera Coat",
@@ -1557,7 +3165,15 @@
     "cooldown": 120.0,
     "icon": "Tempera_Coat.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#E060E0",
+    "desc": "",
+    "tags": [
+      "defensive"
+    ],
+    "specs": [
+      "pictomancer-pictomancer"
+    ]
   },
   "Tempera Grassa": {
     "name": "Tempera Grassa",
@@ -1565,6 +3181,14 @@
     "cooldown": 1.0,
     "icon": "Tempera_Grassa.png",
     "duration": 10.0,
-    "show": true
+    "show": true,
+    "color": "#E060E0",
+    "desc": "",
+    "tags": [
+      "raid_cd"
+    ],
+    "specs": [
+      "pictomancer-pictomancer"
+    ]
   }
 }

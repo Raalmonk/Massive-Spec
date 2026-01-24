@@ -15,3 +15,9 @@ def index():
 def api_js():
     """Serve the API JS file."""
     return FileResponse(os.path.join("front_end", "api.js"))
+
+
+@router.get("/spell_data.json")
+def spell_data():
+    """Serve the spell_data.json file."""
+    return FileResponse("spell_data.json")

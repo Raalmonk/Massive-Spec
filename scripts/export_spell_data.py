@@ -27,16 +27,25 @@ def main():
 
             # Construct the entry for spell_data.json
             # It maps Name -> { name, id, cooldown, icon, duration }
-            entry = {
-                "name": name,
-                "id": d["spell_id"],
-                "cooldown": d["cooldown"],
-                "icon": d["icon"],
-                "duration": d.get("duration", 0),
-                "show": d.get("show", True),
-            }
+            if name in spells_dict:
+                entry = spells_dict[name]
+            else:
+                entry = {
+                    "name": name,
+                    "id": d["spell_id"],
+                    "cooldown": d["cooldown"],
+                    "icon": d["icon"],
+                    "duration": d.get("duration", 0),
+                    "show": d.get("show", True),
+                    "color": d.get("color", ""),
+                    "desc": d.get("desc", ""),
+                    "tags": d.get("tags", []),
+                    "specs": []
+                }
+                spells_dict[name] = entry
 
-            spells_dict[name] = entry
+            if spec.full_name_slug not in entry["specs"]:
+                entry["specs"].append(spec.full_name_slug)
             count += 1
 
     # Write to file
