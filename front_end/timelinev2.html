@@ -192,9 +192,15 @@ const fetchSpellData = async (specSlug = 'redmage-redmage') => {
 const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = []) => {
     console.log('[M-Spec] 正在读取静态文件:', specSlug, bossSlug);
 
+    // 定义团辅职业列表 (根据你的要求)
+    const BUFF_SPECS = new Set([
+        'astrologian-astrologian', 'scholar-scholar', // Healers
+        'dragoon-dragoon', 'reaper-reaper', 'monk-monk', 'ninja-ninja', // Melee
+        'dancer-dancer', 'bard-bard', // Phys Ranged
+        'redmage-redmage', 'summoner-summoner', 'pictomancer-pictomancer' // Magic Ranged
+    ]);
+
     try {
-        // 1. 构建静态文件名 (注意：这里必须和 updater.py 生成的文件名一致)
-        // 加上时间戳 ?t=... 防止浏览器缓存
         const fileName = `spec_ranking_${specSlug}_${bossSlug}.json`;
         const url = `./data/${fileName}?t=${Date.now()}`;
 
@@ -203,8 +209,6 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
         
         const data = await res.json();
         
-        // 2. 解析静态 JSON 数据结构 (扁平化处理)
-        // 结构通常是: root -> reports -> fights -> players
         const allPlayers = [];
         if (data.reports) {
             data.reports.forEach(report => {
@@ -212,7 +216,6 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                     report.fights.forEach(fight => {
                         if (fight.players) {
                             fight.players.forEach(player => {
-                                // 把外层的重要信息塞给 player 对象，方便后续使用
                                 player.fightDuration = fight.duration;
                                 player.fightId = fight.fight_id;
                                 player.reportId = report.report_id;
@@ -226,29 +229,35 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
             });
         }
 
-        // 3. 排序并截取前 70 名
         allPlayers.sort((a, b) => b.total - a.total);
         const rankedPlayers = allPlayers.filter(p => p.spec_slug === specSlug && p.total > 0).slice(0, 70);
 
-        // 4. 转换数据格式供前端渲染
         const rankData = rankedPlayers.map((player, index) => {
                 const id = `player-${player.source_id || index}`;
                 
-                // 简单的 Partner 图标逻辑 (可选，保留你原有的逻辑即可)
+                // 1. 计算团辅数量
+                const buffCount = (player.composition || []).filter(s => BUFF_SPECS.has(s)).length;
+
+                // 2. Partner 图标逻辑 (更新版)
                 let partnerIcon = null;
-                // ... (这里可以保留你原本的 partner 逻辑，或者暂时留空)
                 const myDetailedRole = getDetailedRole(specSlug);
 
                 if (player.composition && Array.isArray(player.composition)) {
-                    // 2. 在阵容里找：职责相同 && 不是我自己的那个人
-                    const partnerSpec = player.composition.find(s => {
-                        // 必须是同一种细分职责 (例如我是近战，就只找近战)
-                        // 且 ID 不能和当前查看的玩家相同
-                        return getDetailedRole(s) === myDetailedRole && s !== specSlug;
-                    });
+                    // 找出所有同职能的人 (比如所有近战)
+                    const roleMates = player.composition.filter(s => getDetailedRole(s) === myDetailedRole);
+
+                    // 默认逻辑：找一个不是我的人
+                    let partnerSpec = roleMates.find(s => s !== specSlug);
+
+                    // 特殊逻辑：如果是 Tank 或 Healer，且没找到别人(说明是同职业)，且同职能人数>=2
+                    if (['tank', 'healer'].includes(myDetailedRole)) {
+                        if (!partnerSpec && roleMates.length >= 2) {
+                            partnerSpec = specSlug; // 显示我自己(同职业堆叠)
+                        }
+                    }
+                    // 注意：DPS 保持默认逻辑，如果是双绝枪(T)，这里会显示绝枪；如果是双武僧(DPS)，这里partner为空(符合你的要求)
 
                     if (partnerSpec) {
-                        // 3. 找到后获取图标路径
                         const iconName = getIconForSpec(partnerSpec);
                         if (iconName) {
                             partnerIcon = `./images/classes/${iconName}`;
@@ -267,16 +276,15 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                 region: player.region || '??',
                 reportId: player.reportId,
                 fightId: player.fightId,
-                partner: partnerIcon, // 如果你有 partner 逻辑就放这里
+                partner: partnerIcon,
+                buffCount: buffCount, // 新增字段
                 composition: player.composition,
                 dps: player.total,
                 killTime: `${m}:${s}`,
                 killTimeSeconds: durationSeconds,
-                // 处理技能转换
                 casts: (player.casts || []).map(c => ({
                     spellId: c.spell_id,
                     timestamp: c.ts ? c.ts / 1000 : (c.timestamp || 0),
-                    // 如果 spellMap 里找不到技能信息，给个默认值 0，防止报错
                     duration: c.duration || (spellMap[c.spell_id] ? spellMap[c.spell_id].duration : 0)
                 })),
                 deaths: player.deaths || []
@@ -286,7 +294,7 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
 
     } catch (error) {
         console.error('[M-Spec] 读取排名数据失败:', error);
-        return []; // 返回空数组，防止页面白屏
+        return [];
     }
 };
 // --- 替换结束 ---
@@ -734,7 +742,10 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                 <nav className="h-14 bg-[#1a1a1a] border-b border-gray-800 flex items-center justify-between px-4 shrink-0 z-[60]">
                     <div className="flex items-center gap-6">
                         <div className="flex items-center gap-2">
-                            <div className="text-xl font-bold tracking-tight text-white flex items-center select-none"><span style={{ color: THEME_COLOR }} className="mr-1">M</span>-Spec</div>
+                            {/* UPDATED: Added Link wrapper for M-Spec title */}
+                            <a href="main_menu.html#" className="text-xl font-bold tracking-tight text-white flex items-center select-none hover:opacity-80 transition-opacity" style={{ textDecoration: 'none' }}>
+                                <span style={{ color: THEME_COLOR }} className="mr-1">M</span>-Spec
+                            </a>
                         </div>
                         <div className="flex items-center gap-2">
                             <span className="text-gray-400 text-sm">Boss:</span>
@@ -845,6 +856,8 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                                     <div className="flex-1 text-left">RDPS</div>
                                     <div className="w-8 text-center text-gray-600">Reg</div>
                                     <div className="w-8 text-center text-gray-600">Pair</div>
+                                    {/* NEW: Buffs Header */}
+                                    <div className="w-8 text-center text-gray-600 ml-1">Buffs</div>
                                 </div>
                                 <div className="relative h-full" style={{ width: `${FIGHT_DURATION * zoom}px` }}>
                                     {Array.from({ length: Math.ceil(FIGHT_DURATION / 30) + 1 }).map((_, i) => (
@@ -938,6 +951,11 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                                             {/* Partner Column - Only shows for Tank/Healer */}
                                             <div className="w-8 text-center flex justify-center items-center ml-1">
                                                 {row.partner && <img src={row.partner} alt="P" className="w-5 h-5 object-contain" />}
+                                            </div>
+
+                                            {/* NEW: Buffs Count Column */}
+                                            <div className="w-8 text-center flex justify-center items-center ml-1 font-mono text-xs text-gray-400 font-bold">
+                                                {row.buffCount}
                                             </div>
                                         </div>
 
