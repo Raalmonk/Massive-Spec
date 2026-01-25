@@ -58,7 +58,7 @@
     <script type="text/babel" data-type="module">
         import React, { useState, useRef, useEffect, useMemo, useCallback } from 'https://esm.sh/react@18.2.0?dev';
         import { createRoot } from 'https://esm.sh/react-dom@18.2.0/client?dev';
-        import { ZoomIn, ZoomOut, Search, Menu, Skull, Clock, Hourglass, Shield, ShieldAlert, Zap, Swords, MoreHorizontal, Layers, Minimize2, Maximize2, ChevronDown, ExternalLink } from 'https://esm.sh/lucide-react@0.263.1?dev';
+        import { ZoomIn, ZoomOut, Search, Menu, Skull, Clock, Hourglass, Shield, ShieldAlert, Zap, Swords, MoreHorizontal, Layers, Minimize2, Maximize2, ChevronDown, ExternalLink, Flag } from 'https://esm.sh/lucide-react@0.263.1?dev';
 
         // --- Configuration ---
         const THEME_COLOR = '#00FF96';
@@ -256,17 +256,17 @@
                      const finalPartner = partnerIcon;
 
                      const existing = currentRankData.find(p => p.id === id);
+                     const durationSeconds = player.fightDuration / 1000;
+                     const m = Math.floor(durationSeconds / 60);
+                     const s = Math.floor(durationSeconds % 60).toString().padStart(2, '0');
+
                      if (existing) {
                          // Simple cache check
                          if (Math.abs((existing.dps || 0) - player.total) < 0.1) {
                             // Ensure new fields are passed even if cached (though usually cache is object ref)
-                            return { ...existing, rank: index + 1, composition: composition, partner: finalPartner, reportId: player.reportId, fightId: player.fightId };
+                            return { ...existing, rank: index + 1, composition: composition, partner: finalPartner, reportId: player.reportId, fightId: player.fightId, killTimeSeconds: durationSeconds };
                          }
                      }
-
-                     const durationSeconds = player.fightDuration / 1000;
-                     const m = Math.floor(durationSeconds / 60);
-                     const s = Math.floor(durationSeconds % 60).toString().padStart(2, '0');
 
                      return {
                         rank: index + 1,
@@ -279,6 +279,7 @@
                         composition: composition,
                         dps: player.total,
                         killTime: `${m}:${s}`,
+                        killTimeSeconds: durationSeconds, // Added for timeline cutoff
                         casts: (player.casts || []).map(c => ({
                             spellId: c.spell_id,
                             timestamp: c.ts ? c.ts / 1000 : (c.timestamp || 0),
@@ -418,10 +419,11 @@
                     
                     {/* Name Layer (On Hover) */}
                     <span 
-                        className={`absolute inset-0 flex items-center text-xs font-medium text-gray-200 truncate transition-opacity duration-500 underline decoration-gray-500 group-hover/link:decoration-[#00FF96] ${viewMode === 'name' ? 'opacity-100' : 'opacity-0'}`}
+                        className={`absolute inset-0 flex items-center font-bold text-white truncate transition-opacity duration-500 underline decoration-gray-500 group-hover/link:decoration-[#00FF96] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] ${viewMode === 'name' ? 'opacity-100' : 'opacity-0'}`}
+                        style={{ fontSize: '15px' }}
                     >
                         {name}
-                        <ExternalLink size={10} className="ml-1 opacity-50 group-hover/link:opacity-100" />
+                        <ExternalLink size={12} className="ml-1 opacity-50 group-hover/link:opacity-100" />
                     </span>
                 </a>
             );
@@ -558,11 +560,19 @@
 
         // --- Main App ---
         const App = () => {
+            // 1. 定义一个辅助函数来读取 URL 参数
+            const getQueryParam = (param, defaultValue) => {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param) || defaultValue;
+            };
+
             const [zoom, setZoom] = useState(15);
             const [isCollapsed, setIsCollapsed] = useState(true); // Default to Collapsed
             const [viewMode, setViewMode] = useState('damage');
-            const [selectedBoss, setSelectedBoss] = useState('vamp-fatale');
-            const [selectedSpec, setSelectedSpec] = useState('redmage-redmage');
+            
+            // 2. 修改这里：使用 getQueryParam 来设置初始值
+            const [selectedBoss, setSelectedBoss] = useState(getQueryParam('boss', 'vamp-fatale'));
+            const [selectedSpec, setSelectedSpec] = useState(getQueryParam('spec', 'redmage-redmage'));
             const [activeFilterSpecs, setActiveFilterSpecs] = useState(new Set()); // New State
             
             const [spellCategories, setSpellCategories] = useState({});
@@ -713,8 +723,7 @@
                                 <option value="vamp-fatale">M9S: Vamp Fatale</option>
                                 <option value="red-hot-and-deep-blue">M10S: Red Hot and Deep Blue</option>
                                 <option value="the-tyrant">M11S: The Tyrant</option>
-                                <option value="lindwurm">M12S P1: Lindwurm I</option>
-                                <option value="lindwurm-ii">M12S P2: Lindwurm II</option>
+                                <option value="lindwurm">M12S P1: Lindwurm</option>
                             </select>
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
                             <span className="text-gray-400 text-sm">Spec:</span>
@@ -797,7 +806,7 @@
                                 <div className="sticky left-0 bg-[#202020] border-r border-gray-800 shrink-0 flex items-center px-4 text-xs font-bold text-gray-500 uppercase z-[60] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
                                     <div className="w-8 text-center mr-2 text-[#00FF96]">Rank</div>
                                     {/* MODIFIED: Header Text */}
-                                    <div className="flex-1 text-left">RDPS</div>
+                                    <div className="flex-1 text-left">ADPS</div>
                                     <div className="w-8 text-center text-gray-600">Reg</div>
                                     <div className="w-8 text-center text-gray-600">Pair</div>
                                 </div>
@@ -908,19 +917,64 @@
                                                 <div key={dIdx} className="absolute top-1/2 -translate-y-1/2 text-gray-600 z-0" style={{ left: `${deathTime * zoom}px` }}><Skull size={14} /></div>
                                             ))}
 
+                                            {/* Kill Time Marker Logic */}
+                                            {row.killTimeSeconds && (
+                                                <div 
+                                                    className="absolute top-0 bottom-0 z-50 flex flex-col items-center pointer-events-none"
+                                                    style={{ left: `${row.killTimeSeconds * zoom}px` }}
+                                                >
+                                                    {/* Vertical Line */}
+                                                    <div className="h-full w-[2px] bg-red-500/60 shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
+                                                    
+                                                    {/* Label - Positioned like a skill icon but text-only */}
+                                                    <div className="absolute top-1/2 -translate-y-1/2 left-1 flex items-center z-50">
+                                                        {/* Icon Box */}
+                                                        <div
+                                                            className="flex items-center justify-center rounded-sm bg-red-900/80 border border-red-500/50"
+                                                            style={{
+                                                                height: `${(isCollapsed ? totalHeight : trackHeight) * 0.85}px`,
+                                                                width: `${(isCollapsed ? totalHeight : trackHeight) * 0.85}px`
+                                                            }}
+                                                        >
+                                                            <Flag size={(isCollapsed ? totalHeight : trackHeight) * 0.85 * 0.6} className="text-white" />
+                                                        </div>
+
+                                                        {/* Text */}
+                                                        <span 
+                                                            className="ml-1 font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] whitespace-nowrap"
+                                                            style={{ fontSize: `${(isCollapsed ? totalHeight : trackHeight) * 0.85 * 0.7}px`, lineHeight: 1 }}
+                                                        >
+                                                            {row.killTime}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            )}
+
                                             {processedCasts.map((cast, cIdx) => {
                                                 const spell = spells[cast.spellId];
                                                 if (!spell) return null;
+
+                                                // --- KILL TIME CLIPPING LOGIC ---
+                                                const timeUntilKill = row.killTimeSeconds ? (row.killTimeSeconds - cast.timestamp) : 99999;
+                                                
+                                                // If cast starts AFTER kill, skip it
+                                                if (timeUntilKill <= 0) return null;
 
                                                 // Vertical positioning
                                                 const currentTrackHeight = isCollapsed ? totalHeight : trackHeight;
                                                 const topPos = isCollapsed ? 0 : cast.trackIndex * trackHeight;
 
                                                 // Dimensions - Adjusted for Compactness
-                                                // In compact mode (32px), icon should be small. 85% of 32 = ~27px
                                                 const iconHeight = currentTrackHeight * 0.85; 
-                                                const durationWidth = Math.max((cast.duration || 0) * zoom, iconHeight); 
-                                                const cdWidth = (spell.cd || 0) * zoom;
+                                                const rawDurationWidth = (cast.duration || 0) * zoom;
+                                                const rawCdWidth = (spell.cd || 0) * zoom;
+                                                
+                                                // Max allowed width (distance to kill time)
+                                                const maxVisibleWidth = timeUntilKill * zoom;
+
+                                                // Clamp widths
+                                                const durationWidth = Math.max(0, Math.min(rawDurationWidth, maxVisibleWidth));
+                                                const cdWidth = Math.max(0, Math.min(rawCdWidth, maxVisibleWidth));
 
                                                 // Color Assignment (Consistent per spell)
                                                 const barColor = spellColorMap[cast.spellId] || '#ffffff';
@@ -949,8 +1003,8 @@
                                                     >
                                                         <div className="relative w-full h-full flex items-center">
                                                             
-                                                            {/* 1. Cooldown Bar - Lighter version of the ASSIGNED BAR COLOR */}
-                                                            {showCooldown && spell.cd > 0 && (
+                                                            {/* 1. Cooldown Bar - CLAMPED */}
+                                                            {showCooldown && spell.cd > 0 && cdWidth > 0 && (
                                                                 <div 
                                                                     className="absolute top-1/2 -translate-y-1/2 h-1/3 rounded-r-sm z-0"
                                                                     style={{
@@ -961,8 +1015,8 @@
                                                                 />
                                                             )}
 
-                                                            {/* 2. Duration Bar - Uses ASSIGNED BAR COLOR */}
-                                                            {showDuration && (
+                                                            {/* 2. Duration Bar - CLAMPED */}
+                                                            {showDuration && durationWidth > 0 && (
                                                                 <div
                                                                     className="absolute left-0 z-10 rounded-sm shadow-sm"
                                                                     style={{
