@@ -167,7 +167,11 @@ class Fight(warcraftlogs_base.BaseModel):
     #   Summary
     #
     def get_query_parts(self) -> list[str]:
-        return [f"summary: table({self.summary_query_args}, dataType: Summary)"]
+        parts = [f"summary: table({self.summary_query_args}, dataType: Summary)"]
+        # --- DEBUG START ---
+        print(f"[DEBUG-0] Fight.get_query_parts | ID={self.fight_id} | QueryParts={parts}")
+        # --- DEBUG END ---
+        return parts
 
     def get_query(self) -> str:
         """Get the Query to load the fights summary."""
@@ -190,6 +194,12 @@ class Fight(warcraftlogs_base.BaseModel):
 
     def process_players(self, summary_data: "wcl.ReportSummary"):
         self.players = []
+
+        # --- DEBUG START ---
+        comp_count = len(summary_data.composition) if summary_data.composition else 0
+        print(f"[DEBUG-2] Fight.process_players | Raw Composition Count from WCL: {comp_count}")
+        # --- DEBUG END ---
+
         total_damage = summary_data.damageDone
         total_healing = summary_data.healingDone
 
@@ -240,11 +250,28 @@ class Fight(warcraftlogs_base.BaseModel):
             player.process_death_events(summary_data.deathEvents)
             self.players.append(player)
 
+            # --- DEBUG START (Optional: print first player) ---
+            if len(self.players) == 1:
+                print(f"[DEBUG-3] First Player Created: {player.name} - {player.spec_slug}")
+            # --- DEBUG END ---
+
         self.players.sort(key=lambda player: (player.spec.role, player.spec, player.name))
+
+        # --- DEBUG START ---
+        print(f"[DEBUG-4] Final Player Count: {len(self.players)}")
+        # --- DEBUG END ---
 
     def process_query_result(self, **query_result: typing.Any):
         """Process the data retured from an Overview-Query."""
         report_data = wcl.ReportData(**query_result)
+        
+        # --- DEBUG START ---
+        has_summary = bool(report_data.report and report_data.report.summary)
+        print(f"[DEBUG-1] Fight.process_query_result | ID={self.fight_id} | Has Summary Data? {has_summary}")
+        if not has_summary:
+            print(f"[DEBUG-1] WARNING: No summary data found in report_data. Keys: {query_result.keys()}")
+        # --- DEBUG END ---
+
         if not report_data.report.summary:
             return
         summary_data = report_data.report.summary

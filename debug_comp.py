@@ -1,32 +1,48 @@
 # debug_comp.py
 import asyncio
 import os
-
-# 确保能找到 lorgs 模块
 import sys
+
+# 1. 设置伪造 AWS 凭证
+os.environ["AWS_ACCESS_KEY_ID"] = "testing"
+os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
+os.environ["AWS_SECURITY_TOKEN"] = "testing"
+os.environ["AWS_SESSION_TOKEN"] = "testing"
+os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
+
+# 2. 设置路径
 sys.path.append(os.getcwd())
+
+# 3. [关键修复] 导入数据模块，这会初始化 RaidBoss 列表
+import lorgs.data 
 
 from lorgs.models.warcraftlogs_comp_ranking import CompRanking
 
 async def main():
-    boss_slug = "vamp-fatale"  # 或者其他你想测试的 Boss Slug
+    boss_slug = "vamp-fatale" 
     print(f"--- Starting Debug for Boss: {boss_slug} ---")
     
-    # 1. 获取或创建 CompRanking 对象
+    # 获取对象
     ranking = CompRanking.get_or_create(boss_slug=boss_slug)
     
-    # 2. 强制加载数据 (这会触发 Fight.load -> process_query_result -> process_players)
-    # limit=5 限制数量，加快调试速度
-    # clear_old=True 清除旧数据，确保重新抓取
-    await ranking.load(limit=5, clear_old=True)
+    # 4. 核心步骤：直接调用 load
+    print(">>> Calling ranking.load()...")
+    # 注意：clear_old=True 会强制重新抓取，这非常重要，否则它可能会直接读缓存而不触发我们的 print
+    await ranking.load(limit=5, clear_old=True) 
+    print(">>> ranking.load() finished.")
     
-    print("--- Debug Finished ---")
-    
-    # 打印结果检查
+    # 5. 打印结果检查
     if ranking.reports:
-        first_fight = ranking.reports[0].fights[0]
-        print(f"First Fight Players Count: {len(first_fight.players)}")
-        print(f"First Fight Composition: {first_fight.composition}")
+        print(f"\nSuccessfully loaded {len(ranking.reports)} reports.")
+        first_report = ranking.reports[0]
+        if first_report.fights:
+            first_fight = first_report.fights[0]
+            print(f"First Fight ID: {first_fight.fight_id}")
+            print(f"First Fight Players Count: {len(first_fight.players)}")
+            # 这里是我们最关心的：Composition 到底有没有生成
+            print(f"First Fight Composition: {first_fight.composition}")
+        else:
+            print("First report has no fights.")
     else:
         print("No reports loaded.")
 

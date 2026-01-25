@@ -113,7 +113,16 @@ class CompRankingFight(Fight):
 
     def process_query_result(self, **query_result: typing.Any):
         super().process_query_result(**query_result)
+        # --- DEBUG START ---
+        print(f"[DEBUG] Processing Fight ID: {self.fight_id}")
+        print(f"[DEBUG] Player count: {len(self.players)}") # 检查这里是否为 0
+        # --- DEBUG END ---
         self.composition = get_composition(self.players)
+        # --- DEBUG START ---
+        import json
+        # 打印生成的 composition
+        print(f"[DEBUG] Composition: {json.dumps(self.composition, indent=2)}")
+        # --- DEBUG END ---
 
 
 class CompRankingReport(warcraftlogs_report.Report):
