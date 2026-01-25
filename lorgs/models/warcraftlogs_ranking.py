@@ -173,7 +173,13 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                 if spec_name and spec_name.lower() in ("dps", "healer", "tank"):
                      spec_name = class_name
 
+                # 1. Try Strict Lookup (Class + Spec)
                 spec = WowSpec.get(name_slug_cap=spec_name, wow_class__name_slug_cap=class_name)
+
+                # 2. FIX: Fallback Lookup (Spec only) for FF14 compatibility
+                if not spec:
+                    spec = WowSpec.get(name_slug_cap=spec_name)
+
                 if not spec:
                     continue
 
