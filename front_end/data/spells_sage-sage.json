@@ -1,0 +1,146 @@
+[
+  {
+    "spell_id": 37033,
+    "name": "Psyche",
+    "icon": "Psyche.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#80A0F0"
+  },
+  {
+    "spell_id": 24313,
+    "name": "Phlegma III",
+    "icon": "Phlegma_III.png",
+    "cooldown": 40.0,
+    "duration": 0.0,
+    "color": "#80A0F0"
+  },
+  {
+    "spell_id": 24300,
+    "name": "Zoe",
+    "icon": "Zoe.png",
+    "cooldown": 90.0,
+    "duration": 30.0,
+    "color": "#80A0F0"
+  },
+  {
+    "spell_id": 24303,
+    "name": "Taurochole",
+    "icon": "Taurochole.png",
+    "cooldown": 45.0,
+    "duration": 15.0,
+    "color": "#80A0F0"
+  },
+  {
+    "spell_id": 24305,
+    "name": "Haima",
+    "icon": "Haima.png",
+    "cooldown": 120.0,
+    "duration": 15.0,
+    "color": "#80A0F0"
+  },
+  {
+    "spell_id": 24296,
+    "name": "Druochole",
+    "icon": "Druochole.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#80A0F0"
+  },
+  {
+    "spell_id": 24294,
+    "name": "Soteria",
+    "icon": "Soteria.png",
+    "cooldown": 60.0,
+    "duration": 15.0,
+    "color": "#80A0F0"
+  },
+  {
+    "spell_id": 24317,
+    "name": "Krasis",
+    "icon": "Krasis.png",
+    "cooldown": 60.0,
+    "duration": 10.0,
+    "color": "#80A0F0"
+  },
+  {
+    "spell_id": 37035,
+    "name": "Philosophia",
+    "icon": "Philosophia.png",
+    "cooldown": 180.0,
+    "duration": 20.0,
+    "color": "#80A0F0"
+  },
+  {
+    "spell_id": 24310,
+    "name": "Holos",
+    "icon": "Holos.png",
+    "cooldown": 120.0,
+    "duration": 20.0,
+    "color": "#80A0F0"
+  },
+  {
+    "spell_id": 24311,
+    "name": "Panhaima",
+    "icon": "Panhaima.png",
+    "cooldown": 120.0,
+    "duration": 15.0,
+    "color": "#80A0F0"
+  },
+  {
+    "spell_id": 24318,
+    "name": "Pneuma",
+    "icon": "Pneuma.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#80A0F0"
+  },
+  {
+    "spell_id": 24298,
+    "name": "Kerachole",
+    "icon": "Kerachole.png",
+    "cooldown": 30.0,
+    "duration": 15.0,
+    "color": "#80A0F0"
+  },
+  {
+    "spell_id": 24299,
+    "name": "Ixochole",
+    "icon": "Ixochole.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#80A0F0"
+  },
+  {
+    "spell_id": 24302,
+    "name": "Physis II",
+    "icon": "Physis_II.png",
+    "cooldown": 60.0,
+    "duration": 15.0,
+    "color": "#80A0F0"
+  },
+  {
+    "spell_id": 37034,
+    "name": "Eukrasian Prognosis II",
+    "icon": "Eukrasian_Prognosis_II.png",
+    "cooldown": 1.5,
+    "duration": 0.0,
+    "color": "#80A0F0"
+  },
+  {
+    "spell_id": 34603670,
+    "name": "Grade 4 Gemdraught of Mind",
+    "icon": "Grade_4_gemdraught_of_mind_icon1.png",
+    "cooldown": 270,
+    "duration": 30.0,
+    "color": "#b576e8"
+  },
+  {
+    "spell_id": 3,
+    "name": "Sprint",
+    "icon": "Sprint_icon1.png",
+    "cooldown": 60.0,
+    "duration": 10.0,
+    "color": "#666666"
+  }
+]

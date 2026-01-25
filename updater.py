@@ -69,6 +69,23 @@ async def update_spec(spec, boss_slug="vamp-fatale"):
 
         logger.info(f"Saved {filename}")
 
+        # Save Spells
+        spells_data = []
+        for spell in spec.all_spells:
+            spells_data.append({
+                "spell_id": spell.spell_id,
+                "name": spell.name,
+                "icon": spell.icon,
+                "cooldown": spell.cooldown,
+                "duration": spell.duration,
+                "color": spell.color,
+            })
+
+        spells_filename = f"front_end/data/spells_{spec_slug}.json"
+        with open(spells_filename, "w") as f:
+            json.dump(spells_data, f, indent=2)
+        logger.info(f"Saved {spells_filename}")
+
     except Exception as e:
         logger.error(f"Error updating {spec_slug}: {e}")
 
