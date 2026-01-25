@@ -1,30 +1,34 @@
+/**
+ * 从静态 JSON 文件加载排名数据
+ * 这些文件是由后端的 updater.py 脚本定期生成的。
+ */
+async function loadRanking(bossSlug, specSlug) {
+    // 1. 构建静态文件的路径
+    // 路径结构: ./data/spec_ranking_<职业>_<BOSS>.json
+    // 例如: ./data/spec_ranking_pictomancer-pictomancer_vamp-fatale.json
+    
+    // 添加时间戳参数 (?t=...) 以防止浏览器缓存旧数据
+    const timestamp = new Date().getTime();
+    const fileName = `spec_ranking_${specSlug}_${bossSlug}.json`;
+    const url = `./data/${fileName}?t=${timestamp}`;
 
-async function loadFightData(reportId, fightId) {
-    // URL structure: http://127.0.0.1:5000/api/fight_analysis/<ReportID>/<FightID>
-    // Hardcoded spec parameter for now as requested
-    const url = `http://127.0.0.1:5000/api/fight_analysis/${reportId}/${fightId}?spec=redmage-redmage`;
-
-    console.log(`[FFLorrgs] Fetching data from: ${url}`);
+    console.log(`[M-Spec] Fetching static data from: ${url}`);
 
     try {
         const response = await fetch(url);
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            // 如果文件不存在 (404)，通常意味着 updater.py 还没有抓取该职业的数据
+            throw new Error(`HTTP error! status: ${response.status} (File not found)`);
         }
 
         const data = await response.json();
-
-        console.log("[FFLorrgs] Data received:", data);
-
-        // Call the render function if it exists
-        if (typeof renderCanvas === 'function') {
-            renderCanvas(data);
-        } else {
-            console.error("renderCanvas function is not defined!");
-        }
+        console.log("[M-Spec] Data received:", data);
+        return data;
 
     } catch (error) {
-        console.error("[FFLorrgs] Failed to fetch fight data:", error);
+        console.error("[M-Spec] Failed to fetch ranking data:", error);
+        console.warn("提示: 请确认 updater.py 是否已成功运行并生成了对应的 .json 文件");
+        return null;
     }
 }

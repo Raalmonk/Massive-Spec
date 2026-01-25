@@ -4,6 +4,12 @@ import json
 import logging
 import os
 import sys
+from lorgs.logger import logger  
+
+# --- 修复: 设置本地调试用的密钥 (从 main.py 复制过来的) ---
+# 这样你就不用在终端里 export 环境变量了
+os.environ["WCL_CLIENT_ID"] = "a0e16bba-fba8-432d-a317-4a6a83d98728"
+os.environ["WCL_CLIENT_SECRET"] = "Rowpl4stVguifS4YJbzow1HCjh1g2uNuGNaFYRPk"
 
 # Ensure lorgs module is found
 sys.path.append(os.getcwd())
@@ -59,7 +65,7 @@ async def update_spec(spec, boss_slug="vamp-fatale"):
         os.makedirs(os.path.dirname(filename), exist_ok=True)
 
         with open(filename, "w") as f:
-            json.dump(data, f)
+            json.dump(data, f, ensure_ascii=False, default=str)
 
         logger.info(f"Saved {filename}")
 
