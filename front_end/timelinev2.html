@@ -188,7 +188,7 @@
             console.log('[M-Spec] Starting fetch for:', specSlug, bossSlug);
 
             try {
-                const res = await fetch(`${API_BASE}/api/spec_ranking/${specSlug}/${bossSlug}`);
+                const res = await fetch(`./data/spec_ranking_${specSlug}_${bossSlug}.json?t=${Date.now()}`);
                 const data = await res.json();
                 
                 const allPlayers = [];
