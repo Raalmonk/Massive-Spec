@@ -218,7 +218,7 @@
                 // But we added partners to `fight.players`.
                 // We should filter to only show the "main" spec we are looking at.
                 // The `specSlug` argument tells us which spec we are ranking.
-                const rankedPlayers = allPlayers.filter(p => p.spec_slug === specSlug && p.total > 0).slice(0, 20);
+                const rankedPlayers = allPlayers.filter(p => p.spec_slug === specSlug && p.total > 0).slice(0, 70);
 
                 const userRole = getRole(specSlug);
 
