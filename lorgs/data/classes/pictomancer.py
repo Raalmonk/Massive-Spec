@@ -37,7 +37,7 @@ PICTOMANCER_MAIN.add_spell(spell_id=34683, cooldown=1, name="Subtractive Palette
 PICTOMANCER_MAIN.add_spell(spell_id=34674, cooldown=60, name="Striking Muse", icon="Striking_Muse.png",show=True,  tags=[SpellTag.DAMAGE])
 PICTOMANCER_MAIN.add_spell(spell_id=34677, cooldown=30, name="Retribution of the Madeen", icon="Retribution_of_the_Madeen.png", show=False, tags=[SpellTag.DAMAGE])
 PICTOMANCER_MAIN.add_spell(spell_id=34676, cooldown=30, name="Mog of the Ages", icon="Mog_of_the_Ages.png", show=False, tags=[SpellTag.DAMAGE])
-PICTOMANCER_MAIN.add_spell(spell_id=150, cooldown=40, duration=10, name="Swiftcast", icon="Swiftcast.png", show=False, tags=[SpellTag.DAMAGE])
+PICTOMANCER_MAIN.add_spell(spell_id=7561, cooldown=40, name="Swiftcast", icon="Swiftcast.png", show=False, tags=[SpellTag.DAMAGE])
 PICTOMANCER_MAIN.add_spell(spell_id=34662, cooldown=2.5, name="Holy in White", icon="Holy_in_White.png", show=False, tags=[SpellTag.DAMAGE])
 PICTOMANCER_MAIN.add_spell(spell_id=34663, cooldown=3.3, name="Comet in Black", icon="Comet_in_Black.png", show=False, tags=[SpellTag.DAMAGE])
 

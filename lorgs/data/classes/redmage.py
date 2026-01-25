@@ -38,7 +38,7 @@ RED_MAGE_MAIN.add_spell(spell_id=7519, cooldown=35, name="Contre Sixte", icon="C
 
 RED_MAGE_MAIN.add_spell(spell_id=7518, cooldown=55,  name="Acceleration", icon="Acceleration.png",show=False, tags=[SpellTag.DAMAGE])
 
-RED_MAGE_MAIN.add_spell(spell_id=150, cooldown=40,  name="Swiftcast", icon="Swiftcast.png",show=False, tags=[SpellTag.DAMAGE])
+RED_MAGE_MAIN.add_spell(spell_id=7561, cooldown=40,  name="Swiftcast", icon="Swiftcast.png",show=False, tags=[SpellTag.DAMAGE])
 RED_MAGE_MAIN.add_spell(spell_id=16528, cooldown=2.5, name="Enchanted Reprise", icon="Enchanted_Reprise.png", show=False,tags=[SpellTag.DAMAGE])
 
 # Self Mitigation

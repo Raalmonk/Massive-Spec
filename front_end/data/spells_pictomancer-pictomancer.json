@@ -74,7 +74,7 @@
     "name": "Swiftcast",
     "icon": "Swiftcast.png",
     "cooldown": 40.0,
-    "duration": 0.00,
+    "duration": 0.0,
     "color": "#E060E0",
     "load_order": 5,
     "show": false,

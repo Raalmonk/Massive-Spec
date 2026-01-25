@@ -598,7 +598,10 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
             const [loading, setLoading] = useState(true);
 
             const [showDuration, setShowDuration] = useState(true);
-            const [showCooldown, setShowCooldown] = useState(true);
+            
+            // CHANGE 1: Set default to false
+            const [showCooldown, setShowCooldown] = useState(false);
+            
             const [showDeaths, setShowDeaths] = useState(true);
             const [showPhases, setShowPhases] = useState(true);
             const [showBossRow, setShowBossRow] = useState(true);
@@ -771,7 +774,10 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                         <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Display</span>
                         <div className="flex items-center gap-1">
                             <button title="Duration" onClick={() => setShowDuration(!showDuration)} className={`w-8 h-6 flex items-center justify-center text-sm rounded border transition-colors ${showDuration ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>⏳</button>
-                            <button title="Cooldown" onClick={() => setShowCooldown(!showCooldown)} className={`w-8 h-6 flex items-center justify-center text-sm rounded border transition-colors ${showCooldown ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>💿</button>
+                            
+                            {/* CHANGE 2: Changed emoji to 🕙 */}
+                            <button title="Cooldown" onClick={() => setShowCooldown(!showCooldown)} className={`w-8 h-6 flex items-center justify-center text-sm rounded border transition-colors ${showCooldown ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>🕙</button>
+                        
                         </div>
                     </div>
                     <div className="flex flex-col gap-1 border-r border-gray-700 pr-4 shrink-0">
