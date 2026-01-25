@@ -232,6 +232,7 @@ class Fight(warcraftlogs_base.BaseModel):
             total_data = total_damage
             for data in total_data:
                 if data.id == composition_data.id:
+                    print(f"DEBUG DATA for {composition_data.name}: {data}")
                     total = data.total / (self.duration / 1000)
                     break
             else:

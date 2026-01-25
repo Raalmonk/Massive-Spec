@@ -354,9 +354,22 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         if clear_old:
             self.reports = []
 
-        # 1. 加载排行榜 (此时可能丢失了队友信息)
+        # 1. 加载排行榜 (此时拥有官方准确的 rDPS)
         await self.load_rankings()
         self.reports = self.sort_reports(self.reports)
+
+        # ============================================================
+        # [NEW] 快照：保存官方排行榜中的准确数值
+        # 因为后续的 Summary Fallback 会用计算值覆盖这些数据
+        # Map: (fight_id, player_name) -> official_dps
+        # ============================================================
+        official_dps_map = {}
+        for report in self.reports:
+            for fight in report.fights:
+                # 此时每场战斗通常只有1个玩家(主角)，就是排行榜上那个人
+                for p in fight.players:
+                    official_dps_map[(fight.fight_id, p.name)] = p.total
+        # ============================================================
 
         # 2. 应用数量限制
         limit = limit or -1
@@ -368,8 +381,29 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         
         if fights_missing_comp:
             logger.info(f"[Fallback] Fetching Composition for {len(fights_missing_comp)} fights (via Summary API)...")
-            # 批量加载 Summary，这会填充 fight.players
+            # 批量加载 Summary，这会填充 fight.players，但会将 dps 重置为手动计算值
             await self.load_many(fights_missing_comp, raise_errors=False)
+
+            # ============================================================
+            # [NEW] 还原：将官方准确值覆盖回手动计算值
+            # ============================================================
+            restore_count = 0
+            for fight in fights_missing_comp:
+                for player in fight.players:
+                    # 查找这个玩家是否是排行榜上的主角
+                    key = (fight.fight_id, player.name)
+                    if key in official_dps_map:
+                        old_val = player.total
+                        new_val = official_dps_map[key]
+                        player.total = new_val # <--- 强行覆盖回官方值
+                        restore_count += 1
+                        
+                        # (可选) 打印第一条还原日志验证一下
+                        if restore_count == 1:
+                            logger.info(f"[DPS Fix] Restored {player.name}: {old_val} -> {new_val}")
+            
+            logger.info(f"[DPS Fix] Restored accurate Ranking Data for {restore_count} players.")
+            # ============================================================
 
         # 4. 加载技能数据
         await self.load_actors()

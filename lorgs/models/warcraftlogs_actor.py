@@ -112,6 +112,9 @@ class BaseActor(warcraftlogs_base.BaseModel):
         # 打印调试信息
         print(f"\n[DEBUG] Querying Actor: {getattr(self, 'name', 'Unknown')}")
         print(f"[DEBUG] Time: {self.fight.start_time_rel} - {self.fight.end_time_rel}")
+
+        dps_val = getattr(self, "total", "N/A")
+        print(f"[DEBUG] Actor DPS (Total): {dps_val}")
         
         # --- 🟢 新增：打印阵容 Composition ---
         # 这样我们就能确认在查询具体技能时，Fight 对象里的阵容是不是空的
