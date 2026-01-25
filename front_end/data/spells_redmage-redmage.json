@@ -1,0 +1,106 @@
+[
+  {
+    "spell_id": 7520,
+    "name": "Embolden",
+    "icon": "Embolden.png",
+    "cooldown": 120.0,
+    "duration": 20.0,
+    "color": "#E87B7B"
+  },
+  {
+    "spell_id": 7521,
+    "name": "Manafication",
+    "icon": "Manafication.png",
+    "cooldown": 110.0,
+    "duration": 15.0,
+    "color": "#E87B7B"
+  },
+  {
+    "spell_id": 7527,
+    "name": "Enchanted Riposte",
+    "icon": "Enchanted_Riposte.png",
+    "cooldown": 1.5,
+    "duration": 0.0,
+    "color": "#E87B7B"
+  },
+  {
+    "spell_id": 7517,
+    "name": "Fleche",
+    "icon": "Fleche.png",
+    "cooldown": 25.0,
+    "duration": 0.0,
+    "color": "#E87B7B"
+  },
+  {
+    "spell_id": 7519,
+    "name": "Contre Sixte",
+    "icon": "Contre_Sixte.png",
+    "cooldown": 35.0,
+    "duration": 0.0,
+    "color": "#E87B7B"
+  },
+  {
+    "spell_id": 7518,
+    "name": "Acceleration",
+    "icon": "Acceleration.png",
+    "cooldown": 55.0,
+    "duration": 0.0,
+    "color": "#E87B7B"
+  },
+  {
+    "spell_id": 150,
+    "name": "Swiftcast",
+    "icon": "Swiftcast.png",
+    "cooldown": 40.0,
+    "duration": 0.0,
+    "color": "#E87B7B"
+  },
+  {
+    "spell_id": 16528,
+    "name": "Enchanted Reprise",
+    "icon": "Enchanted_Reprise.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B"
+  },
+  {
+    "spell_id": 7514,
+    "name": "Vercure",
+    "icon": "Vercure.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B"
+  },
+  {
+    "spell_id": 7560,
+    "name": "Addle",
+    "icon": "Addle.png",
+    "cooldown": 90.0,
+    "duration": 15.0,
+    "color": "#E87B7B"
+  },
+  {
+    "spell_id": 25857,
+    "name": "Magick Barrier",
+    "icon": "Magick_Barrier.png",
+    "cooldown": 120.0,
+    "duration": 10.0,
+    "color": "#E87B7B"
+  },
+  {
+    "spell_id": 34603669,
+    "name": "Grade 4 Gemdraught of Intelligence [HQ]",
+    "icon": "Grade_4_gemdraught_of_intelligence_icon1.png",
+    "cooldown": 270,
+    "duration": 30.0,
+    "color": "#b576e8"
+  },
+  {
+    "spell_id": 3,
+    "name": "Sprint",
+    "icon": "Sprint_icon1.png",
+    "cooldown": 60.0,
+    "duration": 10.0,
+    "color": "#666666"
+  }
+]

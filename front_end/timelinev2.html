@@ -64,7 +64,7 @@
         const THEME_COLOR = '#00FF96';
         const JOB_COLOR_RDM = '#E87B7B';
         const FIGHT_DURATION = 1200; // Increased to 10 minutes (600s) to fix the "7 minute" overflow issue
-        const API_BASE = 'http://127.0.0.1:5000';
+        const API_BASE = '';
         const LEFT_PANEL_WIDTH = 260; 
 
         // Palette for Duration Bars (Sequential assignment)
@@ -84,39 +84,39 @@
         });
 
         // 1. fetchSpellData (API)
-        // --- 替换开始 ---
 const fetchSpellData = async (specSlug = 'redmage-redmage') => {
     try {
-        // 尝试请求后端
-        const res = await fetch(`${API_BASE}/api/specs/${specSlug}/spells`);
-        if (!res.ok) throw new Error("API不可用");
+        // 【关键修改】不再请求 API，而是请求本地 JSON 文件
+        const url = `./data/spells_${specSlug}.json?t=${Date.now()}`;
+        console.log(`[M-Spec] 加载技能配置: ${url}`);
+        
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Local spell file not found");
         const data = await res.json();
         
-        // ... (保留你原有的解析逻辑) ...
-        // 如果你原有逻辑很长，可以直接把原来的逻辑包在 try 块里
-        
-        // 这里简写演示，请尽量保留你原本的数据处理逻辑
         const spellMap = {};
-        data.forEach((spell, index) => {
+        const list = Array.isArray(data) ? data : Object.values(data);
+
+        list.forEach((spell, index) => {
             spellMap[spell.spell_id] = {
                 id: spell.spell_id,
                 name: spell.name,
-                image: spell.icon, // 注意路径问题
+                // 【关键修改】图片路径改为本地相对路径
+                image: `./images/spells/${spell.icon}`,
                 cd: spell.cooldown || 0,
                 duration: spell.duration || 0,
                 color: spell.color || '#ffcc00',
-                category: 'MAJOR', // 简化的分类
-                show: spell.show
+                category: 'MAJOR',
+                show: true
             };
         });
         return spellMap;
 
     } catch (e) {
-        console.warn(`[警告] 无法获取 ${specSlug} 的技能数据 (后端未启动?)。将显示无图标模式。`);
-        return {}; // 关键！返回空对象而不是让程序崩溃
+        console.warn(`[离线模式] 未找到 ${specSlug} 的技能定义文件，将显示默认方块。`, e);
+        return {};
     }
 };
-// --- 替换结束 ---
         // Mock Data for Specs - Moved to Global Scope
         const SPECS = [
             { label: 'Tanks', items: [
@@ -447,7 +447,7 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                                                         className={`w-9 h-9 flex items-center justify-center rounded border transition-all relative ${isSelected ? 'bg-[#333] border-[#00FF96]' : 'bg-[#252525] border-transparent hover:bg-[#333]'}`}
                                                         title={item.n}
                                                     >
-                                                        <img src={`${API_BASE}/lorrgs_assets/images/classes/${item.icon}`} alt={item.n} className="w-full h-full object-cover rounded-sm" />
+                                                        <img src={`./images/classes/${item.icon}`} alt={item.n} className="w-full h-full object-cover rounded-sm" />
                                                         {isSelected && <div className="absolute inset-0 border-2 border-[#00FF96] rounded pointer-events-none"></div>}
                                                     </button>
                                                 );
@@ -491,7 +491,7 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                         onClick={() => setIsOpen(!isOpen)} 
                         className="flex items-center gap-2 px-3 py-1.5 bg-black/30 border border-gray-700 rounded-md text-sm hover:border-[#00FF96] transition-colors"
                     >
-                        <img src={`${API_BASE}/lorrgs_assets/images/classes/${currentIcon}`} alt={currentName} className="w-5 h-5 object-contain" />
+                        <img src={`./images/classes/${currentIcon}`} alt={currentName} className="w-5 h-5 object-contain" />
                         <span className="font-medium text-white">{currentName}</span>
                         <ChevronDown size={14} className="text-gray-400" />
                     </button>
@@ -509,7 +509,7 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                                                 className={`w-8 h-8 flex items-center justify-center rounded border transition-all overflow-hidden ${selectedSpec === item.id ? 'bg-[#333] border-[#00FF96]' : 'bg-[#252525] border-transparent hover:bg-[#333] hover:border-[#00FF96]'}`}
                                                 title={item.n}
                                             >
-                                                <img src={`${API_BASE}/lorrgs_assets/images/classes/${item.icon}`} alt={item.n} className="w-full h-full object-cover" />
+                                                <img src={`./images/classes/${item.icon}`} alt={item.n} className="w-full h-full object-cover" />
                                             </button>
                                         ))}
                                     </div>
