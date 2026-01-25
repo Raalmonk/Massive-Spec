@@ -2354,7 +2354,7 @@
     "id": 7561,
     "cooldown": 40.0,
     "icon": "Swiftcast.png",
-    "duration": 10.0,
+    "duration": 0.00,
     "show": false,
     "color": "#A579D6",
     "desc": "",
