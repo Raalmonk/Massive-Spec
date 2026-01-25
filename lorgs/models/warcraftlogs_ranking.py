@@ -94,7 +94,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
 
         # 1. 获取名字参数
         # Global 查询：必须使用具体的职业名 (例如 "Scholar")，否则 API 不会返回 combatantInfo
-        real_class_name = self.spec.wow_class.name_slug_cap
+        real_class_name = "Global"
         spec_name = self.spec.name_slug_cap
 
         # CN 查询：由于分区特殊性，必须使用 "Global" 作为 className

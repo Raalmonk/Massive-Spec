@@ -16,7 +16,7 @@ async def load_spec_rankings(
     boss_slug: str,
     spec_slug: str,
     difficulty: str = "mythic",
-    metric: str = "dps",
+    metric: str = "rdps",
     limit=50,
     clear=False,
 ) -> tuple[bool, str]:
@@ -27,7 +27,10 @@ async def load_spec_rankings(
     # Force DPS for Healers
     spec = WowSpec.get(full_name_slug=spec_slug)
     if spec and spec.role.code == "heal":
-        metric = "dps"
+        metric = "rdps"
+    
+    if metric == "dps":
+        metric = "rdps"
 
     # fmt: off
     print(f"loading: {boss_slug} vs {spec_slug} | (difficulty={difficulty} / metric={metric} / limit={limit} / clear={clear})")
