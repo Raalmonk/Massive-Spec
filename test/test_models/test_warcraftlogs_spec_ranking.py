@@ -99,5 +99,5 @@ class TestSpecRanking(unittest.TestCase):
 
         self.spec_ranking.process_query_result(**data)
 
-        # Global limit is 5
-        assert len(self.spec_ranking.reports) == 5
+        # Global limit is 20 (was 5)
+        assert len(self.spec_ranking.reports) == 10

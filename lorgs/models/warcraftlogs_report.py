@@ -7,6 +7,7 @@ import asyncio
 import datetime
 import textwrap
 import typing
+from typing import Optional
 
 # IMPORT LOCAL LIBRARIES
 from lorgs.clients import wcl
