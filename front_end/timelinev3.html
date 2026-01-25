@@ -410,7 +410,8 @@
                 >
                     {/* DPS Layer (Default) */}
                     <span 
-                        className={`absolute inset-0 flex items-center text-xs font-mono font-medium text-[#00FF96] transition-opacity duration-500 ${viewMode === 'dps' ? 'opacity-100' : 'opacity-0'}`}
+                        className={`absolute inset-0 flex items-center font-bold text-[#00FF96] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] transition-opacity duration-500 ${viewMode === 'dps' ? 'opacity-100' : 'opacity-0'}`}
+                        style={{ fontSize: '19px', lineHeight: 1 }}
                     >
                         {Math.round(dps).toLocaleString()}
                     </span>
@@ -795,7 +796,7 @@
                                 <div className="sticky left-0 bg-[#202020] border-r border-gray-800 shrink-0 flex items-center px-4 text-xs font-bold text-gray-500 uppercase z-[60] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
                                     <div className="w-8 text-center mr-2 text-[#00FF96]">Rank</div>
                                     {/* MODIFIED: Header Text */}
-                                    <div className="flex-1 text-left">ADPS</div>
+                                    <div className="flex-1 text-left">RDPS</div>
                                     <div className="w-8 text-center text-gray-600">Reg</div>
                                     <div className="w-8 text-center text-gray-600">Pair</div>
                                 </div>
