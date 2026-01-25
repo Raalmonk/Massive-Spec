@@ -1,0 +1,92 @@
+[
+  {
+    "id": "M12S2_ARCADIAN_AFLAME",
+    "name": "Arcadian Aflame",
+    "time": 10,
+    "duration": 5.0,
+    "color": "",
+    "icon": "Arcadian_Aflame.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M12S2_REPLICATION",
+    "name": "Replication I",
+    "time": 25,
+    "duration": 3.0,
+    "color": "",
+    "icon": "Replication.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M12S2_DOUBLE_SOBAT",
+    "name": "Double Sabat",
+    "time": 64,
+    "duration": 6.0,
+    "color": "",
+    "icon": "Double_Sobat.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M12S2_ESOTERIC_FINISHER_1",
+    "name": "Esoteric Finisher",
+    "time": 77,
+    "duration": 5.0,
+    "color": "",
+    "icon": "Esoteric_Finisher.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M12S2_FIREFALL_SPLASH",
+    "name": "Firefall Splash",
+    "time": 122,
+    "duration": 6.0,
+    "color": "",
+    "icon": "Firefall_Splash.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M12S2_IDYLLIC_DREAM_1",
+    "name": "Idyllic Dream",
+    "time": 265,
+    "duration": 5.0,
+    "color": "",
+    "icon": "Idyllic_Dream.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M12S2_LINDWURMS_METEOR",
+    "name": "Lindwurm's Meteor",
+    "time": 344,
+    "duration": 5.0,
+    "color": "",
+    "icon": "Lindwurms_Meteor.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M12S2_ARCADIAN_ARCANUM",
+    "name": "Arcadian Arcanum",
+    "time": 353,
+    "duration": 4.0,
+    "color": "",
+    "icon": "Arcadian_Arcanum.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M12S2_ESOTERIC_FINISHER_2",
+    "name": "Esoteric Finisher",
+    "time": 488,
+    "duration": 5.0,
+    "color": "",
+    "icon": "Esoteric_Finisher.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M12S2_ARCADIAN_HELL",
+    "name": "Arcadian Hell",
+    "time": 510,
+    "duration": 5.0,
+    "color": "",
+    "icon": "Arcadian_Hell.png",
+    "type": "mechanic"
+  }
+]

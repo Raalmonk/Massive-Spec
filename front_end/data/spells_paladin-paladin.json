@@ -1,0 +1,171 @@
+[
+  {
+    "spell_id": 20,
+    "name": "Fight or Flight",
+    "icon": "Fight_or_Flight.png",
+    "cooldown": 60.0,
+    "duration": 20.0,
+    "color": "#A8D2E6",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 36920,
+    "name": "Guardian",
+    "icon": "Guardian.png",
+    "cooldown": 120.0,
+    "duration": 15.0,
+    "color": "#A8D2E6",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 7531,
+    "name": "Rampart",
+    "icon": "Rampart.png",
+    "cooldown": 90.0,
+    "duration": 20.0,
+    "color": "#A8D2E6",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 22,
+    "name": "Bulwark",
+    "icon": "Bulwark.png",
+    "cooldown": 90.0,
+    "duration": 10.0,
+    "color": "#A8D2E6",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 25746,
+    "name": "Holy Sheltron",
+    "icon": "Holy_Sheltron.png",
+    "cooldown": 5.0,
+    "duration": 4.0,
+    "color": "#A8D2E6",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 7382,
+    "name": "Intervention",
+    "icon": "Intervention.png",
+    "cooldown": 10.0,
+    "duration": 4.0,
+    "color": "#A8D2E6",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 30,
+    "name": "Hallowed Ground",
+    "icon": "Hallowed_Ground.png",
+    "cooldown": 420.0,
+    "duration": 10.0,
+    "color": "#A8D2E6",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 27,
+    "name": "Cover",
+    "icon": "Cover.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 7535,
+    "name": "Reprisal",
+    "icon": "Reprisal.png",
+    "cooldown": 60.0,
+    "duration": 15.0,
+    "color": "#A8D2E6",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 3540,
+    "name": "Divine Veil",
+    "icon": "Divine_Veil.png",
+    "cooldown": 90.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 7385,
+    "name": "Passage of Arms",
+    "icon": "Passage_of_Arms.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 34603666,
+    "name": "Grade 4 Gemdraught of Strength",
+    "icon": "Grade_4_gemdraught_of_strength_icon1.png",
+    "cooldown": 270,
+    "duration": 30.0,
+    "color": "#b576e8",
+    "show": false,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
+  },
+  {
+    "spell_id": 3,
+    "name": "Sprint",
+    "icon": "Sprint_icon1.png",
+    "cooldown": 60.0,
+    "duration": 10.0,
+    "color": "#666666",
+    "show": null,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
+  }
+]

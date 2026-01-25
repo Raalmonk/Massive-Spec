@@ -1,0 +1,110 @@
+[
+  {
+    "id": "M10S_HOT_IMPACT",
+    "name": "Hot Impact",
+    "time": 9,
+    "duration": 5.0,
+    "color": "",
+    "icon": "Hot_Impact.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M10S_PYROTATION",
+    "name": "Pyrotation",
+    "time": 64,
+    "duration": 5.0,
+    "color": "",
+    "icon": "Pyrotation.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M10S_DIVERS_DARE_1",
+    "name": "Divers' Dare",
+    "time": 78,
+    "duration": 5.0,
+    "color": "",
+    "icon": "Divers_Dare.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M10S_DEEP_IMPACT",
+    "name": "Deep Impact",
+    "time": 132,
+    "duration": 5.0,
+    "color": "",
+    "icon": "Deep_Impact.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M10S_XTREME_SPECTACULAR",
+    "name": "Xtreme Spectacular",
+    "time": 157,
+    "duration": 17.0,
+    "color": "",
+    "icon": "Xtreme_Spectacular.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M10S_EPIC_BROTHERHOOD",
+    "name": "Epic Brotherhood",
+    "time": 179,
+    "duration": 5.0,
+    "color": "",
+    "icon": "Epic_Brotherhood.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M10S_INSANE_AIR",
+    "name": "Insane Air",
+    "time": 189,
+    "duration": 31.0,
+    "color": "",
+    "icon": "Insane_Air.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M10S_DEEP_VARIAL",
+    "name": "Deep Varial",
+    "time": 270,
+    "duration": 7.0,
+    "color": "",
+    "icon": "Deep_Varial.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M10S_HOT_AERIAL",
+    "name": "Hot Aerial",
+    "time": 284,
+    "duration": 7.0,
+    "color": "",
+    "icon": "Hot_Aerial.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M10S_WATERY_GRAVE",
+    "name": "Watery Grave",
+    "time": 338,
+    "duration": 5.0,
+    "color": "",
+    "icon": "Watery_Grave.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M10S_SICKEST_TAKE_OFF",
+    "name": "Sickest Take-off",
+    "time": 434,
+    "duration": 4.0,
+    "color": "",
+    "icon": "Sickest_Take-off.png",
+    "type": "mechanic"
+  },
+  {
+    "id": "M10S_DIVERS_DARE_2",
+    "name": "Divers' Dare",
+    "time": 524,
+    "duration": 5.0,
+    "color": "",
+    "icon": "Divers_Dare.png",
+    "type": "mechanic"
+  }
+]

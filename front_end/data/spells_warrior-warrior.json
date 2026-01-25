@@ -1,0 +1,145 @@
+[
+  {
+    "spell_id": 7389,
+    "name": "Inner Release",
+    "icon": "Inner_Release.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 36923,
+    "name": "Damnation",
+    "icon": "Damnation.png",
+    "cooldown": 120.0,
+    "duration": 15.0,
+    "color": "#CF2621",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 7531,
+    "name": "Rampart",
+    "icon": "Rampart.png",
+    "cooldown": 90.0,
+    "duration": 20.0,
+    "color": "#CF2621",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 40,
+    "name": "Thrill of Battle",
+    "icon": "Thrill_of_Battle.png",
+    "cooldown": 90.0,
+    "duration": 10.0,
+    "color": "#CF2621",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 25751,
+    "name": "Bloodwhetting",
+    "icon": "Bloodwhetting.png",
+    "cooldown": 25.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 16464,
+    "name": "Nascent Flash",
+    "icon": "Nascent_Flash.png",
+    "cooldown": 25.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 43,
+    "name": "Holmgang",
+    "icon": "Holmgang.png",
+    "cooldown": 240.0,
+    "duration": 10.0,
+    "color": "#CF2621",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 7535,
+    "name": "Reprisal",
+    "icon": "Reprisal.png",
+    "cooldown": 60.0,
+    "duration": 15.0,
+    "color": "#CF2621",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 7388,
+    "name": "Shake It Off",
+    "icon": "Shake_It_Off.png",
+    "cooldown": 90.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 34603666,
+    "name": "Grade 4 Gemdraught of Strength",
+    "icon": "Grade_4_gemdraught_of_strength_icon1.png",
+    "cooldown": 270,
+    "duration": 30.0,
+    "color": "#b576e8",
+    "show": false,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
+  },
+  {
+    "spell_id": 3,
+    "name": "Sprint",
+    "icon": "Sprint_icon1.png",
+    "cooldown": 60.0,
+    "duration": 10.0,
+    "color": "#666666",
+    "show": null,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
+  }
+]

@@ -5,7 +5,12 @@
     "icon": "Ikishoten.png",
     "cooldown": 120.0,
     "duration": 0.0,
-    "color": "#E46D04"
+    "color": "#E46D04",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
   },
   {
     "spell_id": 7489,
@@ -13,7 +18,12 @@
     "icon": "Higanbana.png",
     "cooldown": 2.5,
     "duration": 60.0,
-    "color": "#E46D04"
+    "color": "#E46D04",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
   },
   {
     "spell_id": 7499,
@@ -21,7 +31,12 @@
     "icon": "Meikyo_Shisui.png",
     "cooldown": 55.0,
     "duration": 0.0,
-    "color": "#E46D04"
+    "color": "#E46D04",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
   },
   {
     "spell_id": 7546,
@@ -29,7 +44,12 @@
     "icon": "True_North.png",
     "cooldown": 45.0,
     "duration": 10.0,
-    "color": "#E46D04"
+    "color": "#E46D04",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
   },
   {
     "spell_id": 7541,
@@ -37,7 +57,12 @@
     "icon": "Second_Wind.png",
     "cooldown": 120.0,
     "duration": 0.0,
-    "color": "#E46D04"
+    "color": "#E46D04",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
   },
   {
     "spell_id": 7542,
@@ -45,7 +70,12 @@
     "icon": "Bloodbath.png",
     "cooldown": 90.0,
     "duration": 20.0,
-    "color": "#E46D04"
+    "color": "#E46D04",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
   },
   {
     "spell_id": 36962,
@@ -53,7 +83,12 @@
     "icon": "Tengentsu.png",
     "cooldown": 15.0,
     "duration": 4.0,
-    "color": "#E46D04"
+    "color": "#E46D04",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
   },
   {
     "spell_id": 7549,
@@ -61,7 +96,12 @@
     "icon": "Feint.png",
     "cooldown": 90.0,
     "duration": 15.0,
-    "color": "#E46D04"
+    "color": "#E46D04",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
   },
   {
     "spell_id": 34603666,
@@ -69,7 +109,12 @@
     "icon": "Grade_4_gemdraught_of_strength_icon1.png",
     "cooldown": 270,
     "duration": 30.0,
-    "color": "#b576e8"
+    "color": "#b576e8",
+    "show": false,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
   },
   {
     "spell_id": 3,
@@ -77,6 +122,11 @@
     "icon": "Sprint_icon1.png",
     "cooldown": 60.0,
     "duration": 10.0,
-    "color": "#666666"
+    "color": "#666666",
+    "show": null,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
   }
 ]

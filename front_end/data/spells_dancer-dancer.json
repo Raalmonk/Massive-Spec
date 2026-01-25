@@ -1,0 +1,145 @@
+[
+  {
+    "spell_id": 15998,
+    "name": "Technical Step",
+    "icon": "Technical_Step.png",
+    "cooldown": 120.0,
+    "duration": 20.0,
+    "color": "#E2B0AF",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 16011,
+    "name": "Devilment",
+    "icon": "Devilment.png",
+    "cooldown": 120.0,
+    "duration": 20.0,
+    "color": "#E2B0AF",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 16013,
+    "name": "Flourish",
+    "icon": "Flourish.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#E2B0AF",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 15997,
+    "name": "Standard Step",
+    "icon": "Standard_Step.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#E2B0AF",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 16005,
+    "name": "Saber Dance",
+    "icon": "Saber_Dance.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E2B0AF",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 7541,
+    "name": "Second Wind",
+    "icon": "Second_Wind.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#E2B0AF",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 16012,
+    "name": "Shield Samba",
+    "icon": "Shield_Samba.png",
+    "cooldown": 90.0,
+    "duration": 15.0,
+    "color": "#E2B0AF",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 16015,
+    "name": "Curing Waltz",
+    "icon": "Curing_Waltz.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#E2B0AF",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 16014,
+    "name": "Improvisation",
+    "icon": "Improvisation.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#E2B0AF",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 34603667,
+    "name": "Grade 4 Gemdraught of Dexterity",
+    "icon": "Grade_4_gemdraught_of_dexterity_icon1.png",
+    "cooldown": 270,
+    "duration": 30.0,
+    "color": "#b576e8",
+    "show": false,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
+  },
+  {
+    "spell_id": 3,
+    "name": "Sprint",
+    "icon": "Sprint_icon1.png",
+    "cooldown": 60.0,
+    "duration": 10.0,
+    "color": "#666666",
+    "show": null,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
+  }
+]

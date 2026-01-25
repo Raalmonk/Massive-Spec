@@ -4,116 +4,122 @@ import json
 import logging
 import os
 import sys
-from lorgs.logger import logger  
+import time
 
-# --- 修复: 设置本地调试用的密钥 (从 main.py 复制过来的) ---
-# 这样你就不用在终端里 export 环境变量了
-os.environ["WCL_CLIENT_ID"] = "a0e16bba-fba8-432d-a317-4a6a83d98728"
-os.environ["WCL_CLIENT_SECRET"] = "Rowpl4stVguifS4YJbzow1HCjh1g2uNuGNaFYRPk"
-
-# Ensure lorgs module is found
-sys.path.append(os.getcwd())
-
-# Setup Environment Variables (copied from main.py for independent execution)
+# --- 1. 环境配置 ---
 os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
-# Credentials for S3/DynamoDB (if needed by underlying libs, usually 'testing' for local/dev)
 os.environ.setdefault("AWS_ACCESS_KEY_ID", "testing")
 os.environ.setdefault("AWS_SECRET_ACCESS_KEY", "testing")
 
-# WCL Credentials
-# Ensure these are set in your environment or .env file
-if not os.environ.get("WCL_CLIENT_ID") or not os.environ.get("WCL_CLIENT_SECRET"):
-    logger.warning("WCL Credentials not found in environment variables. Script may fail if credentials are required.")
+# WCL 密钥
+os.environ["WCL_CLIENT_ID"] = "a0e16bba-fba8-432d-a317-4a6a83d98728"
+os.environ["WCL_CLIENT_SECRET"] = "Rowpl4stVguifS4YJbzow1HCjh1g2uNuGNaFYRPk"
 
+# 确保能找到 lorgs 包
+sys.path.append(os.getcwd())
 
-# Setup Logging
+import aiohttp 
+
+# --- 导入业务模块 ---
+from lorgs.logger import logger  
+from lorgs.clients.wcl.client import WarcraftlogsClient
+
+# 日志设置
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# Import Lorgs logic
+# 导入核心数据
 try:
     from lorgs.data.classes import ALL_SPECS
     from lorgs.models.warcraftlogs_ranking import SpecRanking
+    # 注意：不再需要导入 ARCADION_HEAVYWEIGHT 或 SpellTag，因为不需要生成静态文件了
 except ImportError as e:
     logger.error(f"Failed to import lorgs modules: {e}")
     sys.exit(1)
 
-async def update_spec(spec, boss_slug="vamp-fatale"):
-    """Fetch and save data for a single spec."""
+
+# --- 核心逻辑 ---
+
+async def _do_update_spec(spec, boss_slug):
+    """(内部函数) 只负责获取并保存排名数据"""
     spec_slug = spec.full_name_slug
-    logger.info(f"Updating {spec_slug}...")
+    
+    # 1. 获取排名数据 (网络请求)
+    ranking = SpecRanking.get_or_create(
+        boss_slug=boss_slug,
+        spec_slug=spec_slug,
+        difficulty="mythic",
+        metric=spec.role.metric,
+    )
+    
+    # limit=80 用于确保有足够的样本
+    await ranking.load(limit=80, clear_old=True)
+    
+    # 2. 序列化数据
+    data = ranking.model_dump(exclude_unset=True, by_alias=True)
 
-    try:
-        ranking = SpecRanking.get_or_create(
-            boss_slug=boss_slug,
-            spec_slug=spec_slug,
-            difficulty="mythic",
-            metric=spec.role.metric,
-        )
+    # 3. 保存排名文件
+    filename = f"front_end/data/spec_ranking_{spec_slug}_{boss_slug}.json"
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    
+    with open(filename, "w") as f:
+        json.dump(data, f, ensure_ascii=False, default=str)
+        
+    # logger.info(f"Saved ranking: {filename}") # 可选：减少日志刷屏
 
-        # Load data from WCL
-        # using limit=80 to match lorrgs_api/routes/api_spec_rankings.py
-        await ranking.load(limit=80, clear_old=True)
-
-        # Serialize
-        data = ranking.model_dump(exclude_unset=True, by_alias=True)
-
-        # Save to file
-        filename = f"front_end/data/spec_ranking_{spec_slug}_{boss_slug}.json"
-
-        # Ensure directory exists
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
-
-        with open(filename, "w") as f:
-            json.dump(data, f, ensure_ascii=False, default=str)
-
-        logger.info(f"Saved {filename}")
-
-        # Save Spells
-        spells_data = []
-        for spell in spec.all_spells:
-            spells_data.append({
-                "spell_id": spell.spell_id,
-                "name": spell.name,
-                "icon": spell.icon,
-                "cooldown": spell.cooldown,
-                "duration": spell.duration,
-                "color": spell.color,
-            })
-
-        spells_filename = f"front_end/data/spells_{spec_slug}.json"
-        with open(spells_filename, "w") as f:
-            json.dump(spells_data, f, indent=2)
-        logger.info(f"Saved {spells_filename}")
-
-    except Exception as e:
-        logger.error(f"Error updating {spec_slug}: {e}")
+async def update_spec_with_retry(spec, boss_slug):
+    """带重试机制的更新函数"""
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            await _do_update_spec(spec, boss_slug)
+            return # 成功则退出
+        except aiohttp.ClientResponseError as e:
+            if e.status == 429:
+                wait_time = 15 * (attempt + 1) # 429 稍微等久一点
+                logger.warning(f"Rate Limit (429) for {spec.full_name_slug}. Waiting {wait_time}s... (Attempt {attempt+1}/{max_retries})")
+                await asyncio.sleep(wait_time)
+            else:
+                logger.error(f"HTTP Error {e.status} for {spec.full_name_slug}: {e}")
+                return 
+        except Exception as e:
+            logger.error(f"Error updating {spec.full_name_slug}: {e}")
+            return 
 
 async def main():
-    # 1. Sort Specs
-    sorted_specs = sorted(list(ALL_SPECS), key=lambda s: s.full_name_slug)
+    WarcraftlogsClient._instance = None # 重置 Session
 
-    # 2. Determine Rotation
-    # Cycle is 5 hours.
-    # 0-3: 4 specs
-    # 4: 5 specs
+    try:
+        # Boss 轮换列表 (每小时换一个)
+        BOSS_ROTATION = [
+            "vamp-fatale", "red-hot-and-deep-blue", "the-tyrant", "lindwurm", "lindwurm-ii"
+        ]
 
-    current_hour = datetime.datetime.now(datetime.timezone.utc).hour
-    cycle_hour = current_hour % 5
+        current_hour = datetime.datetime.now(datetime.timezone.utc).hour
+        cycle_index = current_hour % len(BOSS_ROTATION)
+        target_boss = BOSS_ROTATION[cycle_index]
 
-    start_idx = cycle_hour * 4
-    if cycle_hour < 4:
-        end_idx = start_idx + 4
-    else:
-        end_idx = start_idx + 5
+        # 获取所有职业
+        all_specs = sorted(list(ALL_SPECS), key=lambda s: s.full_name_slug)
+        logger.info(f"=== Work Cycle: Hour {current_hour} | Boss: {target_boss} | Specs: {len(all_specs)} ===")
 
-    specs_to_update = sorted_specs[start_idx:end_idx]
+        # 执行爬取
+        for i, spec in enumerate(all_specs):
+            logger.info(f"[{i+1}/{len(all_specs)}] Updating {spec.full_name_slug}...")
+            
+            await update_spec_with_retry(spec, boss_slug=target_boss)
+            
+            # 礼貌性延迟，防止 429
+            await asyncio.sleep(3)
+        
+        # 注意：这里不再调用 generate_boss_files()
 
-    logger.info(f"Hour: {current_hour} (Cycle: {cycle_hour}). Updating {len(specs_to_update)} specs: {[s.full_name_slug for s in specs_to_update]}")
-
-    # 3. Update Specs
-    for spec in specs_to_update:
-        await update_spec(spec)
+    finally:
+        logger.info("Closing HTTP Session...")
+        if WarcraftlogsClient._instance and WarcraftlogsClient._instance.session:
+            await WarcraftlogsClient._instance.session.close()
+            await asyncio.sleep(0.25)
+        logger.info("Done.")
 
 if __name__ == "__main__":
     asyncio.run(main())

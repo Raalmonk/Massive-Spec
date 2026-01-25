@@ -1,0 +1,262 @@
+[
+  {
+    "spell_id": 166,
+    "name": "Aetherflow",
+    "icon": "Aetherflow.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 7436,
+    "name": "Chain Stratagem",
+    "icon": "Chain_Stratagem.png",
+    "cooldown": 120.0,
+    "duration": 20.0,
+    "color": "#8657FF",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 3587,
+    "name": "Dissipation",
+    "icon": "Dissipation.png",
+    "cooldown": 180.0,
+    "duration": 30.0,
+    "color": "#8657FF",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 16542,
+    "name": "Recitation",
+    "icon": "Recitation.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 189,
+    "name": "Lustrate",
+    "icon": "Lustrate.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 7434,
+    "name": "Excogitation",
+    "icon": "Excogitation.png",
+    "cooldown": 45.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 7437,
+    "name": "Aetherpact",
+    "icon": "Aetherpact.png",
+    "cooldown": 3.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 25868,
+    "name": "Expedient",
+    "icon": "Expedient.png",
+    "cooldown": 120.0,
+    "duration": 20.0,
+    "color": "#8657FF",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 16545,
+    "name": "Summon Seraph",
+    "icon": "Summon_Seraph.png",
+    "cooldown": 120.0,
+    "duration": 22.0,
+    "color": "#8657FF",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 16546,
+    "name": "Consolation",
+    "icon": "Consolation.png",
+    "cooldown": 20.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 3585,
+    "name": "Deployment Tactics",
+    "icon": "Deployment_Tactics.png",
+    "cooldown": 90.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 188,
+    "name": "Sacred Soil",
+    "icon": "Sacred_Soil.png",
+    "cooldown": 30.0,
+    "duration": 17.0,
+    "color": "#8657FF",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 37014,
+    "name": "Seraphism",
+    "icon": "Seraphism.png",
+    "cooldown": 180.0,
+    "duration": 20.0,
+    "color": "#8657FF",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 16538,
+    "name": "Fey Illumination",
+    "icon": "Fey_Illumination.png",
+    "cooldown": 120.0,
+    "duration": 20.0,
+    "color": "#8657FF",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 3583,
+    "name": "Indomitability",
+    "icon": "Indomitability.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 16543,
+    "name": "Fey Blessing",
+    "icon": "Fey_Blessing.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 37013,
+    "name": "Concitation",
+    "icon": "Concitation.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 37016,
+    "name": "Accession",
+    "icon": "Accession.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 34603670,
+    "name": "Grade 4 Gemdraught of Mind",
+    "icon": "Grade_4_gemdraught_of_mind_icon1.png",
+    "cooldown": 270,
+    "duration": 30.0,
+    "color": "#b576e8",
+    "show": false,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
+  },
+  {
+    "spell_id": 3,
+    "name": "Sprint",
+    "icon": "Sprint_icon1.png",
+    "cooldown": 60.0,
+    "duration": 10.0,
+    "color": "#666666",
+    "show": null,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
+  }
+]

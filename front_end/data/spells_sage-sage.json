@@ -5,7 +5,12 @@
     "icon": "Psyche.png",
     "cooldown": 60.0,
     "duration": 0.0,
-    "color": "#80A0F0"
+    "color": "#80A0F0",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
   },
   {
     "spell_id": 24313,
@@ -13,7 +18,12 @@
     "icon": "Phlegma_III.png",
     "cooldown": 40.0,
     "duration": 0.0,
-    "color": "#80A0F0"
+    "color": "#80A0F0",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
   },
   {
     "spell_id": 24300,
@@ -21,7 +31,12 @@
     "icon": "Zoe.png",
     "cooldown": 90.0,
     "duration": 30.0,
-    "color": "#80A0F0"
+    "color": "#80A0F0",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
   },
   {
     "spell_id": 24303,
@@ -29,7 +44,12 @@
     "icon": "Taurochole.png",
     "cooldown": 45.0,
     "duration": 15.0,
-    "color": "#80A0F0"
+    "color": "#80A0F0",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
   },
   {
     "spell_id": 24305,
@@ -37,7 +57,12 @@
     "icon": "Haima.png",
     "cooldown": 120.0,
     "duration": 15.0,
-    "color": "#80A0F0"
+    "color": "#80A0F0",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
   },
   {
     "spell_id": 24296,
@@ -45,7 +70,12 @@
     "icon": "Druochole.png",
     "cooldown": 1.0,
     "duration": 0.0,
-    "color": "#80A0F0"
+    "color": "#80A0F0",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
   },
   {
     "spell_id": 24294,
@@ -53,7 +83,12 @@
     "icon": "Soteria.png",
     "cooldown": 60.0,
     "duration": 15.0,
-    "color": "#80A0F0"
+    "color": "#80A0F0",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
   },
   {
     "spell_id": 24317,
@@ -61,7 +96,12 @@
     "icon": "Krasis.png",
     "cooldown": 60.0,
     "duration": 10.0,
-    "color": "#80A0F0"
+    "color": "#80A0F0",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
   },
   {
     "spell_id": 37035,
@@ -69,7 +109,12 @@
     "icon": "Philosophia.png",
     "cooldown": 180.0,
     "duration": 20.0,
-    "color": "#80A0F0"
+    "color": "#80A0F0",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
   },
   {
     "spell_id": 24310,
@@ -77,7 +122,12 @@
     "icon": "Holos.png",
     "cooldown": 120.0,
     "duration": 20.0,
-    "color": "#80A0F0"
+    "color": "#80A0F0",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
   },
   {
     "spell_id": 24311,
@@ -85,7 +135,12 @@
     "icon": "Panhaima.png",
     "cooldown": 120.0,
     "duration": 15.0,
-    "color": "#80A0F0"
+    "color": "#80A0F0",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
   },
   {
     "spell_id": 24318,
@@ -93,7 +148,12 @@
     "icon": "Pneuma.png",
     "cooldown": 120.0,
     "duration": 0.0,
-    "color": "#80A0F0"
+    "color": "#80A0F0",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
   },
   {
     "spell_id": 24298,
@@ -101,7 +161,12 @@
     "icon": "Kerachole.png",
     "cooldown": 30.0,
     "duration": 15.0,
-    "color": "#80A0F0"
+    "color": "#80A0F0",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
   },
   {
     "spell_id": 24299,
@@ -109,7 +174,12 @@
     "icon": "Ixochole.png",
     "cooldown": 30.0,
     "duration": 0.0,
-    "color": "#80A0F0"
+    "color": "#80A0F0",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
   },
   {
     "spell_id": 24302,
@@ -117,7 +187,12 @@
     "icon": "Physis_II.png",
     "cooldown": 60.0,
     "duration": 15.0,
-    "color": "#80A0F0"
+    "color": "#80A0F0",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
   },
   {
     "spell_id": 37034,
@@ -125,7 +200,12 @@
     "icon": "Eukrasian_Prognosis_II.png",
     "cooldown": 1.5,
     "duration": 0.0,
-    "color": "#80A0F0"
+    "color": "#80A0F0",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
   },
   {
     "spell_id": 34603670,
@@ -133,7 +213,12 @@
     "icon": "Grade_4_gemdraught_of_mind_icon1.png",
     "cooldown": 270,
     "duration": 30.0,
-    "color": "#b576e8"
+    "color": "#b576e8",
+    "show": false,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
   },
   {
     "spell_id": 3,
@@ -141,6 +226,11 @@
     "icon": "Sprint_icon1.png",
     "cooldown": 60.0,
     "duration": 10.0,
-    "color": "#666666"
+    "color": "#666666",
+    "show": null,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
   }
 ]

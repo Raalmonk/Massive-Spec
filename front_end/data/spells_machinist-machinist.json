@@ -1,0 +1,171 @@
+[
+  {
+    "spell_id": 16501,
+    "name": "Automaton Queen",
+    "icon": "Automaton_Queen.png",
+    "cooldown": 6.0,
+    "duration": 12.0,
+    "color": "#6EE1D6",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 2876,
+    "name": "Reassemble",
+    "icon": "Reassemble.png",
+    "cooldown": 55.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 17209,
+    "name": "Hypercharge",
+    "icon": "Hypercharge.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 7414,
+    "name": "Barrel Stabilizer",
+    "icon": "Barrel_Stabilizer.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 2878,
+    "name": "Wildfire",
+    "icon": "Wildfire.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 16498,
+    "name": "Drill",
+    "icon": "Drill.png",
+    "cooldown": 20.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 16500,
+    "name": "Air Anchor",
+    "icon": "Air_Anchor.png",
+    "cooldown": 40.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 25788,
+    "name": "Chain Saw",
+    "icon": "Chain_Saw.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 7541,
+    "name": "Second Wind",
+    "icon": "Second_Wind.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 16889,
+    "name": "Tactician",
+    "icon": "Tactician.png",
+    "cooldown": 90.0,
+    "duration": 15.0,
+    "color": "#6EE1D6",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 2887,
+    "name": "Dismantle",
+    "icon": "Dismantle.png",
+    "cooldown": 120.0,
+    "duration": 10.0,
+    "color": "#6EE1D6",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 34603667,
+    "name": "Grade 4 Gemdraught of Dexterity",
+    "icon": "Grade_4_gemdraught_of_dexterity_icon1.png",
+    "cooldown": 270,
+    "duration": 30.0,
+    "color": "#b576e8",
+    "show": false,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
+  },
+  {
+    "spell_id": 3,
+    "name": "Sprint",
+    "icon": "Sprint_icon1.png",
+    "cooldown": 60.0,
+    "duration": 10.0,
+    "color": "#666666",
+    "show": null,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
+  }
+]

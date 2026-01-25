@@ -1,0 +1,158 @@
+[
+  {
+    "spell_id": 136,
+    "name": "Presence of Mind",
+    "icon": "Presence_of_Mind.png",
+    "cooldown": 120.0,
+    "duration": 15.0,
+    "color": "#FFF0F5",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 16535,
+    "name": "Afflatus Misery",
+    "icon": "Afflatus_Misery.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 3570,
+    "name": "Tetragrammaton",
+    "icon": "Tetragrammaton.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 25861,
+    "name": "Aquaveil",
+    "icon": "Aquaveil.png",
+    "cooldown": 60.0,
+    "duration": 8.0,
+    "color": "#FFF0F5",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 7432,
+    "name": "Divine Benison",
+    "icon": "Divine_Benison.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 25862,
+    "name": "Liturgy of the Bell",
+    "icon": "Liturgy_of_the_Bell.png",
+    "cooldown": 180.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 16536,
+    "name": "Temperance",
+    "icon": "Temperance.png",
+    "cooldown": 120.0,
+    "duration": 20.0,
+    "color": "#FFF0F5",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 7433,
+    "name": "Plenary Indulgence",
+    "icon": "Plenary_Indulgence.png",
+    "cooldown": 60.0,
+    "duration": 10.0,
+    "color": "#FFF0F5",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 37011,
+    "name": "Divine Caress",
+    "icon": "Divine_Caress.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 3571,
+    "name": "Assize",
+    "icon": "Assize.png",
+    "cooldown": 40.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 34603670,
+    "name": "Grade 4 Gemdraught of Mind",
+    "icon": "Grade_4_gemdraught_of_mind_icon1.png",
+    "cooldown": 270,
+    "duration": 30.0,
+    "color": "#b576e8",
+    "show": false,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
+  },
+  {
+    "spell_id": 3,
+    "name": "Sprint",
+    "icon": "Sprint_icon1.png",
+    "cooldown": 60.0,
+    "duration": 10.0,
+    "color": "#666666",
+    "show": null,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
+  }
+]

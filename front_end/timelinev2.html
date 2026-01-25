@@ -85,38 +85,41 @@
 
         // 1. fetchSpellData (API)
 const fetchSpellData = async (specSlug = 'redmage-redmage') => {
-    try {
-        // 【关键修改】不再请求 API，而是请求本地 JSON 文件
-        const url = `./data/spells_${specSlug}.json?t=${Date.now()}`;
-        console.log(`[M-Spec] 加载技能配置: ${url}`);
-        
-        const res = await fetch(url);
-        if (!res.ok) throw new Error("Local spell file not found");
-        const data = await res.json();
-        
-        const spellMap = {};
-        const list = Array.isArray(data) ? data : Object.values(data);
+            try {
+                const url = `./data/spells_${specSlug}.json?t=${Date.now()}`;
+                console.log(`[M-Spec] 加载技能配置: ${url}`);
+                
+                const res = await fetch(url);
+                if (!res.ok) throw new Error("Local spell file not found");
+                const data = await res.json();
+                
+                const spellMap = {};
+                const list = Array.isArray(data) ? data : Object.values(data);
 
-        list.forEach((spell, index) => {
-            spellMap[spell.spell_id] = {
-                id: spell.spell_id,
-                name: spell.name,
-                // 【关键修改】图片路径改为本地相对路径
-                image: `./images/spells/${spell.icon}`,
-                cd: spell.cooldown || 0,
-                duration: spell.duration || 0,
-                color: spell.color || '#ffcc00',
-                category: 'MAJOR',
-                show: true
-            };
-        });
-        return spellMap;
+                list.forEach((spell) => {
+                    spellMap[spell.spell_id] = {
+                        id: spell.spell_id,
+                        name: spell.name,
+                        image: `./images/spells/${spell.icon}`,
+                        cd: spell.cooldown || 0,
+                        duration: spell.duration || 0,
+                        color: spell.color || '#ffcc00',
+                        
+                        // --- 修复点 1: 读取 JSON 里的真实分类 ---
+                        category: spell.category || 'MAJOR', 
+                        
+                        // --- 修复点 2: 读取 JSON 里的默认显示状态 ---
+                        // 注意: 必须判断 undefined，因为 show 可能是 false
+                        show: (spell.show !== undefined && spell.show !== null) ? spell.show : true
+                    };
+                });
+                return spellMap;
 
-    } catch (e) {
-        console.warn(`[离线模式] 未找到 ${specSlug} 的技能定义文件，将显示默认方块。`, e);
-        return {};
-    }
-};
+            } catch (e) {
+                console.warn(`[离线模式] 未找到 ${specSlug} 的技能定义文件。`, e);
+                return {};
+            }
+        };
         // Mock Data for Specs - Moved to Global Scope
         const SPECS = [
             { label: 'Tanks', items: [
@@ -231,6 +234,24 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                 // 简单的 Partner 图标逻辑 (可选，保留你原有的逻辑即可)
                 let partnerIcon = null;
                 // ... (这里可以保留你原本的 partner 逻辑，或者暂时留空)
+                const myDetailedRole = getDetailedRole(specSlug);
+
+                if (player.composition && Array.isArray(player.composition)) {
+                    // 2. 在阵容里找：职责相同 && 不是我自己的那个人
+                    const partnerSpec = player.composition.find(s => {
+                        // 必须是同一种细分职责 (例如我是近战，就只找近战)
+                        // 且 ID 不能和当前查看的玩家相同
+                        return getDetailedRole(s) === myDetailedRole && s !== specSlug;
+                    });
+
+                    if (partnerSpec) {
+                        // 3. 找到后获取图标路径
+                        const iconName = getIconForSpec(partnerSpec);
+                        if (iconName) {
+                            partnerIcon = `./images/classes/${iconName}`;
+                        }
+                    }
+                }
 
                 const durationSeconds = player.fightDuration / 1000;
                 const m = Math.floor(durationSeconds / 60);
@@ -276,26 +297,54 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
             return parseInt(timeStr);
         };
 
+        // --- 适配你的命名: 读取本地 m9s.json, m10s.json 等 ---
         const fetchBossMechanics = async (bossSlug) => {
-    if (!bossSlug) return [];
-    try {
-        const res = await fetch(`${API_BASE}/api/bosses/${bossSlug}/spells`);
-        if (!res.ok) throw new Error("API不可用");
-        const data = await res.json();
-        
-        // ... (保留你原有的解析逻辑) ...
-        return Object.values(data).map(spell => ({
-            // 你的映射逻辑
-            time: parseInt(spell.time),
-            name: spell.name,
-            // ...
-        }));
+            if (!bossSlug) return [];
 
-    } catch (e) {
-        console.warn("[警告] 无法获取 BOSS 机制数据。将跳过显示 BOSS 时间轴。");
-        return []; // 关键！返回空数组
-    }
-};
+            // 1. 定义映射表：把下拉菜单的值 (slug) 映射到你的文件名
+            const fileMapping = {
+                'vamp-fatale': 'm9s',
+                'red-hot-and-deep-blue': 'm10s',
+                'the-tyrant': 'm11s',
+                'lindwurm': 'm12s_p1',
+                // 如果你有P2的话
+                'gaia-memory': 'm12s_p2', 
+                'lindwurm-ii': 'm12s_p2'
+            };
+
+            // 2. 获取对应的文件名，如果没有匹配到就默认用 slug
+            const fileName = fileMapping[bossSlug] || bossSlug;
+
+            try {
+                // 读取 ./data/m9s.json
+                const url = `./data/${fileName}.json?t=${Date.now()}`;
+                console.log(`[M-Spec] 加载 Boss 时间轴: ${url}`);
+
+                const res = await fetch(url);
+                if (!res.ok) throw new Error(`Boss 文件 ${fileName}.json 未找到`);
+                
+                const data = await res.json();
+                
+                // 3. 数据转换 (和之前一样)
+                const list = Array.isArray(data) ? data : Object.values(data);
+
+                return list.map(spell => ({
+                    id: spell.id || spell.spell_id,
+                    name: spell.name || 'Unknown',
+                    // 兼容秒或毫秒
+                    time: (spell.time > 10000) ? (spell.time / 1000) : (spell.time || spell.timestamp || 0),
+                    duration: spell.duration || 0,
+                    color: spell.color || '#ff4444', 
+                    // 补全图标路径 (如果有 icon 字段)
+                    icon: spell.icon ? `./images/spells/${spell.icon}` : null,
+                    type: spell.type || 'mechanic'
+                })).sort((a, b) => a.time - b.time);
+
+            } catch (e) {
+                console.warn(`[离线模式] 无法加载 ${fileName}，Boss 轴将隐藏。`, e);
+                return []; 
+            }
+        };
 // --- 替换结束 ---
         const calculateCastTracks = (casts) => {
             if (!casts || casts.length === 0) return { tracks: [], maxTracks: 1 };

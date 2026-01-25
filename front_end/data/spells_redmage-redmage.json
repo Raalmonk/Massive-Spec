@@ -5,7 +5,12 @@
     "icon": "Embolden.png",
     "cooldown": 120.0,
     "duration": 20.0,
-    "color": "#E87B7B"
+    "color": "#E87B7B",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
   },
   {
     "spell_id": 7521,
@@ -13,7 +18,12 @@
     "icon": "Manafication.png",
     "cooldown": 110.0,
     "duration": 15.0,
-    "color": "#E87B7B"
+    "color": "#E87B7B",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
   },
   {
     "spell_id": 7527,
@@ -21,7 +31,12 @@
     "icon": "Enchanted_Riposte.png",
     "cooldown": 1.5,
     "duration": 0.0,
-    "color": "#E87B7B"
+    "color": "#E87B7B",
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
   },
   {
     "spell_id": 7517,
@@ -29,7 +44,12 @@
     "icon": "Fleche.png",
     "cooldown": 25.0,
     "duration": 0.0,
-    "color": "#E87B7B"
+    "color": "#E87B7B",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
   },
   {
     "spell_id": 7519,
@@ -37,7 +57,12 @@
     "icon": "Contre_Sixte.png",
     "cooldown": 35.0,
     "duration": 0.0,
-    "color": "#E87B7B"
+    "color": "#E87B7B",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
   },
   {
     "spell_id": 7518,
@@ -45,7 +70,12 @@
     "icon": "Acceleration.png",
     "cooldown": 55.0,
     "duration": 0.0,
-    "color": "#E87B7B"
+    "color": "#E87B7B",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
   },
   {
     "spell_id": 150,
@@ -53,7 +83,12 @@
     "icon": "Swiftcast.png",
     "cooldown": 40.0,
     "duration": 0.0,
-    "color": "#E87B7B"
+    "color": "#E87B7B",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
   },
   {
     "spell_id": 16528,
@@ -61,7 +96,12 @@
     "icon": "Enchanted_Reprise.png",
     "cooldown": 2.5,
     "duration": 0.0,
-    "color": "#E87B7B"
+    "color": "#E87B7B",
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
   },
   {
     "spell_id": 7514,
@@ -69,7 +109,12 @@
     "icon": "Vercure.png",
     "cooldown": 2.5,
     "duration": 0.0,
-    "color": "#E87B7B"
+    "color": "#E87B7B",
+    "show": false,
+    "category": "SINGLE_MIT",
+    "debug_tags": [
+      "SINGLE_MIT"
+    ]
   },
   {
     "spell_id": 7560,
@@ -77,7 +122,12 @@
     "icon": "Addle.png",
     "cooldown": 90.0,
     "duration": 15.0,
-    "color": "#E87B7B"
+    "color": "#E87B7B",
+    "show": true,
+    "category": "RAID_MIT",
+    "debug_tags": [
+      "RAID_MIT"
+    ]
   },
   {
     "spell_id": 25857,
@@ -85,7 +135,12 @@
     "icon": "Magick_Barrier.png",
     "cooldown": 120.0,
     "duration": 10.0,
-    "color": "#E87B7B"
+    "color": "#E87B7B",
+    "show": false,
+    "category": "RAID_MIT",
+    "debug_tags": [
+      "RAID_MIT"
+    ]
   },
   {
     "spell_id": 34603669,
@@ -93,7 +148,12 @@
     "icon": "Grade_4_gemdraught_of_intelligence_icon1.png",
     "cooldown": 270,
     "duration": 30.0,
-    "color": "#b576e8"
+    "color": "#b576e8",
+    "show": false,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
   },
   {
     "spell_id": 3,
@@ -101,6 +161,11 @@
     "icon": "Sprint_icon1.png",
     "cooldown": 60.0,
     "duration": 10.0,
-    "color": "#666666"
+    "color": "#666666",
+    "show": null,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ]
   }
 ]
