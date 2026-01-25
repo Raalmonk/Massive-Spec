@@ -152,14 +152,22 @@ class Fight(warcraftlogs_base.BaseModel):
     # Query
     #
     @property
-    def table_query_args(self) -> str:
+    def summary_query_args(self) -> str:
+        """Query Arguments for the Summary Table.
+
+        Always fetches the full raid (no sourceID filter) to ensure correct composition.
+        """
         return f"fightIDs: {self.fight_id}, startTime: {self.start_time_rel}, endTime: {self.end_time_rel}"
+
+    @property
+    def table_query_args(self) -> str:
+        return self.summary_query_args
 
     ############################################################################
     #   Summary
     #
     def get_query_parts(self) -> list[str]:
-        return [f"summary: table({self.table_query_args}, dataType: Summary)"]
+        return [f"summary: table({self.summary_query_args}, dataType: Summary)"]
 
     def get_query(self) -> str:
         """Get the Query to load the fights summary."""
