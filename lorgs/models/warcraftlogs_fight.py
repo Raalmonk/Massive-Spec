@@ -171,10 +171,6 @@ class Fight(warcraftlogs_base.BaseModel):
 
     def get_query(self) -> str:
         """Get the Query to load the fights summary."""
-        if self.players:
-            logger.info("no players")
-            return ""
-
         if not self.report:
             raise ValueError("Missing Parent Report")
 
