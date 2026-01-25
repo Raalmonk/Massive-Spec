@@ -189,6 +189,7 @@ class Fight(warcraftlogs_base.BaseModel):
         )
 
     def process_players(self, summary_data: "wcl.ReportSummary"):
+        self.players = []
         total_damage = summary_data.damageDone
         total_healing = summary_data.healingDone
 
@@ -204,9 +205,13 @@ class Fight(warcraftlogs_base.BaseModel):
             spec_data = composition_data.specs[0]
             spec_name = spec_data.spec
             class_name = composition_data.type
-            if spec_name.lower() in("dps","healer","tank"):
+            if spec_name.lower() in ("dps", "healer", "tank"):
                 spec_name = class_name
+
             spec = WowSpec.get(name_slug_cap=spec_name, wow_class__name_slug_cap=class_name)
+            if not spec:
+                spec = WowSpec.get(name_slug_cap=spec_name)
+
             if not spec:
                 logger.warning("Unknown Spec: %s", spec_name)
                 continue
@@ -255,8 +260,7 @@ class Fight(warcraftlogs_base.BaseModel):
     async def load_actors(self, player_ids: typing.Optional[list[int]] = None):
         player_ids = player_ids or []
 
-        if not self.players:
-            await self.load()
+        await self.load()
 
         # Get Players to load
         actors_to_load: list["BaseActor"] = []
