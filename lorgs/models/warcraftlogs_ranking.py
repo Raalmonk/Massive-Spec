@@ -354,50 +354,50 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         if clear_old:
             self.reports = []
 
-        # 1. 加载排行榜 (此时拥有官方准确的 rDPS)
+        # 1. 加载排行榜
         await self.load_rankings()
         self.reports = self.sort_reports(self.reports)
 
         # ============================================================
-        # [快照] 保存官方排行榜中的准确数值
-        # Map: (fight_id, player_name) -> official_dps
+        # [NEW Logic] 使用 Python 对象 ID 建立快照
+        # 不再依赖名字字符串，防止名字在加载过程中发生变动（如添加服务器后缀）
+        # Map: id(player_object) -> official_dps
         # ============================================================
         official_dps_map = {}
         for report in self.reports:
             for fight in report.fights:
                 for p in fight.players:
-                    official_dps_map[(fight.fight_id, p.name)] = p.total
+                    # 使用内存地址作为唯一键，确保持久性
+                    official_dps_map[id(p)] = p.total
         # ============================================================
 
         # 2. 应用数量限制
         limit = limit or -1
         self.reports = self.reports[:limit]
 
-        # 3. 检查并补全阵容 (处理 combatantInfo 丢失)
+        # 3. 补全阵容 (Fallback)
         fights_missing_comp = [f for f in self.fights if len(f.players) <= 1]
         if fights_missing_comp:
-            logger.info(f"[Fallback] Fetching Composition for {len(fights_missing_comp)} fights (via Summary API)...")
+            logger.info(f"[Fallback] Fetching Composition for {len(fights_missing_comp)} fights...")
             await self.load_many(fights_missing_comp, raise_errors=False)
 
-        # 4. 加载技能数据 (注意：这一步会触发重新计算，导致 DPS 变回错误的 29510)
+        # 4. 加载技能数据 (这一步可能会改坏 DPS，甚至改坏名字)
         await self.load_actors()
         
         # ============================================================
-        # [NEW FIX] 最终一致性检查：强制还原所有玩家的 DPS 为官方排行榜数值
-        # 必须放在 load_actors 之后！
+        # [Final Fix] 最终一致性检查
+        # 使用对象 ID 进行回溯还原
         # ============================================================
         restore_count_final = 0
         for report in self.reports:
             for fight in report.fights:
                 for player in fight.players:
-                    # 1. 找到该玩家的官方数值
-                    key = (fight.fight_id, player.name)
-                    official_val = official_dps_map.get(key)
+                    # 使用 id(player) 找回当初那个纯净的数值
+                    official_val = official_dps_map.get(id(player))
                     
-                    # 2. 如果存在且不一致，强制覆盖
                     if official_val is not None:
-                        # 允许极小的浮点误差(>1)，但 29510 vs 27971 肯定会被修正
-                        if abs(player.total - official_val) > 1.0: 
+                        # 只要有偏差就强制覆盖
+                        if abs(player.total - official_val) > 0.1: 
                             logger.info(f"[DPS Final Fix] Correction for {player.name}: Local={player.total} -> Official={official_val}")
                             player.total = official_val
                             restore_count_final += 1
@@ -408,7 +408,6 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         
         logger.info("done")
 
-        # 更新时间戳
         self.updated = datetime.datetime.now(datetime.timezone.utc)
         self.dirty = False
 
