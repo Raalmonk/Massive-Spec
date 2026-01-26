@@ -35,6 +35,9 @@ MONK_MAIN.add_spell(spell_id=7395, cooldown=60, duration=20, name="Riddle of Fir
 MONK_MAIN.add_spell(spell_id=25766, cooldown=90, duration=15, name="Riddle of Wind",show=True, icon="Riddle_of_Wind.png", tags=[SpellTag.DAMAGE])
 MONK_MAIN.add_spell(spell_id=7396, cooldown=120, duration=20, name="Brotherhood",show=True, icon="Brotherhood.png", tags=[SpellTag.DAMAGE])
 MONK_MAIN.add_spell(spell_id=7546, cooldown=45, duration=10, name="True North",show=True, icon="True_North.png", tags=[SpellTag.DAMAGE])
+MONK_MAIN.add_spell(spell_id=25768, name="Rising Phoenix",show=True, icon="Rising_Phoenix.png", tags=[SpellTag.DAMAGE])
+MONK_MAIN.add_spell(spell_id=25769, name="Phantom Rush",show=True, icon="Phantom_Rush.png", tags=[SpellTag.DAMAGE])
+MONK_MAIN.add_spell(spell_id=36948, name="Elixir Burst",show=True, icon="Elixir_Burst.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
 MONK_MAIN.add_spell(spell_id=7541, cooldown=120, name="Second Wind", icon="Second_Wind.png", show=False,tags=[SpellTag.DEFENSIVE])

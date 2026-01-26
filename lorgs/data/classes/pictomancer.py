@@ -40,6 +40,17 @@ PICTOMANCER_MAIN.add_spell(spell_id=34676, cooldown=30, name="Mog of the Ages", 
 PICTOMANCER_MAIN.add_spell(spell_id=7561, cooldown=40, name="Swiftcast", icon="Swiftcast.png", show=False, tags=[SpellTag.DAMAGE])
 PICTOMANCER_MAIN.add_spell(spell_id=34662, cooldown=2.5, name="Holy in White", icon="Holy_in_White.png", show=False, tags=[SpellTag.DAMAGE])
 PICTOMANCER_MAIN.add_spell(spell_id=34663, cooldown=3.3, name="Comet in Black", icon="Comet_in_Black.png", show=False, tags=[SpellTag.DAMAGE])
+PICTOMANCER_MAIN.add_spell(spell_id=34653, cooldown=0.0, name="Blizzard in Cyan", icon="Blizzard_in_Cyan.png", show=True, tags=[SpellTag.DAMAGE])
+PICTOMANCER_MAIN.add_spell(spell_id=34650, cooldown=0.0, name="Fire in Red", icon="Fire_in_Red.png", show=False, tags=[SpellTag.DAMAGE])
+
+
+PICTOMANCER_MAIN.add_spell(spell_id=34664, cooldown=0.0, name="Pom Motif", icon="Pom_Motif.png", show=False, tags=[SpellTag.DAMAGE])
+PICTOMANCER_MAIN.add_spell(spell_id=34665, cooldown=0.0, name="Wing Motif", icon="Wing_Motif.png", show=False, tags=[SpellTag.DAMAGE])
+PICTOMANCER_MAIN.add_spell(spell_id=34666, cooldown=0.0, name="Claw Motif", icon="Claw_Motif.png", show=False, tags=[SpellTag.DAMAGE])
+PICTOMANCER_MAIN.add_spell(spell_id=34667, cooldown=0.0, name="Maw Motif", icon="Maw_Motif.png", show=False, tags=[SpellTag.DAMAGE])
+PICTOMANCER_MAIN.add_spell(spell_id=34668, cooldown=0.0, name="Hammer Motif", icon="Hammer_Motif.png", show=False, tags=[SpellTag.DAMAGE])
+PICTOMANCER_MAIN.add_spell(spell_id=34669, cooldown=0.0, name="Starry Sky Motif", icon="Starry_Sky_Motif.png", show=False, tags=[SpellTag.DAMAGE])
+
 
 # Self Mitigation
 PICTOMANCER_MAIN.add_spell(spell_id=34685, cooldown=120, duration=10, name="Tempera Coat", icon="Tempera_Coat.png", show=False, tags=[SpellTag.DEFENSIVE])
