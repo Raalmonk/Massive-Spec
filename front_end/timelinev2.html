@@ -58,7 +58,8 @@
     <script type="text/babel" data-type="module">
         import React, { useState, useRef, useEffect, useMemo, useCallback } from 'https://esm.sh/react@18.2.0?dev';
         import { createRoot } from 'https://esm.sh/react-dom@18.2.0/client?dev';
-        import { ZoomIn, ZoomOut, Search, Menu, Skull, Clock, Hourglass, Shield, ShieldAlert, Zap, Swords, MoreHorizontal, Layers, Minimize2, Maximize2, ChevronDown, ExternalLink, Flag } from 'https://esm.sh/lucide-react@0.263.1?dev';
+        // REMOVED: Skull import
+        import { ZoomIn, ZoomOut, Search, Menu, Clock, Hourglass, Shield, ShieldAlert, Zap, Swords, MoreHorizontal, Layers, Minimize2, Maximize2, ChevronDown, ExternalLink, Flag } from 'https://esm.sh/lucide-react@0.263.1?dev';
 
         // --- Configuration ---
         const THEME_COLOR = '#00FF96';
@@ -297,7 +298,7 @@
                             timestamp: c.ts ? c.ts / 1000 : (c.timestamp || 0),
                             duration: c.duration || (spellMap[c.spell_id] ? spellMap[c.spell_id].duration : 0)
                         })),
-                        deaths: player.deaths || []
+                        deaths: player.deaths || [] // Data kept, UI removed
                     };
                 });
                 return rankData;
@@ -626,7 +627,7 @@
             // CHANGE 1: Set default to false
             const [showCooldown, setShowCooldown] = useState(false);
             
-            const [showDeaths, setShowDeaths] = useState(true);
+            // REMOVED: showDeaths state
             const [showPhases, setShowPhases] = useState(true);
             const [showBossRow, setShowBossRow] = useState(true);
 
@@ -1070,10 +1071,7 @@
                                                 <div key={i} className="absolute top-0 bottom-0 border-l border-gray-800/20 pointer-events-none" style={{ left: `${i * tickSettings.major * zoom}px` }} />
                                             ))}
                                             
-                                            {/* Deaths */}
-                                            {showDeaths && row.deaths.map((deathTime, dIdx) => (
-                                                <div key={dIdx} className="absolute top-1/2 -translate-y-1/2 text-gray-600 z-0" style={{ left: `${deathTime * zoom}px` }}><Skull size={14} /></div>
-                                            ))}
+                                            {/* REMOVED: Deaths Display */}
 
                                             {/* Kill Time Marker Logic */}
                                             {row.killTimeSeconds && (
