@@ -98,10 +98,10 @@
     ]
   },
   {
-    "spell_id": 34,
+    "spell_id": 7542,
     "name": "Bloodbath",
     "icon": "Bloodbath.png",
-    "cooldown": 7542.0,
+    "cooldown": 90.0,
     "duration": 20.0,
     "color": "#AF1964",
     "load_order": 7,
@@ -126,10 +126,10 @@
     ]
   },
   {
-    "spell_id": 76,
+    "spell_id": 7549,
     "name": "Feint",
     "icon": "Feint.png",
-    "cooldown": 7549.0,
+    "cooldown": 90.0,
     "duration": 15.0,
     "color": "#AF1964",
     "load_order": 9,
