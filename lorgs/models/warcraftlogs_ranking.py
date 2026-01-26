@@ -287,11 +287,11 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         # 1. Global (Top 5)
         global_data = encounter_data.get("global", {})
         # ... 后续代码保持不变 ...
-        global_rankings = wcl.CharacterRankings(**global_data).rankings[:45]
+        global_rankings = wcl.CharacterRankings(**global_data).rankings
 
         # 2. CN (Top 10)
         cn_data = encounter_data.get("cn", {})
-        cn_rankings = wcl.CharacterRankings(**cn_data).rankings[:25]
+        cn_rankings = wcl.CharacterRankings(**cn_data).rankings
 
         # Log check to confirm we got CN names
         if cn_rankings:
