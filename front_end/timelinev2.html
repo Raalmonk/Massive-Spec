@@ -996,7 +996,7 @@
                                         onClick={() => setSelectedRowId(isSelected ? null : row.id)}
                                         className={`flex hover:bg-[#1a1a1a] transition-colors group relative ${
                                             isSelected 
-                                            ? 'bg-[#00FF96]/5 border-t border-b border-[#00FF96] z-10' // High z-index to show borders over neighbors
+                                            ? 'bg-[#00FF96]/5 border-t-[2px] border-b-[2px] border-[#00FF96] z-10' // High z-index to show borders over neighbors
                                             : 'border-b border-gray-800/40'
                                         }`} 
                                         style={{ height: `${totalHeight}px` }}

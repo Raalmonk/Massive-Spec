@@ -41,7 +41,7 @@ NINJA_MAIN.add_spell(spell_id=7546, cooldown=45, duration=10, name="True North",
 
 # Self Mitigation
 NINJA_MAIN.add_spell(spell_id=7541, cooldown=120, name="Second Wind", icon="Second_Wind.png", show=False, tags=[SpellTag.DEFENSIVE])
-NINJA_MAIN.add_spell(spell_id=34, cooldown=7542, duration=20, name="Bloodbath", show=False, icon="Bloodbath.png", tags=[SpellTag.DEFENSIVE])
+NINJA_MAIN.add_spell(spell_id=7542, cooldown=90, duration=20, name="Bloodbath", show=False, icon="Bloodbath.png", tags=[SpellTag.DEFENSIVE])
 NINJA_MAIN.add_spell(spell_id=2241, cooldown=120, name="Shade Shift", icon="Shade_Shift.png", show=False, tags=[SpellTag.DEFENSIVE])
 
-NINJA_MAIN.add_spell(spell_id=76, cooldown=7549, duration=15, name="Feint",show=True, icon="Feint.png", tags=[SpellTag.RAID_CD])
+NINJA_MAIN.add_spell(spell_id=7549, cooldown=90, duration=15, name="Feint",show=True, icon="Feint.png", tags=[SpellTag.RAID_CD])
