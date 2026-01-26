@@ -6,7 +6,7 @@ from __future__ import annotations
 import datetime
 import textwrap
 import typing
-from typing import Optional
+from typing import Optional, Dict, Tuple
 
 # IMPORT LOCAL LIBRARIES
 from lorgs import utils
@@ -25,8 +25,8 @@ from lorgs.models.wow_spec import WowSpec
 # Map Difficulty Names to Integers used in WCL
 DIFFICULTY_IDS = {
     "normal": 100,
-    "heroic": 101,  # savage
-    "mythic": 101,  # savage
+    "heroic": 101,
+    "mythic": 101,
     "savage": 101,
     "extreme": 102,
     "ultimate": 103,
@@ -43,6 +43,10 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
 
     updated: datetime.datetime = datetime.datetime.min
     dirty: bool = False
+    
+    # [新增] 专门用来存从 API 拿到的绝对正确的 DPS
+    # Key: (fight_id, player_name_simple) -> Value: correct_dps
+    official_dps_cache: Dict[Tuple[int, str], float] = {}
 
     # Config
     key: typing.ClassVar[str] = "{spec_slug}/{boss_slug}__{difficulty}__{metric}"
@@ -76,30 +80,21 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
     @staticmethod
     def sort_reports(reports: list[Report]) -> list[Report]:
         """Sort the reports in place by the highest dps player."""
-
         def get_total(report: Report) -> float:
             top = 0.0
             for fight in report.fights:
                 for player in fight.players:
                     top = max(top, player.total)
             return top
-
         return sorted(reports, key=get_total, reverse=True)
 
-    ############################################################################
-    # Query: Rankings
-    #
     def get_query(self) -> str:
         """Return the Query to load the rankings for this Spec & Boss."""
         difficulty_id = DIFFICULTY_IDS.get(self.difficulty) or 101
-
         real_class_name = "Global"
         cn_class_name = "Global"
         spec_name = self.spec.name_slug_cap
 
-        
-
-        # 2. 定义查询构建函数 (支持传入不同的 class_name)
         def build_rankings_query(class_name_arg: str, extra_args: str = ""):
             return f"""
                 characterRankings(
@@ -112,7 +107,6 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                 )
             """
 
-        # 3. 组合查询：Global 用具体名，CN 用 "Global"
         return textwrap.dedent(
             f"""\
         worldData
@@ -128,42 +122,19 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
 
     @utils.as_list
     def get_old_reports(self) -> typing.Generator[tuple[str, int, str], None, None]:
-        """Return a list of unique keys to identify existing reports."""
         for report in self.reports:
             for fight in report.fights:
                 for player in fight.players:
                     key = (report.report_id, fight.fight_id, player.name)
                     yield key
 
-    # 文件: lorgs/models/warcraftlogs_ranking.py
-
     def add_new_fight(self, ranking_data: wcl.CharacterRanking) -> None:
         report_data = ranking_data.report
-
         if not report_data:
             return
-
-        # === 🔍 深度调试 START ===
-        # 强制检查 combatantInfo 的状态
-        info_list = ranking_data.combatantInfo
-        info_len = len(info_list) if info_list else 0
-        
-        # 只打印前3个 fight 的详细信息，防止刷屏，但如果有问题一定要报出来
-        if info_len == 0:
-            print(f"[DEBUG-CRITICAL] Fight {report_data.fightID}: CombatantInfo is EMPTY! (Name: {ranking_data.name})")
-        else:
-            # 打印第一条数据看看长什么样，确认字段名是否正确
-            first_item = info_list[0]
-            print(f"[DEBUG-OK] Fight {report_data.fightID}: Found {info_len} combatants. Sample: {first_item}")
-        # === 🔍 深度调试 END ===
-
-        # skip hidden reports
         if ranking_data.hidden:
             return
 
-        ################
-        # Player
-        # ... (后续代码保持不变)
         # Player
         player = Player(
             name=ranking_data.name,
@@ -171,7 +142,6 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             spec_slug=self.spec_slug,
         )
 
-        ################
         # Fight
         fight = Fight(
             fight_id=report_data.fightID,
@@ -183,7 +153,6 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         # Parse combatantInfo to add partners
         if ranking_data.combatantInfo:
             for combatant in ranking_data.combatantInfo:
-                # Combatant is a dict
                 name = combatant.get("name")
                 if name == player.name:
                     continue
@@ -191,33 +160,14 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                 spec_name = combatant.get("spec")
                 class_name = combatant.get("type")
 
-                # --- 🟢 新增 DEBUG ---
-                # 打印出 WCL 返回的原始 Class 和 Spec 名字
-                # 只打印一次或者前几次，避免日志爆炸
-                if fight.fight_id % 10 == 0: # 稍微抽样一下
-                     print(f"[DEBUG-Match] Try parsing: Name={name}, Class={class_name}, Spec={spec_name}")
-                # ---------------------
-
                 if spec_name and spec_name.lower() in ("dps", "healer", "tank"):
                      spec_name = class_name
 
-                # 1. Try Strict Lookup (Class + Spec)
                 spec = WowSpec.get(name_slug_cap=spec_name, wow_class__name_slug_cap=class_name)
-
-                # 2. FIX: Fallback Lookup (Spec only) for FF14 compatibility
                 if not spec:
                     spec = WowSpec.get(name_slug_cap=spec_name)
-
                 if not spec:
-                    # --- 🟢 新增 DEBUG ---
-                    # 打印失败的情况
-                    if fight.fight_id % 10 == 0:
-                        print(f"[DEBUG-Match] FAILED to find spec for: {spec_name} (Class: {class_name})")
-                    # ---------------------
                     continue
-
-                # if spec.role.code != self.spec.role.code:
-                #     continue
 
                 p = Player(
                     source_id=combatant.get("id"),
@@ -228,15 +178,8 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                 p.fight = fight
                 fight.players.append(p)
 
-        # Populate the composition list with spec slugs
         fight.composition = [p.spec_slug for p in fight.players]
-
-        # === 🟢 新增 DEBUG 打印 (只针对 Spec Ranking) ===
-        print(f"[DEBUG-SpecRanking] Fight ID: {fight.fight_id} | Composition Size: {len(fight.composition)}")
-        print(f"[DEBUG-SpecRanking] Comp Details: {fight.composition}") # 如果想看详细内容就把这行解注
-        # ===============================================
-        ################
-        # Report
+        
         report = Report(
             report_id=report_data.code,
             start_time=report_data.startTime,
@@ -246,73 +189,54 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         self.reports.append(report)
 
     def add_new_fights(self, rankings: list[wcl.CharacterRanking]):
-        """Add new Fights."""
         old_reports = self.get_old_reports()
-
         for ranking_data in rankings:
             report_data = ranking_data.report
-
-            ################
-            # check if already in the list
             key = (report_data.code, report_data.fightID, ranking_data.name)
             if key in old_reports:
                 continue
-
             self.add_new_fight(ranking_data)
 
-    @staticmethod
-    def _normalize_name(name: str) -> str:
-        if not name: return ""
-        return name.split("-")[0].strip()
-
+    ############################################################################
+    # Query: Rankings
+    #
     def process_query_result(self, **query_result: typing.Any):
         """Process the Ranking Results."""
-        # unwrap data
         encounter_data = query_result.get("worldData", {}).get("encounter", {})
 
-        # === 🔍 DEBUG RAW JSON (新增) ===
-        import json
-        global_raw = encounter_data.get("global", {})
-        rankings_raw = global_raw.get("rankings", [])
-        
-        print(f"[DEBUG-RAW] Rankings Count: {len(rankings_raw)}")
-        if rankings_raw:
-            first = rankings_raw[0]
-            # 打印第一条数据的所有 Key，看看有没有 'combatantInfo'
-            print(f"[DEBUG-RAW] First Item Keys: {list(first.keys())}")
-            
-            # 如果有 combatantInfo，打印它的类型和长度
-            if "combatantInfo" in first:
-                c_info = first["combatantInfo"]
-                print(f"[DEBUG-RAW] 'combatantInfo' exists. Type: {type(c_info)}, Length: {len(c_info) if isinstance(c_info, list) else 'N/A'}")
-            else:
-                print(f"[DEBUG-RAW] ❌ 'combatantInfo' KEY IS MISSING in the API Response!")
-        # ================================
-
-        # 1. Global (Top 5)
         global_data = encounter_data.get("global", {})
-        # ... 后续代码保持不变 ...
-        global_rankings = wcl.CharacterRankings(**global_data).rankings[:100]
+        global_rankings = wcl.CharacterRankings(**global_data).rankings 
 
-        # 2. CN (Top 10)
         cn_data = encounter_data.get("cn", {})
-        cn_rankings = wcl.CharacterRankings(**cn_data).rankings[:100]
-
-        # Log check to confirm we got CN names
-        if cn_rankings:
-            logger.info(f"[CN Data Check] First CN Player: {cn_rankings[0].name}")
+        cn_rankings = wcl.CharacterRankings(**cn_data).rankings
 
         # Merge
         rankings = global_rankings + cn_rankings
+        
+        # [核心] 构建绝对真理缓存
+        # 无论后续把 total 改成什么样，这个字典里的值永远是 WCL 官方榜单上的值
+        self.official_dps_cache = {}
+        
+        def normalize_name(n):
+            # 去除服务器名，只留 ID
+            return n.split("-")[0].strip() if "-" in n else n.strip()
+
+        for r in rankings:
+            # Key: (FightID, NormalizedName)
+            # 这样不管是 "引力同频" 还是 "引力同频-Server"，都能对上
+            key = (r.report.fightID, normalize_name(r.name))
+            self.official_dps_cache[key] = r.amount
+            
+            # 为了保险，把不去掉服务器名的也存一份
+            key_raw = (r.report.fightID, r.name)
+            self.official_dps_cache[key_raw] = r.amount
+
         self.add_new_fights(rankings)
         self.post_init()
 
     async def load_rankings(self) -> None:
         """Fetch the current Ranking Data"""
         query = self.get_query()
-
-        # Single query to Global API handles both regions now
-        # We DO NOT need to switch endpoints or tokens.
         result = await self.client.query(query)
         self.process_query_result(**result)
 
@@ -321,32 +245,21 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
     #
     async def load_actors(self) -> None:
         """Load the Casts for all missing fights."""
-        
-        # [优化] 只加载主角的技能数据
-        # 我们只关心当前排行榜对应的 Spec (比如 Astrologian)
-        # 如果不加这个过滤，会加载所有 8 个队友的技能，导致 API 超限
         actors_to_load = [p for p in self.players if p.spec_slug == self.spec_slug]
-
-        # 添加 Boss (只加载第一个 Boss 的完整时间轴，其他的只加载阶段)
         for i, fight in enumerate(self.fights):
             if not fight.boss:
                 fight.boss = Boss(boss_slug=self.boss_slug)
                 fight.boss.fight = fight
-
             if i == 0:
                 fight.boss.query_mode = fight.boss.QueryModes.ALL
             else:
                 fight.boss.query_mode = fight.boss.QueryModes.PHASES
-
             actors_to_load.append(fight.boss)
 
-        # 过滤掉已经加载过的
         actors_to_load = [actor for actor in actors_to_load if actor and not actor.casts]
-
         logger.info(f"load {len(actors_to_load)} players/bosses")
         if not actors_to_load:
             return
-
         await self.load_many(actors_to_load, raise_errors=False)
 
     ############################################################################
@@ -358,76 +271,54 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
 
         if clear_old:
             self.reports = []
+            self.official_dps_cache = {} # 清空缓存
 
-        # 1. Load Rankings
+        # 1. 加载排行榜 (此时 official_dps_cache 被填充)
         await self.load_rankings()
         self.reports = self.sort_reports(self.reports)
 
-        # ============================================================
-        # [NEW] Snapshot Official DPS
-        # ============================================================
-        official_dps_map = {}
-        for report in self.reports:
-            for fight in report.fights:
-                # 只有列表里的第一个人是“主角”(Ranker)
-                if fight.players:
-                    p = fight.players[0]
-                    clean_name = SpecRanking._normalize_name(p.name)
-                    key = (fight.fight_id, clean_name)
-                    official_dps_map[key] = p.total
-        # ============================================================
-
-        # 2. Apply Limit
+        # 2. 应用数量限制
         limit = limit or -1
         self.reports = self.reports[:limit]
 
-        # 3. Fetch Details
+        # 3. 补全阵容
         fights_missing_comp = [f for f in self.fights if len(f.players) <= 1]
-        
         if fights_missing_comp:
             logger.info(f"[Fallback] Fetching Composition for {len(fights_missing_comp)} fights...")
             await self.load_many(fights_missing_comp, raise_errors=False)
 
-            # ============================================================
-            # [NEW] "Highlander" Rule: There can be only one.
-            # ============================================================
-            restore_count = 0
-            censor_count = 0
-            
-            for fight in self.fights:
-                if not fight.players:
-                    continue
-                
-                # 1. 认领主角 (First player is ALWAYS the Ranker)
-                ranker = fight.players[0]
-                
-                # 2. 修复主角数据
-                clean_name = SpecRanking._normalize_name(ranker.name)
-                key = (fight.fight_id, clean_name)
-                official_val = official_dps_map.get(key)
-                
-                if official_val is not None and abs(ranker.total - official_val) > 1.0:
-                    ranker.total = official_val
-                    restore_count += 1
-                
-                # 3. 封杀配角 (Censor Teammates)
-                # 遍历除了主角以外的所有队友
-                for teammate in fight.players[1:]:
-                    # 如果队友也是同职业 (比如队伍里有两个黑骑)
-                    if teammate.spec_slug == self.spec_slug:
-                        # 直接把这个"克隆人/队友"的伤害归零，防止他在别人的榜单里篡位
-                        if teammate.total > 0:
-                            teammate.total = 0
-                            censor_count += 1
-
-            logger.info(f"[DPS Fix] Restored {restore_count} Rankers | Censored {censor_count} Impostors (Teammates).")
-            # ============================================================
-
-        # 4. Load Spells
+        # 4. 加载技能数据 (会把 dps 算错)
         await self.load_actors()
         
-        logger.info("done")
+        # ============================================================
+        # [Final Fix v6] 使用 API 原始数据覆盖
+        # ============================================================
+        def normalize_name(n):
+            return n.split("-")[0].strip() if "-" in n else n.strip()
 
+        restore_count_final = 0
+        for report in self.reports:
+            for fight in report.fights:
+                for player in fight.players:
+                    # 尝试匹配
+                    key_simple = (fight.fight_id, normalize_name(player.name))
+                    key_raw = (fight.fight_id, player.name)
+                    
+                    official_val = self.official_dps_cache.get(key_simple) or self.official_dps_cache.get(key_raw)
+                    
+                    if official_val is not None:
+                        if abs(player.total - official_val) > 1.0: 
+                            if "引力" in player.name or "偷心" in player.name:
+                                logger.info(f"[DPS Fix] RESTORING {player.name}: {player.total} -> {official_val}")
+                            
+                            player.total = official_val
+                            restore_count_final += 1
+        
+        if restore_count_final > 0:
+            logger.info(f"[DPS Final Fix] Corrected DPS for {restore_count_final} players to match Leaderboard.")
+        # ============================================================
+        
+        logger.info("done")
         self.updated = datetime.datetime.now(datetime.timezone.utc)
         self.dirty = False
 
