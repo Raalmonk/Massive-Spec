@@ -39,7 +39,8 @@ ASTROLOGIAN_MAIN.add_spell(spell_id=7444, cooldown=1, name="Lord of Crowns", ico
 ASTROLOGIAN_MAIN.add_spell(spell_id=3614, cooldown=40, name="Essential Dignity", icon="Essential_Dignity.png",show=False, tags=[SpellTag.DEFENSIVE])
 ASTROLOGIAN_MAIN.add_spell(spell_id=25873, cooldown=60, duration=8, name="Exaltation", icon="Exaltation.png", show=False,tags=[SpellTag.DEFENSIVE])
 ASTROLOGIAN_MAIN.add_spell(spell_id=16556, cooldown=30, name="Celestial Intersection", icon="Celestial_Intersection.png", show=False,tags=[SpellTag.DEFENSIVE])
-
+ASTROLOGIAN_MAIN.add_spell(spell_id=3595, cooldown=0, duation=15,name="Aspected Benefic", icon="Aspected_Benefic.png", show=False,tags=[SpellTag.DEFENSIVE])
+ASTROLOGIAN_MAIN.add_spell(spell_id=3610, cooldown=0, duation=0,name="Benefic II", icon="Benefic_II.png", show=False,tags=[SpellTag.DEFENSIVE])
 
 # Party Mitigation
 ASTROLOGIAN_MAIN.add_spell(spell_id=25874, cooldown=180, name="Macrocosmos", icon="Macrocosmos.png",show=True, tags=[SpellTag.RAID_CD])
@@ -49,3 +50,6 @@ ASTROLOGIAN_MAIN.add_spell(spell_id=3613, cooldown=60, name="Collective Unconsci
 ASTROLOGIAN_MAIN.add_spell(spell_id=16553, cooldown=60, duration=15, name="Celestial Opposition", icon="Celestial_Opposition.png",show=False, tags=[SpellTag.RAID_CD])
 ASTROLOGIAN_MAIN.add_spell(spell_id=7445, cooldown=1, name="Lady of Crowns", icon="Lady_of_Crowns.png", show=False,tags=[SpellTag.RAID_CD])
 ASTROLOGIAN_MAIN.add_spell(spell_id=37031, cooldown=1, duration=15, name="Sun Sign", icon="Sun_Sign.png", show=False,tags=[SpellTag.RAID_CD])
+ASTROLOGIAN_MAIN.add_spell(spell_id=37030, cooldown=0, duration=15, name="Helios_Conjunction", icon="Helios_Conjunction.png", show=False,tags=[SpellTag.RAID_CD])
+ASTROLOGIAN_MAIN.add_spell(spell_id=16557, cooldown=60, name="Horoscope", icon="Horoscope.png", show=False,tags=[SpellTag.RAID_CD])
+ASTROLOGIAN_MAIN.add_spell(spell_id=3600, cooldown=0, name="Helios", icon="Helios.png", show=False,tags=[SpellTag.RAID_CD])

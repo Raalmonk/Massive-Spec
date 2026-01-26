@@ -441,6 +441,7 @@
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                     title="Open in FF Logs"
+                    onClick={(e) => e.stopPropagation()} // Prevent triggering row selection
                 >
                     {/* DPS Layer (Default) */}
                     <span 
@@ -601,8 +602,10 @@
 
             const [zoom, setZoom] = useState(15);
             const [isCollapsed, setIsCollapsed] = useState(true); // Default to Collapsed
-            const [viewMode, setViewMode] = useState('damage');
             
+            // NEW: Highlighted Row State
+            const [selectedRowId, setSelectedRowId] = useState(null);
+
             // 2. 修改这里：使用 getQueryParam 来设置初始值
             const [selectedBoss, setSelectedBoss] = useState(getQueryParam('boss', 'vamp-fatale'));
             const [selectedSpec, setSelectedSpec] = useState(getQueryParam('spec', 'redmage-redmage'));
@@ -701,6 +704,17 @@
             const handleZoomIn = () => setZoom(prev => Math.min(prev + 5, 100));
             const handleZoomOut = () => setZoom(prev => Math.max(prev - 5, 5));
             const formatTime = (s) => `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
+
+            // --- FEATURE 1: Dynamic Ticks Calculation ---
+            const getTickSettings = (z) => {
+                // Returns interval in seconds for Major (text) and Minor (lines) ticks
+                if (z < 10) return { major: 60, minor: 10 }; // Zoomed out: 60s numbers, 10s lines
+                if (z < 30) return { major: 30, minor: 5 };  // Medium: 30s numbers, 5s lines
+                if (z < 60) return { major: 15, minor: 1 };  // Zoomed in: 15s numbers, 1s lines
+                return { major: 10, minor: 1 };              // Very zoomed in
+            };
+
+            const tickSettings = getTickSettings(zoom);
 
             // --- Robust Drag Implementation ---
             const onMouseDown = useCallback((e) => {
@@ -880,17 +894,30 @@
                             <div className="sticky top-0 z-50 flex h-8 bg-[#202020] border-b border-gray-800">
                                 <div className="sticky left-0 bg-[#202020] border-r border-gray-800 shrink-0 flex items-center px-4 text-xs font-bold text-gray-500 uppercase z-[60] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
                                     <div className="w-8 text-center mr-2 text-[#00FF96]">Rank</div>
-                                    {/* MODIFIED: Header Text */}
                                     <div className="flex-1 text-left">RDPS</div>
                                     <div className="w-8 text-center text-gray-600">Reg</div>
                                     <div className="w-8 text-center text-gray-600">Pair</div>
-                                    {/* NEW: Buffs Header */}
                                     <div className="w-8 text-center text-gray-600 ml-1">Buffs</div>
                                 </div>
                                 <div className="relative h-full" style={{ width: `${FIGHT_DURATION * zoom}px` }}>
-                                    {Array.from({ length: Math.ceil(FIGHT_DURATION / 30) + 1 }).map((_, i) => (
-                                        <div key={i} className="absolute bottom-0 border-l border-gray-600 pl-1 pb-1 text-[10px] text-gray-500 font-mono select-none" style={{ left: `${i * 30 * zoom}px` }}>{formatTime(i * 30)}</div>
-                                    ))}
+                                    {/* UPDATED: Dynamic Ticks (Feature 1) */}
+                                    {Array.from({ length: Math.ceil(FIGHT_DURATION / tickSettings.minor) + 1 }).map((_, i) => {
+                                        const time = i * tickSettings.minor;
+                                        const isMajor = time % tickSettings.major === 0;
+                                        return (
+                                            <div 
+                                                key={i} 
+                                                className={`absolute bottom-0 border-l ${isMajor ? 'border-gray-500 h-2.5' : 'border-gray-700 h-1.5'}`} 
+                                                style={{ left: `${time * zoom}px` }}
+                                            >
+                                                {isMajor && (
+                                                    <span className="absolute bottom-2 left-1 text-[10px] text-gray-400 font-mono select-none pointer-events-none">
+                                                        {formatTime(time)}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
 
@@ -958,9 +985,22 @@
                                 const rowHeight = 32;
                                 const trackHeight = 30; // Height per sub-row when expanded
                                 const totalHeight = isCollapsed ? rowHeight : Math.max(rowHeight, maxTracks * trackHeight);
+                                
+                                // FEATURE 2: Check if this row is selected
+                                const isSelected = selectedRowId === row.id;
 
                                 return (
-                                    <div key={row.id} className="flex border-b border-gray-800/40 hover:bg-[#1a1a1a] transition-colors group relative" style={{ height: `${totalHeight}px` }}>
+                                    <div 
+                                        key={row.id} 
+                                        // FEATURE 2: Row Click & Highlight Logic
+                                        onClick={() => setSelectedRowId(isSelected ? null : row.id)}
+                                        className={`flex hover:bg-[#1a1a1a] transition-colors group relative ${
+                                            isSelected 
+                                            ? 'bg-[#00FF96]/5 border-t border-b border-[#00FF96] z-10' // High z-index to show borders over neighbors
+                                            : 'border-b border-gray-800/40'
+                                        }`} 
+                                        style={{ height: `${totalHeight}px` }}
+                                    >
                                         {/* Sticky Left Panel - Adjusted for Compact Height */}
                                         <div className="sticky left-0 bg-[#161616] group-hover:bg-[#1e1e1e] border-r border-gray-800 shrink-0 flex items-center px-4 z-40 transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.2)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
                                             <div className="w-8 text-center mr-2 font-mono text-gray-500 text-xs">#{row.rank}</div>
@@ -989,9 +1029,9 @@
 
                                         {/* Right Panel: Casts */}
                                         <div className="relative h-full z-10" style={{ width: `${FIGHT_DURATION * zoom}px` }}>
-                                            {/* Grid Lines */}
-                                            {Array.from({ length: Math.ceil(FIGHT_DURATION / 30) + 1 }).map((_, i) => (
-                                                <div key={i} className="absolute top-0 bottom-0 border-l border-gray-800/20 pointer-events-none" style={{ left: `${i * 30 * zoom}px` }} />
+                                            {/* FEATURE 1: Grid Lines - Synced to Major Ticks */}
+                                            {Array.from({ length: Math.ceil(FIGHT_DURATION / tickSettings.major) + 1 }).map((_, i) => (
+                                                <div key={i} className="absolute top-0 bottom-0 border-l border-gray-800/20 pointer-events-none" style={{ left: `${i * tickSettings.major * zoom}px` }} />
                                             ))}
                                             
                                             {/* Deaths */}

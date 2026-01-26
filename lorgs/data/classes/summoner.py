@@ -42,6 +42,6 @@ SUMMONER_MAIN.add_spell(spell_id=1295, cooldown=1, name="Painflare", icon="Painf
 
 # Self Mitigation
 SUMMONER_MAIN.add_spell(spell_id=25799, cooldown=60, name="Radiant Aegis", icon="Radiant_Aegis.png",show=False, tags=[SpellTag.DEFENSIVE])
-SUMMONER_MAIN.add_spell(spell_id=12853, cooldown=20, duration=30, name="Rekindle", icon="Rekindle.png",show=False, tags=[SpellTag.DEFENSIVE])
+SUMMONER_MAIN.add_spell(spell_id=25830, cooldown=20, duration=30, name="Rekindle", icon="Rekindle.png",show=False, tags=[SpellTag.DEFENSIVE])
 
 SUMMONER_MAIN.add_spell(spell_id=7560, cooldown=90, duration=15, name="Addle", icon="Addle.png",show=True, tags=[SpellTag.RAID_CD])
