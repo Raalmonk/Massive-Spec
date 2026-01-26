@@ -233,7 +233,7 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
         const rankedPlayers = allPlayers.filter(p => p.spec_slug === specSlug && p.total > 0).slice(0, 70);
 
         const rankData = rankedPlayers.map((player, index) => {
-                const id = `player-${player.source_id || index}`;
+                const id = `${player.reportId}-${player.fightId}-${player.source_id}`;
                 
                 // 1. 计算团辅数量
                 const buffCount = (player.composition || []).filter(s => BUFF_SPECS.has(s)).length;
