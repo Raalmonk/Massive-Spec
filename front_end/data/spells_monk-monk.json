@@ -70,13 +70,55 @@
     ]
   },
   {
+    "spell_id": 25768,
+    "name": "Rising Phoenix",
+    "icon": "Rising_Phoenix.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#D69C00",
+    "load_order": 5,
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 25769,
+    "name": "Phantom Rush",
+    "icon": "Phantom_Rush.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#D69C00",
+    "load_order": 6,
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 36948,
+    "name": "Elixir Burst",
+    "icon": "Elixir_Burst.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#D69C00",
+    "load_order": 7,
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
     "spell_id": 7541,
     "name": "Second Wind",
     "icon": "Second_Wind.png",
     "cooldown": 120.0,
     "duration": 0.0,
     "color": "#D69C00",
-    "load_order": 5,
+    "load_order": 8,
     "show": false,
     "category": "SINGLE_MIT",
     "debug_tags": [
@@ -90,7 +132,7 @@
     "cooldown": 90.0,
     "duration": 20.0,
     "color": "#D69C00",
-    "load_order": 6,
+    "load_order": 9,
     "show": false,
     "category": "SINGLE_MIT",
     "debug_tags": [
@@ -104,7 +146,7 @@
     "cooldown": 120.0,
     "duration": 10.0,
     "color": "#D69C00",
-    "load_order": 7,
+    "load_order": 10,
     "show": false,
     "category": "SINGLE_MIT",
     "debug_tags": [
@@ -118,7 +160,7 @@
     "cooldown": 90.0,
     "duration": 15.0,
     "color": "#D69C00",
-    "load_order": 8,
+    "load_order": 11,
     "show": true,
     "category": "RAID_MIT",
     "debug_tags": [
@@ -132,7 +174,7 @@
     "cooldown": 90.0,
     "duration": 15.0,
     "color": "#D69C00",
-    "load_order": 9,
+    "load_order": 12,
     "show": false,
     "category": "RAID_MIT",
     "debug_tags": [
@@ -146,7 +188,7 @@
     "cooldown": 270,
     "duration": 30.0,
     "color": "#b576e8",
-    "load_order": 10,
+    "load_order": 13,
     "show": false,
     "category": "UTILITY",
     "debug_tags": [
@@ -160,7 +202,7 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#666666",
-    "load_order": 11,
+    "load_order": 14,
     "show": null,
     "category": "UTILITY",
     "debug_tags": [
