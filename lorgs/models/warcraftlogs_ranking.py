@@ -359,14 +359,12 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         self.reports = self.sort_reports(self.reports)
 
         # ============================================================
-        # [NEW] 快照：保存官方排行榜中的准确数值
-        # 因为后续的 Summary Fallback 会用计算值覆盖这些数据
+        # [快照] 保存官方排行榜中的准确数值
         # Map: (fight_id, player_name) -> official_dps
         # ============================================================
         official_dps_map = {}
         for report in self.reports:
             for fight in report.fights:
-                # 此时每场战斗通常只有1个玩家(主角)，就是排行榜上那个人
                 for p in fight.players:
                     official_dps_map[(fight.fight_id, p.name)] = p.total
         # ============================================================
@@ -375,40 +373,38 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         limit = limit or -1
         self.reports = self.reports[:limit]
 
-        # 3. [核心修复] 检查并补全阵容
-        # 如果战斗中玩家数量 <= 1，说明 combatantInfo 丢失，手动去抓 Summary
+        # 3. 检查并补全阵容 (处理 combatantInfo 丢失)
         fights_missing_comp = [f for f in self.fights if len(f.players) <= 1]
-        
         if fights_missing_comp:
             logger.info(f"[Fallback] Fetching Composition for {len(fights_missing_comp)} fights (via Summary API)...")
-            # 批量加载 Summary，这会填充 fight.players，但会将 dps 重置为手动计算值
             await self.load_many(fights_missing_comp, raise_errors=False)
 
-            # ============================================================
-            # [NEW] 还原：将官方准确值覆盖回手动计算值
-            # ============================================================
-            restore_count = 0
-            for fight in fights_missing_comp:
-                for player in fight.players:
-                    # 查找这个玩家是否是排行榜上的主角
-                    key = (fight.fight_id, player.name)
-                    if key in official_dps_map:
-                        old_val = player.total
-                        new_val = official_dps_map[key]
-                        # 只有当数值确实被改坏了才还原 (避免不必要的日志)
-                        if old_val != new_val:
-                            player.total = new_val # <--- 强行覆盖回官方值
-                            restore_count += 1
-                            # (可选) 打印日志验证一下是否修好了那个 29510
-                            if abs(old_val - 29510) < 100: 
-                                logger.info(f"[DPS Fix] FIXED GHOST DATA for {player.name}: {old_val} -> {new_val}")
-            
-            if restore_count > 0:
-                logger.info(f"[DPS Fix] Restored accurate Ranking Data for {restore_count} players.")
-            # ============================================================
-
-        # 4. 加载技能数据
+        # 4. 加载技能数据 (注意：这一步会触发重新计算，导致 DPS 变回错误的 29510)
         await self.load_actors()
+        
+        # ============================================================
+        # [NEW FIX] 最终一致性检查：强制还原所有玩家的 DPS 为官方排行榜数值
+        # 必须放在 load_actors 之后！
+        # ============================================================
+        restore_count_final = 0
+        for report in self.reports:
+            for fight in report.fights:
+                for player in fight.players:
+                    # 1. 找到该玩家的官方数值
+                    key = (fight.fight_id, player.name)
+                    official_val = official_dps_map.get(key)
+                    
+                    # 2. 如果存在且不一致，强制覆盖
+                    if official_val is not None:
+                        # 允许极小的浮点误差(>1)，但 29510 vs 27971 肯定会被修正
+                        if abs(player.total - official_val) > 1.0: 
+                            logger.info(f"[DPS Final Fix] Correction for {player.name}: Local={player.total} -> Official={official_val}")
+                            player.total = official_val
+                            restore_count_final += 1
+        
+        if restore_count_final > 0:
+            logger.info(f"[DPS Final Fix] Corrected DPS for {restore_count_final} players to match Leaderboard.")
+        # ============================================================
         
         logger.info("done")
 
