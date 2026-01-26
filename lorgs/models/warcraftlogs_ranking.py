@@ -294,6 +294,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         # ============================================================
         # [Step A] 建立花名册 (Manifest)
         # 记录每场战斗的 "法定主角" 是谁，以及他的 "法定DPS"
+        # 使用全名 (Full Name) 以避免同名不同服的冲突
         # Map Key: (report_id, fight_id) -> {name, dps}
         # ============================================================
         manifest = {}
@@ -304,7 +305,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                     p = fight.players[0]
                     key = (report.report_id, fight.fight_id)
                     manifest[key] = {
-                        "name": SpecRanking._normalize_name(p.name),
+                        "name": p.name, # 使用原始全名
                         "dps": p.total
                     }
         # ============================================================
@@ -324,7 +325,6 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             # [Step B] 执行军规 (Enforce Manifest)
             # ============================================================
             restore_count = 0
-            censor_count = 0
             
             for report in self.reports:
                 for fight in report.fights:
@@ -332,35 +332,45 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                     target_info = manifest.get(key)
                     
                     if not target_info:
-                        continue # Should not happen if logic is correct
+                        continue
                         
-                    target_name = target_info["name"]
+                    target_full_name = target_info["name"]
                     target_dps = target_info["dps"]
+                    target_short_name = self._normalize_name(target_full_name)
+
+                    # 1. 寻找唯一的 Ranker (优先全名匹配，其次短名匹配)
+                    ranker_player = None
                     
-                    # 遍历这场战斗的所有玩家 (此时可能有8个人，顺序也可能乱了)
-                    for player in fight.players:
-                        player_clean_name = SpecRanking._normalize_name(player.name)
-                        
-                        # 检查 1: 是主角吗？
-                        if player_clean_name == target_name:
-                            # 是主角 -> 恢复官方数值
-                            if abs(player.total - target_dps) > 1.0:
-                                player.total = target_dps
-                                restore_count += 1
-                        
-                        # 检查 2: 是同职业的其他人吗？(且不是主角)
-                        elif player.spec_slug == self.spec_slug:
-                            # 是冒充者 -> 禁言 (DPS归零)
-                            if player.total > 0:
-                                player.total = 0
-                                censor_count += 1
+                    # 尝试全名匹配 (Best)
+                    for p in fight.players:
+                        if p.name == target_full_name:
+                            ranker_player = p
+                            break
+                    
+                    # 尝试短名匹配 (Fallback)
+                    if not ranker_player:
+                        for p in fight.players:
+                            if self._normalize_name(p.name) == target_short_name:
+                                ranker_player = p
+                                break
+                    
+                    # 2. 修正数值
+                    if ranker_player:
+                        for p in fight.players:
+                            if p == ranker_player:
+                                # 是主角 -> 恢复官方数值
+                                if abs(p.total - target_dps) > 0.1:
+                                    p.total = target_dps
+                                    restore_count += 1
+                            elif p.spec_slug == self.spec_slug:
+                                # 是同职业的其他人 (冒充者) -> 禁言 (DPS归零)
+                                p.total = 0
                     
                     # [Step C] 重新确立地位 (Re-Sort)
                     # 强制把 DPS 最高的人 (现在只能是主角了) 放到列表第一个
-                    # 这样 sort_reports 和前端获取 players[0] 时就不会出错
                     fight.players.sort(key=lambda p: p.total, reverse=True)
 
-            logger.info(f"[DPS Fix] Restored {restore_count} Rankers | Censored {censor_count} Impostors.")
+            logger.info(f"[DPS Fix] Enforced Manifest on {restore_count} Rankers.")
             # ============================================================
 
         # 4. Load Spells
@@ -370,3 +380,6 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
 
         self.updated = datetime.datetime.now(datetime.timezone.utc)
         self.dirty = False
+
+from lorgs.models.warcraftlogs_report import Report
+SpecRanking.model_rebuild()
