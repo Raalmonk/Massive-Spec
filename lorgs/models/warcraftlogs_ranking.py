@@ -351,49 +351,63 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         """Get Top Ranks for a given boss and spec."""
         logger.info(f"{self.boss.name} vs. {self.spec.name} {self.spec.wow_class.name} START | limit={limit} | clear_old={clear_old}")
 
-        # [核心修改] 强制清空旧数据
-        # 不再依赖 clear_old 参数，或者你可以认为我们现在的逻辑就是总是 clear_old=True
-        # 这确保了：
-        # 1. 榜单上没有的“幽灵数据”会被彻底删除。
-        # 2. 榜单上还在的数据，会重新建立，从而读取 WCL 官方正确的 DPS (amount)，覆盖掉本地算错的值。
-        self.reports = []
+        if clear_old:
+            self.reports = []
 
         # 1. 加载排行榜 (此时拥有官方准确的 rDPS)
         await self.load_rankings()
-        
-        # 排序
         self.reports = self.sort_reports(self.reports)
 
-        # ... (保留你之前的快照 snapshot 逻辑，用于后续恢复 DPS) ...
+        # ============================================================
+        # [NEW] 快照：保存官方排行榜中的准确数值
+        # 因为后续的 Summary Fallback 会用计算值覆盖这些数据
+        # Map: (fight_id, player_name) -> official_dps
         # ============================================================
         official_dps_map = {}
         for report in self.reports:
             for fight in report.fights:
+                # 此时每场战斗通常只有1个玩家(主角)，就是排行榜上那个人
                 for p in fight.players:
                     official_dps_map[(fight.fight_id, p.name)] = p.total
         # ============================================================
 
-        # 2. 应用数量限制 (截断榜单)
+        # 2. 应用数量限制
         limit = limit or -1
         self.reports = self.reports[:limit]
 
-        # 3. 检查并补全阵容 (CombatantInfo 缺失的情况)
-        # ... (保留这部分逻辑) ...
+        # 3. [核心修复] 检查并补全阵容
+        # 如果战斗中玩家数量 <= 1，说明 combatantInfo 丢失，手动去抓 Summary
         fights_missing_comp = [f for f in self.fights if len(f.players) <= 1]
+        
         if fights_missing_comp:
-            # ... (保留 fetch summary 和 恢复 DPS 的逻辑) ...
+            logger.info(f"[Fallback] Fetching Composition for {len(fights_missing_comp)} fights (via Summary API)...")
+            # 批量加载 Summary，这会填充 fight.players，但会将 dps 重置为手动计算值
             await self.load_many(fights_missing_comp, raise_errors=False)
-            
-            # [重要] 恢复 DPS (防止 load_many 重置为错误值)
+
+            # ============================================================
+            # [NEW] 还原：将官方准确值覆盖回手动计算值
+            # ============================================================
+            restore_count = 0
             for fight in fights_missing_comp:
                 for player in fight.players:
+                    # 查找这个玩家是否是排行榜上的主角
                     key = (fight.fight_id, player.name)
                     if key in official_dps_map:
-                        player.total = official_dps_map[key]
+                        old_val = player.total
+                        new_val = official_dps_map[key]
+                        # 只有当数值确实被改坏了才还原 (避免不必要的日志)
+                        if old_val != new_val:
+                            player.total = new_val # <--- 强行覆盖回官方值
+                            restore_count += 1
+                            # (可选) 打印日志验证一下是否修好了那个 29510
+                            if abs(old_val - 29510) < 100: 
+                                logger.info(f"[DPS Fix] FIXED GHOST DATA for {player.name}: {old_val} -> {new_val}")
+            
+            if restore_count > 0:
+                logger.info(f"[DPS Fix] Restored accurate Ranking Data for {restore_count} players.")
+            # ============================================================
 
-        # 4. 重新加载技能时间轴 (这是“后面的我们再填”的部分)
-        # 因为我们刚才清空了 self.reports，所以这里会重新下载所有上榜玩家的施法数据。
-        # 这是一个必要的代价，用来保证数据的纯净和准确。
+        # 4. 加载技能数据
         await self.load_actors()
         
         logger.info("done")
