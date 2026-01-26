@@ -31,7 +31,7 @@ RED_MAGE_MAIN = WowSpec(role=RDPS, wow_class=RED_MAGE, name="Red Mage")
 
 # Burst / Cooldowns
 RED_MAGE_MAIN.add_spell(spell_id=7520, cooldown=120, duration=20, name="Embolden", icon="Embolden.png", show=True,tags=[SpellTag.DAMAGE])
-RED_MAGE_MAIN.add_spell(spell_id=7521, cooldown=110, duration=15, name="Manafication", show=True,icon="Manafication.png", tags=[SpellTag.DAMAGE])
+RED_MAGE_MAIN.add_spell(spell_id=7521, cooldown=110, duration=30, name="Manafication", show=True,icon="Manafication.png", tags=[SpellTag.DAMAGE])
 RED_MAGE_MAIN.add_spell(spell_id=7527, cooldown=1.5, name="Enchanted Riposte", show=True,icon="Enchanted_Riposte.png", tags=[SpellTag.DAMAGE], variations=[45960])
 RED_MAGE_MAIN.add_spell(spell_id=7517, cooldown=25, name="Fleche", icon="Fleche.png", show=False,tags=[SpellTag.DAMAGE])
 RED_MAGE_MAIN.add_spell(spell_id=7519, cooldown=35, name="Contre Sixte", icon="Contre_Sixte.png", show=False,tags=[SpellTag.DAMAGE])
