@@ -28,7 +28,7 @@
     ]
   },
   {
-    "spell_id": 6062,
+    "spell_id": 16478,
     "name": "High Jump",
     "icon": "High_Jump.png",
     "cooldown": 30.0,
@@ -84,7 +84,7 @@
     ]
   },
   {
-    "spell_id": 34,
+    "spell_id": 7542,
     "name": "Bloodbath",
     "icon": "Bloodbath.png",
     "cooldown": 7542.0,
@@ -98,7 +98,7 @@
     ]
   },
   {
-    "spell_id": 76,
+    "spell_id": 7549,
     "name": "Feint",
     "icon": "Feint.png",
     "cooldown": 7549.0,

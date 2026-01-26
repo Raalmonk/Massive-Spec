@@ -1,0 +1,22 @@
+{
+  "meta": {
+    "boss": 101,
+    "dps": 49892.2,
+    "duration": 506668,
+    "report": "VLNYPMkAdrTcQBZK",
+    "fight": 73,
+    "region": ""
+  },
+  "rows": [
+    {
+      "label": "Vena Attire",
+      "spec": "WhiteMage",
+      "casts": []
+    },
+    {
+      "label": "Crow Xo",
+      "spec": "Scholar",
+      "casts": []
+    }
+  ]
+}

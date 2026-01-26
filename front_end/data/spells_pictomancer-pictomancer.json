@@ -112,13 +112,125 @@
     ]
   },
   {
+    "spell_id": 34653,
+    "name": "Blizzard in Cyan",
+    "icon": "Blizzard_in_Cyan.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#E060E0",
+    "load_order": 8,
+    "show": true,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 34650,
+    "name": "Fire in Red",
+    "icon": "Fire_in_Red.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#E060E0",
+    "load_order": 9,
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 34664,
+    "name": "Pom Motif",
+    "icon": "Pom_Motif.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#E060E0",
+    "load_order": 10,
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 34665,
+    "name": "Wing Motif",
+    "icon": "Wing_Motif.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#E060E0",
+    "load_order": 11,
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 34666,
+    "name": "Claw Motif",
+    "icon": "Claw_Motif.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#E060E0",
+    "load_order": 12,
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 34667,
+    "name": "Maw Motif",
+    "icon": "Maw_Motif.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#E060E0",
+    "load_order": 13,
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 34668,
+    "name": "Hammer Motif",
+    "icon": "Hammer_Motif.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#E060E0",
+    "load_order": 14,
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 34669,
+    "name": "Starry Sky Motif",
+    "icon": "Starry_Sky_Motif.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#E060E0",
+    "load_order": 15,
+    "show": false,
+    "category": "MAJOR",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
     "spell_id": 34685,
     "name": "Tempera Coat",
     "icon": "Tempera_Coat.png",
     "cooldown": 120.0,
     "duration": 10.0,
     "color": "#E060E0",
-    "load_order": 8,
+    "load_order": 16,
     "show": false,
     "category": "SINGLE_MIT",
     "debug_tags": [
@@ -132,7 +244,7 @@
     "cooldown": 90.0,
     "duration": 15.0,
     "color": "#E060E0",
-    "load_order": 9,
+    "load_order": 17,
     "show": true,
     "category": "RAID_MIT",
     "debug_tags": [
@@ -146,7 +258,7 @@
     "cooldown": 1.0,
     "duration": 10.0,
     "color": "#E060E0",
-    "load_order": 10,
+    "load_order": 18,
     "show": false,
     "category": "RAID_MIT",
     "debug_tags": [
@@ -160,7 +272,7 @@
     "cooldown": 270,
     "duration": 30.0,
     "color": "#b576e8",
-    "load_order": 11,
+    "load_order": 19,
     "show": false,
     "category": "UTILITY",
     "debug_tags": [
@@ -174,7 +286,7 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#666666",
-    "load_order": 12,
+    "load_order": 20,
     "show": null,
     "category": "UTILITY",
     "debug_tags": [

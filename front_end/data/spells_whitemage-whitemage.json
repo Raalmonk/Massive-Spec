@@ -70,13 +70,55 @@
     ]
   },
   {
+    "spell_id": 16531,
+    "name": "Afflatus_Solace",
+    "icon": "Afflatus_Solace.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 5,
+    "show": false,
+    "category": "SINGLE_MIT",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 135,
+    "name": "Cure II",
+    "icon": "Cure_II.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 6,
+    "show": false,
+    "category": "SINGLE_MIT",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 1000158,
+    "name": "Regen",
+    "icon": "Regen.png",
+    "cooldown": 0.0,
+    "duration": 18.0,
+    "color": "#FFF0F5",
+    "load_order": 7,
+    "show": false,
+    "category": "SINGLE_MIT",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
     "spell_id": 25862,
     "name": "Liturgy of the Bell",
     "icon": "Liturgy_of_the_Bell.png",
     "cooldown": 180.0,
     "duration": 0.0,
     "color": "#FFF0F5",
-    "load_order": 5,
+    "load_order": 8,
     "show": true,
     "category": "RAID_MIT",
     "debug_tags": [
@@ -90,7 +132,7 @@
     "cooldown": 120.0,
     "duration": 20.0,
     "color": "#FFF0F5",
-    "load_order": 6,
+    "load_order": 9,
     "show": true,
     "category": "RAID_MIT",
     "debug_tags": [
@@ -104,7 +146,7 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#FFF0F5",
-    "load_order": 7,
+    "load_order": 10,
     "show": true,
     "category": "RAID_MIT",
     "debug_tags": [
@@ -118,7 +160,7 @@
     "cooldown": 1.0,
     "duration": 0.0,
     "color": "#FFF0F5",
-    "load_order": 8,
+    "load_order": 11,
     "show": false,
     "category": "RAID_MIT",
     "debug_tags": [
@@ -132,7 +174,63 @@
     "cooldown": 40.0,
     "duration": 0.0,
     "color": "#FFF0F5",
-    "load_order": 9,
+    "load_order": 12,
+    "show": false,
+    "category": "RAID_MIT",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 16534,
+    "name": "Afflatus_Rapture",
+    "icon": "Afflatus_Rapture.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 13,
+    "show": false,
+    "category": "RAID_MIT",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 131,
+    "name": "Cure III",
+    "icon": "Cure_III.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 14,
+    "show": false,
+    "category": "RAID_MIT",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 37010,
+    "name": "Medica III",
+    "icon": "Medica_III.png",
+    "cooldown": 0.0,
+    "duration": 15.0,
+    "color": "#FFF0F5",
+    "load_order": 15,
+    "show": false,
+    "category": "RAID_MIT",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 124,
+    "name": "Medica",
+    "icon": "Medica.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 16,
     "show": false,
     "category": "RAID_MIT",
     "debug_tags": [
@@ -146,7 +244,7 @@
     "cooldown": 270,
     "duration": 30.0,
     "color": "#b576e8",
-    "load_order": 10,
+    "load_order": 17,
     "show": false,
     "category": "UTILITY",
     "debug_tags": [
@@ -160,7 +258,7 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#666666",
-    "load_order": 11,
+    "load_order": 18,
     "show": null,
     "category": "UTILITY",
     "debug_tags": [
