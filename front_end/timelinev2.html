@@ -59,7 +59,8 @@
         import React, { useState, useRef, useEffect, useMemo, useCallback } from 'https://esm.sh/react@18.2.0?dev';
         import { createRoot } from 'https://esm.sh/react-dom@18.2.0/client?dev';
         // REMOVED: Skull import
-        import { ZoomIn, ZoomOut, Search, Menu, Clock, Hourglass, Shield, ShieldAlert, Zap, Swords, MoreHorizontal, Layers, Minimize2, Maximize2, ChevronDown, ExternalLink, Flag } from 'https://esm.sh/lucide-react@0.263.1?dev';
+        // ADDED: Eye, EyeOff for the toggle button
+        import { ZoomIn, ZoomOut, Search, Menu, Clock, Hourglass, Shield, ShieldAlert, Zap, Swords, MoreHorizontal, Layers, Minimize2, Maximize2, ChevronDown, ExternalLink, Flag, Eye, EyeOff } from 'https://esm.sh/lucide-react@0.263.1?dev';
 
         // --- Configuration ---
         const THEME_COLOR = '#00FF96';
@@ -702,6 +703,18 @@
                 setSelectedSpells(newSet);
             };
 
+            // --- FEATURE: Toggle All Visibility ---
+            const toggleAllVisibility = () => {
+                if (selectedSpells.size > 0) {
+                    // Turn all off
+                    setSelectedSpells(new Set());
+                } else {
+                    // Turn all on
+                    const allIds = Object.values(spells).map(s => s.id);
+                    setSelectedSpells(new Set(allIds));
+                }
+            };
+
             const handleZoomIn = () => setZoom(prev => Math.min(prev + 5, 100));
             const handleZoomOut = () => setZoom(prev => Math.max(prev - 5, 5));
             const formatTime = (s) => `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
@@ -889,6 +902,18 @@
                                 </div>
                             </div>
                         ))}
+
+                        {/* --- NEW: Toggle All Button (Placed after all categories/sprint) --- */}
+                        <div className="flex flex-col gap-1 border-l border-gray-700 pl-4">
+                            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Global</span>
+                            <button
+                                onClick={toggleAllVisibility}
+                                className={`w-8 h-8 flex items-center justify-center rounded border transition-all ${selectedSpells.size > 0 ? 'bg-[#00FF96]/20 border-[#00FF96] text-[#00FF96]' : 'bg-transparent border-gray-700 text-gray-500 hover:border-gray-500'}`}
+                                title={selectedSpells.size > 0 ? "Hide All Spells" : "Show All Spells"}
+                            >
+                                {selectedSpells.size > 0 ? <Eye size={16} /> : <EyeOff size={16} />}
+                            </button>
+                        </div>
                     </div>
                     <div className="flex-1"></div>
                     <div className="flex items-center gap-2 bg-black/20 p-1 rounded-lg border border-gray-800 shrink-0">
