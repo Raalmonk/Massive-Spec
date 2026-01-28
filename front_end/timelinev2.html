@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M-Spec - Timeline</title>
+    <title>M-Spec - Timeline (Curated)</title>
 
     <!-- 1. Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -59,6 +59,16 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
+        
+        /* Animation for Selection Mode */
+        @keyframes pulse-border-blue {
+            0% { border-color: #3B82F6; }
+            50% { border-color: rgba(59, 130, 246, 0.2); }
+            100% { border-color: #3B82F6; }
+        }
+        .selection-active-blue {
+            animation: pulse-border-blue 2s infinite;
+        }
     </style>
 </head>
 <body>
@@ -68,11 +78,12 @@
     <script type="text/babel" data-type="module">
         import React, { useState, useRef, useEffect, useMemo, useCallback } from 'https://esm.sh/react@18.2.0?dev';
         import { createRoot } from 'https://esm.sh/react-dom@18.2.0/client?dev';
-        // REMOVED: Skull import
-        import { ZoomIn, ZoomOut, Search, Menu, Clock, Hourglass, Shield, ShieldAlert, Zap, Swords, MoreHorizontal, Layers, Minimize2, Maximize2, ChevronDown, ExternalLink, Flag, Timer } from 'https://esm.sh/lucide-react@0.263.1?dev';
+        // ADDED: MousePointer2, CheckCircle2, XCircle
+        import { ZoomIn, ZoomOut, Search, Menu, Clock, Hourglass, Shield, ShieldAlert, Zap, Swords, MoreHorizontal, Layers, Minimize2, Maximize2, ChevronDown, ExternalLink, Flag, Timer, MousePointer2, CheckCircle2, XCircle } from 'https://esm.sh/lucide-react@0.263.1?dev';
 
         // --- Configuration ---
         const THEME_COLOR = '#00FF96';
+        const SELECTION_COLOR_BLUE = '#3B82F6'; // Blue for Curation Mode
         const JOB_COLOR_RDM = '#E87B7B';
         const FIGHT_DURATION = 1200; // Increased to 10 minutes (600s) to fix the "7 minute" overflow issue
         const API_BASE = '';
@@ -115,15 +126,8 @@
                         cd: spell.cooldown || 0,
                         duration: spell.duration || 0,
                         color: spell.color || '#ffcc00',
-                        
-                        // 读取分类
                         category: spell.category || 'MAJOR', 
-                        
-                        // 读取显示状态
                         show: (spell.show !== undefined && spell.show !== null) ? spell.show : true,
-
-                        // --- 🟢 关键修复: 必须显式读取 load_order ---
-                        // 如果 JSON 里有 load_order 就用它，没有就给个默认大值(排最后)
                         load_order: (spell.load_order !== undefined) ? spell.load_order : 9999
                     };
                 });
@@ -191,24 +195,20 @@
             return 'dps';
         };
 
-        // NEW: URL Helper
         const getFFLogsUrl = (reportId, fightId, region) => {
-            // Default to global if undefined
             const baseUrl = (region === "CN") ? "https://cn.fflogs.com" : "https://www.fflogs.com";
             return `${baseUrl}/reports/${reportId}#fight=${fightId}`;
         };
 
         // 2. fetchRankings (API with Region & Partner Logic)
-        // --- UPDATED to support Region Filtering ---
         const fetchRankings = async (specSlug, bossSlug, spellMap, regionFilter = 'All') => {
             console.log('[M-Spec] 正在读取静态文件:', specSlug, bossSlug, 'Region:', regionFilter);
 
-            // 定义团辅职业列表 (根据你的要求)
             const BUFF_SPECS = new Set([
-                'astrologian-astrologian', 'scholar-scholar', // Healers
-                'dragoon-dragoon', 'reaper-reaper', 'monk-monk', 'ninja-ninja', // Melee
-                'dancer-dancer', 'bard-bard', // Phys Ranged
-                'redmage-redmage', 'summoner-summoner', 'pictomancer-pictomancer' // Magic Ranged
+                'astrologian-astrologian', 'scholar-scholar',
+                'dragoon-dragoon', 'reaper-reaper', 'monk-monk', 'ninja-ninja',
+                'dancer-dancer', 'bard-bard', 
+                'redmage-redmage', 'summoner-summoner', 'pictomancer-pictomancer'
             ]);
 
             try {
@@ -240,43 +240,33 @@
                     });
                 }
 
-                // 1. FILTER: Apply Spec and Region filter BEFORE sorting/slicing
                 let filteredPlayers = allPlayers.filter(p => p.spec_slug === specSlug && p.total > 0);
                 
                 if (regionFilter && regionFilter !== 'All') {
                     filteredPlayers = filteredPlayers.filter(p => p.region === regionFilter);
                 }
 
-                // 2. SORT: Descending DPS
                 filteredPlayers.sort((a, b) => b.total - a.total);
 
-                // 3. SLICE: Take top 70
                 const rankedPlayers = filteredPlayers.slice(0, 70);
 
                 const rankData = rankedPlayers.map((player, index) => {
                         const id = `${player.reportId}-${player.fightId}-${player.source_id}`;
                         
-                        // 1. 计算团辅数量
                         const buffCount = (player.composition || []).filter(s => BUFF_SPECS.has(s)).length;
 
-                        // 2. Partner 图标逻辑 (更新版)
                         let partnerIcon = null;
                         const myDetailedRole = getDetailedRole(specSlug);
 
                         if (player.composition && Array.isArray(player.composition)) {
-                            // 找出所有同职能的人 (比如所有近战)
                             const roleMates = player.composition.filter(s => getDetailedRole(s) === myDetailedRole);
-
-                            // 默认逻辑：找一个不是我的人
                             let partnerSpec = roleMates.find(s => s !== specSlug);
 
-                            // 特殊逻辑：如果是 Tank 或 Healer，且没找到别人(说明是同职业)，且同职能人数>=2
                             if (['tank', 'healer'].includes(myDetailedRole)) {
                                 if (!partnerSpec && roleMates.length >= 2) {
-                                    partnerSpec = specSlug; // 显示我自己(同职业堆叠)
+                                    partnerSpec = specSlug;
                                 }
                             }
-                            // 注意：DPS 保持默认逻辑，如果是双绝枪(T)，这里会显示绝枪；如果是双武僧(DPS)，这里partner为空(符合你的要求)
 
                             if (partnerSpec) {
                                 const iconName = getIconForSpec(partnerSpec);
@@ -298,7 +288,7 @@
                         reportId: player.reportId,
                         fightId: player.fightId,
                         partner: partnerIcon,
-                        buffCount: buffCount, // 新增字段
+                        buffCount: buffCount,
                         composition: player.composition,
                         dps: player.total,
                         killTime: `${m}:${s}`,
@@ -308,7 +298,7 @@
                             timestamp: c.ts ? c.ts / 1000 : (c.timestamp || 0),
                             duration: c.duration || (spellMap[c.spell_id] ? spellMap[c.spell_id].duration : 0)
                         })),
-                        deaths: player.deaths || [] // Data kept, UI removed
+                        deaths: player.deaths || [] 
                     };
                 });
                 return rankData;
@@ -328,27 +318,20 @@
             return parseInt(timeStr);
         };
 
-        // --- 适配你的命名: 读取本地 m9s.json, m10s.json 等 ---
         const fetchBossMechanics = async (bossSlug) => {
             if (!bossSlug) return [];
 
-            // 1. 定义映射表：把下拉菜单的值 (slug) 映射到你的文件名
             const fileMapping = {
                 'vamp-fatale': 'm9s',
                 'red-hot-and-deep-blue': 'm10s',
                 'the-tyrant': 'm11s',
                 'lindwurm': 'm12s_p1',
-                
-                // 如果你有P2的话
-                
                 'lindwurm-ii': 'm12s_p2'
             };
 
-            // 2. 获取对应的文件名，如果没有匹配到就默认用 slug
             const fileName = fileMapping[bossSlug] || bossSlug;
 
             try {
-                // 读取 ./data/m9s.json
                 const url = `./data/${fileName}.json?t=${Date.now()}`;
                 console.log(`[M-Spec] 加载 Boss 时间轴: ${url}`);
 
@@ -357,17 +340,14 @@
                 
                 const data = await res.json();
                 
-                // 3. 数据转换 (和之前一样)
                 const list = Array.isArray(data) ? data : Object.values(data);
 
                 return list.map(spell => ({
                     id: spell.id || spell.spell_id,
                     name: spell.name || 'Unknown',
-                    // 兼容秒或毫秒
                     time: (spell.time > 10000) ? (spell.time / 1000) : (spell.time || spell.timestamp || 0),
                     duration: spell.duration || 0,
                     color: spell.color || '#ff4444', 
-                    // 补全图标路径 (如果有 icon 字段)
                     icon: spell.icon ? `./images/spells/${spell.icon}` : null,
                     type: spell.type || 'mechanic'
                 })).sort((a, b) => a.time - b.time);
@@ -380,14 +360,12 @@
         
         const calculateCastTracks = (casts) => {
             if (!casts || casts.length === 0) return { tracks: [], maxTracks: 1 };
-            // Sort by timestamp for proper overlap rendering
             const sortedCasts = [...casts].sort((a, b) => a.timestamp - b.timestamp);
 
             const tracks = [];
             const results = [];
 
             sortedCasts.forEach(cast => {
-                // Heuristic for visual overlap prevention
                 const castEnd = cast.timestamp + Math.max(cast.duration || 0, 5) + 2; 
                 let placed = false;
                 for (let i = 0; i < tracks.length; i++) {
@@ -419,15 +397,13 @@
         };
 
         const RenderIcon = ({ spell, className }) => {
-            // Check spell.image (player spells) or spell.icon (boss mechanics)
             const imgUrl = spell.image || spell.icon;
             if (imgUrl) return <img src={imgUrl} alt={spell.name} className={`w-full h-full object-cover ${className}`} />;
             return <div className={`flex items-center justify-center w-full h-full text-sm select-none bg-gray-700 ${className}`}>{spell.char || (spell.name ? spell.name[0] : '?')}</div>;
         };
 
-        // NEW: Player Name/DPS Toggle Cell Component with Jump Link
         const PlayerNameCell = ({ name, dps, reportId, fightId, region }) => {
-            const [viewMode, setViewMode] = useState('dps'); // 'dps' or 'name'
+            const [viewMode, setViewMode] = useState('dps'); 
             const timeoutRef = useRef(null);
 
             const handleMouseEnter = () => {
@@ -438,7 +414,7 @@
             const handleMouseLeave = () => {
                 timeoutRef.current = setTimeout(() => {
                     setViewMode('dps');
-                }, 5000); // 5 seconds delay
+                }, 5000); 
             };
 
             const url = getFFLogsUrl(reportId, fightId, region);
@@ -452,9 +428,8 @@
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                     title="Open in FF Logs"
-                    onClick={(e) => e.stopPropagation()} // Prevent triggering row selection
+                    onClick={(e) => e.stopPropagation()} 
                 >
-                    {/* DPS Layer (Default) */}
                     <span 
                         className={`absolute inset-0 flex items-center font-bold text-[#00FF96] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] transition-opacity duration-500 ${viewMode === 'dps' ? 'opacity-100' : 'opacity-0'}`}
                         style={{ fontSize: '19px', lineHeight: 1 }}
@@ -462,7 +437,6 @@
                         {Math.round(dps).toLocaleString()}
                     </span>
                     
-                    {/* Name Layer (On Hover) */}
                     <span 
                         className={`absolute inset-0 flex items-center font-bold text-white truncate transition-opacity duration-500 underline decoration-gray-500 group-hover/link:decoration-[#00FF96] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] ${viewMode === 'name' ? 'opacity-100' : 'opacity-0'}`}
                         style={{ fontSize: '15px' }}
@@ -474,18 +448,15 @@
             );
         };
 
-        // NEW COMPONENT: Kill Time Filter (Dropdown)
         const KillTimeFilter = ({ filterRange, onApply }) => {
             const [isOpen, setIsOpen] = useState(false);
             const ref = useRef(null);
 
-            // Local State for inputs (Min Minutes, Min Seconds, Max Minutes, Max Seconds)
             const [minM, setMinM] = useState('');
             const [minS, setMinS] = useState('');
             const [maxM, setMaxM] = useState('');
             const [maxS, setMaxS] = useState('');
 
-            // Format helper for button display
             const formatDisplay = () => {
                 if (filterRange.min === 0 && filterRange.max >= 9999) return "Kill Time";
                 const formatTime = (totalSec) => {
@@ -497,7 +468,6 @@
                 return `${formatTime(filterRange.min)} - ${formatTime(filterRange.max)}`;
             };
 
-            // Initialize local state when dropdown opens
             useEffect(() => {
                 if (isOpen) {
                     const hasMin = filterRange.min > 0;
@@ -519,13 +489,11 @@
 
             const handleApply = () => {
                 const minSeconds = (parseInt(minM || 0) * 60) + parseInt(minS || 0);
-                // If max fields are empty, assume infinite
                 let maxSeconds = 99999;
                 if (maxM !== '' || maxS !== '') {
                     maxSeconds = (parseInt(maxM || 0) * 60) + parseInt(maxS || 0);
                 }
                 
-                // Swap if min > max
                 if (minSeconds > maxSeconds && maxSeconds !== 99999) {
                      onApply({ min: maxSeconds, max: minSeconds });
                 } else {
@@ -539,7 +507,6 @@
                 setIsOpen(false);
             }
 
-            // Input class helper
             const inputClass = "w-12 bg-[#252525] border border-gray-700 rounded p-1 text-center text-white text-sm focus:border-[#00FF96] focus:outline-none";
 
             return (
@@ -557,7 +524,6 @@
                         <div className="absolute top-full left-0 mt-2 w-64 bg-[#1a1a1a] border border-gray-700 rounded-lg shadow-xl z-[70] p-4 flex flex-col gap-4">
                             <h3 className="text-xs font-bold text-gray-500 uppercase">Filter Kill Time (Min : Sec)</h3>
                             
-                            {/* Min Time */}
                             <div className="flex items-center justify-between">
                                 <span className="text-sm text-gray-300 w-10">Min</span>
                                 <div className="flex items-center gap-1">
@@ -567,7 +533,6 @@
                                 </div>
                             </div>
 
-                            {/* Max Time */}
                             <div className="flex items-center justify-between">
                                 <span className="text-sm text-gray-300 w-10">Max</span>
                                 <div className="flex items-center gap-1">
@@ -587,7 +552,6 @@
             );
         };
 
-        // Composition Filter Component
         const CompositionFilter = ({ activeFilterSpecs, onApply }) => {
             const [isOpen, setIsOpen] = useState(false);
             const [tempSelected, setTempSelected] = useState(new Set(activeFilterSpecs));
@@ -661,13 +625,10 @@
             );
         };
 
-        // Custom Spec Selector
         const SpecSelector = ({ selectedSpec, onChange }) => {
             const [isOpen, setIsOpen] = useState(false);
             const ref = useRef(null);
 
-            // Uses Global SPECS variable
-            
             const currentSpecItem = SPECS.flatMap(g => g.items).find(i => i.id === selectedSpec);
             const currentIcon = currentSpecItem?.icon || 'Red_Mage.png';
             const currentName = currentSpecItem?.n || 'Red Mage';
@@ -718,27 +679,26 @@
 
         // --- Main App ---
         const App = () => {
-            // 1. 定义一个辅助函数来读取 URL 参数
             const getQueryParam = (param, defaultValue) => {
                 const urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get(param) || defaultValue;
             };
 
             const [zoom, setZoom] = useState(15);
-            const [isCollapsed, setIsCollapsed] = useState(true); // Default to Collapsed
+            const [isCollapsed, setIsCollapsed] = useState(true); 
             
             // NEW: Highlighted Row State (MULTI-SELECT)
             const [selectedRowIds, setSelectedRowIds] = useState(new Set());
+            // NEW FEATURE: Curation Mode States
+            const [isSelectionMode, setIsSelectionMode] = useState(false);
+            const [isCurated, setIsCurated] = useState(false);
 
-            // 2. 修改这里：使用 getQueryParam 来设置初始值
             const [selectedBoss, setSelectedBoss] = useState(getQueryParam('boss', 'vamp-fatale'));
             const [selectedSpec, setSelectedSpec] = useState(getQueryParam('spec', 'redmage-redmage'));
             
-            // NEW: Region Filter
             const [selectedRegion, setSelectedRegion] = useState('All');
 
-            const [activeFilterSpecs, setActiveFilterSpecs] = useState(new Set()); // New State
-            // NEW: Kill Time Range State {min: seconds, max: seconds}
+            const [activeFilterSpecs, setActiveFilterSpecs] = useState(new Set()); 
             const [killTimeRange, setKillTimeRange] = useState({ min: 0, max: 99999 });
 
             const [spellCategories, setSpellCategories] = useState({});
@@ -748,22 +708,17 @@
             const [loading, setLoading] = useState(true);
 
             const [showDuration, setShowDuration] = useState(true);
-            
-            // CHANGE 1: Set default to false
             const [showCooldown, setShowCooldown] = useState(false);
             
-            // REMOVED: showDeaths state
             const [showPhases, setShowPhases] = useState(true);
             const [showBossRow, setShowBossRow] = useState(true);
 
             const [selectedSpells, setSelectedSpells] = useState(new Set());
             const scrollContainerRef = useRef(null);
 
-            // consistent spell coloring
             const spellColorMap = useMemo(() => {
                 const map = {};
                 let colorIdx = 0;
-                // Sort spells by ID to ensure consistency
                 const sortedSpellIds = Object.keys(spells).sort();
 
                 sortedSpellIds.forEach(spellId => {
@@ -773,8 +728,7 @@
                 return map;
             }, [spells]);
 
-            // Drag State (Refactored to Refs for robustness)
-            const [isDraggingState, setIsDraggingState] = useState(false); // Only for UI cursor update
+            const [isDraggingState, setIsDraggingState] = useState(false); 
             const dragInfo = useRef({
                 isDown: false,
                 startX: 0,
@@ -788,12 +742,10 @@
                     const sps = await fetchSpellData(selectedSpec);
                     const mechs = await fetchBossMechanics(selectedBoss);
                     
-                    // PASS selectedRegion here
                     const ranks = await fetchRankings(selectedSpec, selectedBoss, sps, selectedRegion);
 
                     setSpellCategories(cats); setSpells(sps); setBossMechanics(mechs); setRankData(ranks);
                     
-                    // Filter default active spells
                     const defaultSelectedIds = Object.values(sps)
                         .filter(s => {
                             if (s.show !== null && s.show !== undefined) {
@@ -808,7 +760,7 @@
                     setLoading(false);
                 };
                 load();
-            }, [selectedBoss, selectedSpec, selectedRegion]); // ADDED selectedRegion to dependency array
+            }, [selectedBoss, selectedSpec, selectedRegion]); 
 
             const toggleSpell = (spellId) => {
                 const newSet = new Set(selectedSpells);
@@ -818,7 +770,6 @@
 
             const toggleCategory = (catKey) => {
                 const spellsInCat = Object.values(spells).filter(s => s.category === catKey);
-                // Determine logic: if ANY are unselected, select ALL. If ALL are selected, deselect ALL.
                 const allSelected = spellsInCat.every(s => selectedSpells.has(s.id));
                 const newSet = new Set(selectedSpells);
                 spellsInCat.forEach(s => {
@@ -831,18 +782,15 @@
             const handleZoomOut = () => setZoom(prev => Math.max(prev - 5, 5));
             const formatTime = (s) => `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
 
-            // --- FEATURE 1: Dynamic Ticks Calculation ---
             const getTickSettings = (z) => {
-                // Returns interval in seconds for Major (text) and Minor (lines) ticks
-                if (z < 10) return { major: 60, minor: 10 }; // Zoomed out: 60s numbers, 10s lines
-                if (z < 30) return { major: 30, minor: 5 };  // Medium: 30s numbers, 5s lines
-                if (z < 60) return { major: 15, minor: 1 };  // Zoomed in: 15s numbers, 1s lines
-                return { major: 10, minor: 1 };              // Very zoomed in
+                if (z < 10) return { major: 60, minor: 10 }; 
+                if (z < 30) return { major: 30, minor: 5 };  
+                if (z < 60) return { major: 15, minor: 1 };  
+                return { major: 10, minor: 1 };              
             };
 
             const tickSettings = getTickSettings(zoom);
 
-            // --- Robust Drag Implementation ---
             const onMouseDown = useCallback((e) => {
                 dragInfo.current = {
                     isDown: true,
@@ -851,11 +799,9 @@
                 };
                 setIsDraggingState(true);
                 
-                // Add listeners to window to catch movements outside the container
                 window.addEventListener('mousemove', onMouseMove);
                 window.addEventListener('mouseup', onMouseUp);
                 
-                // Prevent text selection
                 e.preventDefault(); 
             }, []);
 
@@ -864,7 +810,7 @@
                 e.preventDefault();
                 
                 const x = e.pageX;
-                const walk = (x - dragInfo.current.startX) * 1.5; // Scroll speed multiplier
+                const walk = (x - dragInfo.current.startX) * 1.5; 
                 if (scrollContainerRef.current) {
                     scrollContainerRef.current.scrollLeft = dragInfo.current.scrollLeft - walk;
                 }
@@ -874,12 +820,10 @@
                 dragInfo.current.isDown = false;
                 setIsDraggingState(false);
                 
-                // Clean up window listeners
                 window.removeEventListener('mousemove', onMouseMove);
                 window.removeEventListener('mouseup', onMouseUp);
             }, [onMouseMove]);
 
-            // Cleanup on unmount
             useEffect(() => {
                 return () => {
                     window.removeEventListener('mousemove', onMouseMove);
@@ -887,11 +831,9 @@
                 };
             }, [onMouseMove, onMouseUp]);
 
-            // --- NEW: URL UPDATE HELPER ---
             const updateUrlAndReload = (key, value) => {
                 const url = new URL(window.location);
                 url.searchParams.set(key, value);
-                // Also ensure we keep the OTHER param
                 if (key === 'boss') {
                     url.searchParams.set('spec', selectedSpec);
                 } else if (key === 'spec') {
@@ -899,6 +841,24 @@
                 }
                 
                 window.location.href = url.toString();
+            };
+
+            // FEATURE: Handle Confirm Selection
+            const handleConfirmSelection = () => {
+                if (selectedRowIds.size === 0) {
+                    alert("Please select at least one row.");
+                    return;
+                }
+                setIsCurated(true);
+                setIsSelectionMode(false);
+            };
+
+            // FEATURE: Handle Cancel/Exit
+            const handleExitCuration = () => {
+                setIsCurated(false);
+                setIsSelectionMode(false);
+                // Optional: Clear selection on exit, or keep it? Keeping it is usually better UX
+                // setSelectedRowIds(new Set()); 
             };
 
 
@@ -911,14 +871,12 @@
                 <nav className="h-14 bg-[#1a1a1a] border-b border-gray-800 flex items-center justify-between px-4 shrink-0 z-[60]">
                     <div className="flex items-center gap-6">
                         <div className="flex items-center gap-2">
-                            {/* UPDATED: Added Link wrapper for M-Spec title */}
                             <a href="main_menu.html#" className="text-xl font-bold tracking-tight text-white flex items-center select-none hover:opacity-80 transition-opacity" style={{ textDecoration: 'none' }}>
                                 <span style={{ color: THEME_COLOR }} className="mr-1">M</span>-Spec
                             </a>
                         </div>
                         <div className="flex items-center gap-2">
                             <span className="text-gray-400 text-sm">Boss:</span>
-                            {/* UPDATED: onChange now triggers URL update */}
                             <select 
                                 value={selectedBoss} 
                                 onChange={(e) => updateUrlAndReload('boss', e.target.value)} 
@@ -932,14 +890,12 @@
                             </select>
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
                             <span className="text-gray-400 text-sm">Spec:</span>
-                            {/* UPDATED: onChange now triggers URL update */}
                             <SpecSelector 
                                 selectedSpec={selectedSpec} 
                                 onChange={(id) => updateUrlAndReload('spec', id)} 
                             />
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
                             
-                            {/* NEW: Region Selector */}
                             <span className="text-gray-400 text-sm">Region:</span>
                             <select value={selectedRegion} onChange={(e) => setSelectedRegion(e.target.value)} className="bg-black/30 border border-gray-700 text-white text-sm rounded px-2 py-1.5 focus:outline-none focus:border-[#00FF96] cursor-pointer">
                                 <option value="All">All</option>
@@ -955,8 +911,61 @@
 
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
                             
-                            {/* NEW: Kill Time Filter */}
                             <KillTimeFilter filterRange={killTimeRange} onApply={setKillTimeRange} />
+
+                            <span className="w-px h-3 bg-gray-600 mx-2"></span>
+
+                            {/* NEW FEATURE: Curation Buttons */}
+                            {/* State 1: Default - Show "Select" */}
+                            {!isSelectionMode && !isCurated && (
+                                <button 
+                                    onClick={() => { setIsSelectionMode(true); setSelectedRowIds(new Set()); }}
+                                    className="flex items-center gap-2 px-3 py-1.5 border border-gray-700 rounded-md text-sm text-gray-400 hover:border-[#00FF96] hover:text-white transition-colors bg-black/30"
+                                    title="Enter Curation Mode"
+                                >
+                                    <MousePointer2 size={14} />
+                                    <span>Select</span>
+                                </button>
+                            )}
+
+                            {/* State 2: Selection Mode Active */}
+                            {isSelectionMode && (
+                                <div className="flex items-center gap-2 animate-in fade-in zoom-in duration-200">
+                                    <span className="text-xs font-bold text-[#3B82F6] mr-1">
+                                        Selected: {selectedRowIds.size}
+                                    </span>
+                                    <button 
+                                        onClick={handleConfirmSelection}
+                                        className="flex items-center gap-1 px-3 py-1.5 bg-[#3B82F6] text-white font-bold rounded-md text-sm hover:bg-blue-600 transition-colors shadow-lg shadow-blue-500/20"
+                                    >
+                                        <CheckCircle2 size={14} />
+                                        <span>Confirm</span>
+                                    </button>
+                                    <button 
+                                        onClick={() => setIsSelectionMode(false)}
+                                        className="flex items-center gap-1 px-3 py-1.5 border border-red-500/50 text-red-400 rounded-md text-sm hover:bg-red-500/10 transition-colors"
+                                    >
+                                        <XCircle size={14} />
+                                        <span>Cancel</span>
+                                    </button>
+                                </div>
+                            )}
+
+                            {/* State 3: Curated Mode Active */}
+                            {isCurated && (
+                                <div className="flex items-center gap-2">
+                                    <button 
+                                        onClick={handleExitCuration}
+                                        className="flex items-center gap-2 px-3 py-1.5 bg-[#3B82F6]/20 border border-[#3B82F6] text-white rounded-md text-sm hover:bg-[#3B82F6]/30 transition-colors"
+                                        title="Exit Curated Mode"
+                                    >
+                                        <CheckCircle2 size={14} className="text-[#3B82F6]" />
+                                        <span>Curated ({selectedRowIds.size})</span>
+                                        <XCircle size={14} className="ml-1 opacity-50 hover:opacity-100" />
+                                    </button>
+                                </div>
+                            )}
+
                         </div>
                     </div>
                     {/* Right side with Discord Icon */}
@@ -981,8 +990,6 @@
                         <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Display</span>
                         <div className="flex items-center gap-1">
                             <button title="Duration" onClick={() => setShowDuration(!showDuration)} className={`w-8 h-6 flex items-center justify-center text-sm rounded border transition-colors ${showDuration ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>⏳</button>
-                            
-                            {/* CHANGE 2: Changed emoji to 🕙 */}
                             <button title="Cooldown" onClick={() => setShowCooldown(!showCooldown)} className={`w-8 h-6 flex items-center justify-center text-sm rounded border transition-colors ${showCooldown ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>🕙</button>
                         
                         </div>
@@ -991,7 +998,6 @@
                         <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Boss</span>
                         <div className="flex items-center gap-2">
                             <div className={`w-8 h-8 rounded border-2 overflow-hidden cursor-pointer transition ${showBossRow ? 'border-[#00FF96] opacity-100' : 'border-gray-700 opacity-50 grayscale'}`} onClick={() => setShowBossRow(!showBossRow)} title="Toggle Boss Row">
-                                {/* Modified Image Source */}
                                 <img src="./images/classes/inv_achievement_raiddragon_sarkareth.jpg" alt="Boss" className="w-full h-full object-cover" />
                             </div>
                         </div>
@@ -1128,9 +1134,12 @@
                                             if (!comp.includes(spec)) return false;
                                         }
                                     }
-                                    // 2. Kill Time Filter (New)
+                                    // 2. Kill Time Filter
                                     if (row.killTimeSeconds < killTimeRange.min) return false;
                                     if (row.killTimeSeconds > killTimeRange.max) return false;
+
+                                    // 3. CURATION FILTER (New)
+                                    if (isCurated && !selectedRowIds.has(row.id)) return false;
 
                                     return true;
                                 })
@@ -1148,6 +1157,10 @@
                                 // FEATURE 2: Check if this row is selected (MULTI-SELECT SUPPORT)
                                 const isSelected = selectedRowIds.has(row.id);
 
+                                // Dynamic styles based on Selection Mode
+                                const selectionBorderColor = isSelectionMode ? 'border-[#3B82F6]' : 'border-[#00FF96]';
+                                const selectionBg = isSelectionMode ? 'bg-[#3B82F6]/10' : 'bg-[#00FF96]/5';
+
                                 return (
                                     <div 
                                         key={row.id} 
@@ -1163,14 +1176,14 @@
                                         }}
                                         className={`flex hover:bg-[#1a1a1a] transition-colors group relative border-b border-gray-800/40 ${
                                             isSelected 
-                                            ? 'bg-[#00FF96]/5 z-10' // Removed border changes to prevent layout shift
+                                            ? `${selectionBg} z-10` // Removed border changes to prevent layout shift
                                             : ''
                                         }`} 
                                         style={{ height: `${totalHeight}px` }}
                                     >
                                         {/* Selection Highlight Overlay - Absolute positioned to avoid layout shift */}
                                         {isSelected && (
-                                            <div className="absolute inset-0 border-t-2 border-b-2 border-[#00FF96] pointer-events-none z-[60]"></div>
+                                            <div className={`absolute inset-0 border-t-2 border-b-2 ${selectionBorderColor} pointer-events-none z-[60]`}></div>
                                         )}
 
                                         {/* Sticky Left Panel - Adjusted for Compact Height */}
