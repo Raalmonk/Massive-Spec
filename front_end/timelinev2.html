@@ -49,6 +49,16 @@
         /* Custom Drag Cursor */
         .cursor-grab { cursor: grab; }
         .cursor-grabbing { cursor: grabbing; }
+        
+        /* Input Number Styling - Remove spinners */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
     </style>
 </head>
 <body>
@@ -59,8 +69,7 @@
         import React, { useState, useRef, useEffect, useMemo, useCallback } from 'https://esm.sh/react@18.2.0?dev';
         import { createRoot } from 'https://esm.sh/react-dom@18.2.0/client?dev';
         // REMOVED: Skull import
-        // ADDED: Eye, EyeOff for the toggle button
-        import { ZoomIn, ZoomOut, Search, Menu, Clock, Hourglass, Shield, ShieldAlert, Zap, Swords, MoreHorizontal, Layers, Minimize2, Maximize2, ChevronDown, ExternalLink, Flag, Eye, EyeOff } from 'https://esm.sh/lucide-react@0.263.1?dev';
+        import { ZoomIn, ZoomOut, Search, Menu, Clock, Hourglass, Shield, ShieldAlert, Zap, Swords, MoreHorizontal, Layers, Minimize2, Maximize2, ChevronDown, ExternalLink, Flag, Timer } from 'https://esm.sh/lucide-react@0.263.1?dev';
 
         // --- Configuration ---
         const THEME_COLOR = '#00FF96';
@@ -465,6 +474,119 @@
             );
         };
 
+        // NEW COMPONENT: Kill Time Filter (Dropdown)
+        const KillTimeFilter = ({ filterRange, onApply }) => {
+            const [isOpen, setIsOpen] = useState(false);
+            const ref = useRef(null);
+
+            // Local State for inputs (Min Minutes, Min Seconds, Max Minutes, Max Seconds)
+            const [minM, setMinM] = useState('');
+            const [minS, setMinS] = useState('');
+            const [maxM, setMaxM] = useState('');
+            const [maxS, setMaxS] = useState('');
+
+            // Format helper for button display
+            const formatDisplay = () => {
+                if (filterRange.min === 0 && filterRange.max >= 9999) return "Kill Time";
+                const formatTime = (totalSec) => {
+                    if (totalSec >= 9999) return "Max";
+                    const m = Math.floor(totalSec / 60);
+                    const s = totalSec % 60;
+                    return `${m}:${s.toString().padStart(2, '0')}`;
+                };
+                return `${formatTime(filterRange.min)} - ${formatTime(filterRange.max)}`;
+            };
+
+            // Initialize local state when dropdown opens
+            useEffect(() => {
+                if (isOpen) {
+                    const hasMin = filterRange.min > 0;
+                    const hasMax = filterRange.max < 9999;
+                    setMinM(hasMin ? Math.floor(filterRange.min / 60).toString() : '');
+                    setMinS(hasMin ? (filterRange.min % 60).toString() : '');
+                    setMaxM(hasMax ? Math.floor(filterRange.max / 60).toString() : '');
+                    setMaxS(hasMax ? (filterRange.max % 60).toString() : '');
+                }
+            }, [isOpen, filterRange]);
+
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (ref.current && !ref.current.contains(event.target)) setIsOpen(false);
+                };
+                document.addEventListener('mousedown', handleClickOutside);
+                return () => document.removeEventListener('mousedown', handleClickOutside);
+            }, []);
+
+            const handleApply = () => {
+                const minSeconds = (parseInt(minM || 0) * 60) + parseInt(minS || 0);
+                // If max fields are empty, assume infinite
+                let maxSeconds = 99999;
+                if (maxM !== '' || maxS !== '') {
+                    maxSeconds = (parseInt(maxM || 0) * 60) + parseInt(maxS || 0);
+                }
+                
+                // Swap if min > max
+                if (minSeconds > maxSeconds && maxSeconds !== 99999) {
+                     onApply({ min: maxSeconds, max: minSeconds });
+                } else {
+                     onApply({ min: minSeconds, max: maxSeconds });
+                }
+                setIsOpen(false);
+            };
+
+            const handleReset = () => {
+                onApply({ min: 0, max: 99999 });
+                setIsOpen(false);
+            }
+
+            // Input class helper
+            const inputClass = "w-12 bg-[#252525] border border-gray-700 rounded p-1 text-center text-white text-sm focus:border-[#00FF96] focus:outline-none";
+
+            return (
+                <div className="relative" ref={ref}>
+                    <button
+                        onClick={() => setIsOpen(!isOpen)}
+                        className={`flex items-center gap-2 px-3 py-1.5 border rounded-md text-sm transition-colors ${ (filterRange.min > 0 || filterRange.max < 9999) ? 'bg-[#00FF96]/20 border-[#00FF96] text-white' : 'bg-black/30 border-gray-700 text-gray-400 hover:border-[#00FF96]'}`}
+                    >
+                        <Timer size={14} />
+                        <span>{formatDisplay()}</span>
+                        <ChevronDown size={14} />
+                    </button>
+
+                    {isOpen && (
+                        <div className="absolute top-full left-0 mt-2 w-64 bg-[#1a1a1a] border border-gray-700 rounded-lg shadow-xl z-[70] p-4 flex flex-col gap-4">
+                            <h3 className="text-xs font-bold text-gray-500 uppercase">Filter Kill Time (Min : Sec)</h3>
+                            
+                            {/* Min Time */}
+                            <div className="flex items-center justify-between">
+                                <span className="text-sm text-gray-300 w-10">Min</span>
+                                <div className="flex items-center gap-1">
+                                    <input type="number" placeholder="M" value={minM} onChange={(e) => setMinM(e.target.value)} className={inputClass} />
+                                    <span className="text-gray-500">:</span>
+                                    <input type="number" placeholder="S" value={minS} onChange={(e) => setMinS(e.target.value)} className={inputClass} />
+                                </div>
+                            </div>
+
+                            {/* Max Time */}
+                            <div className="flex items-center justify-between">
+                                <span className="text-sm text-gray-300 w-10">Max</span>
+                                <div className="flex items-center gap-1">
+                                    <input type="number" placeholder="M" value={maxM} onChange={(e) => setMaxM(e.target.value)} className={inputClass} />
+                                    <span className="text-gray-500">:</span>
+                                    <input type="number" placeholder="S" value={maxS} onChange={(e) => setMaxS(e.target.value)} className={inputClass} />
+                                </div>
+                            </div>
+
+                            <div className="flex items-center justify-between pt-2 border-t border-gray-700 mt-1">
+                                <button onClick={handleReset} className="text-xs text-gray-400 hover:text-white px-2 py-1">Reset</button>
+                                <button onClick={handleApply} className="text-xs bg-[#00FF96] text-black font-bold px-3 py-1.5 rounded hover:bg-[#00cc78]">Apply</button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
         // Composition Filter Component
         const CompositionFilter = ({ activeFilterSpecs, onApply }) => {
             const [isOpen, setIsOpen] = useState(false);
@@ -616,7 +738,9 @@
             const [selectedRegion, setSelectedRegion] = useState('All');
 
             const [activeFilterSpecs, setActiveFilterSpecs] = useState(new Set()); // New State
-            
+            // NEW: Kill Time Range State {min: seconds, max: seconds}
+            const [killTimeRange, setKillTimeRange] = useState({ min: 0, max: 99999 });
+
             const [spellCategories, setSpellCategories] = useState({});
             const [spells, setSpells] = useState({});
             const [bossMechanics, setBossMechanics] = useState([]);
@@ -701,18 +825,6 @@
                     if (allSelected) newSet.delete(s.id); else newSet.add(s.id);
                 });
                 setSelectedSpells(newSet);
-            };
-
-            // --- FEATURE: Toggle All Visibility ---
-            const toggleAllVisibility = () => {
-                if (selectedSpells.size > 0) {
-                    // Turn all off
-                    setSelectedSpells(new Set());
-                } else {
-                    // Turn all on
-                    const allIds = Object.values(spells).map(s => s.id);
-                    setSelectedSpells(new Set(allIds));
-                }
             };
 
             const handleZoomIn = () => setZoom(prev => Math.min(prev + 5, 100));
@@ -840,6 +952,11 @@
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
 
                             <CompositionFilter activeFilterSpecs={activeFilterSpecs} onApply={setActiveFilterSpecs} />
+
+                            <span className="w-px h-3 bg-gray-600 mx-2"></span>
+                            
+                            {/* NEW: Kill Time Filter */}
+                            <KillTimeFilter filterRange={killTimeRange} onApply={setKillTimeRange} />
                         </div>
                     </div>
                     {/* Right side with Discord Icon */}
@@ -902,18 +1019,6 @@
                                 </div>
                             </div>
                         ))}
-
-                        {/* --- NEW: Toggle All Button (Placed after all categories/sprint) --- */}
-                        <div className="flex flex-col gap-1 border-l border-gray-700 pl-4">
-                            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Global</span>
-                            <button
-                                onClick={toggleAllVisibility}
-                                className={`w-8 h-8 flex items-center justify-center rounded border transition-all ${selectedSpells.size > 0 ? 'bg-[#00FF96]/20 border-[#00FF96] text-[#00FF96]' : 'bg-transparent border-gray-700 text-gray-500 hover:border-gray-500'}`}
-                                title={selectedSpells.size > 0 ? "Hide All Spells" : "Show All Spells"}
-                            >
-                                {selectedSpells.size > 0 ? <Eye size={16} /> : <EyeOff size={16} />}
-                            </button>
-                        </div>
                     </div>
                     <div className="flex-1"></div>
                     <div className="flex items-center gap-2 bg-black/20 p-1 rounded-lg border border-gray-800 shrink-0">
@@ -1016,12 +1121,17 @@
                             {/* Player Rows */}
                             {rankData
                                 .filter(row => {
-                                    if (activeFilterSpecs.size === 0) return true;
-                                    const comp = row.composition || [];
-                                    // Check if all activeFilterSpecs are present in comp
-                                    for (let spec of activeFilterSpecs) {
-                                        if (!comp.includes(spec)) return false;
+                                    // 1. Composition Filter
+                                    if (activeFilterSpecs.size > 0) {
+                                        const comp = row.composition || [];
+                                        for (let spec of activeFilterSpecs) {
+                                            if (!comp.includes(spec)) return false;
+                                        }
                                     }
+                                    // 2. Kill Time Filter (New)
+                                    if (row.killTimeSeconds < killTimeRange.min) return false;
+                                    if (row.killTimeSeconds > killTimeRange.max) return false;
+
                                     return true;
                                 })
                                 .map((row) => {
