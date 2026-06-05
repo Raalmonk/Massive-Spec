@@ -88,6 +88,7 @@
         const FIGHT_DURATION = 1200; // Increased to 10 minutes (600s) to fix the "7 minute" overflow issue
         const API_BASE = '';
         const LEFT_PANEL_WIDTH = 260; 
+        const DRAG_THRESHOLD = 6;
 
         // Palette for Duration Bars (Sequential assignment)
         const DURATION_PALETTE = [
@@ -693,7 +694,7 @@
                 return urlParams.get(param) || defaultValue;
             };
 
-            const [zoom, setZoom] = useState(15);
+            const [zoom, setZoom] = useState(5);
             const [isCollapsed, setIsCollapsed] = useState(true); 
             
             // NEW: Highlighted Row State (MULTI-SELECT)
@@ -727,6 +728,7 @@
 
             const [selectedSpells, setSelectedSpells] = useState(new Set());
             const scrollContainerRef = useRef(null);
+            const suppressRowClickRef = useRef(false);
 
             const spellColorMap = useMemo(() => {
                 const map = {};
@@ -744,7 +746,9 @@
             const dragInfo = useRef({
                 isDown: false,
                 startX: 0,
-                scrollLeft: 0
+                startY: 0,
+                scrollLeft: 0,
+                moved: false
             });
 
             useEffect(() => {
@@ -805,6 +809,12 @@
             const handleZoomIn = () => setZoom(prev => Math.min(prev + 5, 100));
             const handleZoomOut = () => setZoom(prev => Math.max(prev - 5, 5));
             const formatTime = (s) => `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
+            const displayToggleClass = (active) =>
+                `h-6 min-w-10 px-2 flex items-center justify-center rounded-sm border text-[10px] font-black font-mono uppercase transition-colors ${
+                    active
+                        ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96] shadow-[inset_0_0_0_1px_rgba(0,255,150,0.12)]'
+                        : 'bg-[#111] border-gray-700 text-gray-500 hover:border-gray-500 hover:text-gray-300'
+                }`;
 
             const getTickSettings = (z) => {
                 if (z < 10) return { major: 60, minor: 10 }; 
@@ -837,33 +847,50 @@
             }, [rankData, bossMechanics]);
 
             const onMouseDown = useCallback((e) => {
+                if (e.button !== 0 || !scrollContainerRef.current) return;
+                if (e.target.closest('button, a, input, select, textarea')) return;
+
                 dragInfo.current = {
                     isDown: true,
                     startX: e.pageX,
-                    scrollLeft: scrollContainerRef.current.scrollLeft
+                    startY: e.pageY,
+                    scrollLeft: scrollContainerRef.current.scrollLeft,
+                    moved: false
                 };
-                setIsDraggingState(true);
                 
                 window.addEventListener('mousemove', onMouseMove);
                 window.addEventListener('mouseup', onMouseUp);
-                
-                e.preventDefault(); 
             }, []);
 
             const onMouseMove = useCallback((e) => {
                 if (!dragInfo.current.isDown) return;
+
+                const deltaX = e.pageX - dragInfo.current.startX;
+                const deltaY = e.pageY - dragInfo.current.startY;
+                if (!dragInfo.current.moved && Math.hypot(deltaX, deltaY) >= DRAG_THRESHOLD) {
+                    dragInfo.current.moved = true;
+                    setIsDraggingState(true);
+                }
+
+                if (!dragInfo.current.moved) return;
+
                 e.preventDefault();
-                
-                const x = e.pageX;
-                const walk = (x - dragInfo.current.startX) * 1.5; 
                 if (scrollContainerRef.current) {
-                    scrollContainerRef.current.scrollLeft = dragInfo.current.scrollLeft - walk;
+                    scrollContainerRef.current.scrollLeft = dragInfo.current.scrollLeft - deltaX * 1.5;
                 }
             }, []);
 
             const onMouseUp = useCallback(() => {
+                const didDrag = dragInfo.current.moved;
                 dragInfo.current.isDown = false;
                 setIsDraggingState(false);
+
+                if (didDrag) {
+                    suppressRowClickRef.current = true;
+                    window.setTimeout(() => {
+                        suppressRowClickRef.current = false;
+                    }, 100);
+                }
                 
                 window.removeEventListener('mousemove', onMouseMove);
                 window.removeEventListener('mouseup', onMouseUp);
@@ -1045,10 +1072,10 @@
                     <div className="flex flex-col gap-1 border-r border-gray-700 pr-4 shrink-0">
                         <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Display</span>
                         <div className="flex items-center gap-1">
-                            <button title="Duration" onClick={() => setShowDuration(!showDuration)} className={`w-8 h-6 flex items-center justify-center text-sm rounded border transition-colors ${showDuration ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>⏳</button>
-                            <button title="Cooldown" onClick={() => setShowCooldown(!showCooldown)} className={`w-8 h-6 flex items-center justify-center text-sm rounded border transition-colors ${showCooldown ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>🕙</button>
+                            <button title="Duration" onClick={() => setShowDuration(!showDuration)} className={displayToggleClass(showDuration)}>DU</button>
+                            <button title="Cooldown" onClick={() => setShowCooldown(!showCooldown)} className={displayToggleClass(showCooldown)}>CD</button>
                         
-                            <button title="Phases" onClick={() => setShowPhases(!showPhases)} className={`h-6 flex items-center justify-center text-xs rounded border transition-colors px-2 ${showPhases ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>Phases</button>
+                            <button title="Phases" onClick={() => setShowPhases(!showPhases)} className={displayToggleClass(showPhases)}>PH</button>
                         </div>
                     </div>
                     <div className="flex flex-col gap-1 border-r border-gray-700 pr-4 shrink-0">
@@ -1131,8 +1158,8 @@
                         <div className="min-w-fit pb-10">
 
                             {/* Sticky Header: Time Ruler */}
-                            <div className="sticky top-0 z-50 flex h-8 bg-[#202020] border-b border-gray-800">
-                                <div className="sticky left-0 bg-[#202020] border-r border-gray-800 shrink-0 flex items-center px-4 text-xs font-bold text-gray-500 uppercase z-[60] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
+                            <div className="sticky top-0 z-50 flex h-8 bg-[#202020] border-b border-gray-700/80">
+                                <div className="sticky left-0 bg-[#202020] border-r border-gray-800 shrink-0 flex items-center px-4 text-[11px] font-bold text-gray-500 uppercase z-[60] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
                                     <div className="w-8 text-center mr-2 text-[#00FF96]">Rank</div>
                                     <div className="flex-1 text-left">RDPS</div>
                                     <div className="w-8 text-center text-gray-600">Reg</div>
@@ -1147,11 +1174,15 @@
                                         return (
                                             <div 
                                                 key={i} 
-                                                className={`absolute bottom-0 border-l ${isMajor ? 'border-gray-500 h-2.5' : 'border-gray-700 h-1.5'}`} 
+                                                className="absolute inset-y-0"
                                                 style={{ left: `${time * zoom}px` }}
                                             >
+                                                <div className={`absolute bottom-0 border-l ${isMajor ? 'border-gray-500/90 h-4' : 'border-gray-700/80 h-2'}`} />
                                                 {isMajor && (
-                                                    <span className="absolute bottom-2 left-1 text-[10px] text-gray-400 font-mono select-none pointer-events-none">
+                                                    <span
+                                                        className="absolute inset-y-0 left-1.5 flex items-center text-[13px] leading-none text-gray-200 font-bold tabular-nums select-none pointer-events-none"
+                                                        style={{ fontVariantNumeric: 'tabular-nums' }}
+                                                    >
                                                         {formatTime(time)}
                                                     </span>
                                                 )}
@@ -1163,7 +1194,7 @@
 
                             {/* Phase Lines */}
                             {showPhases && timelinePhases.length > 0 && (
-                                <div className="absolute top-10 bottom-0 right-0 pointer-events-none z-[1]" style={{ left: `${LEFT_PANEL_WIDTH}px` }}>
+                                <div className="absolute top-8 bottom-0 right-0 pointer-events-none z-[1]" style={{ left: `${LEFT_PANEL_WIDTH}px` }}>
                                     {timelinePhases.map((phase, i) => (
                                         <div
                                             key={i}
@@ -1179,7 +1210,7 @@
 
                             {/* Boss Timeline - Explicitly placed above players */}
                             {showBossRow && (
-                                <div className="flex h-12 border-b border-gray-800/60 bg-[#151515] hover:bg-[#1a1a1a] transition-colors group relative sticky top-8 z-40">
+                                <div className="flex h-10 border-b border-gray-800/60 bg-[#151515] hover:bg-[#1a1a1a] transition-colors group relative sticky top-8 z-40">
                                     <div className="sticky left-0 bg-[#181818] border-r border-gray-800 shrink-0 flex items-center px-4 z-50 shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
                                         <div className="flex-1 font-bold text-gray-300">Boss Timeline</div>
                                     </div>
@@ -1189,11 +1220,11 @@
                                                 /* Standard Boss Bar for duration mechanics */
                                                 <div 
                                                     key={i} 
-                                                    className="absolute top-1/2 -translate-y-1/2 h-6 rounded border border-white/10 flex items-center justify-center text-[10px] text-white/90 overflow-hidden shadow-sm" 
-                                                    style={{ left: `${mech.time * zoom}px`, width: `${Math.max(mech.duration * zoom, 20)}px`, backgroundColor: mech.color }} 
+                                                    className="absolute top-1/2 -translate-y-1/2 h-7 rounded-sm border border-white/15 flex items-center justify-center text-[13px] font-bold text-white/95 overflow-hidden shadow-sm" 
+                                                    style={{ left: `${mech.time * zoom}px`, width: `${Math.max(mech.duration * zoom, 48)}px`, backgroundColor: mech.color }} 
                                                     title={`${mech.name} (${formatTime(mech.time)}) - ${mech.duration}s`}
                                                 >
-                                                    <span className="truncate px-1">{mech.name}</span>
+                                                    <span className="block max-w-full overflow-hidden whitespace-nowrap px-2 leading-none drop-shadow-[0_1px_1px_rgba(0,0,0,0.75)]">{mech.name}</span>
                                                 </div>
                                             ) : (
                                                 /* Icon Box for instant mechanics */
@@ -1261,7 +1292,11 @@
                                     <div 
                                         key={row.id} 
                                         // FEATURE 2: Row Click & Highlight Logic (MULTI-SELECT)
-                                        onClick={() => {
+                                        onClick={(e) => {
+                                            if (suppressRowClickRef.current) {
+                                                e.preventDefault();
+                                                return;
+                                            }
                                             const newSet = new Set(selectedRowIds);
                                             if (newSet.has(row.id)) {
                                                 newSet.delete(row.id);

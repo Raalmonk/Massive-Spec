@@ -8,14 +8,14 @@ DANCING_MAD_ZONE = RaidZone(
     icon="boss_dancing_mad.jpg",
 )
 
-# FFLogs uses the provided zone/ranking page id for this Ultimate ranking path.
+# FFLogs uses zone/page id 76 for this Ultimate ranking path.
+# GraphQL encounter ranking queries use the encounter id from the ranking URL.
 DANCING_MAD = DANCING_MAD_ZONE.add_boss(
-    id=76,
+    id=1085,
     name="Dancing Mad",
     nick="DM",
     icon="boss_dancing_mad.jpg",
 )
 
-# TODO: Fill exact FFLogs phase trigger ability IDs when confirmed.
-# DANCING_MAD.add_phase(name="P2", spell_id=0, event_type="cast")
-# DANCING_MAD.add_phase(name="P3", spell_id=0, event_type="cast")
+# FF Logs should provide Dancing Mad phase intervals natively via report phases/phaseTransitions
+# once public kill logs exist. Do not add manual trigger spell IDs here.

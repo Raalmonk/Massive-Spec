@@ -41,19 +41,19 @@ from lorgs.models.raid_boss import RaidBoss
 BOSS_NAME = RaidBoss(id=123, name="Boss Name", ...)
 boss = BOSS_NAME
 boss.add_cast(spell_id=12345, name="Mechanic Name", ...)
+```
 
-Job Definition (lorgs/data/classes/job_name.py):
-
-Python
-
+**Job Definition (`lorgs/data/classes/job_name.py`):**
+```python
 from lorgs.models.wow_class import WowClass
 from lorgs.models.wow_spec import WowSpec
 # Note: For FF14, Job is both the Class and the Spec.
 JOB = WowClass(id=1, name="JobName", color="#HEX")
 JOB_SPEC = WowSpec(role=ROLE, wow_class=JOB, name="JobName")
 JOB_SPEC.add_spell(...)
+```
 
-6. Target Data & Implementation Plan (FF14)
+## 6. Target Data & Implementation Plan (FF14)
 Implementation should follow the spreadsheet data (fflorrgs.xlsx). Map the CSV columns to SpellTags as follows:
 
 Burst/Cooldowns: SpellTag.DAMAGE (or no tag implies standard CD).
@@ -116,3 +116,18 @@ BLM (Black Mage): Ley Lines, Manafont, Manaward.
 PCT (Pictomancer): Starry Muse, Striking Muse, Retribution of the Madeen, Mog of the Ages, Tempera Coat, Tempera Grassa.
 
 (Note: Role Actions like Feint, Addle, Reprisal, Rampart should be added to each Job individually for now unless a shared Role module is established.)
+
+## 7. Local Debug Notes
+* Project-root `.env` is loaded by local debug scripts. Use `WCL_AUTH_TOKEN`, or both `WCL_CLIENT_ID` and `WCL_CLIENT_SECRET`.
+* Local scripts set dummy AWS values before importing models:
+  `AWS_DEFAULT_REGION=us-east-1`, `AWS_ACCESS_KEY_ID=testing`, `AWS_SECRET_ACCESS_KEY=testing`.
+* Use one-command scripts for focused frontend JSON generation:
+  `python scripts/debug_darkknight_fru.py`
+  `python scripts/debug_astrologian_dancing_mad.py`
+* `main.py` serves the frontend at `/`; the actual timeline file is `front_end/timelinev2.html`, and generated ranking data is served from `front_end/data`.
+
+## 8. Frontend Timeline Notes
+* Avoid emoji in timeline controls. Prefer short, flat text labels such as `DU`, `CD`, and `PH`, or lucide icons when an icon is clearer.
+* Boss phase intervals should come from FF Logs native `phases` / `phaseTransitions` when available. Do not add hand-authored phase trigger IDs for fights whose official phases are available from FF Logs.
+* Boss timeline mechanics should not render static phase/window placeholders as mechanic icons.
+* Horizontal dragging is the primary timeline navigation. Keep row-selection click handling separated from drag movement so dragging does not accidentally highlight rows.
