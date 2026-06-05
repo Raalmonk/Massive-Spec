@@ -9,11 +9,10 @@ import typing
 import pydantic
 
 # IMPORT LOCAL LIBRARIES
-#from lorgs.models.base import redis
-from lorgs.models.base import base
+from lorgs.models.base import DynamoDBModel
 
 
-class Task(redis.DynamoDBModel):
+class Task(DynamoDBModel):
     """"""
     key: typing.ClassVar[str] = "{task_id}"
     skey: typing.ClassVar[str] = "task_info"

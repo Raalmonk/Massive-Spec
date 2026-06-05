@@ -173,7 +173,28 @@ class Fight(warcraftlogs_base.BaseModel):
     #   Summary
     #
     def get_query_parts(self) -> list[str]:
-        parts = [f"summary: table({self.summary_query_args}, dataType: Summary)"]
+        parts = [
+            f"summary: table({self.summary_query_args}, dataType: Summary)",
+            """
+            nativePhases: phases {
+                encounterID
+                phases {
+                    id
+                    name
+                }
+            }
+            """,
+            f"""
+            nativeFights: fights(fightIDs: {self.fight_id}) {{
+                id
+                encounterID
+                phaseTransitions {{
+                    id
+                    startTime
+                }}
+            }}
+            """,
+        ]
         # --- DEBUG START ---
         print(f"[DEBUG-0] Fight.get_query_parts | ID={self.fight_id} | QueryParts={parts}")
         # --- DEBUG END ---
@@ -273,6 +294,7 @@ class Fight(warcraftlogs_base.BaseModel):
     def process_query_result(self, **query_result: typing.Any):
         """Process the data retured from an Overview-Query."""
         report_data = wcl.ReportData(**query_result)
+        self.process_native_phases(query_result)
         
         # --- DEBUG START ---
         has_summary = bool(report_data.report and report_data.report.summary)
@@ -289,6 +311,32 @@ class Fight(warcraftlogs_base.BaseModel):
 
         for player in self.players:
             player.process_query_result(**query_result)
+
+    def process_native_phases(self, query_result: dict[str, typing.Any]) -> None:
+        """Load FF Logs built-in phase transitions for this fight."""
+        report = (query_result.get("reportData") or {}).get("report") or query_result.get("report") or {}
+        native_phases = report.get("nativePhases") or []
+        native_fights = report.get("nativeFights") or []
+
+        fight_data = next((fight for fight in native_fights if fight.get("id") == self.fight_id), None)
+        transitions = (fight_data or {}).get("phaseTransitions") or []
+        if not transitions:
+            return
+
+        encounter_id = fight_data.get("encounterID") or (self.boss.raid_boss.id if self.boss else None)
+        phase_group = next(
+            (phase_set for phase_set in native_phases if encounter_id and phase_set.get("encounterID") == encounter_id),
+            native_phases[0] if native_phases else {},
+        )
+        phase_names = {phase.get("id"): phase.get("name") for phase in phase_group.get("phases", [])}
+
+        self.phases = [
+            Phase(
+                ts=max(int(transition.get("startTime", 0) - self.start_time_rel), 0),
+                name=phase_names.get(transition.get("id")) or f"P{transition.get('id')}",
+            )
+            for transition in transitions
+        ]
 
     ############################################################################
     #   Load Player:

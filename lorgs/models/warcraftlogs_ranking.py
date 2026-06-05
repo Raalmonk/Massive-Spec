@@ -29,7 +29,7 @@ DIFFICULTY_IDS = {
     "mythic": 101,  # savage
     "savage": 101,
     "extreme": 102,
-    "ultimate": 103,
+    "ultimate": 100,
 }
 
 
