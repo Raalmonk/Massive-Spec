@@ -1,4 +1,6 @@
 from .arcadion_heavyweight import ARCADION_HEAVYWEIGHT
+from .dancing_mad import *
+from .futures_rewritten import *
 from .m9s import *
 from .m10s import *
 from .m11s import *
@@ -12,4 +14,8 @@ __all__ = [
     "THE_TYRANT",
     "LINDWURM",
     "LINDWURM_II",
+    "FUTURES_REWRITTEN_ZONE",
+    "FUTURES_REWRITTEN",
+    "DANCING_MAD_ZONE",
+    "DANCING_MAD",
 ]

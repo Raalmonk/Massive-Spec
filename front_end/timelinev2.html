@@ -232,6 +232,7 @@
                                         player.reportId = report.report_id;
                                         player.region = report.region;
                                         player.composition = fight.composition || [];
+                                        player.phases = fight.phases || [];
                                         allPlayers.push(player);
                                     });
                                 }
@@ -293,6 +294,12 @@
                         dps: player.total,
                         killTime: `${m}:${s}`,
                         killTimeSeconds: durationSeconds,
+                        phases: (player.phases || []).map(p => ({
+                            name: p.name || "Phase",
+                            timestamp: p.time !== undefined ? p.time : ((p.ts || 0) / 1000),
+                            ts: p.ts || 0,
+                            mrt: p.mrt || ""
+                        })),
                         casts: (player.casts || []).map(c => ({
                             spellId: c.spell_id,
                             timestamp: c.ts ? c.ts / 1000 : (c.timestamp || 0),
@@ -326,7 +333,9 @@
                 'red-hot-and-deep-blue': 'm10s',
                 'the-tyrant': 'm11s',
                 'lindwurm': 'm12s_p1',
-                'lindwurm-ii': 'm12s_p2'
+                'lindwurm-ii': 'm12s_p2',
+                'futures-rewritten': 'futures_rewritten',
+                'dancing-mad': 'dancing_mad'
             };
 
             const fileName = fileMapping[bossSlug] || bossSlug;
@@ -805,6 +814,11 @@
             };
 
             const tickSettings = getTickSettings(zoom);
+            const timelineDuration = useMemo(() => {
+                const killTimes = rankData.map(row => row.killTimeSeconds || 0);
+                const mechanicEnds = bossMechanics.map(m => (m.time || 0) + (m.duration || 0));
+                return Math.max(FIGHT_DURATION, ...killTimes, ...mechanicEnds) + 30;
+            }, [rankData, bossMechanics]);
 
             const onMouseDown = useCallback((e) => {
                 dragInfo.current = {
@@ -911,6 +925,8 @@
                                 <option value="the-tyrant">M11S: The Tyrant</option>
                                 <option value="lindwurm">M12S P1: Lindwurm</option>
                                 <option value="lindwurm-ii">M12S P2: Lindwurm</option>
+                                <option value="futures-rewritten">Future Rewritten</option>
+                                <option value="dancing-mad">Dancing Mad</option>
                             </select>
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
                             <span className="text-gray-400 text-sm">Spec:</span>
@@ -1016,6 +1032,7 @@
                             <button title="Duration" onClick={() => setShowDuration(!showDuration)} className={`w-8 h-6 flex items-center justify-center text-sm rounded border transition-colors ${showDuration ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>⏳</button>
                             <button title="Cooldown" onClick={() => setShowCooldown(!showCooldown)} className={`w-8 h-6 flex items-center justify-center text-sm rounded border transition-colors ${showCooldown ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>🕙</button>
                         
+                            <button title="Phases" onClick={() => setShowPhases(!showPhases)} className={`h-6 flex items-center justify-center text-xs rounded border transition-colors px-2 ${showPhases ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:border-gray-500'}`}>Phases</button>
                         </div>
                     </div>
                     <div className="flex flex-col gap-1 border-r border-gray-700 pr-4 shrink-0">
@@ -1106,9 +1123,9 @@
                                     <div className="w-8 text-center text-gray-600">Pair</div>
                                     <div className="w-8 text-center text-gray-600 ml-1">Buffs</div>
                                 </div>
-                                <div className="relative h-full" style={{ width: `${FIGHT_DURATION * zoom}px` }}>
+                                <div className="relative h-full" style={{ width: `${timelineDuration * zoom}px` }}>
                                     {/* UPDATED: Dynamic Ticks (Feature 1) */}
-                                    {Array.from({ length: Math.ceil(FIGHT_DURATION / tickSettings.minor) + 1 }).map((_, i) => {
+                                    {Array.from({ length: Math.ceil(timelineDuration / tickSettings.minor) + 1 }).map((_, i) => {
                                         const time = i * tickSettings.minor;
                                         const isMajor = time % tickSettings.major === 0;
                                         return (
@@ -1143,7 +1160,7 @@
                                     <div className="sticky left-0 bg-[#181818] border-r border-gray-800 shrink-0 flex items-center px-4 z-50 shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
                                         <div className="flex-1 font-bold text-gray-300">Boss Timeline</div>
                                     </div>
-                                    <div className="relative h-full z-10" style={{ width: `${FIGHT_DURATION * zoom}px` }}>
+                                    <div className="relative h-full z-10" style={{ width: `${timelineDuration * zoom}px` }}>
                                         {bossMechanics.map((mech, i) => (
                                             mech.duration > 0 ? (
                                                 /* Standard Boss Bar for duration mechanics */
@@ -1203,6 +1220,15 @@
                                 
                                 // FEATURE 2: Check if this row is selected (MULTI-SELECT SUPPORT)
                                 const isSelected = selectedRowIds.has(row.id);
+                                const rowPhases = row.phases && row.phases.length
+                                    ? row.phases
+                                    : bossMechanics
+                                        .filter(m => m.type === "phase" || m.type === "window")
+                                        .map(m => ({
+                                            name: m.name,
+                                            timestamp: m.time,
+                                            color: m.color
+                                        }));
 
                                 // Dynamic styles based on Selection Mode
                                 const selectionBorderColor = isSelectionMode ? 'border-[#3B82F6]' : 'border-[#00FF96]';
@@ -1260,10 +1286,26 @@
                                         </div>
 
                                         {/* Right Panel: Casts */}
-                                        <div className="relative h-full z-10" style={{ width: `${FIGHT_DURATION * zoom}px` }}>
+                                        <div className="relative h-full z-10" style={{ width: `${timelineDuration * zoom}px` }}>
                                             {/* FEATURE 1: Grid Lines - Synced to Major Ticks */}
-                                            {Array.from({ length: Math.ceil(FIGHT_DURATION / tickSettings.major) + 1 }).map((_, i) => (
+                                            {Array.from({ length: Math.ceil(timelineDuration / tickSettings.major) + 1 }).map((_, i) => (
                                                 <div key={i} className="absolute top-0 bottom-0 border-l border-gray-800/20 pointer-events-none" style={{ left: `${i * tickSettings.major * zoom}px` }} />
+                                            ))}
+
+                                            {showPhases && rowPhases.map((phase, pIdx) => (
+                                                <div
+                                                    key={`phase-${pIdx}`}
+                                                    className="absolute top-0 bottom-0 border-l border-dashed border-white/20 pointer-events-none z-[5]"
+                                                    style={{
+                                                        left: `${phase.timestamp * zoom}px`,
+                                                        borderColor: phase.color || "rgba(255,255,255,0.25)"
+                                                    }}
+                                                    title={`${phase.name} (${formatTime(phase.timestamp)})`}
+                                                >
+                                                    <span className="absolute top-0 left-1 text-[10px] text-gray-400 whitespace-nowrap bg-black/50 px-1 rounded">
+                                                        {phase.name}
+                                                    </span>
+                                                </div>
                                             ))}
                                             
                                             {/* REMOVED: Deaths Display */}

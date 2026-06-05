@@ -46,16 +46,41 @@ except ImportError as e:
 # --- 核心逻辑 ---
 
 # 修改函数签名，增加 timestamp_folder 参数
+BOSS_ROTATION = [
+    "vamp-fatale",
+    "red-hot-and-deep-blue",
+    "the-tyrant",
+    "lindwurm",
+    "lindwurm-ii",
+    "futures-rewritten",
+    "dancing-mad",
+]
+
+BOSS_CONFIG = {
+    "futures-rewritten": {
+        "difficulty": "ultimate",
+        "metric": "dps",
+    },
+    "dancing-mad": {
+        "difficulty": "ultimate",
+        "metric": "dps",
+    },
+}
+
+
 async def _do_update_spec(spec, boss_slug, timestamp_folder):
     """(内部函数) 只负责获取并保存排名数据"""
     spec_slug = spec.full_name_slug
+    config = BOSS_CONFIG.get(boss_slug, {})
+    difficulty = config.get("difficulty", "mythic")
+    metric = config.get("metric", spec.role.metric)
     
     # 1. 获取排名数据 (网络请求) - 保持不变
     ranking = SpecRanking.get_or_create(
         boss_slug=boss_slug,
         spec_slug=spec_slug,
-        difficulty="mythic",
-        metric=spec.role.metric,
+        difficulty=difficulty,
+        metric=metric,
     )
     
     # 这里的 clear_old=True 配合我们之前的讨论，保证数据纯净
@@ -113,10 +138,6 @@ async def main():
 
     try:
         # Boss 轮换列表
-        BOSS_ROTATION = [
-            "vamp-fatale", "red-hot-and-deep-blue", "the-tyrant", "lindwurm", "lindwurm-ii"
-        ]
-
         # 获取当前时间
         now = datetime.datetime.now(datetime.timezone.utc)
         current_hour = now.hour

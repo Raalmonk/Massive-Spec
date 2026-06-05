@@ -1,0 +1,34 @@
+[
+  {
+    "id": "DM_P1",
+    "name": "P1",
+    "time": 0,
+    "duration": 0,
+    "type": "phase",
+    "color": "#888888"
+  },
+  {
+    "id": "DM_P2",
+    "name": "P2",
+    "time": 120,
+    "duration": 0,
+    "type": "phase",
+    "color": "#888888"
+  },
+  {
+    "id": "DM_P3",
+    "name": "P3",
+    "time": 300,
+    "duration": 0,
+    "type": "phase",
+    "color": "#888888"
+  },
+  {
+    "id": "DM_P4",
+    "name": "P4",
+    "time": 540,
+    "duration": 0,
+    "type": "phase",
+    "color": "#888888"
+  }
+]

@@ -31,6 +31,11 @@ class Phase(pydantic.BaseModel):
     name: str = "Phase"
     mrt: str = ""
 
+    @pydantic.computed_field
+    @property
+    def time(self) -> float:
+        return self.timestamp / 1000
+
 
 class Fight(warcraftlogs_base.BaseModel):
     fight_id: int
@@ -94,6 +99,7 @@ class Fight(warcraftlogs_base.BaseModel):
             "players": [player.as_dict() for player in players],
             "composition": [p.spec_slug for p in self.players],
             "boss": self.boss.as_dict() if self.boss else {},
+            "phases": [phase.model_dump(by_alias=True) for phase in self.phases],
         }
 
     ##########################
