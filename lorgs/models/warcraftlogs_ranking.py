@@ -251,10 +251,40 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
     ############################################################################
     # Query: Fights
     #
+    def _should_load_buddies(self) -> bool:
+        """Buddy rows are only useful for FF14 tank/healer comparisons."""
+        return bool(self.spec and self.spec.role and self.spec.role.code in ("tank", "heal"))
+
+    @staticmethod
+    def _actor_load_key(actor: typing.Any) -> tuple[typing.Any, ...]:
+        """Return a stable key so duplicate fight/player rows do not fetch twice."""
+        fight = getattr(actor, "fight", None)
+        report = getattr(fight, "report", None)
+        report_id = getattr(report, "report_id", "")
+        fight_id = getattr(fight, "fight_id", 0)
+
+        if isinstance(actor, Player):
+            return (
+                "player",
+                report_id,
+                fight_id,
+                actor.source_id,
+                actor.guid,
+                actor.name,
+                actor.spec_slug,
+            )
+
+        if isinstance(actor, Boss):
+            return ("boss", report_id, fight_id, actor.boss_slug)
+
+        return (actor.__class__.__name__, report_id, fight_id, getattr(actor, "source_id", 0))
+
     async def load_actors(self) -> None:
         """Load the Casts for all missing fights."""
         # [优化] 只加载主角 (DPS > 0 的那个) 的技能数据
         actors_to_load = [p for p in self.players if p.spec_slug == self.spec_slug and p.total > 0]
+        load_buddies = self._should_load_buddies()
+        buddy_role_code = self.spec.role.code if load_buddies else ""
 
         for i, fight in enumerate(self.fights):
             if not fight.boss:
@@ -266,15 +296,47 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             else:
                 fight.boss.query_mode = fight.boss.QueryModes.PHASES
 
+            if load_buddies:
+                ranker_source_ids = {
+                    p.source_id
+                    for p in fight.players
+                    if p.spec_slug == self.spec_slug and p.total > 0
+                }
+                buddy_players = [
+                    p
+                    for p in fight.players
+                    if p.source_id not in ranker_source_ids
+                    and p.spec
+                    and p.spec.role
+                    and p.spec.role.code == buddy_role_code
+                ]
+                actors_to_load.extend(buddy_players)
+
             actors_to_load.append(fight.boss)
 
         actors_to_load = [actor for actor in actors_to_load if actor and not actor.casts]
+        unique_actors = []
+        seen_actors = {}
+        duplicate_actors = []
 
-        logger.info(f"load {len(actors_to_load)} players/bosses")
-        if not actors_to_load:
+        for actor in actors_to_load:
+            key = self._actor_load_key(actor)
+            original = seen_actors.get(key)
+            if original:
+                duplicate_actors.append((actor, original))
+                continue
+
+            seen_actors[key] = actor
+            unique_actors.append(actor)
+
+        logger.info(f"load {len(unique_actors)} players/bosses")
+        if not unique_actors:
             return
 
-        await self.load_many(actors_to_load, raise_errors=False)
+        await self.load_many(unique_actors, raise_errors=False)
+
+        for duplicate, original in duplicate_actors:
+            duplicate.casts = list(original.casts)
 
     ############################################################################
     # Query: Both

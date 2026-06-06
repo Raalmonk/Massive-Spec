@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M-Spec - Timeline (Curated)</title>
+    <title>M-Spec</title>
 
     <!-- 1. Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -212,6 +212,28 @@
                 .map(s => Number(s.id))
         );
 
+        const getSpellSelectionStorageKey = (specSlug) => `m-spec:selected-spells:${specSlug}`;
+
+        const readStoredSpellSelection = (specSlug, spellMap) => {
+            try {
+                const raw = localStorage.getItem(getSpellSelectionStorageKey(specSlug));
+                if (raw === null) return null;
+                const validIds = new Set(Object.values(spellMap).map(spell => Number(spell.id)));
+                return new Set(JSON.parse(raw).map(Number).filter(id => validIds.has(id)));
+            } catch (error) {
+                console.warn("[M-Spec] Could not read stored spell selection.", error);
+                return null;
+            }
+        };
+
+        const writeStoredSpellSelection = (specSlug, selectedIds) => {
+            try {
+                localStorage.setItem(getSpellSelectionStorageKey(specSlug), JSON.stringify([...selectedIds].map(Number)));
+            } catch (error) {
+                console.warn("[M-Spec] Could not store spell selection.", error);
+            }
+        };
+
         const mergeSpellMaps = (baseSpells, observedSpells) => {
             const merged = { ...baseSpells };
             Object.entries(observedSpells || {}).forEach(([spellId, spell]) => {
@@ -262,6 +284,34 @@
             return 'dps';
         };
 
+        const supportsBuddy = (specSlug) => {
+            const role = getRole(specSlug);
+            return role === 'tank' || role === 'healer';
+        };
+
+        const getSpecsForDetailedRole = (role) => {
+            const groupLabel = role === 'tank' ? 'Tanks' : role === 'healer' ? 'Healers' : '';
+            const group = SPECS.find(g => g.label === groupLabel);
+            return group ? group.items : [];
+        };
+
+        const getBuddySpecOptions = (specSlug) => {
+            const role = getRole(specSlug);
+            if (!supportsBuddy(specSlug)) return [];
+            return getSpecsForDetailedRole(role).filter(spec => spec.id !== specSlug);
+        };
+
+        const findBuddyPlayer = (player, fightPlayers, specSlug) => {
+            if (!supportsBuddy(specSlug)) return null;
+            const role = getRole(specSlug);
+            const playerSourceId = Number(player.source_id || 0);
+            const candidates = (fightPlayers || []).filter(candidate => (
+                getRole(candidate.spec_slug) === role
+                && Number(candidate.source_id || 0) !== playerSourceId
+            ));
+            return candidates.find(candidate => candidate.casts && candidate.casts.length) || candidates[0] || null;
+        };
+
         const getFFLogsUrl = (reportId, fightId, region) => {
             const baseUrl = (region === "CN") ? "https://cn.fflogs.com" : "https://www.fflogs.com";
             return `${baseUrl}/reports/${reportId}#fight=${fightId}`;
@@ -288,21 +338,24 @@
                 const data = await res.json();
                 
                 const allPlayers = [];
+                const playersByFight = new Map();
                 if (data.reports) {
                     data.reports.forEach(report => {
                         if (report.fights) {
                             report.fights.forEach(fight => {
-                                if (fight.players) {
-                                    fight.players.forEach(player => {
-                                        player.fightDuration = fight.duration;
-                                        player.fightId = fight.fight_id;
-                                        player.reportId = report.report_id;
-                                        player.region = report.region;
-                                        player.composition = fight.composition || [];
-                                        player.phases = fight.phases || [];
-                                        allPlayers.push(player);
-                                    });
-                                }
+                                const fightKey = `${report.report_id}-${fight.fight_id}`;
+                                const fightPlayers = (fight.players || []).map(player => ({
+                                    ...player,
+                                    fightDuration: fight.duration,
+                                    fightId: fight.fight_id,
+                                    reportId: report.report_id,
+                                    region: report.region,
+                                    composition: fight.composition || [],
+                                    phases: fight.phases || [],
+                                    fightKey
+                                }));
+                                playersByFight.set(fightKey, fightPlayers);
+                                allPlayers.push(...fightPlayers);
                             });
                         }
                     });
@@ -325,8 +378,15 @@
 
                         let partnerIcon = null;
                         const myDetailedRole = getDetailedRole(specSlug);
+                        const fightPlayers = playersByFight.get(player.fightKey) || [];
+                        const buddyPlayer = findBuddyPlayer(player, fightPlayers, specSlug);
 
-                        if (player.composition && Array.isArray(player.composition)) {
+                        if (buddyPlayer) {
+                            const iconName = getIconForSpec(buddyPlayer.spec_slug);
+                            if (iconName) {
+                                partnerIcon = `./images/classes/${iconName}`;
+                            }
+                        } else if (player.composition && Array.isArray(player.composition)) {
                             const roleMates = player.composition.filter(s => getDetailedRole(s) === myDetailedRole);
                             let partnerSpec = roleMates.find(s => s !== specSlug);
 
@@ -347,6 +407,11 @@
                         const durationSeconds = player.fightDuration / 1000;
                         const m = Math.floor(durationSeconds / 60);
                         const s = Math.floor(durationSeconds % 60).toString().padStart(2, '0');
+                        const normalizeCasts = (casts, durationSpellMap = {}) => (casts || []).map(c => ({
+                            spellId: c.spell_id,
+                            timestamp: c.ts ? c.ts / 1000 : (c.timestamp || 0),
+                            duration: c.duration || (durationSpellMap[c.spell_id] ? durationSpellMap[c.spell_id].duration : 0)
+                        }));
 
                         return {
                         rank: index + 1,
@@ -367,11 +432,18 @@
                             ts: p.ts || 0,
                             mrt: p.mrt || ""
                         })),
-                        casts: (player.casts || []).map(c => ({
-                            spellId: c.spell_id,
-                            timestamp: c.ts ? c.ts / 1000 : (c.timestamp || 0),
-                            duration: c.duration || (spellMap[c.spell_id] ? spellMap[c.spell_id].duration : 0)
-                        })),
+                        casts: normalizeCasts(player.casts, spellMap),
+                        buddy: buddyPlayer ? {
+                            sourceId: buddyPlayer.source_id,
+                            name: buddyPlayer.name,
+                            classSlug: buddyPlayer.class_slug,
+                            specSlug: buddyPlayer.spec_slug,
+                            icon: getIconForSpec(buddyPlayer.spec_slug),
+                            dps: buddyPlayer.total || 0,
+                            region: player.region || '??',
+                            casts: normalizeCasts(buddyPlayer.casts),
+                            deaths: buddyPlayer.deaths || []
+                        } : null,
                         deaths: player.deaths || [] 
                     };
                 });
@@ -524,6 +596,35 @@
             );
         };
 
+        const BuddyNameCell = ({ name, dps }) => {
+            const [isHovering, setIsHovering] = useState(false);
+
+            return (
+                <div
+                    className="flex-1 w-full min-w-0 min-h-[24px] self-stretch relative flex items-center pr-2 cursor-default"
+                    onMouseEnter={() => setIsHovering(true)}
+                    onMouseOver={() => setIsHovering(true)}
+                    onPointerEnter={() => setIsHovering(true)}
+                    onMouseLeave={() => setIsHovering(false)}
+                    onPointerLeave={() => setIsHovering(false)}
+                    title={name}
+                >
+                    <span
+                        className={`absolute inset-0 flex items-center font-bold text-[#00FF96] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] transition-opacity duration-150 ${isHovering ? 'opacity-0' : 'opacity-100'}`}
+                        style={{ fontSize: '17px', lineHeight: 1 }}
+                    >
+                        {Math.round(dps).toLocaleString()}
+                    </span>
+                    <span
+                        className={`absolute inset-0 flex items-center font-bold text-gray-300 truncate transition-opacity duration-150 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] ${isHovering ? 'opacity-100' : 'opacity-0'}`}
+                        style={{ fontSize: '13px' }}
+                    >
+                        {name}
+                    </span>
+                </div>
+            );
+        };
+
         const KillTimeFilter = ({ filterRange, onApply }) => {
             const [isOpen, setIsOpen] = useState(false);
             const ref = useRef(null);
@@ -597,7 +698,7 @@
                     </button>
 
                     {isOpen && (
-                        <div className="absolute top-full left-0 mt-2 w-64 bg-[#1a1a1a] border border-gray-700 rounded-lg shadow-xl z-[70] p-4 flex flex-col gap-4">
+                        <div className="absolute top-full left-0 mt-2 w-64 bg-[#1a1a1a] border border-gray-700 rounded-lg shadow-xl z-[8000] p-4 flex flex-col gap-4">
                             <h3 className="text-xs font-bold text-gray-500 uppercase">Filter Kill Time (Min : Sec)</h3>
                             
                             <div className="flex items-center justify-between">
@@ -667,7 +768,7 @@
                     </button>
 
                     {isOpen && (
-                        <div className="absolute top-full left-0 mt-2 w-80 bg-[#1a1a1a] border border-gray-700 rounded-lg shadow-xl z-[70] p-4 flex flex-col gap-4 max-h-[500px] overflow-y-auto custom-scrollbar">
+                        <div className="absolute top-full left-0 mt-2 w-80 bg-[#1a1a1a] border border-gray-700 rounded-lg shadow-xl z-[8000] p-4 flex flex-col gap-4 max-h-[500px] overflow-y-auto custom-scrollbar">
                             <div className="flex flex-col gap-4">
                                 {SPECS.map((group, idx) => (
                                     <div key={idx} className="flex flex-col gap-2">
@@ -729,7 +830,7 @@
                     </button>
 
                     {isOpen && (
-                        <div className="absolute top-full left-0 mt-2 w-64 bg-[#1a1a1a] border border-gray-700 rounded-lg shadow-xl z-[70] p-2 flex flex-col gap-2 max-h-[400px] overflow-y-auto custom-scrollbar">
+                        <div className="absolute top-full left-0 mt-2 w-64 bg-[#1a1a1a] border border-gray-700 rounded-lg shadow-xl z-[8000] p-2 flex flex-col gap-2 max-h-[400px] overflow-y-auto custom-scrollbar">
                             {SPECS.map((group, idx) => (
                                 <div key={idx} className="flex flex-col gap-1">
                                     <span className="text-[10px] uppercase text-gray-500 font-bold px-1">{group.label}</span>
@@ -801,10 +902,15 @@
             
             const [showPhases, setShowPhases] = useState(true);
             const [showBossRow, setShowBossRow] = useState(true);
+            const [showBuddy, setShowBuddy] = useState(false);
+            const [buddySpellMaps, setBuddySpellMaps] = useState({});
+            const [buddySpellSelections, setBuddySpellSelections] = useState({});
+            const [buddySpellMenuSpec, setBuddySpellMenuSpec] = useState(null);
 
             const [selectedSpells, setSelectedSpells] = useState(new Set());
             const scrollContainerRef = useRef(null);
             const suppressRowClickRef = useRef(false);
+            const buddyMenuRef = useRef(null);
 
             const spellColorMap = useMemo(() => {
                 const map = {};
@@ -830,6 +936,22 @@
                 return grouped;
             }, [spells]);
 
+            const buddySpecOptions = useMemo(() => getBuddySpecOptions(selectedSpec), [selectedSpec]);
+            const isBuddySupported = supportsBuddy(selectedSpec);
+            const buddySpellColorMaps = useMemo(() => {
+                const result = {};
+                Object.entries(buddySpellMaps).forEach(([specSlug, spellMap]) => {
+                    const map = {};
+                    let colorIdx = 0;
+                    Object.keys(spellMap || {}).sort().forEach(spellId => {
+                        map[spellId] = DURATION_PALETTE[colorIdx % DURATION_PALETTE.length];
+                        colorIdx++;
+                    });
+                    result[specSlug] = map;
+                });
+                return result;
+            }, [buddySpellMaps]);
+
             const dragInfo = useRef({
                 isDown: false,
                 startX: 0,
@@ -837,6 +959,7 @@
                 scrollLeft: 0,
                 moved: false
             });
+            const pendingIconPressRef = useRef(null);
 
             const setDraggingCursor = useCallback((isDragging) => {
                 if (!scrollContainerRef.current) return;
@@ -849,22 +972,101 @@
                     const cats = await fetchSpellCategories();
                     const sps = await fetchSpellData(selectedSpec);
                     const mechs = await fetchBossMechanics(selectedBoss);
+                    const buddyEntries = await Promise.all(
+                        getBuddySpecOptions(selectedSpec).map(async spec => [spec.id, await fetchSpellData(spec.id)])
+                    );
+                    const nextBuddySpellMaps = Object.fromEntries(buddyEntries);
                     
                     const ranks = await fetchRankings(selectedSpec, selectedBoss, sps, selectedRegion);
 
-                    setSpellCategories(cats); setSpells(sps); setBossMechanics(mechs); setRankData(ranks);
+                    setSpellCategories(cats);
+                    setSpells(sps);
+                    setBossMechanics(mechs);
+                    setRankData(ranks);
+                    setBuddySpellMaps(nextBuddySpellMaps);
+                    setBuddySpellSelections(Object.fromEntries(
+                        buddyEntries.map(([specSlug, spellMap]) => [
+                            specSlug,
+                            new Set(getDefaultSelectedSpellIds(spellMap, cats))
+                        ])
+                    ));
+                    setBuddySpellMenuSpec(null);
+                    if (!supportsBuddy(selectedSpec)) {
+                        setShowBuddy(false);
+                    }
                     
+                    const storedSelectedIds = readStoredSpellSelection(selectedSpec, sps);
                     const defaultSelectedIds = getDefaultSelectedSpellIds(sps, cats);
-                    setSelectedSpells(new Set(defaultSelectedIds));
+                    setSelectedSpells(storedSelectedIds !== null ? storedSelectedIds : new Set(defaultSelectedIds));
 
                     setLoading(false);
                 };
                 load();
             }, [selectedBoss, selectedSpec, selectedRegion]); 
 
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (buddyMenuRef.current && !buddyMenuRef.current.contains(event.target)) {
+                        setBuddySpellMenuSpec(null);
+                    }
+                };
+                document.addEventListener('mousedown', handleClickOutside);
+                return () => document.removeEventListener('mousedown', handleClickOutside);
+            }, []);
+
+            const tankInvulnSpellIds = useMemo(() => new Set([30, 43, 3638, 16152]), []);
+            const isFocusedSpellId = useCallback((spellId) => {
+                const id = Number(spellId);
+                if (!focusedSpellId) return false;
+                if (tankInvulnSpellIds.has(Number(focusedSpellId))) {
+                    return tankInvulnSpellIds.has(id);
+                }
+                return Number(focusedSpellId) === id;
+            }, [focusedSpellId, tankInvulnSpellIds]);
+            const toggleFocusedSpell = useCallback((spellId) => {
+                const id = Number(spellId);
+                setFocusedSpellId(prev => {
+                    if (tankInvulnSpellIds.has(Number(prev)) && tankInvulnSpellIds.has(id)) {
+                        return null;
+                    }
+                    return Number(prev) === id ? null : id;
+                });
+            }, [tankInvulnSpellIds]);
+            const handleSpellIconMouseDown = useCallback((e, spellId) => {
+                if (e.button !== 0) return;
+                e.preventDefault();
+
+                const pressedElement = e.currentTarget;
+                pendingIconPressRef.current = {
+                    element: pressedElement,
+                    spellId: Number(spellId),
+                    startX: e.clientX,
+                    startY: e.clientY
+                };
+
+                const handleIconMouseUp = (event) => {
+                    window.removeEventListener('mouseup', handleIconMouseUp);
+
+                    const pending = pendingIconPressRef.current;
+                    pendingIconPressRef.current = null;
+                    if (!pending || pending.element !== pressedElement) return;
+
+                    const delta = Math.hypot(event.clientX - pending.startX, event.clientY - pending.startY);
+                    const releaseTarget = document.elementFromPoint(event.clientX, event.clientY);
+                    const releasedOnSameIcon = releaseTarget && pending.element.contains(releaseTarget);
+
+                    if (delta < DRAG_THRESHOLD && !dragInfo.current.moved && releasedOnSameIcon) {
+                        toggleFocusedSpell(pending.spellId);
+                    }
+                };
+
+                window.addEventListener('mouseup', handleIconMouseUp);
+            }, [toggleFocusedSpell]);
+
             const toggleSpell = (spellId) => {
                 const newSet = new Set(selectedSpells);
                 if (newSet.has(spellId)) newSet.delete(spellId); else newSet.add(spellId);
+                writeStoredSpellSelection(selectedSpec, newSet);
                 setSelectedSpells(newSet);
             };
 
@@ -875,6 +1077,7 @@
                 spellsInCat.forEach(s => {
                     if (allSelected) newSet.delete(s.id); else newSet.add(s.id);
                 });
+                writeStoredSpellSelection(selectedSpec, newSet);
                 setSelectedSpells(newSet);
             };
 
@@ -882,11 +1085,15 @@
             const toggleAllSpells = () => {
                 if (selectedSpells.size > 0) {
                     // Hide All
-                    setSelectedSpells(new Set());
+                    const newSet = new Set();
+                    writeStoredSpellSelection(selectedSpec, newSet);
+                    setSelectedSpells(newSet);
                 } else {
                     // Show All
                     const allIds = Object.values(spells).map(s => s.id);
-                    setSelectedSpells(new Set(allIds));
+                    const newSet = new Set(allIds);
+                    writeStoredSpellSelection(selectedSpec, newSet);
+                    setSelectedSpells(newSet);
                 }
             };
 
@@ -917,6 +1124,38 @@
                     const current = new Set(prev[rowId] || []);
                     const allIds = Object.values(spellMap).map(s => Number(s.id));
                     return { ...prev, [rowId]: current.size > 0 ? new Set() : new Set(allIds) };
+                });
+            };
+
+            const toggleBuddySpell = (specSlug, spellId) => {
+                setBuddySpellSelections(prev => {
+                    const current = new Set(prev[specSlug] || []);
+                    const id = Number(spellId);
+                    if (current.has(id)) current.delete(id); else current.add(id);
+                    return { ...prev, [specSlug]: current };
+                });
+            };
+
+            const toggleBuddyCategory = (specSlug, catKey) => {
+                const spellMap = buddySpellMaps[specSlug] || {};
+                const spellsInCat = Object.values(spellMap).filter(s => s.category === catKey);
+                setBuddySpellSelections(prev => {
+                    const current = new Set(prev[specSlug] || []);
+                    const allSelected = spellsInCat.every(s => current.has(Number(s.id)));
+                    spellsInCat.forEach(s => {
+                        const id = Number(s.id);
+                        if (allSelected) current.delete(id); else current.add(id);
+                    });
+                    return { ...prev, [specSlug]: current };
+                });
+            };
+
+            const toggleAllBuddySpells = (specSlug) => {
+                const spellMap = buddySpellMaps[specSlug] || {};
+                setBuddySpellSelections(prev => {
+                    const current = new Set(prev[specSlug] || []);
+                    const allIds = Object.values(spellMap).map(s => Number(s.id));
+                    return { ...prev, [specSlug]: current.size > 0 ? new Set() : new Set(allIds) };
                 });
             };
 
@@ -1018,8 +1257,13 @@
                 const importedKillTimes = importedRows.map(row => row.killTimeSeconds || 0);
                 const mechanicEnds = bossMechanics.map(m => (m.time || 0) + (m.duration || 0));
                 const importedCastEnds = importedRows.flatMap(row => row.casts.map(cast => (cast.timestamp || 0) + (cast.duration || 0)));
-                return Math.max(FIGHT_DURATION, ...killTimes, ...importedKillTimes, ...mechanicEnds, ...importedCastEnds) + 30;
-            }, [rankData, bossMechanics, importedRows]);
+                const buddyCastEnds = showBuddy ? rankData.flatMap(row => (row.buddy?.casts || []).map(cast => {
+                    const buddySpellMap = buddySpellMaps[row.buddy.specSlug] || {};
+                    const spell = buddySpellMap[cast.spellId] || {};
+                    return (cast.timestamp || 0) + (cast.duration || spell.duration || 0);
+                })) : [];
+                return Math.max(FIGHT_DURATION, ...killTimes, ...importedKillTimes, ...mechanicEnds, ...importedCastEnds, ...buddyCastEnds) + 30;
+            }, [rankData, bossMechanics, importedRows, buddySpellMaps, showBuddy]);
             const timelineWidth = timelineDuration * zoom;
             const rowGridStyle = useMemo(() => ({
                 backgroundImage: "linear-gradient(to right, rgba(31,41,55,0.2) 1px, transparent 1px)",
@@ -1154,7 +1398,7 @@
                 <div className="flex flex-col h-screen bg-[#121212] text-gray-300 font-sans overflow-hidden">
 
                 {/* Navbar */}
-                <nav className="h-14 bg-[#1a1a1a] border-b border-gray-800 flex items-center justify-between px-4 shrink-0 z-[60]">
+                <nav className="h-14 bg-[#1a1a1a] border-b border-gray-800 flex items-center justify-between px-4 shrink-0 z-[7000]">
                     <div className="flex items-center gap-6">
                         <div className="flex items-center gap-2">
                             <a href="main_menu.html#" className="text-xl font-bold tracking-tight text-white flex items-center select-none hover:opacity-80 transition-opacity" style={{ textDecoration: 'none' }}>
@@ -1368,7 +1612,7 @@
                 )}
 
                 {/* Control Bar */}
-                <div className="bg-[#181818] border-b border-gray-800 px-4 py-2 shrink-0 flex items-center gap-4 overflow-x-auto no-scrollbar shadow-md z-50">
+                <div className="bg-[#181818] border-b border-gray-800 px-4 py-2 shrink-0 flex items-center gap-4 overflow-visible no-scrollbar shadow-md z-[5000]">
                     <div className="flex flex-col gap-1 border-r border-gray-700 pr-4 shrink-0">
                         <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Display</span>
                         <div className="flex items-center gap-1">
@@ -1416,6 +1660,96 @@
                                 </div>
                             </div>
                         ))}
+
+                        {isBuddySupported && (
+                            <div className="flex flex-col gap-1 border-l border-gray-700 pl-4 shrink-0" ref={buddyMenuRef}>
+                                <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                                    Party
+                                </div>
+                                <div className="flex items-center gap-0.5 h-8">
+                                    <button
+                                        title="Show buddy tank/healer cooldowns"
+                                        onClick={() => setShowBuddy(prev => !prev)}
+                                        className={`${displayToggleClass(showBuddy)} px-3`}
+                                    >
+                                        Buddy
+                                    </button>
+                                    {showBuddy && buddySpecOptions.map(specInfo => {
+                                        const spellMap = buddySpellMaps[specInfo.id] || {};
+                                        const selectedIds = buddySpellSelections[specInfo.id] || new Set();
+                                        return (
+                                            <div key={`buddy-filter-${specInfo.id}`} className="relative">
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setBuddySpellMenuSpec(prev => prev === specInfo.id ? null : specInfo.id);
+                                                    }}
+                                                    className={`h-8 min-w-[30px] border-0 bg-transparent p-0 overflow-visible rounded-sm transition flex items-center justify-center ${selectedIds.size > 0 ? 'opacity-100' : 'opacity-35 grayscale hover:opacity-70'}`}
+                                                    title={`${specInfo.n} buddy spells`}
+                                                >
+                                                    <img src={`./images/classes/${specInfo.icon}`} alt={specInfo.n} draggable={false} className="h-7 w-7 rounded-sm object-cover shadow-sm" />
+                                                </button>
+                                                {buddySpellMenuSpec === specInfo.id && (
+                                                    <div
+                                                        className="absolute top-full right-0 mt-2 z-[6000] w-[360px] rounded-md border border-gray-700 bg-[#151515] p-3 shadow-2xl"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        <div className="mb-2 flex items-center justify-between border-b border-gray-800 pb-2">
+                                                            <div className="flex min-w-0 items-center gap-2">
+                                                                <img src={`./images/classes/${specInfo.icon}`} alt="" draggable={false} className="h-6 w-6 rounded-sm object-cover" />
+                                                                <div className="min-w-0">
+                                                                    <div className="truncate text-xs font-bold text-white">{specInfo.n}</div>
+                                                                    <div className="text-[10px] font-mono text-gray-500">{selectedIds.size} shown</div>
+                                                                </div>
+                                                            </div>
+                                                            <button
+                                                                onClick={() => toggleAllBuddySpells(specInfo.id)}
+                                                                className="rounded border border-gray-700 px-2 py-1 text-[10px] font-bold text-gray-400 hover:border-[#00FF96] hover:text-white"
+                                                            >
+                                                                ALL
+                                                            </button>
+                                                        </div>
+                                                        <div className="space-y-3">
+                                                            {Object.entries(spellCategories).map(([catKey, category]) => {
+                                                                const categorySpells = Object.values(spellMap)
+                                                                    .filter(spell => spell.category === catKey)
+                                                                    .sort((a, b) => a.load_order - b.load_order);
+                                                                if (!categorySpells.length) return null;
+                                                                return (
+                                                                    <div key={`buddy-cat-${specInfo.id}-${catKey}`} className="space-y-1">
+                                                                        <button
+                                                                            onClick={() => toggleBuddyCategory(specInfo.id, catKey)}
+                                                                            className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-gray-500 hover:text-white"
+                                                                        >
+                                                                            <CategoryIcon type={category.iconType} /> {category.label}
+                                                                        </button>
+                                                                        <div className="flex flex-wrap gap-1.5">
+                                                                            {categorySpells.map(spell => {
+                                                                                const isSelected = selectedIds.has(Number(spell.id));
+                                                                                return (
+                                                                                    <button
+                                                                                        key={`buddy-spell-${specInfo.id}-${spell.id}`}
+                                                                                        onClick={() => toggleBuddySpell(specInfo.id, spell.id)}
+                                                                                        className={`h-8 w-8 overflow-hidden rounded border transition ${isSelected ? 'border-transparent opacity-100 grayscale-0' : 'border-gray-800 opacity-30 grayscale hover:opacity-70 hover:border-gray-600'}`}
+                                                                                        title={spell.name}
+                                                                                    >
+                                                                                        <RenderIcon spell={spell} />
+                                                                                    </button>
+                                                                                );
+                                                                            })}
+                                                                        </div>
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
 
                         {/* NEW: Global Toggle */}
                         <div className="hidden">
@@ -1466,8 +1800,8 @@
                         <div className="min-w-fit pb-10">
 
                             {/* Sticky Header: Time Ruler */}
-                            <div className="sticky top-0 z-50 flex h-8 bg-[#202020] border-b border-gray-700/80">
-                                <div className="sticky left-0 bg-[#202020] border-r border-gray-700/90 shrink-0 flex items-center px-4 text-[11px] font-bold text-gray-500 uppercase z-[1000] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
+                            <div className="sticky top-0 z-[3000] flex h-8 bg-[#202020] border-b border-gray-700/80 shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
+                                <div className="sticky left-0 bg-[#202020] border-r border-gray-700/90 shrink-0 flex items-center px-4 text-[11px] font-bold text-gray-500 uppercase z-[3100] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
                                     <div className="w-8 text-center mr-2 text-[#00FF96]">Rank</div>
                                     <div className="flex-1 text-left">RDPS</div>
                                     <div className="w-8 text-center text-gray-600">Reg</div>
@@ -1709,7 +2043,7 @@
                                             )}
 
                                             {processedImportedCasts.map((cast, cIdx) => {
-                                                const isFocusedSpell = focusedSpellId === Number(cast.spellId);
+                                                const isFocusedSpell = isFocusedSpellId(cast.spellId);
                                                 const spell = importedSpellMap[String(cast.spellId)] || {
                                                     id: cast.spellId,
                                                     name: `ID: ${cast.spellId}`,
@@ -1766,10 +2100,7 @@
 
                                                             <div
                                                                 onMouseDown={(e) => {
-                                                                    e.preventDefault();
-                                                                    e.stopPropagation();
-                                                                    const spellId = Number(cast.spellId);
-                                                                    setFocusedSpellId(prev => prev === spellId ? null : spellId);
+                                                                    handleSpellIconMouseDown(e, cast.spellId);
                                                                 }}
                                                                 onClick={(e) => {
                                                                     e.stopPropagation();
@@ -1829,6 +2160,29 @@
                                 const rowHeight = 32;
                                 const trackHeight = 30; // Height per sub-row when expanded
                                 const totalHeight = isCollapsed ? rowHeight : Math.max(rowHeight, maxTracks * trackHeight);
+                                const buddy = showBuddy && isBuddySupported ? row.buddy : null;
+                                const buddySpecSlug = buddy?.specSlug || "";
+                                const buddySpellMap = buddySpecSlug === selectedSpec ? spells : (buddySpellMaps[buddySpecSlug] || {});
+                                const buddySelectedSpellIds = buddySpecSlug === selectedSpec
+                                    ? selectedSpells
+                                    : (buddySpellSelections[buddySpecSlug] || new Set());
+                                const buddyColorMap = buddySpecSlug === selectedSpec
+                                    ? spellColorMap
+                                    : (buddySpellColorMaps[buddySpecSlug] || {});
+                                const buddyCasts = buddy
+                                    ? (buddy.casts || []).map(cast => ({
+                                        ...cast,
+                                        duration: cast.duration || (buddySpellMap[cast.spellId] ? buddySpellMap[cast.spellId].duration : 0)
+                                    }))
+                                    : [];
+                                const visibleBuddyCasts = buddyCasts.filter(cast => buddySelectedSpellIds.has(Number(cast.spellId)));
+                                const buddyRowHeight = 26;
+                                const buddyTrackHeight = 24;
+                                const { processedCasts: processedBuddyCasts, maxTracks: buddyMaxTracks } = isCollapsed
+                                    ? { processedCasts: visibleBuddyCasts.map(c => ({ ...c, trackIndex: 0 })), maxTracks: 1 }
+                                    : calculateCastTracks(visibleBuddyCasts);
+                                const buddyTotalHeight = isCollapsed ? buddyRowHeight : Math.max(buddyRowHeight, buddyMaxTracks * buddyTrackHeight);
+                                const showBuddyRow = Boolean(buddy);
                                 
                                 // FEATURE 2: Check if this row is selected (MULTI-SELECT SUPPORT)
                                 const isSelected = selectedRowIds.has(row.id);
@@ -1847,6 +2201,7 @@
                                 const selectionBg = isSelectionMode ? 'bg-[#3B82F6]/10' : 'bg-[#00FF96]/5';
 
                                 return (
+                                    <React.Fragment key={row.id}>
                                     <div 
                                         key={row.id} 
                                         // FEATURE 2: Row Click & Highlight Logic (MULTI-SELECT)
@@ -1855,7 +2210,10 @@
                                                 e.preventDefault();
                                                 return;
                                             }
-                                            setFocusedSpellId(null);
+                                            if (focusedSpellId) {
+                                                setFocusedSpellId(null);
+                                                return;
+                                            }
                                             const newSet = new Set(selectedRowIds);
                                             if (newSet.has(row.id)) {
                                                 newSet.delete(row.id);
@@ -1958,7 +2316,7 @@
                                             )}
 
                                             {processedCasts.map((cast, cIdx) => {
-                                                const isFocusedSpell = focusedSpellId === Number(cast.spellId);
+                                                const isFocusedSpell = isFocusedSpellId(cast.spellId);
                                                 
                                                 const spell = spells[cast.spellId] || {
         id: cast.spellId,
@@ -2035,10 +2393,7 @@
                                                             {/* 3. Icon */}
                                                             <div
                                                                 onMouseDown={(e) => {
-                                                                    e.preventDefault();
-                                                                    e.stopPropagation();
-                                                                    const spellId = Number(cast.spellId);
-                                                                    setFocusedSpellId(prev => prev === spellId ? null : spellId);
+                                                                    handleSpellIconMouseDown(e, cast.spellId);
                                                                 }}
                                                                 onClick={(e) => {
                                                                     e.stopPropagation();
@@ -2067,6 +2422,107 @@
                                             })}
                                         </div>
                                     </div>
+                                    {showBuddyRow && (
+                                        <div
+                                            className="flex bg-[#101614] hover:bg-[#13201b] transition-colors group/buddy relative border-t border-gray-800/40"
+                                            style={{ height: `${buddyTotalHeight}px` }}
+                                        >
+                                            <div className="sticky left-0 bg-[#101614] group-hover/buddy:bg-[#13201b] border-r border-gray-700/90 shrink-0 flex items-center px-4 z-[1000] transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.2)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
+                                                <div className="ml-6 w-10 text-left mr-3 text-[10px] font-black uppercase tracking-wide text-gray-600">Buddy</div>
+                                                <div className="flex h-full min-w-0 flex-1 items-center">
+                                                    <BuddyNameCell
+                                                        name={buddy.name}
+                                                        dps={buddy.dps || 0}
+                                                    />
+                                                </div>
+                                                <div className="w-8 ml-1"></div>
+                                                <div className="w-8 ml-1"></div>
+                                                <div className="w-8 ml-1"></div>
+                                            </div>
+                                            <div className="relative h-full z-10 overflow-hidden" style={{ width: `${timelineWidth}px` }}>
+                                                {processedBuddyCasts.map((cast, cIdx) => {
+                                                    const isFocusedSpell = isFocusedSpellId(cast.spellId);
+                                                    const spell = buddySpellMap[cast.spellId] || {
+                                                        id: cast.spellId,
+                                                        name: `ID: ${cast.spellId}`,
+                                                        image: null,
+                                                        cd: 0,
+                                                        color: '#666666'
+                                                    };
+                                                    const timeUntilKill = row.killTimeSeconds ? (row.killTimeSeconds - cast.timestamp) : 99999;
+                                                    if (timeUntilKill <= 0) return null;
+
+                                                    const currentTrackHeight = isCollapsed ? buddyTotalHeight : buddyTrackHeight;
+                                                    const topPos = isCollapsed ? 0 : cast.trackIndex * buddyTrackHeight;
+                                                    const iconHeight = currentTrackHeight * 0.82;
+                                                    const durationWidth = Math.max(0, Math.min((cast.duration || 0) * zoom, timeUntilKill * zoom));
+                                                    const cdWidth = Math.max(0, Math.min((spell.cd || 0) * zoom, timeUntilKill * zoom));
+                                                    const barColor = buddyColorMap[cast.spellId] || spell.color || DURATION_PALETTE[cIdx % DURATION_PALETTE.length];
+
+                                                    return (
+                                                        <div
+                                                            key={`buddy-cast-${row.id}-${cIdx}`}
+                                                            className={`absolute flex items-center group/icon select-none transition-opacity duration-150 ${focusedSpellId && !isFocusedSpell ? 'opacity-25' : 'opacity-100'}`}
+                                                            style={{
+                                                                left: `${cast.timestamp * zoom}px`,
+                                                                top: `${topPos}px`,
+                                                                height: `${currentTrackHeight}px`,
+                                                                zIndex: isFocusedSpell ? 220 + cIdx : 10 + cIdx
+                                                            }}
+                                                        >
+                                                            <div className="relative h-full flex items-center">
+                                                                {showCooldown && spell.cd > 0 && cdWidth > 0 && (
+                                                                    <div
+                                                                        className="absolute top-1/2 -translate-y-1/2 h-1/3 rounded-r-sm z-0"
+                                                                        style={{
+                                                                            left: `${iconHeight / 2}px`,
+                                                                            width: `${cdWidth}px`,
+                                                                            backgroundColor: hexToRgba(barColor, 0.2)
+                                                                        }}
+                                                                    />
+                                                                )}
+                                                                {showDuration && durationWidth > 0 && (
+                                                                    <div
+                                                                        className="absolute left-0 z-10 rounded-sm shadow-sm"
+                                                                        style={{
+                                                                            width: `${durationWidth}px`,
+                                                                            height: '82%',
+                                                                            backgroundColor: barColor,
+                                                                            opacity: 0.88
+                                                                        }}
+                                                                    />
+                                                                )}
+                                                                <div
+                                                                    onMouseDown={(e) => {
+                                                                        handleSpellIconMouseDown(e, cast.spellId);
+                                                                    }}
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                    }}
+                                                                    className={`relative z-20 flex items-center justify-center overflow-hidden rounded-sm bg-black/50 ${isFocusedSpell ? 'ring-2 ring-[#00FF96] ring-offset-1 ring-offset-black' : ''}`}
+                                                                    style={{
+                                                                        height: `${iconHeight}px`,
+                                                                        width: `${iconHeight}px`,
+                                                                        minWidth: `${iconHeight}px`
+                                                                    }}
+                                                                    title={`${spell.name} (${formatTime(cast.timestamp)})`}
+                                                                >
+                                                                    <RenderIcon spell={spell} className="opacity-100" />
+                                                                </div>
+                                                                <span
+                                                                    className="ml-1 font-bold text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] z-30 pointer-events-none"
+                                                                    style={{ fontSize: `${iconHeight * 0.58}px`, lineHeight: 1 }}
+                                                                >
+                                                                    {formatTime(cast.timestamp)}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
+                                    </React.Fragment>
                                 );
                             })}
                         </div>
