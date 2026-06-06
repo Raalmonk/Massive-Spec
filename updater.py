@@ -47,13 +47,14 @@ except ImportError as e:
 
 # 修改函数签名，增加 timestamp_folder 参数
 BOSS_ROTATION = [
+    "futures-rewritten",
+    "dancing-mad",
     "vamp-fatale",
     "red-hot-and-deep-blue",
+    "dancing-mad",
     "the-tyrant",
     "lindwurm",
     "lindwurm-ii",
-    "futures-rewritten",
-    "dancing-mad",
 ]
 
 BOSS_CONFIG = {
@@ -179,5 +180,52 @@ async def main():
             await asyncio.sleep(0.25)
         logger.info("Done.")
 
+
+async def run_cycle(target_boss: str, cycle_index: int) -> None:
+    """Run one sweep for a single boss in the hourly rotation."""
+    now = datetime.datetime.now(datetime.timezone.utc)
+    date_str = now.strftime("%Y-%m-%d")
+    time_str = now.strftime("%Hh_%Mm")
+    archive_batch_dir = os.path.join("archives", date_str, f"{time_str}_{target_boss}")
+
+    logger.info(f"=== Work Cycle: Rotation {cycle_index} | Boss: {target_boss} ===")
+    logger.info(f"=== Archive Target: {archive_batch_dir} ===")
+
+    all_specs = sorted(list(ALL_SPECS), key=lambda s: s.full_name_slug)
+
+    for i, spec in enumerate(all_specs):
+        logger.info(f"[{i+1}/{len(all_specs)}] Updating {spec.full_name_slug}...")
+        await update_spec_with_retry(spec, boss_slug=target_boss, timestamp_folder=archive_batch_dir)
+        await asyncio.sleep(3)
+
+
+async def sleep_until_next_hour() -> None:
+    now = datetime.datetime.now(datetime.timezone.utc)
+    next_hour = (now + datetime.timedelta(hours=1)).replace(minute=0, second=0, microsecond=0)
+    wait_seconds = max(1, int((next_hour - now).total_seconds()))
+    logger.info(f"Sleeping {wait_seconds}s until next hourly cycle...")
+    await asyncio.sleep(wait_seconds)
+
+
+async def hourly_main() -> None:
+    """Continuously sweep one boss per hour using BOSS_ROTATION order."""
+    WarcraftlogsClient._instance = None
+    cycle_index = 0
+
+    try:
+        while True:
+            target_boss = BOSS_ROTATION[cycle_index % len(BOSS_ROTATION)]
+            await run_cycle(target_boss, cycle_index)
+            cycle_index += 1
+            await sleep_until_next_hour()
+
+    finally:
+        logger.info("Closing HTTP Session...")
+        if WarcraftlogsClient._instance and WarcraftlogsClient._instance.session:
+            await WarcraftlogsClient._instance.session.close()
+            await asyncio.sleep(0.25)
+        logger.info("Done.")
+
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(hourly_main())
