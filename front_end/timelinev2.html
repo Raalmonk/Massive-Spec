@@ -45,10 +45,22 @@
             scrollbar-width: none;
         }
         body { margin: 0; overflow: hidden; background-color: #121212; user-select: none; }
+        img, svg {
+            -webkit-user-drag: none;
+            user-drag: none;
+            user-select: none;
+        }
 
         /* Custom Drag Cursor */
         .cursor-grab { cursor: grab; }
         .cursor-grabbing { cursor: grabbing; }
+        .nav-select {
+            color-scheme: dark;
+        }
+        .nav-select option {
+            background-color: #111111;
+            color: #f3f4f6;
+        }
         
         /* Input Number Styling - Remove spinners */
         input[type=number]::-webkit-inner-spin-button, 
@@ -78,8 +90,7 @@
     <script type="text/babel" data-type="module">
         import React, { useState, useRef, useEffect, useMemo, useCallback } from 'https://esm.sh/react@18.2.0?dev';
         import { createRoot } from 'https://esm.sh/react-dom@18.2.0/client?dev';
-        // ADDED: Eye, EyeOff to imports
-        import { ZoomIn, ZoomOut, Search, Menu, Clock, Hourglass, Shield, ShieldAlert, Zap, Swords, MoreHorizontal, Layers, Minimize2, Maximize2, ChevronDown, ExternalLink, Flag, Timer, MousePointer2, CheckCircle2, XCircle, Eye, EyeOff } from 'https://esm.sh/lucide-react@0.263.1?dev';
+        import { ZoomIn, ZoomOut, Search, Menu, Clock, Hourglass, Shield, ShieldAlert, Zap, Swords, MoreHorizontal, Layers, Minimize2, Maximize2, ChevronDown, ExternalLink, Flag, Timer, MousePointer2, CheckCircle2, XCircle, SlidersHorizontal } from 'https://esm.sh/lucide-react@0.263.1?dev';
 
         // --- Configuration ---
         const THEME_COLOR = '#00FF96';
@@ -177,6 +188,50 @@
         const getIconForSpec = (specSlug) => {
              const item = SPECS.flatMap(g => g.items).find(i => i.id === specSlug);
              return item ? item.icon : null;
+        };
+
+        const getSpecInfo = (specSlug) => {
+            const item = SPECS.flatMap(g => g.items).find(i => i.id === specSlug);
+            if (item) return item;
+            return {
+                id: specSlug,
+                icon: null,
+                n: (specSlug || "Unknown").split("-")[0].replace(/\b\w/g, c => c.toUpperCase())
+            };
+        };
+
+        const getDefaultSelectedSpellIds = (spellMap, categories) => (
+            Object.values(spellMap)
+                .filter(s => {
+                    if (s.show !== null && s.show !== undefined) {
+                        return s.show;
+                    }
+                    const cat = categories[s.category];
+                    return cat ? cat.defaultActive : true;
+                })
+                .map(s => Number(s.id))
+        );
+
+        const mergeSpellMaps = (baseSpells, observedSpells) => {
+            const merged = { ...baseSpells };
+            Object.entries(observedSpells || {}).forEach(([spellId, spell]) => {
+                const base = merged[spellId] || {};
+                merged[spellId] = {
+                    ...spell,
+                    ...base,
+                    id: Number(spell.id || spellId),
+                    image: base.image || spell.image || spell.icon || null,
+                    icon: base.icon || spell.icon || spell.image || null,
+                    name: base.name || spell.name || `ID: ${spellId}`,
+                    color: base.color || spell.color || "#666666",
+                    category: base.category || spell.category || "MAJOR",
+                    load_order: base.load_order !== undefined ? base.load_order : (spell.load_order !== undefined ? spell.load_order : 9999),
+                    show: base.show !== undefined ? base.show : spell.show,
+                    duration: base.duration !== undefined ? base.duration : (spell.duration || 0),
+                    cd: base.cd !== undefined ? base.cd : (spell.cd || 0)
+                };
+            });
+            return merged;
         };
 
         const getRole = (specSlug) => {
@@ -408,7 +463,7 @@
 
         const RenderIcon = ({ spell, className }) => {
             const imgUrl = spell.image || spell.icon;
-            if (imgUrl) return <img src={imgUrl} alt={spell.name} className={`w-full h-full object-cover ${className}`} />;
+            if (imgUrl) return <img src={imgUrl} alt={spell.name} draggable={false} className={`w-full h-full object-cover ${className}`} />;
             return <div className={`flex items-center justify-center w-full h-full text-sm select-none bg-gray-700 ${className}`}>{spell.char || (spell.name ? spell.name[0] : '?')}</div>;
         };
 
@@ -616,7 +671,7 @@
                                                         className={`w-9 h-9 flex items-center justify-center rounded border transition-all relative ${isSelected ? 'bg-[#333] border-[#00FF96]' : 'bg-[#252525] border-transparent hover:bg-[#333]'}`}
                                                         title={item.n}
                                                     >
-                                                        <img src={`./images/classes/${item.icon}`} alt={item.n} className="w-full h-full object-cover rounded-sm" />
+                                                        <img src={`./images/classes/${item.icon}`} alt={item.n} draggable={false} className="w-full h-full object-cover rounded-sm" />
                                                         {isSelected && <div className="absolute inset-0 border-2 border-[#00FF96] rounded pointer-events-none"></div>}
                                                     </button>
                                                 );
@@ -657,7 +712,7 @@
                         onClick={() => setIsOpen(!isOpen)} 
                         className="flex items-center gap-2 px-3 py-1.5 bg-black/30 border border-gray-700 rounded-md text-sm hover:border-[#00FF96] transition-colors"
                     >
-                        <img src={`./images/classes/${currentIcon}`} alt={currentName} className="w-5 h-5 object-contain" />
+                        <img src={`./images/classes/${currentIcon}`} alt={currentName} draggable={false} className="w-5 h-5 object-contain" />
                         <span className="font-medium text-white">{currentName}</span>
                         <ChevronDown size={14} className="text-gray-400" />
                     </button>
@@ -675,7 +730,7 @@
                                                 className={`w-8 h-8 flex items-center justify-center rounded border transition-all overflow-hidden ${selectedSpec === item.id ? 'bg-[#333] border-[#00FF96]' : 'bg-[#252525] border-transparent hover:bg-[#333] hover:border-[#00FF96]'}`}
                                                 title={item.n}
                                             >
-                                                <img src={`./images/classes/${item.icon}`} alt={item.n} className="w-full h-full object-cover" />
+                                                <img src={`./images/classes/${item.icon}`} alt={item.n} draggable={false} className="w-full h-full object-cover" />
                                             </button>
                                         ))}
                                     </div>
@@ -699,6 +754,7 @@
             
             // NEW: Highlighted Row State (MULTI-SELECT)
             const [selectedRowIds, setSelectedRowIds] = useState(new Set());
+            const [focusedSpellId, setFocusedSpellId] = useState(null);
             // NEW: Separated Curated List State
             const [curatedRowIds, setCuratedRowIds] = useState(new Set());
 
@@ -718,7 +774,16 @@
             const [spells, setSpells] = useState({});
             const [bossMechanics, setBossMechanics] = useState([]);
             const [rankData, setRankData] = useState([]);
+            const [importedRows, setImportedRows] = useState([]);
+            const [importedSpellSelections, setImportedSpellSelections] = useState({});
+            const [importSpellMenuRowId, setImportSpellMenuRowId] = useState(null);
             const [loading, setLoading] = useState(true);
+            const [importModalOpen, setImportModalOpen] = useState(false);
+            const [importUrl, setImportUrl] = useState("");
+            const [importPlayers, setImportPlayers] = useState([]);
+            const [importMeta, setImportMeta] = useState(null);
+            const [importError, setImportError] = useState("");
+            const [importLoading, setImportLoading] = useState(false);
 
             const [showDuration, setShowDuration] = useState(true);
             const [showCooldown, setShowCooldown] = useState(false);
@@ -762,15 +827,7 @@
 
                     setSpellCategories(cats); setSpells(sps); setBossMechanics(mechs); setRankData(ranks);
                     
-                    const defaultSelectedIds = Object.values(sps)
-                        .filter(s => {
-                            if (s.show !== null && s.show !== undefined) {
-                                return s.show;
-                            }
-                            const cat = cats[s.category];
-                            return cat ? cat.defaultActive : true;
-                        })
-                        .map(s => s.id);
+                    const defaultSelectedIds = getDefaultSelectedSpellIds(sps, cats);
                     setSelectedSpells(new Set(defaultSelectedIds));
 
                     setLoading(false);
@@ -806,6 +863,111 @@
                 }
             };
 
+            const toggleImportedSpell = (rowId, spellId) => {
+                setImportedSpellSelections(prev => {
+                    const current = new Set(prev[rowId] || []);
+                    const id = Number(spellId);
+                    if (current.has(id)) current.delete(id); else current.add(id);
+                    return { ...prev, [rowId]: current };
+                });
+            };
+
+            const toggleImportedCategory = (rowId, spellMap, catKey) => {
+                const spellsInCat = Object.values(spellMap).filter(s => s.category === catKey);
+                setImportedSpellSelections(prev => {
+                    const current = new Set(prev[rowId] || []);
+                    const allSelected = spellsInCat.every(s => current.has(Number(s.id)));
+                    spellsInCat.forEach(s => {
+                        const id = Number(s.id);
+                        if (allSelected) current.delete(id); else current.add(id);
+                    });
+                    return { ...prev, [rowId]: current };
+                });
+            };
+
+            const toggleAllImportedSpells = (rowId, spellMap) => {
+                setImportedSpellSelections(prev => {
+                    const current = new Set(prev[rowId] || []);
+                    const allIds = Object.values(spellMap).map(s => Number(s.id));
+                    return { ...prev, [rowId]: current.size > 0 ? new Set() : new Set(allIds) };
+                });
+            };
+
+            const postImportLog = async (path, payload) => {
+                const res = await fetch(`/api/import_log/${path}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) {
+                    const text = await res.text();
+                    throw new Error(text || `Import failed (${res.status})`);
+                }
+                return res.json();
+            };
+
+            const handleLoadImportPlayers = async () => {
+                setImportError("");
+                setImportPlayers([]);
+                setImportMeta(null);
+                setImportLoading(true);
+                try {
+                    const data = await postImportLog("players", { url: importUrl });
+                    setImportPlayers(data.players || []);
+                    setImportMeta(data);
+                } catch (error) {
+                    setImportError(error.message || "Could not load players.");
+                } finally {
+                    setImportLoading(false);
+                }
+            };
+
+            const handleImportPlayer = async (player) => {
+                setImportError("");
+                setImportLoading(true);
+                try {
+                    const data = await postImportLog("casts", { url: importUrl, source_id: player.source_id });
+                    const durationSeconds = (data.duration || 0) / 1000;
+                    const specSpellMap = await fetchSpellData(data.player.spec_slug);
+                    const importedSpells = mergeSpellMaps(specSpellMap, data.spells || {});
+                    const importedRow = {
+                        id: `import-${data.report_id}-${data.fight_id}-${data.player.source_id}`,
+                        name: data.player.name,
+                        specSlug: data.player.spec_slug,
+                        reportId: data.report_id,
+                        fightId: data.fight_id,
+                        title: data.title,
+                        kill: data.kill,
+                        percent: data.percent,
+                        killTimeSeconds: durationSeconds,
+                        killTime: formatTime(durationSeconds),
+                        spells: importedSpells,
+                        phases: (data.phases || []).map(p => ({
+                            name: p.name || "Phase",
+                            timestamp: p.time !== undefined ? p.time : ((p.ts || 0) / 1000)
+                        })),
+                        casts: (data.casts || []).map(c => {
+                            const spell = importedSpells[String(c.spell_id)] || {};
+                            return {
+                                spellId: c.spell_id,
+                                timestamp: c.ts ? c.ts / 1000 : 0,
+                                duration: c.duration || spell.duration || 0
+                            };
+                        })
+                    };
+                    setImportedRows(prev => [importedRow, ...prev.filter(row => row.id !== importedRow.id)]);
+                    setImportedSpellSelections(prev => ({
+                        ...prev,
+                        [importedRow.id]: new Set(getDefaultSelectedSpellIds(importedSpells, spellCategories))
+                    }));
+                    setImportModalOpen(false);
+                } catch (error) {
+                    setImportError(error.message || "Could not import player casts.");
+                } finally {
+                    setImportLoading(false);
+                }
+            };
+
             const handleZoomIn = () => setZoom(prev => Math.min(prev + 5, 100));
             const handleZoomOut = () => setZoom(prev => Math.max(prev - 5, 5));
             const formatTime = (s) => `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
@@ -826,9 +988,11 @@
             const tickSettings = getTickSettings(zoom);
             const timelineDuration = useMemo(() => {
                 const killTimes = rankData.map(row => row.killTimeSeconds || 0);
+                const importedKillTimes = importedRows.map(row => row.killTimeSeconds || 0);
                 const mechanicEnds = bossMechanics.map(m => (m.time || 0) + (m.duration || 0));
-                return Math.max(FIGHT_DURATION, ...killTimes, ...mechanicEnds) + 30;
-            }, [rankData, bossMechanics]);
+                const importedCastEnds = importedRows.flatMap(row => row.casts.map(cast => (cast.timestamp || 0) + (cast.duration || 0)));
+                return Math.max(FIGHT_DURATION, ...killTimes, ...importedKillTimes, ...mechanicEnds, ...importedCastEnds) + 30;
+            }, [rankData, bossMechanics, importedRows]);
             const bossTimelineMechanics = useMemo(
                 () => bossMechanics.filter(m => m.type !== "phase" && m.type !== "window"),
                 [bossMechanics]
@@ -849,6 +1013,7 @@
             const onMouseDown = useCallback((e) => {
                 if (e.button !== 0 || !scrollContainerRef.current) return;
                 if (e.target.closest('button, a, input, select, textarea')) return;
+                e.preventDefault();
 
                 dragInfo.current = {
                     isDown: true,
@@ -860,6 +1025,13 @@
                 
                 window.addEventListener('mousemove', onMouseMove);
                 window.addEventListener('mouseup', onMouseUp);
+            }, []);
+
+            const onDragStart = useCallback((e) => {
+                e.preventDefault();
+                dragInfo.current.isDown = false;
+                dragInfo.current.moved = false;
+                setIsDraggingState(false);
             }, []);
 
             const onMouseMove = useCallback((e) => {
@@ -958,19 +1130,22 @@
                         </div>
                         <div className="flex items-center gap-2">
                             <span className="text-gray-400 text-sm">Boss:</span>
-                            <select 
-                                value={selectedBoss} 
-                                onChange={(e) => updateUrlAndReload('boss', e.target.value)} 
-                                className="bg-black/30 border border-gray-700 text-white text-sm rounded px-2 py-1.5 focus:outline-none focus:border-[#00FF96] cursor-pointer"
-                            >
-                                <option value="vamp-fatale">M9S: Vamp Fatale</option>
-                                <option value="red-hot-and-deep-blue">M10S: Red Hot and Deep Blue</option>
-                                <option value="the-tyrant">M11S: The Tyrant</option>
-                                <option value="lindwurm">M12S P1: Lindwurm</option>
-                                <option value="lindwurm-ii">M12S P2: Lindwurm</option>
-                                <option value="futures-rewritten">Future Rewritten</option>
-                                <option value="dancing-mad">Dancing Mad</option>
-                            </select>
+                            <div className="relative">
+                                <select 
+                                    value={selectedBoss} 
+                                    onChange={(e) => updateUrlAndReload('boss', e.target.value)} 
+                                    className="nav-select h-8 min-w-[180px] appearance-none rounded-md border border-gray-700 bg-[#101010] px-3 pr-8 text-sm font-medium text-gray-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] outline-none transition-colors hover:border-[#00FF96]/70 hover:bg-[#151515] focus:border-[#00FF96] cursor-pointer"
+                                >
+                                    <option value="vamp-fatale">M9S: Vamp Fatale</option>
+                                    <option value="red-hot-and-deep-blue">M10S: Red Hot and Deep Blue</option>
+                                    <option value="the-tyrant">M11S: The Tyrant</option>
+                                    <option value="lindwurm">M12S P1: Lindwurm</option>
+                                    <option value="lindwurm-ii">M12S P2: Lindwurm</option>
+                                    <option value="futures-rewritten">Futures Rewritten</option>
+                                    <option value="dancing-mad">Dancing Mad</option>
+                                </select>
+                                <ChevronDown size={14} className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500" />
+                            </div>
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
                             <span className="text-gray-400 text-sm">Spec:</span>
                             <SpecSelector 
@@ -980,14 +1155,21 @@
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
                             
                             <span className="text-gray-400 text-sm">Region:</span>
-                            <select value={selectedRegion} onChange={(e) => setSelectedRegion(e.target.value)} className="bg-black/30 border border-gray-700 text-white text-sm rounded px-2 py-1.5 focus:outline-none focus:border-[#00FF96] cursor-pointer">
-                                <option value="All">All</option>
-                                <option value="JP">JP</option>
-                                <option value="NA">NA</option>
-                                <option value="EU">EU</option>
-                                <option value="OC">OC</option>
-                                <option value="CN">CN</option>
-                            </select>
+                            <div className="relative">
+                                <select
+                                    value={selectedRegion}
+                                    onChange={(e) => setSelectedRegion(e.target.value)}
+                                    className="nav-select h-8 min-w-[82px] appearance-none rounded-md border border-gray-700 bg-[#101010] px-3 pr-8 text-sm font-medium text-gray-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] outline-none transition-colors hover:border-[#00FF96]/70 hover:bg-[#151515] focus:border-[#00FF96] cursor-pointer"
+                                >
+                                    <option value="All">All</option>
+                                    <option value="JP">JP</option>
+                                    <option value="NA">NA</option>
+                                    <option value="EU">EU</option>
+                                    <option value="OC">OC</option>
+                                    <option value="CN">CN</option>
+                                </select>
+                                <ChevronDown size={14} className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500" />
+                            </div>
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
 
                             <CompositionFilter activeFilterSpecs={activeFilterSpecs} onApply={setActiveFilterSpecs} />
@@ -997,6 +1179,18 @@
                             <KillTimeFilter filterRange={killTimeRange} onApply={setKillTimeRange} />
 
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
+
+                            <button
+                                onClick={() => {
+                                    setImportModalOpen(true);
+                                    setImportError("");
+                                }}
+                                className="flex items-center gap-2 px-3 py-1.5 border border-gray-700 rounded-md text-sm text-gray-400 hover:border-[#00FF96] hover:text-white transition-colors bg-black/30"
+                                title="Import one FF Logs pull"
+                            >
+                                <ExternalLink size={14} />
+                                <span>Import Log</span>
+                            </button>
 
                             {/* NEW FEATURE: Curation Buttons */}
                             {/* State 1: Default - Show "Select" */}
@@ -1067,6 +1261,79 @@
                     </div>
                 </nav>
 
+                {importModalOpen && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70">
+                        <div className="w-[520px] max-w-[calc(100vw-32px)] rounded-md border border-gray-700 bg-[#181818] shadow-2xl">
+                            <div className="flex items-center justify-between border-b border-gray-800 px-4 py-3">
+                                <div className="font-bold text-white">Import FF Logs Pull</div>
+                                <button
+                                    onClick={() => setImportModalOpen(false)}
+                                    className="text-gray-500 hover:text-white"
+                                    title="Close"
+                                >
+                                    <XCircle size={18} />
+                                </button>
+                            </div>
+                            <div className="space-y-3 p-4">
+                                <input
+                                    value={importUrl}
+                                    onChange={(e) => setImportUrl(e.target.value)}
+                                    placeholder="https://www.fflogs.com/reports/...?...fight=9&type=damage-done"
+                                    className="w-full rounded border border-gray-700 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-[#00FF96]"
+                                />
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={handleLoadImportPlayers}
+                                        disabled={importLoading || !importUrl.trim()}
+                                        className="rounded-sm border border-[#00FF96] bg-[#00FF96]/10 px-3 py-1.5 text-sm font-bold text-[#00FF96] disabled:cursor-not-allowed disabled:border-gray-700 disabled:text-gray-600"
+                                    >
+                                        {importLoading ? "Loading..." : "Load Players"}
+                                    </button>
+                                    {importMeta && (
+                                        <span className="truncate text-xs text-gray-500">
+                                            {importMeta.report_id} / fight {importMeta.fight_id}
+                                        </span>
+                                    )}
+                                </div>
+                                {importError && (
+                                    <div className="rounded border border-red-500/40 bg-red-950/30 px-3 py-2 text-xs text-red-300">
+                                        {importError}
+                                    </div>
+                                )}
+                                {importPlayers.length > 0 && (
+                                    <div className="max-h-72 overflow-auto rounded border border-gray-800 bg-black/20">
+                                        {importPlayers.map(player => {
+                                            const specInfo = getSpecInfo(player.spec_slug);
+                                            const specIcon = specInfo.icon ? `./images/classes/${specInfo.icon}` : null;
+                                            return (
+                                                <button
+                                                    key={player.source_id}
+                                                    onClick={() => handleImportPlayer(player)}
+                                                    disabled={importLoading}
+                                                    className="flex w-full items-center gap-3 border-b border-gray-800 px-3 py-2.5 text-left text-sm hover:bg-white/5 disabled:cursor-wait"
+                                                >
+                                                    <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded border border-gray-700 bg-[#111]">
+                                                        {specIcon ? (
+                                                            <img src={specIcon} alt={specInfo.n} draggable={false} className="h-full w-full object-cover" />
+                                                        ) : (
+                                                            <span className="text-[10px] font-black text-gray-400">{specInfo.n.slice(0, 2).toUpperCase()}</span>
+                                                        )}
+                                                    </span>
+                                                    <span className="min-w-0 flex-1">
+                                                        <span className="block truncate font-bold text-white">{player.name}</span>
+                                                        <span className="block text-[11px] font-bold uppercase tracking-wide text-gray-500">{specInfo.n}</span>
+                                                    </span>
+                                                    <span className="text-xs font-mono text-gray-600">#{player.source_id}</span>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {/* Control Bar */}
                 <div className="bg-[#181818] border-b border-gray-800 px-4 py-2 shrink-0 flex items-center gap-4 overflow-x-auto no-scrollbar shadow-md z-50">
                     <div className="flex flex-col gap-1 border-r border-gray-700 pr-4 shrink-0">
@@ -1082,7 +1349,7 @@
                         <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Boss</span>
                         <div className="flex items-center gap-2">
                             <div className={`w-8 h-8 rounded border-2 overflow-hidden cursor-pointer transition ${showBossRow ? 'border-[#00FF96] opacity-100' : 'border-gray-700 opacity-50 grayscale'}`} onClick={() => setShowBossRow(!showBossRow)} title="Toggle Boss Row">
-                                <img src="./images/classes/inv_achievement_raiddragon_sarkareth.jpg" alt="Boss" className="w-full h-full object-cover" />
+                                <img src="./images/classes/inv_achievement_raiddragon_sarkareth.jpg" alt="Boss" draggable={false} className="w-full h-full object-cover" />
                             </div>
                         </div>
                     </div>
@@ -1110,7 +1377,7 @@
                             </div>
                         ))}
 
-                        {/* NEW: Global Toggle (The "Eye" Button) */}
+                        {/* NEW: Global Toggle */}
                         <div className="flex flex-col gap-1 border-l border-gray-700 pl-4">
                             <div 
                                 className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-white" 
@@ -1118,7 +1385,7 @@
                                 title={selectedSpells.size > 0 ? "隐藏所有技能" : "显示所有技能"}
                             >
                                 <span className="flex items-center gap-1">
-                                    {selectedSpells.size > 0 ? <Eye size={14} /> : <EyeOff size={14} />} 
+                                    <SlidersHorizontal size={14} />
                                     All
                                 </span>
                             </div>
@@ -1127,7 +1394,7 @@
                                     onClick={toggleAllSpells}
                                     className={`w-8 h-8 flex items-center justify-center rounded border transition-all ${selectedSpells.size > 0 ? 'bg-white/10 border-gray-500 text-white' : 'bg-transparent border-gray-800 text-gray-600'}`}
                                 >
-                                    {selectedSpells.size > 0 ? <Eye size={16} /> : <EyeOff size={16} />}
+                                    <SlidersHorizontal size={16} />
                                 </button>
                             </div>
                         </div>
@@ -1154,6 +1421,7 @@
                         className={`flex-1 overflow-auto bg-[#121212] custom-scrollbar relative ${isDraggingState ? 'cursor-grabbing' : 'cursor-grab'}`} 
                         ref={scrollContainerRef}
                         onMouseDown={onMouseDown}
+                        onDragStart={onDragStart}
                     >
                         <div className="min-w-fit pb-10">
 
@@ -1242,6 +1510,264 @@
                                 </div>
                             )}
 
+                            {/* Imported User Log Rows */}
+                            {importedRows.map(importedRow => {
+                                const rowHeight = 32;
+                                const trackHeight = 30;
+                                const rowPhases = importedRow.phases && importedRow.phases.length
+                                    ? importedRow.phases
+                                    : timelinePhases;
+                                const sameSpecAsTimeline = importedRow.specSlug === selectedSpec;
+                                const importedVisibleSpellIds = sameSpecAsTimeline
+                                    ? selectedSpells
+                                    : (importedSpellSelections[importedRow.id] || new Set());
+                                const importedSpellMap = sameSpecAsTimeline ? { ...importedRow.spells, ...spells } : importedRow.spells;
+                                const visibleImportedCasts = importedRow.casts.filter(cast => importedVisibleSpellIds.has(Number(cast.spellId)));
+                                const { processedCasts: processedImportedCasts, maxTracks: importedMaxTracks } = isCollapsed
+                                    ? { processedCasts: visibleImportedCasts.map(c => ({ ...c, trackIndex: 0 })), maxTracks: 1 }
+                                    : calculateCastTracks(visibleImportedCasts);
+                                const totalHeight = isCollapsed ? rowHeight : Math.max(rowHeight, importedMaxTracks * trackHeight);
+                                const specInfo = getSpecInfo(importedRow.specSlug);
+                                const endLabel = importedRow.kill ? "Kill" : "Wipe";
+                                const percentLabel = !importedRow.kill && importedRow.percent ? ` ${Number(importedRow.percent).toFixed(1)}%` : "";
+
+                                const hexToRgba = (hex, alpha) => {
+                                    if (!hex) return `rgba(255,255,255,${alpha})`;
+                                    if (hex.startsWith('#')) {
+                                        const r = parseInt(hex.slice(1, 3), 16);
+                                        const g = parseInt(hex.slice(3, 5), 16);
+                                        const b = parseInt(hex.slice(5, 7), 16);
+                                        return `rgba(${r},${g},${b},${alpha})`;
+                                    }
+                                    return hex;
+                                };
+
+                                return (
+                                    <div
+                                        key={importedRow.id}
+                                        onClick={() => setFocusedSpellId(null)}
+                                        className={`flex border-b border-[#00FF96]/20 bg-[#07130f] hover:bg-[#0a1a14] transition-colors group/import relative ${importSpellMenuRowId === importedRow.id ? 'z-[90]' : 'z-[20]'}`}
+                                        style={{ height: `${totalHeight}px` }}
+                                    >
+                                        <div className={`sticky left-0 bg-[#0b1713] border-r border-[#00FF96]/20 shrink-0 flex items-center px-4 transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.25)] ${importSpellMenuRowId === importedRow.id ? 'z-[110]' : 'z-40'}`} style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
+                                            <div className="flex min-w-0 flex-1 flex-col">
+                                                <span className="text-[9px] font-black uppercase leading-none text-[#00FF96]">Imported Log</span>
+                                                <span className="truncate text-[13px] font-bold leading-tight text-white">{importedRow.name}</span>
+                                            </div>
+                                            {!sameSpecAsTimeline && (
+                                                <div className="relative ml-2">
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setImportSpellMenuRowId(importSpellMenuRowId === importedRow.id ? null : importedRow.id);
+                                                        }}
+                                                        className="flex h-6 items-center gap-1 rounded border border-gray-700 bg-black/30 px-2 text-[11px] font-bold text-gray-300 hover:border-[#00FF96] hover:text-white"
+                                                        title={`${specInfo.n} spell filters`}
+                                                    >
+                                                        <SlidersHorizontal size={13} />
+                                                        {importedVisibleSpellIds.size}
+                                                    </button>
+                                                    {importSpellMenuRowId === importedRow.id && (
+                                                        <div
+                                                            className="absolute left-0 top-8 z-[200] w-[360px] rounded-md border border-gray-700 bg-[#151515] p-3 shadow-2xl"
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        >
+                                                            <div className="mb-2 flex items-center justify-between border-b border-gray-800 pb-2">
+                                                                <div className="flex min-w-0 items-center gap-2">
+                                                                    <div className="min-w-0">
+                                                                        <div className="truncate text-xs font-bold text-white">{specInfo.n}</div>
+                                                                        <div className="text-[10px] font-mono text-gray-500">{importedVisibleSpellIds.size} shown</div>
+                                                                    </div>
+                                                                </div>
+                                                                <button
+                                                                    onClick={() => toggleAllImportedSpells(importedRow.id, importedSpellMap)}
+                                                                    className="rounded border border-gray-700 px-2 py-1 text-[10px] font-bold text-gray-400 hover:border-[#00FF96] hover:text-white"
+                                                                >
+                                                                    All
+                                                                </button>
+                                                            </div>
+                                                            <div className="space-y-3">
+                                                                {Object.entries(spellCategories).map(([catKey, category]) => {
+                                                                    const categorySpells = Object.values(importedSpellMap)
+                                                                        .filter(spell => spell.category === catKey)
+                                                                        .sort((a, b) => a.load_order - b.load_order);
+                                                                    if (!categorySpells.length) return null;
+                                                                    return (
+                                                                        <div key={`import-cat-${catKey}`} className="space-y-1">
+                                                                            <button
+                                                                                onClick={() => toggleImportedCategory(importedRow.id, importedSpellMap, catKey)}
+                                                                                className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-gray-500 hover:text-white"
+                                                                            >
+                                                                                <CategoryIcon type={category.iconType} /> {category.label}
+                                                                            </button>
+                                                                            <div className="flex flex-wrap gap-1.5">
+                                                                                {categorySpells.map(spell => {
+                                                                                    const isSelected = importedVisibleSpellIds.has(Number(spell.id));
+                                                                                    return (
+                                                                                        <button
+                                                                                            key={`import-spell-${spell.id}`}
+                                                                                            onClick={() => toggleImportedSpell(importedRow.id, spell.id)}
+                                                                                            className={`h-8 w-8 overflow-hidden rounded border transition ${isSelected ? 'border-transparent opacity-100 grayscale-0' : 'border-gray-800 opacity-30 grayscale hover:opacity-70 hover:border-gray-600'}`}
+                                                                                            title={spell.name}
+                                                                                        >
+                                                                                            <RenderIcon spell={spell} />
+                                                                                        </button>
+                                                                                    );
+                                                                                })}
+                                                                            </div>
+                                                                        </div>
+                                                                    );
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+                                            <button
+                                                onClick={() => {
+                                                    setImportedRows(prev => prev.filter(row => row.id !== importedRow.id));
+                                                    setImportedSpellSelections(prev => {
+                                                        const next = { ...prev };
+                                                        delete next[importedRow.id];
+                                                        return next;
+                                                    });
+                                                    if (importSpellMenuRowId === importedRow.id) setImportSpellMenuRowId(null);
+                                                }}
+                                                className="ml-2 text-gray-500 hover:text-white"
+                                                title="Remove imported log"
+                                            >
+                                                <XCircle size={15} />
+                                            </button>
+                                        </div>
+                                        <div className="relative h-full z-10" style={{ width: `${timelineDuration * zoom}px` }}>
+                                            {Array.from({ length: Math.ceil(timelineDuration / tickSettings.major) + 1 }).map((_, i) => (
+                                                <div key={i} className="absolute top-0 bottom-0 border-l border-gray-800/20 pointer-events-none" style={{ left: `${i * tickSettings.major * zoom}px` }} />
+                                            ))}
+
+                                            {showPhases && rowPhases.map((phase, pIdx) => (
+                                                <div
+                                                    key={`import-phase-${pIdx}`}
+                                                    className="absolute top-0 bottom-0 border-l-2 border-dashed pointer-events-none z-[20]"
+                                                    style={{
+                                                        left: `${phase.timestamp * zoom}px`,
+                                                        width: "36px",
+                                                        borderColor: phase.color || "rgba(0,255,150,0.72)",
+                                                        background: "linear-gradient(90deg, rgba(0,255,150,0.12), rgba(0,255,150,0))"
+                                                    }}
+                                                    title={`${phase.name} (${formatTime(phase.timestamp)})`}
+                                                >
+                                                    <span className="absolute top-0 left-1 rounded border border-[#00FF96]/30 bg-black/85 px-1 text-[10px] font-bold text-[#d6fff0] shadow-sm whitespace-nowrap">
+                                                        {phase.name}
+                                                    </span>
+                                                </div>
+                                            ))}
+
+                                            {importedRow.killTimeSeconds > 0 && (
+                                                <div
+                                                    className="absolute top-0 bottom-0 z-50 flex items-center pointer-events-none"
+                                                    style={{ left: `${importedRow.killTimeSeconds * zoom}px` }}
+                                                >
+                                                    <div className={`h-full w-[3px] ${importedRow.kill ? 'bg-[#00FF96]/80 shadow-[0_0_8px_rgba(0,255,150,0.6)]' : 'bg-red-500/80 shadow-[0_0_8px_rgba(239,68,68,0.7)]'}`}></div>
+                                                    <div className={`ml-1 flex items-center gap-1 rounded border px-1.5 py-0.5 text-[11px] font-black uppercase tracking-wide text-white ${importedRow.kill ? 'border-[#00FF96]/50 bg-[#064a31]/90' : 'border-red-500/50 bg-red-950/90'}`}>
+                                                        <Flag size={12} />
+                                                        <span>{endLabel}</span>
+                                                        <span className="font-mono">{importedRow.killTime}</span>
+                                                        {percentLabel && <span className="font-mono text-red-200">{percentLabel}</span>}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {processedImportedCasts.map((cast, cIdx) => {
+                                                const isFocusedSpell = focusedSpellId === Number(cast.spellId);
+                                                const spell = importedSpellMap[String(cast.spellId)] || {
+                                                    id: cast.spellId,
+                                                    name: `ID: ${cast.spellId}`,
+                                                    image: null,
+                                                    cd: 0,
+                                                    color: '#666666'
+                                                };
+                                                const timeUntilKill = importedRow.killTimeSeconds ? (importedRow.killTimeSeconds - cast.timestamp) : 99999;
+                                                if (timeUntilKill <= 0) return null;
+
+                                                const barColor = sameSpecAsTimeline
+                                                    ? (spellColorMap[cast.spellId] || spell.color || DURATION_PALETTE[cIdx % DURATION_PALETTE.length])
+                                                    : (spell.color || DURATION_PALETTE[cIdx % DURATION_PALETTE.length]);
+                                                const durationWidth = Math.max(0, Math.min((cast.duration || 0) * zoom, timeUntilKill * zoom));
+                                                const cdWidth = Math.max(0, Math.min((spell.cd || 0) * zoom, timeUntilKill * zoom));
+                                                const currentTrackHeight = isCollapsed ? totalHeight : trackHeight;
+                                                const topPos = isCollapsed ? 0 : cast.trackIndex * trackHeight;
+                                                const iconHeight = currentTrackHeight * 0.85;
+
+                                                return (
+                                                    <div
+                                                        key={cIdx}
+                                                        onMouseDown={(e) => {
+                                                            e.preventDefault();
+                                                            const spellId = Number(cast.spellId);
+                                                            setFocusedSpellId(prev => prev === spellId ? null : spellId);
+                                                        }}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                        }}
+                                                        className={`absolute flex items-center group/icon select-none transition-opacity duration-150 ${focusedSpellId && !isFocusedSpell ? 'opacity-25' : 'opacity-100'}`}
+                                                        style={{
+                                                            left: `${cast.timestamp * zoom}px`,
+                                                            top: `${topPos}px`,
+                                                            height: `${currentTrackHeight}px`,
+                                                            zIndex: isFocusedSpell ? 220 + cIdx : 10 + cIdx
+                                                        }}
+                                                    >
+                                                        <div className="relative h-full flex items-center">
+                                                            {showCooldown && spell.cd > 0 && cdWidth > 0 && (
+                                                                <div
+                                                                    className="absolute top-1/2 -translate-y-1/2 h-1/3 rounded-r-sm z-0"
+                                                                    style={{
+                                                                        left: `${iconHeight / 2}px`,
+                                                                        width: `${cdWidth}px`,
+                                                                        backgroundColor: hexToRgba(barColor, 0.2)
+                                                                    }}
+                                                                />
+                                                            )}
+
+                                                            {showDuration && durationWidth > 0 && (
+                                                                <div
+                                                                    className="absolute left-0 z-10 rounded-sm shadow-sm"
+                                                                    style={{
+                                                                        width: `${durationWidth}px`,
+                                                                        height: '82%',
+                                                                        backgroundColor: barColor,
+                                                                        opacity: 0.9
+                                                                    }}
+                                                                />
+                                                            )}
+
+                                                            <div
+                                                                className={`relative z-20 flex items-center justify-center overflow-hidden rounded-sm bg-black/50 ${isFocusedSpell ? 'ring-2 ring-[#00FF96] ring-offset-1 ring-offset-black' : ''}`}
+                                                                style={{
+                                                                    height: `${iconHeight}px`,
+                                                                    width: `${iconHeight}px`,
+                                                                    minWidth: `${iconHeight}px`
+                                                                }}
+                                                                title={`${spell.name} (${formatTime(cast.timestamp)})`}
+                                                            >
+                                                                <RenderIcon spell={spell} className="opacity-100" />
+                                                            </div>
+
+                                                            <span
+                                                                className="ml-1 font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] z-30 pointer-events-none"
+                                                                style={{ fontSize: `${iconHeight * 0.62}px`, lineHeight: 1 }}
+                                                            >
+                                                                {formatTime(cast.timestamp)}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+
                             {/* Player Rows */}
                             {rankData
                                 .filter(row => {
@@ -1297,6 +1823,7 @@
                                                 e.preventDefault();
                                                 return;
                                             }
+                                            setFocusedSpellId(null);
                                             const newSet = new Set(selectedRowIds);
                                             if (newSet.has(row.id)) {
                                                 newSet.delete(row.id);
@@ -1334,7 +1861,7 @@
                                             
                                             {/* Partner Column - Only shows for Tank/Healer */}
                                             <div className="w-8 text-center flex justify-center items-center ml-1">
-                                                {row.partner && <img src={row.partner} alt="P" className="w-5 h-5 object-contain" />}
+                                                {row.partner && <img src={row.partner} alt="P" draggable={false} className="w-5 h-5 object-contain" />}
                                             </div>
 
                                             {/* NEW: Buffs Count Column */}
@@ -1404,6 +1931,7 @@
                                             )}
 
                                             {processedCasts.map((cast, cIdx) => {
+                                                const isFocusedSpell = focusedSpellId === Number(cast.spellId);
                                                 
                                                 const spell = spells[cast.spellId] || {
         id: cast.spellId,
@@ -1453,12 +1981,20 @@
                                                 return (
                                                     <div
                                                         key={cIdx}
-                                                        className="absolute flex items-center group/icon select-none"
+                                                        onMouseDown={(e) => {
+                                                            e.preventDefault();
+                                                            const spellId = Number(cast.spellId);
+                                                            setFocusedSpellId(prev => prev === spellId ? null : spellId);
+                                                        }}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                        }}
+                                                        className={`absolute flex items-center group/icon select-none transition-opacity duration-150 ${focusedSpellId && !isFocusedSpell ? 'opacity-25' : 'opacity-100'}`}
                                                         style={{
                                                             left: `${cast.timestamp * zoom}px`,
                                                             top: `${topPos}px`,
                                                             height: `${currentTrackHeight}px`,
-                                                            zIndex: 10 + cIdx // Right skills cover left skills
+                                                            zIndex: isFocusedSpell ? 220 + cIdx : 10 + cIdx // Right skills cover left skills
                                                         }}
                                                     >
                                                         <div className="relative w-full h-full flex items-center">
@@ -1490,7 +2026,7 @@
 
                                                             {/* 3. Icon */}
                                                             <div
-                                                                className="relative z-20 flex items-center justify-center overflow-hidden rounded-sm bg-black/50"
+                                                                className={`relative z-20 flex items-center justify-center overflow-hidden rounded-sm bg-black/50 ${isFocusedSpell ? 'ring-2 ring-[#00FF96] ring-offset-1 ring-offset-black' : ''}`}
                                                                 style={{
                                                                     height: `${iconHeight}px`,
                                                                     width: `${iconHeight}px`,

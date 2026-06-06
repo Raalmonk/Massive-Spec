@@ -16,6 +16,7 @@ from lorrgs_api.routes import (
     auth,
     debug,
     api_fight_analysis,
+    api_import_log,
 )
 
 
@@ -34,6 +35,7 @@ router.include_router(auth.router, prefix="/auth")
 router.include_router(debug.router)
 
 router.include_router(api_fight_analysis.router)
+router.include_router(api_import_log.router)
 
 
 ################################################################################

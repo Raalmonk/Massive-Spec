@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Debug Future Rewritten Dark Knight rankings and write the frontend JSON."""
+"""Debug Futures Rewritten Dark Knight rankings and write the frontend JSON."""
 
 from __future__ import annotations
 
@@ -81,7 +81,7 @@ async def debug_darkknight_fru() -> None:
     phase_counts = [len(fight.phases) for fight in ranking.fights]
     zone_id = resolve_zone_id(boss)
 
-    print("Future Rewritten Dark Knight debug complete")
+    print("Futures Rewritten Dark Knight debug complete")
     print(f"boss slug: {boss.full_name_slug}")
     print(f"boss id: {boss.id}")
     print(f"zone id: {zone_id if zone_id is not None else 'unknown'}")
