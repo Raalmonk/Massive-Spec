@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 # IMPORT STANDARD LIBRARIES
+import asyncio
 import datetime
 import textwrap
 import typing
@@ -30,6 +31,12 @@ DIFFICULTY_IDS = {
     "savage": 101,
     "extreme": 102,
     "ultimate": 100,
+}
+
+RANKING_REGION_LIMITS = {
+    "global": 65,
+    "cn": 25,
+    "kr": 10,
 }
 
 
@@ -126,8 +133,9 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         {{
             encounter(id: {self.boss.id})
             {{
-                global: {build_rankings_query(real_class_name)}
+                global: {build_rankings_query(real_class_name, 'partition: 7')}
                 cn: {build_rankings_query(cn_class_name, 'partition: 3, serverRegion: "CN"')}
+                kr: {build_rankings_query(real_class_name, 'partition: 5')}
             }}
         }}
         """
@@ -226,19 +234,33 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         """Process the Ranking Results."""
         encounter_data = query_result.get("worldData", {}).get("encounter", {})
 
-        # 1. Global (Load ALL)
-        global_data = encounter_data.get("global", {})
-        global_rankings = wcl.CharacterRankings(**global_data).rankings
+        def valid_rankings(rankings: list[wcl.CharacterRanking]) -> list[wcl.CharacterRanking]:
+            return [ranking for ranking in rankings if not ranking.hidden and ranking.report]
 
-        # 2. CN (Load ALL)
+        global_data = encounter_data.get("global", {})
+        global_rankings = [
+            ranking
+            for ranking in valid_rankings(wcl.CharacterRankings(**global_data).rankings)
+            if ranking.server.region not in ("CN", "KR")
+        ][: RANKING_REGION_LIMITS["global"]]
+
         cn_data = encounter_data.get("cn", {})
-        cn_rankings = wcl.CharacterRankings(**cn_data).rankings
+        cn_rankings = valid_rankings(wcl.CharacterRankings(**cn_data).rankings)[: RANKING_REGION_LIMITS["cn"]]
 
         if cn_rankings:
             logger.info(f"[CN Data Check] First CN Player: {cn_rankings[0].name}")
 
-        # Merge
-        rankings = global_rankings + cn_rankings
+        kr_data = encounter_data.get("kr", {})
+        kr_rankings = valid_rankings(wcl.CharacterRankings(**kr_data).rankings)[: RANKING_REGION_LIMITS["kr"]]
+
+        rankings = global_rankings + cn_rankings + kr_rankings
+        logger.info(
+            "[Ranking Quotas] global=%s cn=%s kr=%s total=%s",
+            len(global_rankings),
+            len(cn_rankings),
+            len(kr_rankings),
+            len(rankings),
+        )
         self.add_new_fights(rankings)
         self.post_init()
 
@@ -247,6 +269,96 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         query = self.get_query()
         result = await self.client.query(query)
         self.process_query_result(**result)
+
+    def _build_report_metric_totals_query(self, report: Report) -> str:
+        fight_ids = sorted({fight.fight_id for fight in report.fights if fight.fight_id})
+        fight_ids_text = ", ".join(str(fight_id) for fight_id in fight_ids)
+        return f"""
+            reportData
+            {{
+                report(code: "{report.report_id}")
+                {{
+                    rankings(fightIDs: [{fight_ids_text}], playerMetric: {self.metric})
+                }}
+            }}
+        """
+
+    @staticmethod
+    def _iter_report_ranking_characters(rankings_payload: dict[str, typing.Any]):
+        data = rankings_payload.get("data") or []
+        for fight_data in data:
+            fight_id = fight_data.get("fightID")
+            roles = fight_data.get("roles") or {}
+            for role_data in roles.values():
+                for character in (role_data or {}).get("characters") or []:
+                    if character.get("id_2") or character.get("name_2"):
+                        continue
+
+                    name = character.get("name")
+                    class_name = character.get("class")
+                    amount = character.get("amount")
+                    if not fight_id or not name or not class_name or amount is None:
+                        continue
+
+                    spec = WowSpec.get(name_slug_cap=class_name)
+                    if not spec:
+                        continue
+
+                    yield fight_id, name, spec.full_name_slug, amount
+
+    async def load_metric_totals(self) -> None:
+        """Overwrite fight-summary DPS with ranking totals for the active metric."""
+        if not self._should_load_buddies():
+            return
+
+        reports = [report for report in self.reports if report.report_id and report.fights]
+        if not reports:
+            return
+
+        tasks = [
+            self.client.query(
+                self._build_report_metric_totals_query(report),
+                raise_errors=False,
+                region=report.region,
+            )
+            for report in reports
+        ]
+        results = await asyncio.gather(*tasks)
+
+        metric_totals: dict[tuple[str, int, str, str], float] = {}
+        for report, result in zip(reports, results):
+            rankings_payload = (
+                result.get("reportData", {})
+                .get("report", {})
+                .get("rankings", {})
+            )
+            for fight_id, name, spec_slug, amount in self._iter_report_ranking_characters(rankings_payload):
+                key = (report.report_id, fight_id, self._normalize_name(name), spec_slug)
+                metric_totals[key] = float(amount)
+
+        applied = 0
+        for report in self.reports:
+            for fight in report.fights:
+                for player in fight.players:
+                    key = (
+                        report.report_id,
+                        fight.fight_id,
+                        self._normalize_name(player.name),
+                        player.spec_slug,
+                    )
+                    total = metric_totals.get(key)
+                    if total is None:
+                        continue
+
+                    if player.spec_slug == self.spec_slug and player.total <= 0:
+                        continue
+
+                    if abs(player.total - total) > 0.1:
+                        player.total = total
+                        applied += 1
+
+        if applied:
+            logger.info(f"[Metric Totals] Applied {self.metric} totals to {applied} players.")
 
     ############################################################################
     # Query: Fights
@@ -435,7 +547,10 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             logger.info(f"[DPS Fix] Enforced Manifest on {restore_count} Rankers.")
             # ============================================================
 
-        # 4. Load Spells
+        # 4. Align buddy totals with the active ranking metric before frontend export.
+        await self.load_metric_totals()
+
+        # 5. Load Spells
         await self.load_actors()
         
         logger.info("done")

@@ -60,11 +60,11 @@ BOSS_ROTATION = [
 BOSS_CONFIG = {
     "futures-rewritten": {
         "difficulty": "ultimate",
-        "metric": "dps",
+        "metric": "rdps",
     },
     "dancing-mad": {
         "difficulty": "ultimate",
-        "metric": "dps",
+        "metric": "rdps",
     },
 }
 
@@ -85,7 +85,7 @@ async def _do_update_spec(spec, boss_slug, timestamp_folder):
     )
     
     # 这里的 clear_old=True 配合我们之前的讨论，保证数据纯净
-    await ranking.load(limit=80, clear_old=True)
+    await ranking.load(limit=100, clear_old=True)
     
     # 2. 序列化数据 - 保持不变
     data = ranking.model_dump(exclude_unset=True, by_alias=True)

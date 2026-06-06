@@ -100,6 +100,8 @@
         const API_BASE = '';
         const LEFT_PANEL_WIDTH = 260; 
         const DRAG_THRESHOLD = 6;
+        const MIN_ZOOM = 1;
+        const MAX_ZOOM = 100;
 
         // Palette for Duration Bars (Sequential assignment)
         const DURATION_PALETTE = [
@@ -153,12 +155,14 @@
         // Mock Data for Specs - Moved to Global Scope
         const SPECS = [
             { label: 'Tanks', items: [
+                {id:'tank-combined', icon:null, n:'Tank Combined', combined: true},
                 {id:'paladin-paladin', icon:'paladin.png', n:'Paladin'},
                 {id:'warrior-warrior', icon:'warrior.png', n:'Warrior'},
                 {id:'darkknight-darkknight', icon:'Dark_Knight.png', n:'Dark Knight'},
                 {id:'gunbreaker-gunbreaker', icon:'Gunbreaker.png', n:'Gunbreaker'}
             ]},
             { label: 'Healers', items: [
+                {id:'healer-combined', icon:null, n:'Healer Combined', combined: true},
                 {id:'whitemage-whitemage', icon:'White_Mage.png', n:'White Mage'},
                 {id:'scholar-scholar', icon:'Scholar.png', n:'Scholar'},
                 {id:'astrologian-astrologian', icon:'Astrologian.png', n:'Astrologian'},
@@ -184,6 +188,22 @@
                 {id:'pictomancer-pictomancer', icon:'Pictomancer.png', n:'Pictomancer'}
             ]},
         ];
+
+        const COMBINED_SPECS = {
+            'tank-combined': {
+                role: 'tank',
+                baseSpec: 'paladin-paladin',
+                specs: ['paladin-paladin', 'warrior-warrior', 'darkknight-darkknight', 'gunbreaker-gunbreaker']
+            },
+            'healer-combined': {
+                role: 'healer',
+                baseSpec: 'whitemage-whitemage',
+                specs: ['whitemage-whitemage', 'scholar-scholar', 'astrologian-astrologian', 'sage-sage']
+            }
+        };
+
+        const isCombinedSpec = (specSlug) => Boolean(COMBINED_SPECS[specSlug]);
+        const getCombinedConfig = (specSlug) => COMBINED_SPECS[specSlug] || null;
 
         const getIconForSpec = (specSlug) => {
              const item = SPECS.flatMap(g => g.items).find(i => i.id === specSlug);
@@ -268,12 +288,16 @@
         };
 
         const getRole = (specSlug) => {
+            const combinedConfig = getCombinedConfig(specSlug);
+            if (combinedConfig) return combinedConfig.role;
             if (specSlug.includes('paladin') || specSlug.includes('warrior') || specSlug.includes('darkknight') || specSlug.includes('gunbreaker')) return 'tank';
             if (specSlug.includes('whitemage') || specSlug.includes('scholar') || specSlug.includes('astrologian') || specSlug.includes('sage')) return 'healer';
             return 'dps';
         };
 
         const getDetailedRole = (specSlug) => {
+            const combinedConfig = getCombinedConfig(specSlug);
+            if (combinedConfig) return combinedConfig.role;
             const group = SPECS.find(g => g.items.some(i => i.id === specSlug));
             if (!group) return 'dps';
             if (group.label === 'Tanks') return 'tank';
@@ -292,13 +316,19 @@
         const getSpecsForDetailedRole = (role) => {
             const groupLabel = role === 'tank' ? 'Tanks' : role === 'healer' ? 'Healers' : '';
             const group = SPECS.find(g => g.label === groupLabel);
-            return group ? group.items : [];
+            return group ? group.items.filter(spec => !spec.combined) : [];
         };
 
         const getBuddySpecOptions = (specSlug) => {
             const role = getRole(specSlug);
             if (!supportsBuddy(specSlug)) return [];
             return getSpecsForDetailedRole(role).filter(spec => spec.id !== specSlug);
+        };
+
+        const getCombinedSpecOptions = (specSlug) => {
+            const config = getCombinedConfig(specSlug);
+            if (!config) return [];
+            return config.specs.map(getSpecInfo);
         };
 
         const findBuddyPlayer = (player, fightPlayers, specSlug) => {
@@ -329,7 +359,9 @@
             ]);
 
             try {
-                const fileName = `spec_ranking_${specSlug}_${bossSlug}.json`;
+                const combinedConfig = getCombinedConfig(specSlug);
+                const dataSpecSlug = combinedConfig ? combinedConfig.baseSpec : specSlug;
+                const fileName = `spec_ranking_${dataSpecSlug}_${bossSlug}.json`;
                 const url = `./data/${fileName}?t=${Date.now()}`;
 
                 const res = await fetch(url);
@@ -361,6 +393,68 @@
                     });
                 }
 
+                const normalizeCasts = (casts, durationSpellMap = {}, ownerSpecSlug = "", ownerName = "") => (casts || []).map(c => ({
+                    spellId: c.spell_id,
+                    timestamp: c.ts ? c.ts / 1000 : (c.timestamp || 0),
+                    duration: c.duration || (durationSpellMap[c.spell_id] ? durationSpellMap[c.spell_id].duration : 0),
+                    specSlug: ownerSpecSlug,
+                    ownerName
+                }));
+
+                if (combinedConfig) {
+                    let combinedRows = [];
+                    playersByFight.forEach((fightPlayers, fightKey) => {
+                        const rolePlayers = fightPlayers
+                            .filter(player => getRole(player.spec_slug) === combinedConfig.role && player.total > 0)
+                            .sort((a, b) => b.total - a.total);
+
+                        if (rolePlayers.length < 2) return;
+                        const firstPlayer = rolePlayers[0];
+                        if (regionFilter && regionFilter !== 'All' && firstPlayer.region !== regionFilter) return;
+
+                        const durationSeconds = firstPlayer.fightDuration / 1000;
+                        const m = Math.floor(durationSeconds / 60);
+                        const s = Math.floor(durationSeconds % 60).toString().padStart(2, '0');
+                        const combinedPlayers = rolePlayers.slice(0, 2);
+                        const total = combinedPlayers.reduce((sum, player) => sum + (player.total || 0), 0);
+                        const buffCount = (firstPlayer.composition || []).filter(s => BUFF_SPECS.has(s)).length;
+
+                        combinedRows.push({
+                            rank: 0,
+                            id: `${specSlug}-${fightKey}`,
+                            name: combinedPlayers.map(player => player.name).join(' + '),
+                            region: firstPlayer.region || '??',
+                            reportId: firstPlayer.reportId,
+                            fightId: firstPlayer.fightId,
+                            partner: null,
+                            buffCount,
+                            composition: firstPlayer.composition,
+                            dps: total,
+                            killTime: `${m}:${s}`,
+                            killTimeSeconds: durationSeconds,
+                            phases: (firstPlayer.phases || []).map(p => ({
+                                name: p.name || "Phase",
+                                timestamp: p.time !== undefined ? p.time : ((p.ts || 0) / 1000),
+                                ts: p.ts || 0,
+                                mrt: p.mrt || ""
+                            })),
+                            casts: combinedPlayers.flatMap(player => normalizeCasts(player.casts, {}, player.spec_slug, player.name)),
+                            combinedPlayers: combinedPlayers.map(player => ({
+                                sourceId: player.source_id,
+                                name: player.name,
+                                specSlug: player.spec_slug,
+                                dps: player.total || 0
+                            })),
+                            buddy: null,
+                            deaths: combinedPlayers.flatMap(player => player.deaths || []),
+                            isCombined: true
+                        });
+                    });
+
+                    combinedRows.sort((a, b) => b.dps - a.dps);
+                    return combinedRows.slice(0, 100).map((row, index) => ({ ...row, rank: index + 1 }));
+                }
+
                 let filteredPlayers = allPlayers.filter(p => p.spec_slug === specSlug && p.total > 0);
                 
                 if (regionFilter && regionFilter !== 'All') {
@@ -369,7 +463,7 @@
 
                 filteredPlayers.sort((a, b) => b.total - a.total);
 
-                const rankedPlayers = filteredPlayers.slice(0, 70);
+                const rankedPlayers = filteredPlayers.slice(0, 100);
 
                 const rankData = rankedPlayers.map((player, index) => {
                         const id = `${player.reportId}-${player.fightId}-${player.source_id}`;
@@ -407,12 +501,6 @@
                         const durationSeconds = player.fightDuration / 1000;
                         const m = Math.floor(durationSeconds / 60);
                         const s = Math.floor(durationSeconds % 60).toString().padStart(2, '0');
-                        const normalizeCasts = (casts, durationSpellMap = {}) => (casts || []).map(c => ({
-                            spellId: c.spell_id,
-                            timestamp: c.ts ? c.ts / 1000 : (c.timestamp || 0),
-                            duration: c.duration || (durationSpellMap[c.spell_id] ? durationSpellMap[c.spell_id].duration : 0)
-                        }));
-
                         return {
                         rank: index + 1,
                         id: id,
@@ -774,7 +862,7 @@
                                     <div key={idx} className="flex flex-col gap-2">
                                         <span className="text-[10px] uppercase text-gray-500 font-bold">{group.label}</span>
                                         <div className="flex flex-wrap gap-2">
-                                            {group.items.map(item => {
+                                            {group.items.filter(item => !item.combined).map(item => {
                                                 const isSelected = tempSelected.has(item.id);
                                                 return (
                                                     <button
@@ -807,8 +895,16 @@
             const ref = useRef(null);
 
             const currentSpecItem = SPECS.flatMap(g => g.items).find(i => i.id === selectedSpec);
-            const currentIcon = currentSpecItem?.icon || 'Red_Mage.png';
             const currentName = currentSpecItem?.n || 'Red Mage';
+            const currentIsCombined = Boolean(currentSpecItem?.combined);
+
+            const CombinedMark = ({ compact = false }) => (
+                <span
+                    className={`${compact ? 'h-full w-full text-[9px]' : 'h-5 min-w-[34px] px-1.5 text-[10px]'} flex items-center justify-center rounded-sm border border-[#00FF96]/70 bg-[#00FF96]/10 font-black font-mono uppercase tracking-wide text-[#00FF96]`}
+                >
+                    COM
+                </span>
+            );
 
             useEffect(() => {
                 const handleClickOutside = (event) => {
@@ -824,7 +920,11 @@
                         onClick={() => setIsOpen(!isOpen)} 
                         className="flex items-center gap-2 px-3 py-1.5 bg-black/30 border border-gray-700 rounded-md text-sm hover:border-[#00FF96] transition-colors"
                     >
-                        <img src={`./images/classes/${currentIcon}`} alt={currentName} draggable={false} className="w-5 h-5 object-contain" />
+                        {currentIsCombined ? (
+                            <CombinedMark />
+                        ) : (
+                            <img src={`./images/classes/${currentSpecItem?.icon || 'Red_Mage.png'}`} alt={currentName} draggable={false} className="w-5 h-5 object-contain" />
+                        )}
                         <span className="font-medium text-white">{currentName}</span>
                         <ChevronDown size={14} className="text-gray-400" />
                     </button>
@@ -842,7 +942,11 @@
                                                 className={`w-8 h-8 flex items-center justify-center rounded border transition-all overflow-hidden ${selectedSpec === item.id ? 'bg-[#333] border-[#00FF96]' : 'bg-[#252525] border-transparent hover:bg-[#333] hover:border-[#00FF96]'}`}
                                                 title={item.n}
                                             >
-                                                <img src={`./images/classes/${item.icon}`} alt={item.n} draggable={false} className="w-full h-full object-cover" />
+                                                {item.combined ? (
+                                                    <CombinedMark compact />
+                                                ) : (
+                                                    <img src={`./images/classes/${item.icon}`} alt={item.n} draggable={false} className="w-full h-full object-cover" />
+                                                )}
                                             </button>
                                         ))}
                                     </div>
@@ -936,7 +1040,11 @@
                 return grouped;
             }, [spells]);
 
-            const buddySpecOptions = useMemo(() => getBuddySpecOptions(selectedSpec), [selectedSpec]);
+            const isCombined = isCombinedSpec(selectedSpec);
+            const buddySpecOptions = useMemo(
+                () => isCombinedSpec(selectedSpec) ? getCombinedSpecOptions(selectedSpec) : getBuddySpecOptions(selectedSpec),
+                [selectedSpec]
+            );
             const isBuddySupported = supportsBuddy(selectedSpec);
             const buddySpellColorMaps = useMemo(() => {
                 const result = {};
@@ -970,10 +1078,12 @@
                 const load = async () => {
                     setLoading(true);
                     const cats = await fetchSpellCategories();
-                    const sps = await fetchSpellData(selectedSpec);
+                    const combinedConfig = getCombinedConfig(selectedSpec);
+                    const sps = combinedConfig ? {} : await fetchSpellData(selectedSpec);
                     const mechs = await fetchBossMechanics(selectedBoss);
+                    const partySpecOptions = combinedConfig ? getCombinedSpecOptions(selectedSpec) : getBuddySpecOptions(selectedSpec);
                     const buddyEntries = await Promise.all(
-                        getBuddySpecOptions(selectedSpec).map(async spec => [spec.id, await fetchSpellData(spec.id)])
+                        partySpecOptions.map(async spec => [spec.id, await fetchSpellData(spec.id)])
                     );
                     const nextBuddySpellMaps = Object.fromEntries(buddyEntries);
                     
@@ -991,7 +1101,7 @@
                         ])
                     ));
                     setBuddySpellMenuSpec(null);
-                    if (!supportsBuddy(selectedSpec)) {
+                    if (combinedConfig || !supportsBuddy(selectedSpec)) {
                         setShowBuddy(false);
                     }
                     
@@ -1234,8 +1344,8 @@
                 }
             };
 
-            const handleZoomIn = () => setZoom(prev => Math.min(prev + 5, 100));
-            const handleZoomOut = () => setZoom(prev => Math.max(prev - 5, 5));
+            const handleZoomIn = () => setZoom(prev => Math.min(prev < 5 ? prev + 1 : prev + 5, MAX_ZOOM));
+            const handleZoomOut = () => setZoom(prev => Math.max(prev <= 5 ? prev - 1 : prev - 5, MIN_ZOOM));
             const formatTime = (s) => `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
             const displayToggleClass = (active) =>
                 `h-6 min-w-10 px-2 flex items-center justify-center rounded-sm border text-[10px] font-black font-mono uppercase transition-colors ${
@@ -1245,6 +1355,8 @@
                 }`;
 
             const getTickSettings = (z) => {
+                if (z < 2) return { major: 180, minor: 30 };
+                if (z < 5) return { major: 120, minor: 30 };
                 if (z < 10) return { major: 60, minor: 10 }; 
                 if (z < 30) return { major: 30, minor: 5 };  
                 if (z < 60) return { major: 15, minor: 1 };  
@@ -1444,6 +1556,7 @@
                                     <option value="EU">EU</option>
                                     <option value="OC">OC</option>
                                     <option value="CN">CN</option>
+                                    <option value="KR">KR</option>
                                 </select>
                                 <ChevronDown size={14} className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500" />
                             </div>
@@ -1638,7 +1751,7 @@
                         </div>
                     </div>
                     <div className="flex items-center gap-6">
-                        {Object.entries(spellCategories).map(([catKey, category]) => (
+                        {!isCombined && Object.entries(spellCategories).map(([catKey, category]) => (
                             <div key={catKey} className="flex flex-col gap-1">
                                 <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-white" onClick={() => toggleCategory(catKey)}>
                                     <CategoryIcon type={category.iconType} /> {category.label}
@@ -1667,14 +1780,16 @@
                                     Party
                                 </div>
                                 <div className="flex items-center gap-0.5 h-8">
-                                    <button
-                                        title="Show buddy tank/healer cooldowns"
-                                        onClick={() => setShowBuddy(prev => !prev)}
-                                        className={`${displayToggleClass(showBuddy)} px-3`}
-                                    >
-                                        Buddy
-                                    </button>
-                                    {showBuddy && buddySpecOptions.map(specInfo => {
+                                    {!isCombined && (
+                                        <button
+                                            title="Show buddy tank/healer cooldowns"
+                                            onClick={() => setShowBuddy(prev => !prev)}
+                                            className={`${displayToggleClass(showBuddy)} px-3`}
+                                        >
+                                            Buddy
+                                        </button>
+                                    )}
+                                    {(isCombined || showBuddy) && buddySpecOptions.map(specInfo => {
                                         const spellMap = buddySpellMaps[specInfo.id] || {};
                                         const selectedIds = buddySpellSelections[specInfo.id] || new Set();
                                         return (
@@ -2151,7 +2266,19 @@
                                     return true;
                                 })
                                 .map((row) => {
-                                const visibleCasts = row.casts.filter(cast => selectedSpells.has(cast.spellId));
+                                const visibleCasts = row.casts
+                                    .map(cast => {
+                                        const castSpellMap = row.isCombined ? (buddySpellMaps[cast.specSlug] || {}) : spells;
+                                        const spell = castSpellMap[cast.spellId] || {};
+                                        return {
+                                            ...cast,
+                                            duration: cast.duration || spell.duration || 0
+                                        };
+                                    })
+                                    .filter(cast => {
+                                        const selectedIds = row.isCombined ? (buddySpellSelections[cast.specSlug] || new Set()) : selectedSpells;
+                                        return selectedIds.has(Number(cast.spellId));
+                                    });
                                 const { processedCasts, maxTracks } = isCollapsed
                                     ? { processedCasts: visibleCasts.map(c => ({ ...c, trackIndex: 0 })), maxTracks: 1 }
                                     : calculateCastTracks(visibleCasts);
@@ -2160,7 +2287,7 @@
                                 const rowHeight = 32;
                                 const trackHeight = 30; // Height per sub-row when expanded
                                 const totalHeight = isCollapsed ? rowHeight : Math.max(rowHeight, maxTracks * trackHeight);
-                                const buddy = showBuddy && isBuddySupported ? row.buddy : null;
+                                const buddy = showBuddy && isBuddySupported && !row.isCombined ? row.buddy : null;
                                 const buddySpecSlug = buddy?.specSlug || "";
                                 const buddySpellMap = buddySpecSlug === selectedSpec ? spells : (buddySpellMaps[buddySpecSlug] || {});
                                 const buddySelectedSpellIds = buddySpecSlug === selectedSpec
@@ -2317,8 +2444,10 @@
 
                                             {processedCasts.map((cast, cIdx) => {
                                                 const isFocusedSpell = isFocusedSpellId(cast.spellId);
+                                                const castSpellMap = row.isCombined ? (buddySpellMaps[cast.specSlug] || {}) : spells;
+                                                const castColorMap = row.isCombined ? (buddySpellColorMaps[cast.specSlug] || {}) : spellColorMap;
                                                 
-                                                const spell = spells[cast.spellId] || {
+                                                const spell = castSpellMap[cast.spellId] || {
         id: cast.spellId,
         name: `ID: ${cast.spellId}`,
         image: null, // 没有图片
@@ -2350,7 +2479,7 @@
                                                 const cdWidth = Math.max(0, Math.min(rawCdWidth, maxVisibleWidth));
 
                                                 // Color Assignment (Consistent per spell)
-                                                const barColor = spellColorMap[cast.spellId] || '#ffffff';
+                                                const barColor = castColorMap[cast.spellId] || spell.color || '#ffffff';
 
                                                 return (
                                                     <div

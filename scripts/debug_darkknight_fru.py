@@ -19,7 +19,7 @@ sys.path.append(str(PROJECT_ROOT))
 BOSS_SLUG = "futures-rewritten"
 SPEC_SLUG = "darkknight-darkknight"
 DIFFICULTY = "ultimate"
-METRIC = "dps"
+METRIC = "rdps"
 LIMIT = 3
 
 dotenv.load_dotenv(PROJECT_ROOT / ".env")
