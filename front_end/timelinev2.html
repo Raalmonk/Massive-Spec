@@ -234,6 +234,17 @@
             return merged;
         };
 
+        const hexToRgba = (hex, alpha) => {
+            if (!hex) return `rgba(255,255,255,${alpha})`;
+            if (hex.startsWith('#')) {
+                const r = parseInt(hex.slice(1, 3), 16);
+                const g = parseInt(hex.slice(3, 5), 16);
+                const b = parseInt(hex.slice(5, 7), 16);
+                return `rgba(${r},${g},${b},${alpha})`;
+            }
+            return hex;
+        };
+
         const getRole = (specSlug) => {
             if (specSlug.includes('paladin') || specSlug.includes('warrior') || specSlug.includes('darkknight') || specSlug.includes('gunbreaker')) return 'tank';
             if (specSlug.includes('whitemage') || specSlug.includes('scholar') || specSlug.includes('astrologian') || specSlug.includes('sage')) return 'healer';
@@ -807,7 +818,18 @@
                 return map;
             }, [spells]);
 
-            const [isDraggingState, setIsDraggingState] = useState(false); 
+            const spellsByCategory = useMemo(() => {
+                const grouped = {};
+                Object.values(spells)
+                    .sort((a, b) => a.load_order - b.load_order)
+                    .forEach(spell => {
+                        const category = spell.category || "MAJOR";
+                        if (!grouped[category]) grouped[category] = [];
+                        grouped[category].push(spell);
+                    });
+                return grouped;
+            }, [spells]);
+
             const dragInfo = useRef({
                 isDown: false,
                 startX: 0,
@@ -815,6 +837,11 @@
                 scrollLeft: 0,
                 moved: false
             });
+
+            const setDraggingCursor = useCallback((isDragging) => {
+                if (!scrollContainerRef.current) return;
+                scrollContainerRef.current.style.cursor = isDragging ? 'grabbing' : '';
+            }, []);
 
             useEffect(() => {
                 const load = async () => {
@@ -985,7 +1012,7 @@
                 return { major: 10, minor: 1 };              
             };
 
-            const tickSettings = getTickSettings(zoom);
+            const tickSettings = useMemo(() => getTickSettings(zoom), [zoom]);
             const timelineDuration = useMemo(() => {
                 const killTimes = rankData.map(row => row.killTimeSeconds || 0);
                 const importedKillTimes = importedRows.map(row => row.killTimeSeconds || 0);
@@ -993,6 +1020,12 @@
                 const importedCastEnds = importedRows.flatMap(row => row.casts.map(cast => (cast.timestamp || 0) + (cast.duration || 0)));
                 return Math.max(FIGHT_DURATION, ...killTimes, ...importedKillTimes, ...mechanicEnds, ...importedCastEnds) + 30;
             }, [rankData, bossMechanics, importedRows]);
+            const timelineWidth = timelineDuration * zoom;
+            const rowGridStyle = useMemo(() => ({
+                backgroundImage: "linear-gradient(to right, rgba(31,41,55,0.2) 1px, transparent 1px)",
+                backgroundSize: `${tickSettings.major * zoom}px 100%`,
+                backgroundPosition: "0 0"
+            }), [tickSettings.major, zoom]);
             const bossTimelineMechanics = useMemo(
                 () => bossMechanics.filter(m => m.type !== "phase" && m.type !== "window"),
                 [bossMechanics]
@@ -1031,8 +1064,8 @@
                 e.preventDefault();
                 dragInfo.current.isDown = false;
                 dragInfo.current.moved = false;
-                setIsDraggingState(false);
-            }, []);
+                setDraggingCursor(false);
+            }, [setDraggingCursor]);
 
             const onMouseMove = useCallback((e) => {
                 if (!dragInfo.current.isDown) return;
@@ -1041,7 +1074,7 @@
                 const deltaY = e.pageY - dragInfo.current.startY;
                 if (!dragInfo.current.moved && Math.hypot(deltaX, deltaY) >= DRAG_THRESHOLD) {
                     dragInfo.current.moved = true;
-                    setIsDraggingState(true);
+                    setDraggingCursor(true);
                 }
 
                 if (!dragInfo.current.moved) return;
@@ -1050,12 +1083,12 @@
                 if (scrollContainerRef.current) {
                     scrollContainerRef.current.scrollLeft = dragInfo.current.scrollLeft - deltaX * 1.5;
                 }
-            }, []);
+            }, [setDraggingCursor]);
 
             const onMouseUp = useCallback(() => {
                 const didDrag = dragInfo.current.moved;
                 dragInfo.current.isDown = false;
-                setIsDraggingState(false);
+                setDraggingCursor(false);
 
                 if (didDrag) {
                     suppressRowClickRef.current = true;
@@ -1066,7 +1099,7 @@
                 
                 window.removeEventListener('mousemove', onMouseMove);
                 window.removeEventListener('mouseup', onMouseUp);
-            }, [onMouseMove]);
+            }, [onMouseMove, setDraggingCursor]);
 
             useEffect(() => {
                 return () => {
@@ -1339,6 +1372,13 @@
                     <div className="flex flex-col gap-1 border-r border-gray-700 pr-4 shrink-0">
                         <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Display</span>
                         <div className="flex items-center gap-1">
+                            <button
+                                title={selectedSpells.size > 0 ? "Hide all spells" : "Show all spells"}
+                                onClick={toggleAllSpells}
+                                className={displayToggleClass(selectedSpells.size > 0)}
+                            >
+                                ALL
+                            </button>
                             <button title="Duration" onClick={() => setShowDuration(!showDuration)} className={displayToggleClass(showDuration)}>DU</button>
                             <button title="Cooldown" onClick={() => setShowCooldown(!showCooldown)} className={displayToggleClass(showCooldown)}>CD</button>
                         
@@ -1360,7 +1400,7 @@
                                     <CategoryIcon type={category.iconType} /> {category.label}
                                 </div>
                                 <div className="flex items-center gap-1.5">
-                                    {Object.values(spells).sort((a, b) => a.load_order - b.load_order).filter(spell => spell.category === catKey).map(spell => {
+                                    {(spellsByCategory[catKey] || []).map(spell => {
                                         const isSelected = selectedSpells.has(spell.id);
                                         return (
                                             <button
@@ -1378,23 +1418,23 @@
                         ))}
 
                         {/* NEW: Global Toggle */}
-                        <div className="flex flex-col gap-1 border-l border-gray-700 pl-4">
+                        <div className="hidden">
                             <div 
-                                className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-white" 
+                                className="hidden" 
                                 onClick={toggleAllSpells}
                                 title={selectedSpells.size > 0 ? "隐藏所有技能" : "显示所有技能"}
                             >
                                 <span className="flex items-center gap-1">
                                     <SlidersHorizontal size={14} />
-                                    All
+                                    ALL
                                 </span>
                             </div>
                             <div className="flex items-center gap-1.5 h-8">
                                 <button
                                     onClick={toggleAllSpells}
-                                    className={`w-8 h-8 flex items-center justify-center rounded border transition-all ${selectedSpells.size > 0 ? 'bg-white/10 border-gray-500 text-white' : 'bg-transparent border-gray-800 text-gray-600'}`}
+                                    className={`h-8 px-3 flex items-center justify-center rounded border text-[11px] font-black tracking-wide transition-all ${selectedSpells.size > 0 ? 'bg-white/10 border-gray-500 text-white' : 'bg-transparent border-gray-800 text-gray-500 hover:border-gray-600 hover:text-white'}`}
                                 >
-                                    <SlidersHorizontal size={16} />
+                                    ALL
                                 </button>
                             </div>
                         </div>
@@ -1418,7 +1458,7 @@
                 {/* Timeline Area */}
                 <div className="flex-1 flex overflow-hidden relative">
                     <div 
-                        className={`flex-1 overflow-auto bg-[#121212] custom-scrollbar relative ${isDraggingState ? 'cursor-grabbing' : 'cursor-grab'}`} 
+                        className="flex-1 overflow-auto bg-[#121212] custom-scrollbar relative cursor-grab"
                         ref={scrollContainerRef}
                         onMouseDown={onMouseDown}
                         onDragStart={onDragStart}
@@ -1427,14 +1467,14 @@
 
                             {/* Sticky Header: Time Ruler */}
                             <div className="sticky top-0 z-50 flex h-8 bg-[#202020] border-b border-gray-700/80">
-                                <div className="sticky left-0 bg-[#202020] border-r border-gray-800 shrink-0 flex items-center px-4 text-[11px] font-bold text-gray-500 uppercase z-[60] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
+                                <div className="sticky left-0 bg-[#202020] border-r border-gray-700/90 shrink-0 flex items-center px-4 text-[11px] font-bold text-gray-500 uppercase z-[1000] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
                                     <div className="w-8 text-center mr-2 text-[#00FF96]">Rank</div>
                                     <div className="flex-1 text-left">RDPS</div>
                                     <div className="w-8 text-center text-gray-600">Reg</div>
                                     <div className="w-8 text-center text-gray-600">Pair</div>
                                     <div className="w-8 text-center text-gray-600 ml-1">Buffs</div>
                                 </div>
-                                <div className="relative h-full" style={{ width: `${timelineDuration * zoom}px` }}>
+                                <div className="relative h-full" style={{ width: `${timelineWidth}px` }}>
                                     {/* UPDATED: Dynamic Ticks (Feature 1) */}
                                     {Array.from({ length: Math.ceil(timelineDuration / tickSettings.minor) + 1 }).map((_, i) => {
                                         const time = i * tickSettings.minor;
@@ -1460,9 +1500,15 @@
                                 </div>
                             </div>
 
+                            {/* Timeline Grid */}
+                            <div
+                                className="absolute top-8 bottom-0 pointer-events-none z-[1]"
+                                style={{ left: `${LEFT_PANEL_WIDTH}px`, width: `${timelineWidth}px`, ...rowGridStyle }}
+                            />
+
                             {/* Phase Lines */}
                             {showPhases && timelinePhases.length > 0 && (
-                                <div className="absolute top-8 bottom-0 right-0 pointer-events-none z-[1]" style={{ left: `${LEFT_PANEL_WIDTH}px` }}>
+                                <div className="absolute top-8 bottom-0 right-0 pointer-events-none z-[2]" style={{ left: `${LEFT_PANEL_WIDTH}px` }}>
                                     {timelinePhases.map((phase, i) => (
                                         <div
                                             key={i}
@@ -1479,10 +1525,10 @@
                             {/* Boss Timeline - Explicitly placed above players */}
                             {showBossRow && (
                                 <div className="flex h-10 border-b border-gray-800/60 bg-[#151515] hover:bg-[#1a1a1a] transition-colors group relative sticky top-8 z-40">
-                                    <div className="sticky left-0 bg-[#181818] border-r border-gray-800 shrink-0 flex items-center px-4 z-50 shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
+                                    <div className="sticky left-0 bg-[#181818] border-r border-gray-700/90 shrink-0 flex items-center px-4 z-[1000] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
                                         <div className="flex-1 font-bold text-gray-300">Boss Timeline</div>
                                     </div>
-                                    <div className="relative h-full z-10" style={{ width: `${timelineDuration * zoom}px` }}>
+                                    <div className="relative h-full z-10 overflow-hidden" style={{ width: `${timelineWidth}px` }}>
                                         {bossTimelineMechanics.map((mech, i) => (
                                             mech.duration > 0 ? (
                                                 /* Standard Boss Bar for duration mechanics */
@@ -1531,17 +1577,6 @@
                                 const endLabel = importedRow.kill ? "Kill" : "Wipe";
                                 const percentLabel = !importedRow.kill && importedRow.percent ? ` ${Number(importedRow.percent).toFixed(1)}%` : "";
 
-                                const hexToRgba = (hex, alpha) => {
-                                    if (!hex) return `rgba(255,255,255,${alpha})`;
-                                    if (hex.startsWith('#')) {
-                                        const r = parseInt(hex.slice(1, 3), 16);
-                                        const g = parseInt(hex.slice(3, 5), 16);
-                                        const b = parseInt(hex.slice(5, 7), 16);
-                                        return `rgba(${r},${g},${b},${alpha})`;
-                                    }
-                                    return hex;
-                                };
-
                                 return (
                                     <div
                                         key={importedRow.id}
@@ -1549,7 +1584,7 @@
                                         className={`flex border-b border-[#00FF96]/20 bg-[#07130f] hover:bg-[#0a1a14] transition-colors group/import relative ${importSpellMenuRowId === importedRow.id ? 'z-[90]' : 'z-[20]'}`}
                                         style={{ height: `${totalHeight}px` }}
                                     >
-                                        <div className={`sticky left-0 bg-[#0b1713] border-r border-[#00FF96]/20 shrink-0 flex items-center px-4 transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.25)] ${importSpellMenuRowId === importedRow.id ? 'z-[110]' : 'z-40'}`} style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
+                                        <div className={`sticky left-0 bg-[#0b1713] border-r border-gray-700/90 shrink-0 flex items-center px-4 transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.25)] ${importSpellMenuRowId === importedRow.id ? 'z-[1100]' : 'z-[1000]'}`} style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
                                             <div className="flex min-w-0 flex-1 flex-col">
                                                 <span className="text-[9px] font-black uppercase leading-none text-[#00FF96]">Imported Log</span>
                                                 <span className="truncate text-[13px] font-bold leading-tight text-white">{importedRow.name}</span>
@@ -1583,7 +1618,7 @@
                                                                     onClick={() => toggleAllImportedSpells(importedRow.id, importedSpellMap)}
                                                                     className="rounded border border-gray-700 px-2 py-1 text-[10px] font-bold text-gray-400 hover:border-[#00FF96] hover:text-white"
                                                                 >
-                                                                    All
+                                                                    ALL
                                                                 </button>
                                                             </div>
                                                             <div className="space-y-3">
@@ -1639,11 +1674,7 @@
                                                 <XCircle size={15} />
                                             </button>
                                         </div>
-                                        <div className="relative h-full z-10" style={{ width: `${timelineDuration * zoom}px` }}>
-                                            {Array.from({ length: Math.ceil(timelineDuration / tickSettings.major) + 1 }).map((_, i) => (
-                                                <div key={i} className="absolute top-0 bottom-0 border-l border-gray-800/20 pointer-events-none" style={{ left: `${i * tickSettings.major * zoom}px` }} />
-                                            ))}
-
+                                        <div className="relative h-full z-10 overflow-hidden" style={{ width: `${timelineWidth}px` }}>
                                             {showPhases && rowPhases.map((phase, pIdx) => (
                                                 <div
                                                     key={`import-phase-${pIdx}`}
@@ -1701,14 +1732,6 @@
                                                 return (
                                                     <div
                                                         key={cIdx}
-                                                        onMouseDown={(e) => {
-                                                            e.preventDefault();
-                                                            const spellId = Number(cast.spellId);
-                                                            setFocusedSpellId(prev => prev === spellId ? null : spellId);
-                                                        }}
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                        }}
                                                         className={`absolute flex items-center group/icon select-none transition-opacity duration-150 ${focusedSpellId && !isFocusedSpell ? 'opacity-25' : 'opacity-100'}`}
                                                         style={{
                                                             left: `${cast.timestamp * zoom}px`,
@@ -1742,6 +1765,15 @@
                                                             )}
 
                                                             <div
+                                                                onMouseDown={(e) => {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    const spellId = Number(cast.spellId);
+                                                                    setFocusedSpellId(prev => prev === spellId ? null : spellId);
+                                                                }}
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                }}
                                                                 className={`relative z-20 flex items-center justify-center overflow-hidden rounded-sm bg-black/50 ${isFocusedSpell ? 'ring-2 ring-[#00FF96] ring-offset-1 ring-offset-black' : ''}`}
                                                                 style={{
                                                                     height: `${iconHeight}px`,
@@ -1845,7 +1877,7 @@
                                         )}
 
                                         {/* Sticky Left Panel - Adjusted for Compact Height */}
-                                        <div className="sticky left-0 bg-[#161616] group-hover:bg-[#1e1e1e] border-r border-gray-800 shrink-0 flex items-center px-4 z-40 transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.2)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
+                                        <div className="sticky left-0 bg-[#161616] group-hover:bg-[#1e1e1e] border-r border-gray-700/90 shrink-0 flex items-center px-4 z-[1000] transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.2)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
                                             <div className="w-8 text-center mr-2 font-mono text-gray-500 text-xs">#{row.rank}</div>
                                             
                                             {/* MODIFIED: Use PlayerNameCell for Name/DPS toggle and pass report args */}
@@ -1871,12 +1903,7 @@
                                         </div>
 
                                         {/* Right Panel: Casts */}
-                                        <div className="relative h-full z-10" style={{ width: `${timelineDuration * zoom}px` }}>
-                                            {/* FEATURE 1: Grid Lines - Synced to Major Ticks */}
-                                            {Array.from({ length: Math.ceil(timelineDuration / tickSettings.major) + 1 }).map((_, i) => (
-                                                <div key={i} className="absolute top-0 bottom-0 border-l border-gray-800/20 pointer-events-none" style={{ left: `${i * tickSettings.major * zoom}px` }} />
-                                            ))}
-
+                                        <div className="relative h-full z-10 overflow-hidden" style={{ width: `${timelineWidth}px` }}>
                                             {showPhases && rowPhases.map((phase, pIdx) => (
                                                 <div
                                                     key={`phase-${pIdx}`}
@@ -1967,28 +1994,9 @@
                                                 // Color Assignment (Consistent per spell)
                                                 const barColor = spellColorMap[cast.spellId] || '#ffffff';
 
-                                                // Hex color to RGBA for lighter CD bar (using the assigned barColor)
-                                                const hexToRgba = (hex, alpha) => {
-                                                    // Handle simple hex codes
-                                                    if (!hex) return `rgba(255,255,255,${alpha})`;
-                                                    if (hex.startsWith('#')) {
-                                                        let r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
-                                                        return `rgba(${r},${g},${b},${alpha})`;
-                                                    }
-                                                    return hex; // fallback if already rgb/rgba
-                                                };
-
                                                 return (
                                                     <div
                                                         key={cIdx}
-                                                        onMouseDown={(e) => {
-                                                            e.preventDefault();
-                                                            const spellId = Number(cast.spellId);
-                                                            setFocusedSpellId(prev => prev === spellId ? null : spellId);
-                                                        }}
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                        }}
                                                         className={`absolute flex items-center group/icon select-none transition-opacity duration-150 ${focusedSpellId && !isFocusedSpell ? 'opacity-25' : 'opacity-100'}`}
                                                         style={{
                                                             left: `${cast.timestamp * zoom}px`,
@@ -2026,6 +2034,15 @@
 
                                                             {/* 3. Icon */}
                                                             <div
+                                                                onMouseDown={(e) => {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    const spellId = Number(cast.spellId);
+                                                                    setFocusedSpellId(prev => prev === spellId ? null : spellId);
+                                                                }}
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                }}
                                                                 className={`relative z-20 flex items-center justify-center overflow-hidden rounded-sm bg-black/50 ${isFocusedSpell ? 'ring-2 ring-[#00FF96] ring-offset-1 ring-offset-black' : ''}`}
                                                                 style={{
                                                                     height: `${iconHeight}px`,
