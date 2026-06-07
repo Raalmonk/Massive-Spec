@@ -416,6 +416,7 @@
                         const m = Math.floor(durationSeconds / 60);
                         const s = Math.floor(durationSeconds % 60).toString().padStart(2, '0');
                         const combinedPlayers = rolePlayers.slice(0, 2);
+                        const secondPlayer = combinedPlayers[1];
                         const total = combinedPlayers.reduce((sum, player) => sum + (player.total || 0), 0);
                         const buffCount = (firstPlayer.composition || []).filter(s => BUFF_SPECS.has(s)).length;
 
@@ -438,14 +439,24 @@
                                 ts: p.ts || 0,
                                 mrt: p.mrt || ""
                             })),
-                            casts: combinedPlayers.flatMap(player => normalizeCasts(player.casts, {}, player.spec_slug, player.name)),
+                            casts: normalizeCasts(firstPlayer.casts, {}, firstPlayer.spec_slug, firstPlayer.name),
                             combinedPlayers: combinedPlayers.map(player => ({
                                 sourceId: player.source_id,
                                 name: player.name,
                                 specSlug: player.spec_slug,
                                 dps: player.total || 0
                             })),
-                            buddy: null,
+                            buddy: {
+                                sourceId: secondPlayer.source_id,
+                                name: secondPlayer.name,
+                                classSlug: secondPlayer.class_slug,
+                                specSlug: secondPlayer.spec_slug,
+                                icon: getIconForSpec(secondPlayer.spec_slug),
+                                dps: secondPlayer.total || 0,
+                                region: secondPlayer.region || firstPlayer.region || '??',
+                                casts: normalizeCasts(secondPlayer.casts, {}, secondPlayer.spec_slug, secondPlayer.name),
+                                deaths: secondPlayer.deaths || []
+                            },
                             deaths: combinedPlayers.flatMap(player => player.deaths || []),
                             isCombined: true
                         });
@@ -1369,13 +1380,13 @@
                 const importedKillTimes = importedRows.map(row => row.killTimeSeconds || 0);
                 const mechanicEnds = bossMechanics.map(m => (m.time || 0) + (m.duration || 0));
                 const importedCastEnds = importedRows.flatMap(row => row.casts.map(cast => (cast.timestamp || 0) + (cast.duration || 0)));
-                const buddyCastEnds = showBuddy ? rankData.flatMap(row => (row.buddy?.casts || []).map(cast => {
+                const buddyCastEnds = (showBuddy || isCombined) ? rankData.flatMap(row => (row.buddy?.casts || []).map(cast => {
                     const buddySpellMap = buddySpellMaps[row.buddy.specSlug] || {};
                     const spell = buddySpellMap[cast.spellId] || {};
                     return (cast.timestamp || 0) + (cast.duration || spell.duration || 0);
                 })) : [];
                 return Math.max(FIGHT_DURATION, ...killTimes, ...importedKillTimes, ...mechanicEnds, ...importedCastEnds, ...buddyCastEnds) + 30;
-            }, [rankData, bossMechanics, importedRows, buddySpellMaps, showBuddy]);
+            }, [rankData, bossMechanics, importedRows, buddySpellMaps, showBuddy, isCombined]);
             const timelineWidth = timelineDuration * zoom;
             const rowGridStyle = useMemo(() => ({
                 backgroundImage: "linear-gradient(to right, rgba(31,41,55,0.2) 1px, transparent 1px)",
@@ -1920,7 +1931,7 @@
                                     <div className="w-8 text-center mr-2 text-[#00FF96]">Rank</div>
                                     <div className="flex-1 text-left">RDPS</div>
                                     <div className="w-8 text-center text-gray-600">Reg</div>
-                                    <div className="w-8 text-center text-gray-600">Pair</div>
+                                    <div className="w-8 text-center text-gray-600">{isCombined ? "Spec" : "Pair"}</div>
                                     <div className="w-8 text-center text-gray-600 ml-1">Buffs</div>
                                 </div>
                                 <div className="relative h-full" style={{ width: `${timelineWidth}px` }}>
@@ -2287,7 +2298,9 @@
                                 const rowHeight = 32;
                                 const trackHeight = 30; // Height per sub-row when expanded
                                 const totalHeight = isCollapsed ? rowHeight : Math.max(rowHeight, maxTracks * trackHeight);
-                                const buddy = showBuddy && isBuddySupported && !row.isCombined ? row.buddy : null;
+                                const buddy = row.isCombined
+                                    ? row.buddy
+                                    : (showBuddy && isBuddySupported ? row.buddy : null);
                                 const buddySpecSlug = buddy?.specSlug || "";
                                 const buddySpellMap = buddySpecSlug === selectedSpec ? spells : (buddySpellMaps[buddySpecSlug] || {});
                                 const buddySelectedSpellIds = buddySpecSlug === selectedSpec
@@ -2378,7 +2391,19 @@
                                             
                                             {/* Partner Column - Only shows for Tank/Healer */}
                                             <div className="w-8 text-center flex justify-center items-center ml-1">
-                                                {row.partner && <img src={row.partner} alt="P" draggable={false} className="w-5 h-5 object-contain" />}
+                                                {row.isCombined ? (
+                                                    row.combinedPlayers?.[0]?.specSlug && getIconForSpec(row.combinedPlayers[0].specSlug) && (
+                                                        <img
+                                                            src={`./images/classes/${getIconForSpec(row.combinedPlayers[0].specSlug)}`}
+                                                            alt={row.combinedPlayers[0].specSlug}
+                                                            draggable={false}
+                                                            className="w-5 h-5 object-contain"
+                                                            title={getSpecInfo(row.combinedPlayers[0].specSlug).n}
+                                                        />
+                                                    )
+                                                ) : (
+                                                    row.partner && <img src={row.partner} alt="P" draggable={false} className="w-5 h-5 object-contain" />
+                                                )}
                                             </div>
 
                                             {/* NEW: Buffs Count Column */}
@@ -2557,7 +2582,9 @@
                                             style={{ height: `${buddyTotalHeight}px` }}
                                         >
                                             <div className="sticky left-0 bg-[#101614] group-hover/buddy:bg-[#13201b] border-r border-gray-700/90 shrink-0 flex items-center px-4 z-[1000] transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.2)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
-                                                <div className="ml-6 w-10 text-left mr-3 text-[10px] font-black uppercase tracking-wide text-gray-600">Buddy</div>
+                                                <div className="w-8 text-center mr-2 text-[10px] font-black uppercase tracking-wide text-gray-600">
+                                                    {row.isCombined ? "Pair" : "Buddy"}
+                                                </div>
                                                 <div className="flex h-full min-w-0 flex-1 items-center">
                                                     <BuddyNameCell
                                                         name={buddy.name}
@@ -2565,7 +2592,17 @@
                                                     />
                                                 </div>
                                                 <div className="w-8 ml-1"></div>
-                                                <div className="w-8 ml-1"></div>
+                                                <div className="w-8 ml-1 flex justify-center items-center">
+                                                    {row.isCombined && buddy.specSlug && getIconForSpec(buddy.specSlug) && (
+                                                        <img
+                                                            src={`./images/classes/${getIconForSpec(buddy.specSlug)}`}
+                                                            alt={buddy.specSlug}
+                                                            draggable={false}
+                                                            className="w-5 h-5 object-contain"
+                                                            title={getSpecInfo(buddy.specSlug).n}
+                                                        />
+                                                    )}
+                                                </div>
                                                 <div className="w-8 ml-1"></div>
                                             </div>
                                             <div className="relative h-full z-10 overflow-hidden" style={{ width: `${timelineWidth}px` }}>
