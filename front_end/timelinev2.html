@@ -2581,6 +2581,25 @@
                                             </div>
                                         );
                                     })}
+                                    {showPhases && timelinePhases.map((phase, i) => (
+                                        <div
+                                            key={`ruler-phase-${i}`}
+                                            className="absolute inset-y-0 z-20 pointer-events-none"
+                                            style={{ left: `${phase.timestamp * zoom}px` }}
+                                            title={`${phase.name} (${formatTime(phase.timestamp)})`}
+                                        >
+                                            <div
+                                                className="absolute top-0 bottom-0 border-l-2"
+                                                style={{ borderColor: phase.color || "rgba(0,255,150,0.9)" }}
+                                            />
+                                            <span
+                                                className="absolute left-1 top-0.5 rounded-sm border px-1 text-[10px] font-black leading-tight text-[#d6fff0] bg-black/85 shadow-sm whitespace-nowrap"
+                                                style={{ borderColor: phase.color || "rgba(0,255,150,0.65)" }}
+                                            >
+                                                P{i + 1}
+                                            </span>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
 
@@ -2592,14 +2611,14 @@
 
                             {/* Phase Lines */}
                             {showPhases && timelinePhases.length > 0 && (
-                                <div className="absolute top-8 bottom-0 right-0 pointer-events-none z-[2]" style={{ left: `${LEFT_PANEL_WIDTH}px` }}>
+                                <div className="absolute top-8 bottom-0 right-0 pointer-events-none z-[260]" style={{ left: `${LEFT_PANEL_WIDTH}px` }}>
                                     {timelinePhases.map((phase, i) => (
                                         <div
                                             key={i}
                                             className="absolute top-0 bottom-0 border-l-2 border-dashed"
                                             style={{
                                                 left: `${phase.timestamp * zoom}px`,
-                                                borderColor: phase.color || 'rgba(0,255,150,0.45)'
+                                                borderColor: 'rgba(0,255,150,0.42)'
                                             }}
                                         />
                                     ))}
@@ -2768,11 +2787,11 @@
                                             {showPhases && rowPhases.map((phase, pIdx) => (
                                                 <div
                                                     key={`import-phase-${pIdx}`}
-                                                    className="absolute top-0 bottom-0 border-l-2 border-dashed pointer-events-none z-[20]"
+                                                    className="absolute top-0 bottom-0 border-l-2 pointer-events-none z-[260]"
                                                     style={{
                                                         left: `${phase.timestamp * zoom}px`,
                                                         width: "36px",
-                                                        borderColor: phase.color || "rgba(0,255,150,0.72)",
+                                                        borderColor: phase.color || "rgba(0,255,150,0.76)",
                                                         background: "linear-gradient(90deg, rgba(0,255,150,0.12), rgba(0,255,150,0))"
                                                     }}
                                                     title={`${phase.name} (${formatTime(phase.timestamp)})`}
@@ -3055,11 +3074,11 @@
                                             {showPhases && rowPhases.map((phase, pIdx) => (
                                                 <div
                                                     key={`phase-${pIdx}`}
-                                                    className="absolute top-0 bottom-0 border-l-2 border-dashed pointer-events-none z-[20]"
+                                                    className="absolute top-0 bottom-0 border-l-2 pointer-events-none z-[260]"
                                                     style={{
                                                         left: `${phase.timestamp * zoom}px`,
                                                         width: "36px",
-                                                        borderColor: phase.color || "rgba(0,255,150,0.72)",
+                                                        borderColor: phase.color || "rgba(0,255,150,0.76)",
                                                         background: "linear-gradient(90deg, rgba(0,255,150,0.12), rgba(0,255,150,0))"
                                                     }}
                                                     title={`${phase.name} (${formatTime(phase.timestamp)})`}
