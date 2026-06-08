@@ -44,7 +44,7 @@ def load_local(
     spec: WowSpec,
     boss: RaidBoss,
     difficulty: str = "mythic",
-    metric: str = "dps",
+    metric: str = "rdps",
     limit=50,
     clear: bool = False,
 ):
@@ -117,7 +117,7 @@ def load_spec_rankings() -> None:
                 boss,
                 clear=True,
                 difficulty="mythic",
-                metric="dps",
+                metric="rdps",
             )
 
 

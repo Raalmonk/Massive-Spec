@@ -186,6 +186,9 @@ async def scan_log(url: str, metric: str, boss_slug: str, dry_run: bool) -> None
 
     print("Loading casts for all players and boss...")
     await fight.load_actors()
+    applied_after_casts = apply_metric_totals(fight, totals)
+    if applied_after_casts:
+        print(f"Re-applied {metric.upper()} totals after cast load: {applied_after_casts}/{len(fight.players)} players")
 
     report_payload = report.model_dump(exclude_unset=True, by_alias=True)
     report_payload["fights"] = [fight.model_dump(exclude_unset=True, by_alias=True)]
@@ -231,7 +234,7 @@ async def scan_log(url: str, metric: str, boss_slug: str, dry_run: bool) -> None
 async def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("url", nargs="?", default=DEFAULT_URL)
-    parser.add_argument("--metric", default=DEFAULT_METRIC)
+    parser.add_argument("--metric", default=DEFAULT_METRIC, choices=[DEFAULT_METRIC])
     parser.add_argument("--boss", default=BOSS_SLUG)
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()

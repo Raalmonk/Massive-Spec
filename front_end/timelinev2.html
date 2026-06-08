@@ -447,6 +447,32 @@
             } catch (e) {}
             return normalizeUiLanguage(navigator.language || navigator.userLanguage || 'en');
         };
+        const BUDDY_VISIBILITY_STORAGE_KEY = 'm-spec:show-buddy';
+        const parseBooleanParam = (value) => {
+            if (value === null || value === undefined) return null;
+            const normalized = String(value).trim().toLowerCase();
+            if (['1', 'true', 'on', 'yes'].includes(normalized)) return true;
+            if (['0', 'false', 'off', 'no'].includes(normalized)) return false;
+            return null;
+        };
+        const getInitialBuddyVisibility = () => {
+            const params = new URLSearchParams(window.location.search);
+            const fromUrl = parseBooleanParam(params.get('buddy'));
+            if (fromUrl !== null) return fromUrl;
+            try {
+                const stored = parseBooleanParam(localStorage.getItem(BUDDY_VISIBILITY_STORAGE_KEY));
+                if (stored !== null) return stored;
+            } catch (e) {}
+            return false;
+        };
+        const writeBuddyVisibility = (enabled) => {
+            try {
+                localStorage.setItem(BUDDY_VISIBILITY_STORAGE_KEY, enabled ? '1' : '0');
+            } catch (e) {}
+            const url = new URL(window.location.href);
+            url.searchParams.set('buddy', enabled ? '1' : '0');
+            window.history.replaceState({}, '', url);
+        };
         const translate = (language, key) => I18N[language]?.[key] || I18N.en[key] || key;
         const getCategoryLabel = (category, t) => {
             const key = `category_${String(category.label || '').toLowerCase().replace(/\s+/g, '_')}`;
@@ -1521,7 +1547,7 @@
                 tb: true,
                 aoe: true
             });
-            const [showBuddy, setShowBuddy] = useState(false);
+            const [showBuddy, setShowBuddy] = useState(getInitialBuddyVisibility);
             const [buddySpellMaps, setBuddySpellMaps] = useState({});
             const [buddySpellSelections, setBuddySpellSelections] = useState({});
             const [buddySpellMenuSpec, setBuddySpellMenuSpec] = useState(null);
@@ -1537,6 +1563,10 @@
                 } catch (e) {}
                 document.documentElement.lang = uiLanguage;
             }, [uiLanguage]);
+
+            useEffect(() => {
+                writeBuddyVisibility(showBuddy);
+            }, [showBuddy]);
 
             const cycleUiLanguage = useCallback(() => {
                 setUiLanguage(prev => {
@@ -1626,12 +1656,12 @@
                     setBuddySpellSelections(Object.fromEntries(
                         buddyEntries.map(([specSlug, spellMap]) => [
                             specSlug,
-                            new Set(getDefaultSelectedSpellIds(spellMap, cats))
+                            readStoredSpellSelection(specSlug, spellMap) || new Set(getDefaultSelectedSpellIds(spellMap, cats))
                         ])
                     ));
                     setBuddySpellMenuSpec(null);
-                    if (combinedConfig || !supportsBuddy(selectedSpec)) {
-                        setShowBuddy(false);
+                    if (!supportsBuddy(selectedSpec)) {
+                        setBuddySpellMenuSpec(null);
                     }
                     
                     const storedSelectedIds = readStoredSpellSelection(selectedSpec, sps);
@@ -1653,24 +1683,34 @@
                 return () => document.removeEventListener('mousedown', handleClickOutside);
             }, []);
 
-            const tankInvulnSpellIds = useMemo(() => new Set([30, 43, 3638, 16152]), []);
+            const focusedSpellGroups = useMemo(() => [
+                new Set([30, 43, 3638, 16152]), // Tank invulnerabilities
+                new Set([37013, 37016]) // Scholar Concitation / Accession
+            ], []);
+            const getFocusedSpellGroup = useCallback((spellId) => {
+                const id = Number(spellId);
+                return focusedSpellGroups.find(group => group.has(id)) || null;
+            }, [focusedSpellGroups]);
             const isFocusedSpellId = useCallback((spellId) => {
                 const id = Number(spellId);
                 if (!focusedSpellId) return false;
-                if (tankInvulnSpellIds.has(Number(focusedSpellId))) {
-                    return tankInvulnSpellIds.has(id);
+                const focusedGroup = getFocusedSpellGroup(focusedSpellId);
+                if (focusedGroup) {
+                    return focusedGroup.has(id);
                 }
                 return Number(focusedSpellId) === id;
-            }, [focusedSpellId, tankInvulnSpellIds]);
+            }, [focusedSpellId, getFocusedSpellGroup]);
             const toggleFocusedSpell = useCallback((spellId) => {
                 const id = Number(spellId);
                 setFocusedSpellId(prev => {
-                    if (tankInvulnSpellIds.has(Number(prev)) && tankInvulnSpellIds.has(id)) {
+                    const prevGroup = getFocusedSpellGroup(prev);
+                    const nextGroup = getFocusedSpellGroup(id);
+                    if (prevGroup && nextGroup && prevGroup === nextGroup) {
                         return null;
                     }
                     return Number(prev) === id ? null : id;
                 });
-            }, [tankInvulnSpellIds]);
+            }, [getFocusedSpellGroup]);
             const handleSpellIconMouseDown = useCallback((e, spellId) => {
                 if (e.button !== 0) return;
                 e.preventDefault();
@@ -1771,6 +1811,7 @@
                     const current = new Set(prev[specSlug] || []);
                     const id = Number(spellId);
                     if (current.has(id)) current.delete(id); else current.add(id);
+                    writeStoredSpellSelection(specSlug, current);
                     return { ...prev, [specSlug]: current };
                 });
             };
@@ -1785,6 +1826,7 @@
                         const id = Number(s.id);
                         if (allSelected) current.delete(id); else current.add(id);
                     });
+                    writeStoredSpellSelection(specSlug, current);
                     return { ...prev, [specSlug]: current };
                 });
             };
@@ -1794,7 +1836,9 @@
                 setBuddySpellSelections(prev => {
                     const current = new Set(prev[specSlug] || []);
                     const allIds = Object.values(spellMap).map(s => Number(s.id));
-                    return { ...prev, [specSlug]: current.size > 0 ? new Set() : new Set(allIds) };
+                    const next = current.size > 0 ? new Set() : new Set(allIds);
+                    writeStoredSpellSelection(specSlug, next);
+                    return { ...prev, [specSlug]: next };
                 });
             };
 
@@ -2773,7 +2817,7 @@
                                                 const cdWidth = Math.max(0, Math.min((spell.cd || 0) * zoom, timeUntilKill * zoom));
                                                 const currentTrackHeight = isCollapsed ? totalHeight : trackHeight;
                                                 const topPos = isCollapsed ? 0 : cast.trackIndex * trackHeight;
-                                                const iconHeight = currentTrackHeight * 0.85;
+                                                const iconHeight = currentTrackHeight * 0.9;
 
                                                 return (
                                                     <div
@@ -2803,7 +2847,7 @@
                                                                     className="absolute left-0 z-10 rounded-sm shadow-sm"
                                                                     style={{
                                                                         width: `${durationWidth}px`,
-                                                                        height: '82%',
+                                                                        height: `${iconHeight}px`,
                                                                         backgroundColor: barColor,
                                                                         opacity: 0.9
                                                                     }}
@@ -2817,11 +2861,12 @@
                                                                 onClick={(e) => {
                                                                     e.stopPropagation();
                                                                 }}
-                                                                className={`relative z-20 flex items-center justify-center overflow-hidden rounded-sm bg-black/50 ${isFocusedSpell ? 'ring-2 ring-[#00FF96] ring-offset-1 ring-offset-black' : ''}`}
+                                                                className="relative z-20 flex items-center justify-center overflow-hidden rounded-sm bg-black/50"
                                                                 style={{
                                                                     height: `${iconHeight}px`,
                                                                     width: `${iconHeight}px`,
-                                                                    minWidth: `${iconHeight}px`
+                                                                    minWidth: `${iconHeight}px`,
+                                                                    boxShadow: isFocusedSpell ? 'inset 0 0 0 2px #00FF96, -2px 0 0 #00FF96, 2px 0 0 #00FF96' : 'none'
                                                                 }}
                                                                 title={`${spell.name} (${formatTime(cast.timestamp)})`}
                                                             >
@@ -2909,8 +2954,8 @@
                                         ? showLimitBreak
                                         : buddySelectedSpellIds.has(Number(cast.spellId))
                                 ));
-                                const buddyRowHeight = 26;
-                                const buddyTrackHeight = 24;
+                                const buddyRowHeight = rowHeight;
+                                const buddyTrackHeight = trackHeight;
                                 const { processedCasts: processedBuddyCasts, maxTracks: buddyMaxTracks } = isCollapsed
                                     ? { processedCasts: visibleBuddyCasts.map(c => ({ ...c, trackIndex: 0 })), maxTracks: 1 }
                                     : calculateCastTracks(visibleBuddyCasts);
@@ -2969,7 +3014,7 @@
 
                                         {/* Sticky Left Panel - Adjusted for Compact Height */}
                                         <div className="sticky left-0 bg-[#161616] group-hover:bg-[#1e1e1e] border-r border-gray-700/90 shrink-0 flex items-center px-4 z-[1000] transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.2)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
-                                            <div className="w-8 text-center mr-2 font-mono text-gray-500 text-xs">#{row.rank}</div>
+                                            <div className="w-8 text-center mr-2 font-mono text-gray-400 text-sm font-semibold">#{row.rank}</div>
                                             
                                             {/* MODIFIED: Use PlayerNameCell for Name/DPS toggle and pass report args */}
                                             <PlayerNameCell 
@@ -2980,7 +3025,7 @@
                                                 region={row.region} 
                                             />
                                             
-                                            <div className="w-8 text-center text-[10px] font-mono font-bold text-gray-500 bg-[#222] rounded px-1 py-0.5">{row.region}</div>
+                                            <div className="w-8 text-center text-xs font-mono font-bold text-gray-400 bg-[#222] rounded px-1 py-0.5">{row.region}</div>
                                             
                                             {/* Partner Column - Only shows for Tank/Healer */}
                                             <div className="w-8 text-center flex justify-center items-center ml-1">
@@ -2990,17 +3035,17 @@
                                                             src={`./images/classes/${getIconForSpec(row.combinedPlayers[0].specSlug)}`}
                                                             alt={row.combinedPlayers[0].specSlug}
                                                             draggable={false}
-                                                            className="w-5 h-5 object-contain"
+                                                            className="w-6 h-6 object-contain"
                                                             title={getLocalizedSpecName(row.combinedPlayers[0].specSlug, uiLanguage)}
                                                         />
                                                     )
                                                 ) : (
-                                                    row.partner && <img src={row.partner} alt="P" draggable={false} className="w-5 h-5 object-contain" />
+                                                    row.partner && <img src={row.partner} alt="P" draggable={false} className="w-6 h-6 object-contain" />
                                                 )}
                                             </div>
 
                                             {/* NEW: Buffs Count Column */}
-                                            <div className="w-8 text-center flex justify-center items-center ml-1 font-mono text-xs text-gray-400 font-bold">
+                                            <div className="w-8 text-center flex justify-center items-center ml-1 font-mono text-sm text-gray-300 font-bold">
                                                 {row.buffCount}
                                             </div>
                                         </div>
@@ -3084,7 +3129,7 @@
                                                 const topPos = isCollapsed ? 0 : cast.trackIndex * trackHeight;
 
                                                 // Dimensions - Adjusted for Compactness
-                                                const iconHeight = currentTrackHeight * 0.85; 
+                                                const iconHeight = currentTrackHeight * 0.9; 
                                                 const rawDurationWidth = (cast.duration || 0) * zoom;
                                                 const rawCdWidth = (spell.cd || 0) * zoom;
                                                 
@@ -3131,7 +3176,7 @@
                                                                     className="absolute left-0 z-10 rounded-sm shadow-sm"
                                                                     style={{
                                                                         width: `${durationWidth}px`,
-                                                                        height: '90%',
+                                                                        height: `${iconHeight}px`,
                                                                         backgroundColor: barColor, // Use palette color
                                                                         opacity: 0.9
                                                                     }}
@@ -3146,11 +3191,12 @@
                                                                 onClick={(e) => {
                                                                     e.stopPropagation();
                                                                 }}
-                                                                className={`relative z-20 flex items-center justify-center overflow-hidden rounded-sm bg-black/50 ${isFocusedSpell ? 'ring-2 ring-[#00FF96] ring-offset-1 ring-offset-black' : ''}`}
+                                                                className="relative z-20 flex items-center justify-center overflow-hidden rounded-sm bg-black/50"
                                                                 style={{
                                                                     height: `${iconHeight}px`,
                                                                     width: `${iconHeight}px`,
-                                                                    minWidth: `${iconHeight}px`
+                                                                    minWidth: `${iconHeight}px`,
+                                                                    boxShadow: isFocusedSpell ? 'inset 0 0 0 2px #00FF96, -2px 0 0 #00FF96, 2px 0 0 #00FF96' : 'none'
                                                                 }}
                                                                 title={`${spell.name} (${formatTime(cast.timestamp)})`}
                                                             >
@@ -3199,7 +3245,7 @@
                                                             src={`./images/classes/${getIconForSpec(buddy.specSlug)}`}
                                                             alt={buddy.specSlug}
                                                             draggable={false}
-                                                            className="w-5 h-5 object-contain"
+                                                            className="w-6 h-6 object-contain"
                                                             title={getLocalizedSpecName(buddy.specSlug, uiLanguage)}
                                                         />
                                                     )}
@@ -3221,7 +3267,7 @@
 
                                                     const currentTrackHeight = isCollapsed ? buddyTotalHeight : buddyTrackHeight;
                                                     const topPos = isCollapsed ? 0 : cast.trackIndex * buddyTrackHeight;
-                                                    const iconHeight = currentTrackHeight * 0.82;
+                                                    const iconHeight = currentTrackHeight * 0.9;
                                                     const durationWidth = Math.max(0, Math.min((cast.duration || 0) * zoom, timeUntilKill * zoom));
                                                     const cdWidth = Math.max(0, Math.min((spell.cd || 0) * zoom, timeUntilKill * zoom));
                                                     const barColor = isLimitBreakSpellId(cast.spellId)
@@ -3255,7 +3301,7 @@
                                                                         className="absolute left-0 z-10 rounded-sm shadow-sm"
                                                                         style={{
                                                                             width: `${durationWidth}px`,
-                                                                            height: '82%',
+                                                                            height: `${iconHeight}px`,
                                                                             backgroundColor: barColor,
                                                                             opacity: 0.88
                                                                         }}
@@ -3268,11 +3314,12 @@
                                                                     onClick={(e) => {
                                                                         e.stopPropagation();
                                                                     }}
-                                                                    className={`relative z-20 flex items-center justify-center overflow-hidden rounded-sm bg-black/50 ${isFocusedSpell ? 'ring-2 ring-[#00FF96] ring-offset-1 ring-offset-black' : ''}`}
+                                                                    className="relative z-20 flex items-center justify-center overflow-hidden rounded-sm bg-black/50"
                                                                     style={{
                                                                         height: `${iconHeight}px`,
                                                                         width: `${iconHeight}px`,
-                                                                        minWidth: `${iconHeight}px`
+                                                                        minWidth: `${iconHeight}px`,
+                                                                        boxShadow: isFocusedSpell ? 'inset 0 0 0 2px #00FF96, -2px 0 0 #00FF96, 2px 0 0 #00FF96' : 'none'
                                                                     }}
                                                                     title={`${spell.name} (${formatTime(cast.timestamp)})`}
                                                                 >

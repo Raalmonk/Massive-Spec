@@ -92,7 +92,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
 
     @staticmethod
     def sort_reports(reports: list[Report]) -> list[Report]:
-        """Sort the reports in place by the highest dps player."""
+        """Sort the reports in place by the highest active-metric player."""
 
         def get_total(report: Report) -> float:
             top = 0.0
@@ -330,7 +330,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                     yield fight_id, name, spec.full_name_slug, amount
 
     async def load_metric_totals(self) -> None:
-        """Overwrite fight-summary DPS with ranking totals for the active metric."""
+        """Overwrite fight-summary totals with ranking totals for the active metric."""
         if not self._should_load_buddies():
             return
 
@@ -503,7 +503,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                     key = (report.report_id, fight.fight_id)
                     manifest[key] = {
                         "name": p.name, # 使用原始全名
-                        "dps": p.total
+                        "metric_total": p.total
                     }
         # ============================================================
 
@@ -532,7 +532,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                         continue
                         
                     target_full_name = target_info["name"]
-                    target_dps = target_info["dps"]
+                    target_metric_total = target_info["metric_total"]
                     target_short_name = self._normalize_name(target_full_name)
 
                     # 1. 寻找唯一的 Ranker (优先全名匹配，其次短名匹配)
@@ -556,8 +556,8 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                         for p in fight.players:
                             if p == ranker_player:
                                 # 是主角 -> 恢复官方数值
-                                if abs(p.total - target_dps) > 0.1:
-                                    p.total = target_dps
+                                if abs(p.total - target_metric_total) > 0.1:
+                                    p.total = target_metric_total
                                     restore_count += 1
                             elif p.spec_slug == self.spec_slug:
                                 # 是同职业的其他人 (冒充者) -> 禁言 (DPS归零)
@@ -567,7 +567,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                     # 强制把 DPS 最高的人 (现在只能是主角了) 放到列表第一个
                     fight.players.sort(key=lambda p: p.total, reverse=True)
 
-            logger.info(f"[DPS Fix] Enforced Manifest on {restore_count} Rankers.")
+            logger.info(f"[Metric Fix] Enforced Manifest on {restore_count} Rankers.")
             # ============================================================
 
         # 4. Align buddy totals with the active ranking metric before frontend export.

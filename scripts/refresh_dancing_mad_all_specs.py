@@ -15,6 +15,10 @@ import dotenv
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(PROJECT_ROOT))
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 BOSS_SLUG = "dancing-mad"
 DIFFICULTY = "ultimate"
@@ -66,7 +70,7 @@ async def refresh_spec(spec, limit: int, metric: str) -> tuple[str, int, Path | 
 async def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT)
-    parser.add_argument("--metric", default=DEFAULT_METRIC)
+    parser.add_argument("--metric", default=DEFAULT_METRIC, choices=[DEFAULT_METRIC])
     parser.add_argument("--delay", type=float, default=DELAY_SECONDS)
     args = parser.parse_args()
 

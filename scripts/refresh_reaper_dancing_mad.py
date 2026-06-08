@@ -104,7 +104,7 @@ async def refresh_reaper_dancing_mad(limit: int, metric: str) -> Path:
 async def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT)
-    parser.add_argument("--metric", default=DEFAULT_METRIC)
+    parser.add_argument("--metric", default=DEFAULT_METRIC, choices=[DEFAULT_METRIC])
     args = parser.parse_args()
 
     try:

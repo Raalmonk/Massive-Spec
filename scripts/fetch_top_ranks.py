@@ -27,7 +27,7 @@ from lorgs.models.raid_boss import RaidBoss
 from lorgs.models.wow_spec import WowSpec
 from lorgs.logger import logger
 
-async def fetch_top_ranks(boss_slug, spec_slug, limit=5, difficulty="mythic", metric="dps"):
+async def fetch_top_ranks(boss_slug, spec_slug, limit=5, difficulty="mythic", metric="rdps"):
     # 1. Resolve IDs
     boss = RaidBoss.get(full_name_slug=boss_slug)
     if not boss:
@@ -39,9 +39,9 @@ async def fetch_top_ranks(boss_slug, spec_slug, limit=5, difficulty="mythic", me
         logger.error(f"Spec not found: {spec_slug}")
         return
 
-    # Force DPS for Healers
+    # FF14 rankings should use rDPS for every role.
     if spec.role.code == "heal":
-        metric = "dps"
+        metric = "rdps"
 
     # 2. Query Rankings
     client = wcl.WarcraftlogsClient.get_instance()
@@ -91,14 +91,14 @@ async def fetch_top_ranks(boss_slug, spec_slug, limit=5, difficulty="mythic", me
     # Merge: Global (limit) + CN (10)
     rankings = global_rankings[:limit] + cn_rankings[:10]
 
-    # Sort by DPS
+    # Sort by the selected FF Logs metric.
     rankings.sort(key=lambda x: x.get("amount", 0), reverse=True)
 
     for i, rank in enumerate(rankings):
         report_id = rank.get("report", {}).get("code")
         fight_id = rank.get("report", {}).get("fightID")
         player_name = rank.get("name")
-        amount = rank.get("amount") # Player DPS
+        amount = rank.get("amount") # Player metric amount
 
         logger.info(f"[{i+1}/{limit}] Checking Report: {report_id} Fight: {fight_id} ({player_name})")
 
@@ -137,7 +137,7 @@ async def fetch_top_ranks(boss_slug, spec_slug, limit=5, difficulty="mythic", me
 
              if existing_fight.combatant_info and existing_fight.damage_done > 0:
                  # Optional: Deeper verification could go here.
-                 # e.g. check if player_name is in the fight and has matching DPS
+                 # e.g. check if player_name is in the fight and has matching metric amount
 
                  logger.info(f"   -> Skipping (Already Cached)")
                  continue
@@ -156,7 +156,7 @@ async def fetch_top_ranks(boss_slug, spec_slug, limit=5, difficulty="mythic", me
         fight = user_report.get_fight(fight_id)
         if fight:
             # combatant_info and damage_done should have been populated by process_players
-            logger.info(f"   -> Loaded Fight. Raid DPS: {fight.damage_done}")
+            logger.info(f"   -> Loaded Fight. Raid damage done: {fight.damage_done}")
             logger.info(f"   -> Party: {fight.combatant_info}")
 
             # Save to DB

@@ -68,13 +68,15 @@ BOSS_CONFIG = {
     },
 }
 
+DEFAULT_METRIC = "rdps"
+
 
 async def _do_update_spec(spec, boss_slug, timestamp_folder):
     """(内部函数) 只负责获取并保存排名数据"""
     spec_slug = spec.full_name_slug
     config = BOSS_CONFIG.get(boss_slug, {})
     difficulty = config.get("difficulty", "mythic")
-    metric = config.get("metric", spec.role.metric)
+    metric = config.get("metric", DEFAULT_METRIC)
     
     # 1. 获取排名数据 (网络请求) - 保持不变
     ranking = SpecRanking.get_or_create(
