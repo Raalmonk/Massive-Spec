@@ -2554,7 +2554,7 @@
                             <Layers size={16} />
                         </button>
                         <div className="w-px h-4 bg-gray-700 mx-1"></div>
-                        <button onClick={handleZoomOut} className="p-1.5 hover:bg-gray-700 rounded text-gray-400 hover:text-[#00FF96] transition"><ZoomOut size={16} /></button>
+                        <button onClick={handleZoomIn} className="p-1.5 hover:bg-gray-700 rounded text-gray-400 hover:text-[#00FF96] transition"><ZoomIn size={16} /></button>
                         <input
                             type="range"
                             min={MIN_VISIBLE_MINUTES}
@@ -2565,7 +2565,7 @@
                             className="h-2 w-28 cursor-pointer accent-[#00FF96]"
                             title={`${sliderVisibleMinutes.toFixed(1)} min visible`}
                         />
-                        <button onClick={handleZoomIn} className="p-1.5 hover:bg-gray-700 rounded text-gray-400 hover:text-[#00FF96] transition"><ZoomIn size={16} /></button>
+                        <button onClick={handleZoomOut} className="p-1.5 hover:bg-gray-700 rounded text-gray-400 hover:text-[#00FF96] transition"><ZoomOut size={16} /></button>
                     </div>
                 </div>
 
