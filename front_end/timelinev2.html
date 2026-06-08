@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -169,11 +169,12 @@
         const getBossTimelineColor = (type, color) => color || BOSS_TIMELINE_TYPES[type]?.color || BOSS_TIMELINE_TYPES.mech.color;
 
         const UI_LANGUAGE_STORAGE_KEY = 'm-spec:ui-language';
+        const ZOOM_VISIBLE_MINUTES_STORAGE_KEY = 'm-spec:visible-minutes';
         const UI_LANGUAGES = [
             { id: 'en', label: 'EN' },
-            { id: 'zh', label: 'ä¸­æ–‡' },
-            { id: 'ja', label: 'æ—¥æœ¬èªž' },
-            { id: 'ko', label: 'í•œêµ­ì–´' }
+            { id: 'zh', label: '中文' },
+            { id: 'ja', label: '日本語' },
+            { id: 'ko', label: '한국어' }
         ];
         const I18N = {
             en: {
@@ -241,196 +242,196 @@
                 role_Magical_Ranged: 'Magical Ranged'
             },
             zh: {
-                language: 'è¯­è¨€',
-                loading: 'åŠ è½½ä¸­...',
+                language: '语言',
+                loading: '加载中...',
                 boss: 'Boss',
-                spec: 'èŒä¸š',
-                region: 'åœ°åŒº',
-                with: 'é˜µå®¹ç­›é€‰',
-                killTime: 'å‡»æ€æ—¶é—´',
-                importLog: 'å¯¼å…¥ Log',
-                select: 'ç²¾é€‰',
-                selected: 'å·²é€‰æ‹©',
-                confirm: 'ç¡®è®¤',
-                cancel: 'å–æ¶ˆ',
-                curated: 'ç²¾é€‰',
-                close: 'å…³é—­',
-                importPull: 'å¯¼å…¥ FF Logs Pull',
-                loadPlayers: 'è¯»å–çŽ©å®¶',
-                display: 'æ˜¾ç¤º',
-                all: 'å…¨éƒ¨',
-                showAllSpells: 'æ˜¾ç¤ºæ‰€æœ‰æŠ€èƒ½',
-                hideAllSpells: 'éšè—æ‰€æœ‰æŠ€èƒ½',
-                duration: 'æŒç»­æ—¶é—´',
+                spec: '职业',
+                region: '地区',
+                with: '阵容筛选',
+                killTime: '击杀时间',
+                importLog: '导入 Log',
+                select: '精选',
+                selected: '已选择',
+                confirm: '确认',
+                cancel: '取消',
+                curated: '精选',
+                close: '关闭',
+                importPull: '导入 FF Logs Pull',
+                loadPlayers: '读取玩家',
+                display: '显示',
+                all: '全部',
+                showAllSpells: '显示所有技能',
+                hideAllSpells: '隐藏所有技能',
+                duration: '持续时间',
                 cooldown: 'CD',
-                phases: 'é˜¶æ®µ',
-                showBossRow: 'åˆ‡æ¢ Boss è¡Œ',
+                phases: '阶段',
+                showBossRow: '切换 Boss 行',
                 category_cd: 'CD',
-                category_single_mit: 'å•å‡',
-                category_group_mit: 'å›¢å‡',
-                category_utility: 'åŠŸèƒ½',
+                category_single_mit: '单减',
+                category_group_mit: '团减',
+                category_utility: '功能',
                 limitBreak: 'Limit Break',
-                showLimitBreak: 'æ˜¾ç¤º LB',
-                party: 'é˜Ÿä¼',
-                buddy: 'æ­æ¡£',
-                showBuddy: 'æ˜¾ç¤ºå¦ä¸€ä¸ªåŒèŒèƒ½æŠ€èƒ½',
-                bossTimeline: 'Boss æ—¶é—´è½´',
-                mech: 'æœºåˆ¶',
-                tb: 'æ­»åˆ‘',
+                showLimitBreak: '显示 LB',
+                party: '队伍',
+                buddy: '搭档',
+                showBuddy: '显示另一个同职能技能',
+                bossTimeline: 'Boss 时间轴',
+                mech: '机制',
+                tb: '死刑',
                 aoe: 'AOE',
-                rank: 'æŽ’å',
+                rank: '排名',
                 rdps: 'RDPS',
-                reg: 'åœ°åŒº',
-                pair: 'æ­æ¡£',
-                buffs: 'å›¢è¾…',
-                importedLog: 'Log å·²è£…è½½',
-                removeImportedLog: 'ç§»é™¤å¯¼å…¥ Log',
-                shown: 'æ˜¾ç¤º',
-                filterKillTime: 'ç­›é€‰å‡»æ€æ—¶é—´ï¼ˆåˆ† : ç§’ï¼‰',
-                min: 'æœ€å°',
-                max: 'æœ€å¤§',
-                reset: 'é‡ç½®',
-                apply: 'åº”ç”¨',
-                openFFLogs: 'æ‰“å¼€ FF Logs',
-                enterCuration: 'è¿›å…¥ç²¾é€‰æ¨¡å¼',
-                exitCuration: 'é€€å‡ºç²¾é€‰æ¨¡å¼',
-                showBossTimelineType: 'æ˜¾ç¤º',
-                selectAtLeastOneRow: 'è¯·è‡³å°‘é€‰æ‹©ä¸€è¡Œã€‚',
-                expandRows: 'å±•å¼€è¡Œ',
-                collapseRows: 'æŠ˜å è¡Œ',
-                role_Tanks: 'å¦å…‹',
-                role_Healers: 'æ²»ç–—',
-                role_Melee: 'è¿‘æˆ˜',
-                role_Physical_Ranged: 'è¿œæ•',
-                role_Magical_Ranged: 'æ³•ç³»'
+                reg: '地区',
+                pair: '搭档',
+                buffs: '团辅',
+                importedLog: 'Log 已装载',
+                removeImportedLog: '移除导入 Log',
+                shown: '显示',
+                filterKillTime: '筛选击杀时间（分 : 秒）',
+                min: '最小',
+                max: '最大',
+                reset: '重置',
+                apply: '应用',
+                openFFLogs: '打开 FF Logs',
+                enterCuration: '进入精选模式',
+                exitCuration: '退出精选模式',
+                showBossTimelineType: '显示',
+                selectAtLeastOneRow: '请至少选择一行。',
+                expandRows: '展开行',
+                collapseRows: '折叠行',
+                role_Tanks: '坦克',
+                role_Healers: '治疗',
+                role_Melee: '近战',
+                role_Physical_Ranged: '远敏',
+                role_Magical_Ranged: '法系'
             },
             ja: {
-                language: 'è¨€èªž',
-                loading: 'èª­ã¿è¾¼ã¿ä¸­...',
+                language: '言語',
+                loading: '読み込み中...',
                 boss: 'Boss',
-                spec: 'ã‚¸ãƒ§ãƒ–',
-                region: 'åœ°åŸŸ',
-                with: 'æ§‹æˆãƒ•ã‚£ãƒ«ã‚¿ãƒ¼',
-                killTime: 'è¨Žä¼æ™‚é–“',
-                importLog: 'Log å–è¾¼',
-                select: 'é¸æŠœ',
-                selected: 'é¸æŠžä¸­',
-                confirm: 'ç¢ºå®š',
-                cancel: 'å–æ¶ˆ',
-                curated: 'é¸æŠœ',
-                close: 'é–‰ã˜ã‚‹',
-                importPull: 'FF Logs Pull å–è¾¼',
-                loadPlayers: 'ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼èª­è¾¼',
-                display: 'è¡¨ç¤º',
-                all: 'å…¨ã¦',
-                showAllSpells: 'å…¨ã‚¹ã‚­ãƒ«è¡¨ç¤º',
-                hideAllSpells: 'å…¨ã‚¹ã‚­ãƒ«éžè¡¨ç¤º',
-                duration: 'æŒç¶š',
+                spec: 'ジョブ',
+                region: '地域',
+                with: '構成フィルター',
+                killTime: '討伐時間',
+                importLog: 'Log 取込',
+                select: '選抜',
+                selected: '選択中',
+                confirm: '確定',
+                cancel: '取消',
+                curated: '選抜',
+                close: '閉じる',
+                importPull: 'FF Logs Pull 取込',
+                loadPlayers: 'プレイヤー読込',
+                display: '表示',
+                all: '全て',
+                showAllSpells: '全スキル表示',
+                hideAllSpells: '全スキル非表示',
+                duration: '持続',
                 cooldown: 'CD',
-                phases: 'ãƒ•ã‚§ãƒ¼ã‚º',
-                showBossRow: 'Boss è¡Œã‚’åˆ‡æ›¿',
+                phases: 'フェーズ',
+                showBossRow: 'Boss 行を切替',
                 category_cd: 'CD',
-                category_single_mit: 'å˜ä½“è»½æ¸›',
-                category_group_mit: 'å…¨ä½“è»½æ¸›',
-                category_utility: 'è£œåŠ©',
+                category_single_mit: '単体軽減',
+                category_group_mit: '全体軽減',
+                category_utility: '補助',
                 limitBreak: 'Limit Break',
-                showLimitBreak: 'LB ã‚’è¡¨ç¤º',
-                party: 'ãƒ‘ãƒ¼ãƒ†ã‚£',
-                buddy: 'ç›¸æ–¹',
-                showBuddy: 'ç›¸æ–¹ã‚¿ãƒ³ã‚¯/ãƒ’ãƒ©ã®ã‚¹ã‚­ãƒ«ã‚’è¡¨ç¤º',
-                bossTimeline: 'Boss ã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³',
-                mech: 'ã‚®ãƒŸãƒƒã‚¯',
+                showLimitBreak: 'LB を表示',
+                party: 'パーティ',
+                buddy: '相方',
+                showBuddy: '相方タンク/ヒラのスキルを表示',
+                bossTimeline: 'Boss タイムライン',
+                mech: 'ギミック',
                 tb: 'TB',
                 aoe: 'AOE',
-                rank: 'é †ä½',
+                rank: '順位',
                 rdps: 'RDPS',
-                reg: 'åœ°åŸŸ',
-                pair: 'ç›¸æ–¹',
-                buffs: 'ã‚·ãƒŠã‚¸ãƒ¼',
-                importedLog: 'èª­è¾¼æ¸ˆã¿ Log',
-                removeImportedLog: 'å–è¾¼ Log ã‚’å‰Šé™¤',
-                shown: 'è¡¨ç¤º',
-                filterKillTime: 'è¨Žä¼æ™‚é–“ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ï¼ˆåˆ† : ç§’ï¼‰',
-                min: 'æœ€å°',
-                max: 'æœ€å¤§',
-                reset: 'ãƒªã‚»ãƒƒãƒˆ',
-                apply: 'é©ç”¨',
-                openFFLogs: 'FF Logs ã§é–‹ã',
-                enterCuration: 'é¸æŠœãƒ¢ãƒ¼ãƒ‰',
-                exitCuration: 'é¸æŠœãƒ¢ãƒ¼ãƒ‰çµ‚äº†',
-                showBossTimelineType: 'è¡¨ç¤º',
-                selectAtLeastOneRow: 'å°‘ãªãã¨ã‚‚1è¡Œã‚’é¸æŠžã—ã¦ãã ã•ã„ã€‚',
-                expandRows: 'è¡Œã‚’å±•é–‹',
-                collapseRows: 'è¡Œã‚’æŠ˜ã‚ŠãŸãŸã‚€',
-                role_Tanks: 'ã‚¿ãƒ³ã‚¯',
-                role_Healers: 'ãƒ’ãƒ¼ãƒ©ãƒ¼',
-                role_Melee: 'è¿‘æŽ¥',
-                role_Physical_Ranged: 'ãƒ¬ãƒ³ã‚¸',
-                role_Magical_Ranged: 'ã‚­ãƒ£ã‚¹ã‚¿ãƒ¼'
+                reg: '地域',
+                pair: '相方',
+                buffs: 'シナジー',
+                importedLog: '読込済み Log',
+                removeImportedLog: '取込 Log を削除',
+                shown: '表示',
+                filterKillTime: '討伐時間フィルター（分 : 秒）',
+                min: '最小',
+                max: '最大',
+                reset: 'リセット',
+                apply: '適用',
+                openFFLogs: 'FF Logs で開く',
+                enterCuration: '選抜モード',
+                exitCuration: '選抜モード終了',
+                showBossTimelineType: '表示',
+                selectAtLeastOneRow: '少なくとも1行を選択してください。',
+                expandRows: '行を展開',
+                collapseRows: '行を折りたたむ',
+                role_Tanks: 'タンク',
+                role_Healers: 'ヒーラー',
+                role_Melee: '近接',
+                role_Physical_Ranged: 'レンジ',
+                role_Magical_Ranged: 'キャスター'
             },
             ko: {
-                language: 'ì–¸ì–´',
-                loading: 'ë¶ˆëŸ¬ì˜¤ëŠ” ì¤‘...',
+                language: '언어',
+                loading: '불러오는 중...',
                 boss: 'Boss',
-                spec: 'ì§ì—…',
-                region: 'ì§€ì—­',
-                with: 'ì¡°í•© í•„í„°',
-                killTime: 'í‚¬ íƒ€ìž„',
-                importLog: 'Log ê°€ì ¸ì˜¤ê¸°',
-                select: 'ì„ ë³„',
-                selected: 'ì„ íƒë¨',
-                confirm: 'í™•ì¸',
-                cancel: 'ì·¨ì†Œ',
-                curated: 'ì„ ë³„',
-                close: 'ë‹«ê¸°',
-                importPull: 'FF Logs Pull ê°€ì ¸ì˜¤ê¸°',
-                loadPlayers: 'í”Œë ˆì´ì–´ ë¡œë“œ',
-                display: 'í‘œì‹œ',
-                all: 'ì „ì²´',
-                showAllSpells: 'ëª¨ë“  ìŠ¤í‚¬ í‘œì‹œ',
-                hideAllSpells: 'ëª¨ë“  ìŠ¤í‚¬ ìˆ¨ê¹€',
-                duration: 'ì§€ì†',
+                spec: '직업',
+                region: '지역',
+                with: '조합 필터',
+                killTime: '킬 타임',
+                importLog: 'Log 가져오기',
+                select: '선별',
+                selected: '선택됨',
+                confirm: '확인',
+                cancel: '취소',
+                curated: '선별',
+                close: '닫기',
+                importPull: 'FF Logs Pull 가져오기',
+                loadPlayers: '플레이어 로드',
+                display: '표시',
+                all: '전체',
+                showAllSpells: '모든 스킬 표시',
+                hideAllSpells: '모든 스킬 숨김',
+                duration: '지속',
                 cooldown: 'CD',
-                phases: 'íŽ˜ì´ì¦ˆ',
-                showBossRow: 'Boss í–‰ ì „í™˜',
+                phases: '페이즈',
+                showBossRow: 'Boss 행 전환',
                 category_cd: 'CD',
-                category_single_mit: 'ë‹¨ì¼ ìƒì¡´ê¸°',
-                category_group_mit: 'íŒŒí‹° ìƒì¡´ê¸°',
-                category_utility: 'ìœ í‹¸',
+                category_single_mit: '단일 생존기',
+                category_group_mit: '파티 생존기',
+                category_utility: '유틸',
                 limitBreak: 'Limit Break',
-                showLimitBreak: 'LB í‘œì‹œ',
-                party: 'íŒŒí‹°',
-                buddy: 'ë²„ë””',
-                showBuddy: 'ë‹¤ë¥¸ íƒ±/íž ìŠ¤í‚¬ í‘œì‹œ',
-                bossTimeline: 'Boss íƒ€ìž„ë¼ì¸',
-                mech: 'ê¸°ë¯¹',
+                showLimitBreak: 'LB 표시',
+                party: '파티',
+                buddy: '버디',
+                showBuddy: '다른 탱/힐 스킬 표시',
+                bossTimeline: 'Boss 타임라인',
+                mech: '기믹',
                 tb: 'TB',
                 aoe: 'AOE',
-                rank: 'ìˆœìœ„',
+                rank: '순위',
                 rdps: 'RDPS',
-                reg: 'ì§€ì—­',
-                pair: 'ì§',
-                buffs: 'ì‹œë„ˆì§€',
-                importedLog: 'ë¡œë“œëœ Log',
-                removeImportedLog: 'ê°€ì ¸ì˜¨ Log ì œê±°',
-                shown: 'í‘œì‹œ',
-                filterKillTime: 'í‚¬ íƒ€ìž„ í•„í„° (ë¶„ : ì´ˆ)',
-                min: 'ìµœì†Œ',
-                max: 'ìµœëŒ€',
-                reset: 'ì´ˆê¸°í™”',
-                apply: 'ì ìš©',
-                openFFLogs: 'FF Logs ì—´ê¸°',
-                enterCuration: 'ì„ ë³„ ëª¨ë“œ',
-                exitCuration: 'ì„ ë³„ ëª¨ë“œ ì¢…ë£Œ',
-                showBossTimelineType: 'í‘œì‹œ',
-                selectAtLeastOneRow: 'ìµœì†Œ í•œ ì¤„ì„ ì„ íƒí•´ ì£¼ì„¸ìš”.',
-                expandRows: 'í–‰ íŽ¼ì¹˜ê¸°',
-                collapseRows: 'í–‰ ì ‘ê¸°',
-                role_Tanks: 'íƒ±ì»¤',
-                role_Healers: 'ížëŸ¬',
-                role_Melee: 'ê·¼ì ‘',
-                role_Physical_Ranged: 'ë¬¼ë¦¬ ì›ê±°ë¦¬',
-                role_Magical_Ranged: 'ë§ˆë²• ì›ê±°ë¦¬'
+                reg: '지역',
+                pair: '짝',
+                buffs: '시너지',
+                importedLog: '로드된 Log',
+                removeImportedLog: '가져온 Log 제거',
+                shown: '표시',
+                filterKillTime: '킬 타임 필터 (분 : 초)',
+                min: '최소',
+                max: '최대',
+                reset: '초기화',
+                apply: '적용',
+                openFFLogs: 'FF Logs 열기',
+                enterCuration: '선별 모드',
+                exitCuration: '선별 모드 종료',
+                showBossTimelineType: '표시',
+                selectAtLeastOneRow: '최소 한 줄을 선택해 주세요.',
+                expandRows: '행 펼치기',
+                collapseRows: '행 접기',
+                role_Tanks: '탱커',
+                role_Healers: '힐러',
+                role_Melee: '근접',
+                role_Physical_Ranged: '물리 원거리',
+                role_Magical_Ranged: '마법 원거리'
             }
         };
         const normalizeUiLanguage = (language) => {
@@ -446,6 +447,23 @@
                 if (I18N[stored]) return stored;
             } catch (e) {}
             return normalizeUiLanguage(navigator.language || navigator.userLanguage || 'en');
+        };
+        const getStoredVisibleMinutes = () => {
+            try {
+                const stored = Number(localStorage.getItem(ZOOM_VISIBLE_MINUTES_STORAGE_KEY));
+                if (Number.isFinite(stored)) {
+                    return Math.max(MIN_VISIBLE_MINUTES, Math.min(MAX_VISIBLE_MINUTES, stored));
+                }
+            } catch (e) {}
+            return null;
+        };
+        const getInitialZoom = () => {
+            const storedVisibleMinutes = getStoredVisibleMinutes();
+            if (storedVisibleMinutes !== null) {
+                const visibleWidth = Math.max(320, (window.innerWidth || 1280) - LEFT_PANEL_WIDTH - 12);
+                return visibleWidth / (storedVisibleMinutes * 60);
+            }
+            return 5;
         };
         const BUDDY_VISIBILITY_STORAGE_KEY = 'm-spec:show-buddy';
         const parseBooleanParam = (value) => {
@@ -503,7 +521,7 @@
         const fetchSpellData = async (specSlug = 'redmage-redmage') => {
             try {
                 const url = `./data/spells_${specSlug}.json?t=${Date.now()}`;
-                console.log(`[M-Spec] åŠ è½½æŠ€èƒ½é…ç½®: ${url}`);
+                console.log(`[M-Spec] 加载技能配置: ${url}`);
                 
                 const res = await fetch(url);
                 if (!res.ok) throw new Error("Local spell file not found");
@@ -528,7 +546,7 @@
                 return spellMap;
 
             } catch (e) {
-                console.warn(`[ç¦»çº¿æ¨¡å¼] æœªæ‰¾åˆ° ${specSlug} çš„æŠ€èƒ½å®šä¹‰æ–‡ä»¶ã€‚`, e);
+                console.warn(`[离线模式] 未找到 ${specSlug} 的技能定义文件。`, e);
                 return {};
             }
         };
@@ -594,109 +612,109 @@
 
         const SPEC_NAME_TRANSLATIONS = {
             zh: {
-                'tank-combined': 'åŒTåˆè®¡',
-                'healer-combined': 'åŒå¥¶åˆè®¡',
-                'paladin-paladin': 'éª‘å£«',
-                'warrior-warrior': 'æˆ˜å£«',
-                'darkknight-darkknight': 'æš—é»‘éª‘å£«',
-                'gunbreaker-gunbreaker': 'ç»æžªæˆ˜å£«',
-                'whitemage-whitemage': 'ç™½é­”æ³•å¸ˆ',
-                'scholar-scholar': 'å­¦è€…',
-                'astrologian-astrologian': 'å æ˜Ÿæœ¯å£«',
-                'sage-sage': 'è´¤è€…',
-                'monk-monk': 'æ­¦åƒ§',
-                'dragoon-dragoon': 'é¾™éª‘å£«',
-                'ninja-ninja': 'å¿è€…',
-                'samurai-samurai': 'æ­¦å£«',
-                'reaper-reaper': 'é’é•°å®¢',
-                'viper-viper': 'è°è›‡å‰‘å£«',
-                'bard-bard': 'åŸæ¸¸è¯—äºº',
-                'machinist-machinist': 'æœºå·¥å£«',
-                'dancer-dancer': 'èˆžè€…',
-                'blackmage-blackmage': 'é»‘é­”æ³•å¸ˆ',
-                'summoner-summoner': 'å¬å”¤å¸ˆ',
-                'redmage-redmage': 'èµ¤é­”æ³•å¸ˆ',
-                'pictomancer-pictomancer': 'ç»˜çµæ³•å¸ˆ'
+                'tank-combined': '双T合计',
+                'healer-combined': '双奶合计',
+                'paladin-paladin': '骑士',
+                'warrior-warrior': '战士',
+                'darkknight-darkknight': '暗黑骑士',
+                'gunbreaker-gunbreaker': '绝枪战士',
+                'whitemage-whitemage': '白魔法师',
+                'scholar-scholar': '学者',
+                'astrologian-astrologian': '占星术士',
+                'sage-sage': '贤者',
+                'monk-monk': '武僧',
+                'dragoon-dragoon': '龙骑士',
+                'ninja-ninja': '忍者',
+                'samurai-samurai': '武士',
+                'reaper-reaper': '钐镰客',
+                'viper-viper': '蝰蛇剑士',
+                'bard-bard': '吟游诗人',
+                'machinist-machinist': '机工士',
+                'dancer-dancer': '舞者',
+                'blackmage-blackmage': '黑魔法师',
+                'summoner-summoner': '召唤师',
+                'redmage-redmage': '赤魔法师',
+                'pictomancer-pictomancer': '绘灵法师'
             },
             ja: {
-                'tank-combined': 'ã‚¿ãƒ³ã‚¯åˆç®—',
-                'healer-combined': 'ãƒ’ãƒ¼ãƒ©ãƒ¼åˆç®—',
-                'paladin-paladin': 'ãƒŠã‚¤ãƒˆ',
-                'warrior-warrior': 'æˆ¦å£«',
-                'darkknight-darkknight': 'æš—é»’é¨Žå£«',
-                'gunbreaker-gunbreaker': 'ã‚¬ãƒ³ãƒ–ãƒ¬ã‚¤ã‚«ãƒ¼',
-                'whitemage-whitemage': 'ç™½é­”é“å£«',
-                'scholar-scholar': 'å­¦è€…',
-                'astrologian-astrologian': 'å æ˜Ÿè¡“å¸«',
-                'sage-sage': 'è³¢è€…',
-                'monk-monk': 'ãƒ¢ãƒ³ã‚¯',
-                'dragoon-dragoon': 'ç«œé¨Žå£«',
-                'ninja-ninja': 'å¿è€…',
-                'samurai-samurai': 'ä¾',
-                'reaper-reaper': 'ãƒªãƒ¼ãƒ‘ãƒ¼',
-                'viper-viper': 'ãƒ´ã‚¡ã‚¤ãƒ‘ãƒ¼',
-                'bard-bard': 'åŸéŠè©©äºº',
-                'machinist-machinist': 'æ©Ÿå·¥å£«',
-                'dancer-dancer': 'è¸Šã‚Šå­',
-                'blackmage-blackmage': 'é»’é­”é“å£«',
-                'summoner-summoner': 'å¬å–šå£«',
-                'redmage-redmage': 'èµ¤é­”é“å£«',
-                'pictomancer-pictomancer': 'ãƒ”ã‚¯ãƒˆãƒžãƒ³ã‚µãƒ¼'
+                'tank-combined': 'タンク合算',
+                'healer-combined': 'ヒーラー合算',
+                'paladin-paladin': 'ナイト',
+                'warrior-warrior': '戦士',
+                'darkknight-darkknight': '暗黒騎士',
+                'gunbreaker-gunbreaker': 'ガンブレイカー',
+                'whitemage-whitemage': '白魔道士',
+                'scholar-scholar': '学者',
+                'astrologian-astrologian': '占星術師',
+                'sage-sage': '賢者',
+                'monk-monk': 'モンク',
+                'dragoon-dragoon': '竜騎士',
+                'ninja-ninja': '忍者',
+                'samurai-samurai': '侍',
+                'reaper-reaper': 'リーパー',
+                'viper-viper': 'ヴァイパー',
+                'bard-bard': '吟遊詩人',
+                'machinist-machinist': '機工士',
+                'dancer-dancer': '踊り子',
+                'blackmage-blackmage': '黒魔道士',
+                'summoner-summoner': '召喚士',
+                'redmage-redmage': '赤魔道士',
+                'pictomancer-pictomancer': 'ピクトマンサー'
             },
             ko: {
-                'tank-combined': 'íƒ±ì»¤ í•©ì‚°',
-                'healer-combined': 'ížëŸ¬ í•©ì‚°',
-                'paladin-paladin': 'ë‚˜ì´íŠ¸',
-                'warrior-warrior': 'ì „ì‚¬',
-                'darkknight-darkknight': 'ì•”í‘ê¸°ì‚¬',
-                'gunbreaker-gunbreaker': 'ê±´ë¸Œë ˆì´ì»¤',
-                'whitemage-whitemage': 'ë°±ë§ˆë„ì‚¬',
-                'scholar-scholar': 'í•™ìž',
-                'astrologian-astrologian': 'ì ì„±ìˆ ì‚¬',
-                'sage-sage': 'í˜„ìž',
-                'monk-monk': 'ëª½í¬',
-                'dragoon-dragoon': 'ìš©ê¸°ì‚¬',
-                'ninja-ninja': 'ë‹Œìž',
-                'samurai-samurai': 'ì‚¬ë¬´ë¼ì´',
-                'reaper-reaper': 'ë¦¬í¼',
-                'viper-viper': 'ë°”ì´í¼',
-                'bard-bard': 'ìŒìœ ì‹œì¸',
-                'machinist-machinist': 'ê¸°ê³µì‚¬',
-                'dancer-dancer': 'ë¬´ë„ê°€',
-                'blackmage-blackmage': 'í‘ë§ˆë„ì‚¬',
-                'summoner-summoner': 'ì†Œí™˜ì‚¬',
-                'redmage-redmage': 'ì ë§ˆë„ì‚¬',
-                'pictomancer-pictomancer': 'í”½í† ë§¨ì„œ'
+                'tank-combined': '탱커 합산',
+                'healer-combined': '힐러 합산',
+                'paladin-paladin': '나이트',
+                'warrior-warrior': '전사',
+                'darkknight-darkknight': '암흑기사',
+                'gunbreaker-gunbreaker': '건브레이커',
+                'whitemage-whitemage': '백마도사',
+                'scholar-scholar': '학자',
+                'astrologian-astrologian': '점성술사',
+                'sage-sage': '현자',
+                'monk-monk': '몽크',
+                'dragoon-dragoon': '용기사',
+                'ninja-ninja': '닌자',
+                'samurai-samurai': '사무라이',
+                'reaper-reaper': '리퍼',
+                'viper-viper': '바이퍼',
+                'bard-bard': '음유시인',
+                'machinist-machinist': '기공사',
+                'dancer-dancer': '무도가',
+                'blackmage-blackmage': '흑마도사',
+                'summoner-summoner': '소환사',
+                'redmage-redmage': '적마도사',
+                'pictomancer-pictomancer': '픽토맨서'
             }
         };
 
         const BOSS_NAME_TRANSLATIONS = {
             zh: {
-                'vamp-fatale': 'M9Sï¼šè‡´å‘½ç¾Žäºº',
-                'red-hot-and-deep-blue': 'M10Sï¼šæžé™æ¸©åº¦å·®å…„å¼Ÿ',
-                'the-tyrant': 'M11Sï¼šéœ¸çŽ‹',
-                'lindwurm': 'M12S P1ï¼šäº¡å›½å¤§è›‡ æž—å¾·å¸ƒé²å§†',
-                'lindwurm-ii': 'M12S P2ï¼šäº¡å›½å¤§è›‡ æž—å¾·å¸ƒé²å§†',
-                'futures-rewritten': 'å…‰æš—æœªæ¥ç»å¢ƒæˆ˜',
-                'dancing-mad': 'å¦–æ˜Ÿä¹±èˆžç»å¢ƒæˆ˜'
+                'vamp-fatale': 'M9S：致命美人',
+                'red-hot-and-deep-blue': 'M10S：极限温度差兄弟',
+                'the-tyrant': 'M11S：霸王',
+                'lindwurm': 'M12S P1：亡国大蛇 林德布鲁姆',
+                'lindwurm-ii': 'M12S P2：亡国大蛇 林德布鲁姆',
+                'futures-rewritten': '光暗未来绝境战',
+                'dancing-mad': '妖星乱舞绝境战'
             },
             ja: {
-                'vamp-fatale': 'M9Sï¼šãƒ´ã‚¡ãƒ³ãƒ—ãƒ»ãƒ•ã‚¡ã‚¿ãƒ¼ãƒ«',
-                'red-hot-and-deep-blue': 'M10Sï¼šãƒ¬ãƒƒãƒ‰ãƒ›ãƒƒãƒˆï¼ãƒ‡ã‚£ãƒ¼ãƒ—ãƒ–ãƒ«ãƒ¼',
-                'the-tyrant': 'M11Sï¼šã‚¶ãƒ»ã‚¿ã‚¤ãƒ©ãƒ³ãƒˆ',
-                'lindwurm': 'M12S P1ï¼šãƒªãƒ³ãƒ‰ãƒ–ãƒ«ãƒ ',
-                'lindwurm-ii': 'M12S P2ï¼šãƒªãƒ³ãƒ‰ãƒ–ãƒ«ãƒ ',
-                'futures-rewritten': 'çµ¶ã‚‚ã†ã²ã¨ã¤ã®æœªæ¥',
-                'dancing-mad': 'çµ¶å¦–æ˜Ÿä¹±èˆž'
+                'vamp-fatale': 'M9S：ヴァンプ・ファタール',
+                'red-hot-and-deep-blue': 'M10S：レッドホット／ディープブルー',
+                'the-tyrant': 'M11S：ザ・タイラント',
+                'lindwurm': 'M12S P1：リンドブルム',
+                'lindwurm-ii': 'M12S P2：リンドブルム',
+                'futures-rewritten': '絶もうひとつの未来',
+                'dancing-mad': '絶妖星乱舞'
             },
             ko: {
-                'vamp-fatale': 'M9S: ë±€í”„ íŒŒíƒˆ',
-                'red-hot-and-deep-blue': 'M10S: ë ˆë“œ í•« / ë”¥ ë¸”ë£¨',
-                'the-tyrant': 'M11S: ë” íƒ€ì´ëŸ°íŠ¸',
-                'lindwurm': 'M12S P1: ë¦°ë“œë¸”ë£¸',
-                'lindwurm-ii': 'M12S P2: ë¦°ë“œë¸”ë£¸',
-                'futures-rewritten': 'ì ˆ ë˜ í•˜ë‚˜ì˜ ë¯¸ëž˜',
-                'dancing-mad': 'ì ˆ ìš”ì„±ë‚œë¬´'
+                'vamp-fatale': 'M9S: 뱀프 파탈',
+                'red-hot-and-deep-blue': 'M10S: 레드 핫 / 딥 블루',
+                'the-tyrant': 'M11S: 더 타이런트',
+                'lindwurm': 'M12S P1: 린드블룸',
+                'lindwurm-ii': 'M12S P2: 린드블룸',
+                'futures-rewritten': '절 또 하나의 미래',
+                'dancing-mad': '절 요성난무'
             }
         };
 
@@ -989,7 +1007,7 @@
 
         // 2. fetchRankings (API with Region & Partner Logic)
         const fetchRankings = async (specSlug, bossSlug, spellMap, regionFilter = 'All') => {
-            console.log('[M-Spec] æ­£åœ¨è¯»å–é™æ€æ–‡ä»¶:', specSlug, bossSlug, 'Region:', regionFilter);
+            console.log('[M-Spec] 正在读取静态文件:', specSlug, bossSlug, 'Region:', regionFilter);
 
             const BUFF_SPECS = new Set([
                 'astrologian-astrologian', 'scholar-scholar',
@@ -1214,7 +1232,7 @@
                 return rankData;
 
             } catch (error) {
-                console.error('[M-Spec] è¯»å–æŽ’åæ•°æ®å¤±è´¥:', error);
+                console.error('[M-Spec] 读取排名数据失败:', error);
                 return [];
             }
         };
@@ -1245,10 +1263,10 @@
 
             try {
                 const url = `./data/${fileName}.json?t=${Date.now()}`;
-                console.log(`[M-Spec] åŠ è½½ Boss æ—¶é—´è½´: ${url}`);
+                console.log(`[M-Spec] 加载 Boss 时间轴: ${url}`);
 
                 const res = await fetch(url);
-                if (!res.ok) throw new Error(`Boss æ–‡ä»¶ ${fileName}.json æœªæ‰¾åˆ°`);
+                if (!res.ok) throw new Error(`Boss 文件 ${fileName}.json 未找到`);
                 
                 const data = await res.json();
                 
@@ -1270,7 +1288,7 @@
                 }).sort((a, b) => a.time - b.time);
 
             } catch (e) {
-                console.warn(`[ç¦»çº¿æ¨¡å¼] æ— æ³•åŠ è½½ ${fileName}ï¼ŒBoss è½´å°†éšè—ã€‚`, e);
+                console.warn(`[离线模式] 无法加载 ${fileName}，Boss 轴将隐藏。`, e);
                 return []; 
             }
         };
@@ -1656,7 +1674,7 @@
             const t = useCallback((key) => translate(uiLanguage, key), [uiLanguage]);
             const currentLanguage = UI_LANGUAGES.find(lang => lang.id === uiLanguage) || UI_LANGUAGES[0];
 
-            const [zoom, setZoom] = useState(5);
+            const [zoom, setZoom] = useState(getInitialZoom);
             const [isCollapsed, setIsCollapsed] = useState(true); 
             
             // NEW: Highlighted Row State (MULTI-SELECT)
@@ -2152,6 +2170,11 @@
             const handleZoomIn = () => adjustVisibleMinutes(-1);
             const handleZoomOut = () => adjustVisibleMinutes(1);
             const sliderVisibleMinutes = clampVisibleMinutes(getVisibleMinutesForZoom(zoom));
+            useEffect(() => {
+                try {
+                    localStorage.setItem(ZOOM_VISIBLE_MINUTES_STORAGE_KEY, String(Number(sliderVisibleMinutes.toFixed(2))));
+                } catch (e) {}
+            }, [sliderVisibleMinutes]);
             const formatTime = (s) => `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
             const displayToggleClass = (active) =>
                 `h-6 min-w-10 px-2 flex items-center justify-center rounded-sm border text-[10px] font-black font-mono uppercase transition-colors ${
@@ -2731,7 +2754,7 @@
                             <div 
                                 className="hidden" 
                                 onClick={toggleAllSpells}
-                                title={selectedSpells.size > 0 ? "éšè—æ‰€æœ‰æŠ€èƒ½" : "æ˜¾ç¤ºæ‰€æœ‰æŠ€èƒ½"}
+                                title={selectedSpells.size > 0 ? "隐藏所有技能" : "显示所有技能"}
                             >
                                 <span className="flex items-center gap-1">
                                     <SlidersHorizontal size={14} />
@@ -3370,9 +3393,9 @@
                                                 const spell = isLimitBreakSpellId(cast.spellId) ? getLimitBreakSpell(cast.spellId) : (castSpellMap[cast.spellId] || {
         id: cast.spellId,
         name: `ID: ${cast.spellId}`,
-        image: null, // æ²¡æœ‰å›¾ç‰‡
+        image: null, // 没有图片
         cd: 0,
-        color: '#666666' // é»˜è®¤ç»™ä¸ªç°è‰²
+        color: '#666666' // 默认给个灰色
     });
 
                                                 // --- KILL TIME CLIPPING LOGIC ---
