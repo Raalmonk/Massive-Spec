@@ -700,6 +700,10 @@
             BOSS_NAME_TRANSLATIONS[language]?.[bossSlug] || BOSS_OPTIONS.find(boss => boss.id === bossSlug)?.label || bossSlug
         );
 
+        const getLocalizedBossTimelineName = (event, language) => (
+            event?.name_i18n?.[language] || event?.name || 'Unknown'
+        );
+
         const getDefaultSelectedSpellIds = (spellMap, categories) => (
             Object.values(spellMap)
                 .filter(s => {
@@ -1081,6 +1085,7 @@
                         duration: spell.duration || (isTimelineMarker ? 1 : 0),
                         color: getBossTimelineColor(type, spell.color),
                         icon: spell.icon ? `./images/spells/${spell.icon}` : null,
+                        name_i18n: spell.name_i18n || {},
                         type
                     };
                 }).sort((a, b) => a.time - b.time);
@@ -2564,16 +2569,17 @@
                                         <div className="flex-1 font-bold text-gray-300">{t("bossTimeline")}</div>
                                     </div>
                                     <div className="relative h-full z-10 overflow-hidden" style={{ width: `${timelineWidth}px` }}>
-                                        {bossTimelineMechanics.map((mech, i) => (
-                                            mech.duration > 0 ? (
+                                        {bossTimelineMechanics.map((mech, i) => {
+                                            const mechName = getLocalizedBossTimelineName(mech, uiLanguage);
+                                            return mech.duration > 0 ? (
                                                 /* Standard Boss Bar for duration mechanics */
                                                 <div 
                                                     key={i} 
                                                     className="absolute top-1/2 -translate-y-1/2 h-7 rounded-sm border border-white/15 flex items-center justify-center text-[13px] font-bold text-white/95 overflow-hidden shadow-sm" 
                                                     style={{ left: `${mech.time * zoom}px`, width: `${Math.max(mech.duration * zoom, 48)}px`, backgroundColor: getBossTimelineColor(mech.type, mech.color) }} 
-                                                    title={`${getBossTimelineTypeLabel(mech.type, t) || t("boss")}: ${mech.name} (${formatTime(mech.time)}) - ${mech.duration}s`}
+                                                    title={`${getBossTimelineTypeLabel(mech.type, t) || t("boss")}: ${mechName} (${formatTime(mech.time)}) - ${mech.duration}s`}
                                                 >
-                                                    <span className="block max-w-full overflow-hidden whitespace-nowrap px-2 leading-none drop-shadow-[0_1px_1px_rgba(0,0,0,0.75)]">{mech.name}</span>
+                                                    <span className="block max-w-full overflow-hidden whitespace-nowrap px-2 leading-none drop-shadow-[0_1px_1px_rgba(0,0,0,0.75)]">{mechName}</span>
                                                 </div>
                                             ) : (
                                                 /* Icon Box for instant mechanics */
@@ -2581,12 +2587,12 @@
                                                     key={i} 
                                                     className="absolute top-1/2 -translate-y-1/2 h-6 w-6 rounded border border-white/20 flex items-center justify-center shadow-sm overflow-hidden" 
                                                     style={{ left: `${mech.time * zoom}px`, backgroundColor: getBossTimelineColor(mech.type, mech.color) }}
-                                                    title={`${getBossTimelineTypeLabel(mech.type, t) || t("boss")}: ${mech.name} (${formatTime(mech.time)})`}
+                                                    title={`${getBossTimelineTypeLabel(mech.type, t) || t("boss")}: ${mechName} (${formatTime(mech.time)})`}
                                                 >
-                                                    <RenderIcon spell={mech} />
+                                                    <RenderIcon spell={{ ...mech, name: mechName }} />
                                                 </div>
-                                            )
-                                        ))}
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             )}

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import asdict
 from dataclasses import dataclass
+from dataclasses import field
 from typing import Literal
 
 
@@ -19,6 +20,7 @@ class BossTimelineEvent:
     type: BossTimelineType = "mech"
     color: str = ""
     icon: str = ""
+    name_i18n: dict[str, str] = field(default_factory=dict)
 
     def as_dict(self) -> dict:
         return asdict(self)

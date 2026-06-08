@@ -37,7 +37,11 @@
     "time": 29.2,
     "duration": 2.7,
     "type": "mech",
-    "color": "#facc15"
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "众神之像"
+    }
   },
   {
     "id": "dm-kefka-graven-image-2",
@@ -45,7 +49,11 @@
     "time": 80.284,
     "duration": 2.7,
     "type": "mech",
-    "color": "#facc15"
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "众神之像"
+    }
   },
   {
     "id": "dm-kefka-graven-image-3",
@@ -53,7 +61,11 @@
     "time": 163.828,
     "duration": 2.7,
     "type": "mech",
-    "color": "#facc15"
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "众神之像"
+    }
   },
   {
     "id": "dm-kefka-forsaken-1",
@@ -61,7 +73,11 @@
     "time": 235.596,
     "duration": 6.7,
     "type": "mech",
-    "color": "#facc15"
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "遗弃末世"
+    }
   },
   {
     "id": "dm-kefka-light-of-judgment",
@@ -69,7 +85,11 @@
     "time": 341.888,
     "duration": 4.7,
     "type": "mech",
-    "color": "#facc15"
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "制裁之光"
+    }
   },
   {
     "id": "dm-kefka-decisive-battle-1",
@@ -77,7 +97,11 @@
     "time": 430.947,
     "duration": 2.7,
     "type": "mech",
-    "color": "#facc15"
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "决战"
+    }
   },
   {
     "id": "dm-kefka-decisive-battle-2",
@@ -85,7 +109,11 @@
     "time": 545.267,
     "duration": 2.7,
     "type": "mech",
-    "color": "#facc15"
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "决战"
+    }
   },
   {
     "id": "dm-kefka-celestriad",
@@ -93,7 +121,11 @@
     "time": 958.582,
     "duration": 4.7,
     "type": "mech",
-    "color": "#facc15"
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "三星"
+    }
   },
   {
     "id": "dm-kefka-forsaken-2",
@@ -101,7 +133,11 @@
     "time": 1058.663,
     "duration": 9.7,
     "type": "mech",
-    "color": "#facc15"
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "遗弃末世"
+    }
   },
   {
     "id": "dm-tb-revolting-ruin-iii-1",
@@ -109,7 +145,11 @@
     "time": 15.235,
     "duration": 4.7,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "恶狠狠毁荡"
+    }
   },
   {
     "id": "dm-tb-hyperdrive-1",
@@ -117,7 +157,11 @@
     "time": 65.9,
     "duration": 1,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "超驱动"
+    }
   },
   {
     "id": "dm-tb-revolting-ruin-iii-2",
@@ -125,7 +169,11 @@
     "time": 97.428,
     "duration": 4.7,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "恶狠狠毁荡"
+    }
   },
   {
     "id": "dm-tb-hyperdrive-2",
@@ -133,7 +181,11 @@
     "time": 135.67,
     "duration": 1,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "超驱动"
+    }
   },
   {
     "id": "dm-tb-ultimate-embrace-1",
@@ -141,7 +193,11 @@
     "time": 220.366,
     "duration": 4.7,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "终末双腕"
+    }
   },
   {
     "id": "dm-tb-wings-of-destruction",
@@ -149,7 +205,11 @@
     "time": 370.372,
     "duration": 3.7,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "破坏之翼"
+    }
   },
   {
     "id": "dm-tb-ultimate-embrace-2",
@@ -157,7 +217,11 @@
     "time": 377.671,
     "duration": 4.7,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "终末双腕"
+    }
   },
   {
     "id": "dm-tb-thunder-iii-1a",
@@ -165,7 +229,11 @@
     "time": 478.683,
     "duration": 4.7,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "暴雷"
+    }
   },
   {
     "id": "dm-tb-thunder-iii-2a",
@@ -173,7 +241,11 @@
     "time": 537.307,
     "duration": 4.7,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "暴雷"
+    }
   },
   {
     "id": "dm-tb-thunder-iii-3a",
@@ -181,7 +253,11 @@
     "time": 554.465,
     "duration": 4.7,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "暴雷"
+    }
   },
   {
     "id": "dm-tb-thunder-iii-4a",
@@ -189,7 +265,11 @@
     "time": 596.033,
     "duration": 4.7,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "暴雷"
+    }
   },
   {
     "id": "dm-tb-thunder-iii-5a",
@@ -197,7 +277,11 @@
     "time": 637.277,
     "duration": 4.7,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "暴雷"
+    }
   },
   {
     "id": "dm-tb-fell-forces-1",
@@ -205,7 +289,11 @@
     "time": 912.132,
     "duration": 1,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "分摊平A x3"
+    }
   },
   {
     "id": "dm-tb-flare-1",
@@ -213,7 +301,11 @@
     "time": 937.767,
     "duration": 1,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "核爆"
+    }
   },
   {
     "id": "dm-tb-chaotic-flare-1",
@@ -221,7 +313,11 @@
     "time": 940.941,
     "duration": 1,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "混沌核爆"
+    }
   },
   {
     "id": "dm-tb-flare-diffusion-1",
@@ -229,7 +325,11 @@
     "time": 944.426,
     "duration": 1,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "核爆扩散"
+    }
   },
   {
     "id": "dm-tb-chaotic-holy-1",
@@ -237,7 +337,11 @@
     "time": 944.426,
     "duration": 1,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "混沌神圣"
+    }
   },
   {
     "id": "dm-tb-fell-forces-2",
@@ -245,7 +349,11 @@
     "time": 949.075,
     "duration": 1,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "分摊平A x2"
+    }
   },
   {
     "id": "dm-tb-fell-forces-3",
@@ -253,7 +361,11 @@
     "time": 994.031,
     "duration": 1,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "分摊平A x2"
+    }
   },
   {
     "id": "dm-tb-flare-2",
@@ -261,7 +373,11 @@
     "time": 1029.82,
     "duration": 1,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "核爆"
+    }
   },
   {
     "id": "dm-tb-chaotic-flare-2",
@@ -269,7 +385,11 @@
     "time": 1032.989,
     "duration": 1,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "混沌核爆"
+    }
   },
   {
     "id": "dm-tb-flare-diffusion-2",
@@ -277,7 +397,11 @@
     "time": 1036.466,
     "duration": 1,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "核爆扩散"
+    }
   },
   {
     "id": "dm-tb-chaotic-holy-2",
@@ -285,7 +409,11 @@
     "time": 1036.466,
     "duration": 1,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "混沌神圣"
+    }
   },
   {
     "id": "dm-tb-fell-forces-4",
@@ -293,6 +421,10 @@
     "time": 1041.101,
     "duration": 1,
     "type": "tb",
-    "color": "#60a5fa"
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "分摊平A x3"
+    }
   }
 ]
