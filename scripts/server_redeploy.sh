@@ -15,6 +15,7 @@ DEPLOY_LOCK="/tmp/mspec-deploy.lock"
 MAIN_LOCK="/tmp/mspec-main.lock"
 UPDATER_LOCK="/tmp/mspec-updater.lock"
 DMU_LOCK="/tmp/mspec-dmu-refresh.lock"
+FRONTEND_DATA_BACKUP_DIR=""
 
 log() {
     printf '[%s] %s\n' "$(date '+%F %T')" "$*"
@@ -60,9 +61,34 @@ backup_frontend_data() {
         return
     fi
 
-    local backup_dir="${HOME}/mspec-data-backup-$(date '+%F-%H%M%S')"
-    run cp -a front_end/data "${backup_dir}"
-    log "Backed up front_end/data to ${backup_dir}"
+    FRONTEND_DATA_BACKUP_DIR="${HOME}/mspec-data-backup-$(date '+%F-%H%M%S')"
+    run mkdir -p "${FRONTEND_DATA_BACKUP_DIR}"
+    run cp -a front_end/data "${FRONTEND_DATA_BACKUP_DIR}/data"
+    log "Backed up front_end/data to ${FRONTEND_DATA_BACKUP_DIR}/data"
+}
+
+restore_generated_rankings_from_backup() {
+    if [[ -z "${FRONTEND_DATA_BACKUP_DIR}" || ! -d "${FRONTEND_DATA_BACKUP_DIR}/data" ]]; then
+        log "No front_end/data backup exists; skipping generated ranking restore."
+        return
+    fi
+
+    log "Restoring generated spec_ranking_*.json files from backup."
+    find "${FRONTEND_DATA_BACKUP_DIR}/data" -maxdepth 1 -type f -name 'spec_ranking_*.json' -exec cp -a {} front_end/data/ \;
+}
+
+prepare_generated_rankings_for_pull() {
+    if [[ -z "${FRONTEND_DATA_BACKUP_DIR}" || ! -d "${FRONTEND_DATA_BACKUP_DIR}/data" ]]; then
+        log "ERROR: refusing to clean generated ranking files without a backup."
+        exit 1
+    fi
+
+    log "Preparing generated ranking files for git pull without using stash."
+    log "Tracked spec_ranking files will be restored to HEAD; untracked spec_ranking files will be removed from the working tree."
+    log "The server-generated copies are safe in ${FRONTEND_DATA_BACKUP_DIR}/data and will be copied back after pull."
+
+    git checkout -- 'front_end/data/spec_ranking_*.json' 2>/dev/null || true
+    git clean -fdx -- 'front_end/data/spec_ranking_*.json'
 }
 
 pull_latest_code() {
@@ -74,17 +100,10 @@ pull_latest_code() {
     log "git pull failed. This is usually caused by generated front_end/data files."
     log "Current git status:"
     git status --short || true
-    printf '\n'
-    printf 'Type yes to stash front_end/data and retry git pull. Anything else will abort: '
-    read -r confirm_stash
-    if [[ "${confirm_stash}" != "yes" ]]; then
-        log "Aborted before stashing front_end/data."
-        exit 1
-    fi
 
-    log "Stashing generated front_end/data files and retrying."
-    git stash push -u -m "server generated ranking data before deploy $(date '+%F %T')" -- front_end/data || true
+    prepare_generated_rankings_for_pull
     run git pull --ff-only
+    restore_generated_rankings_from_backup
 }
 
 check_python_files() {

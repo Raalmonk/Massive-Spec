@@ -33,6 +33,13 @@ dist
 .env
 tsconfig.tsbuildinfo
 
+# Runtime logs and generated server data
+*.log
+.runtime/
+.runtime-*/
+archives/
+front_end/data/spec_ranking_*.json
+
 # wip
 docs
 spell_data.json
