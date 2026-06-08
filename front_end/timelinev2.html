@@ -765,6 +765,7 @@
         };
 
         const getImportedLogsStorageKey = (bossSlug) => `m-spec:imported-logs:${bossSlug}`;
+        const getImportedLogRowId = (reportId, fightId, sourceId) => `import-${reportId}-${fightId}-${sourceId}`;
 
         const serializeImportedSpellSelections = (selections) => (
             Object.fromEntries(
@@ -775,10 +776,10 @@
             )
         );
 
-        const readStoredImportedLogs = (bossSlug) => {
+        const readStoredImportedLogCache = (bossSlug) => {
             try {
                 const raw = localStorage.getItem(getImportedLogsStorageKey(bossSlug));
-                if (!raw) return { rows: [], selections: {} };
+                if (!raw) return { rows: [], selections: {}, hiddenRowIds: new Set() };
                 const parsed = JSON.parse(raw);
                 const rows = Array.isArray(parsed.rows) ? parsed.rows : [];
                 const rowIds = new Set(rows.map(row => row.id));
@@ -790,25 +791,95 @@
                             new Set((Array.isArray(selectedIds) ? selectedIds : []).map(Number))
                         ])
                 );
-                return { rows, selections };
+                return {
+                    rows,
+                    selections,
+                    hiddenRowIds: new Set(
+                        (Array.isArray(parsed.hiddenRowIds) ? parsed.hiddenRowIds : []).filter(rowId => rowIds.has(rowId))
+                    )
+                };
             } catch (error) {
                 console.warn("[M-Spec] Could not read stored imported logs.", error);
-                return { rows: [], selections: {} };
+                return { rows: [], selections: {}, hiddenRowIds: new Set() };
             }
         };
 
-        const writeStoredImportedLogs = (bossSlug, rows, selections) => {
+        const readStoredImportedLogs = (bossSlug) => {
+            const cache = readStoredImportedLogCache(bossSlug);
+            return {
+                rows: cache.rows.filter(row => !cache.hiddenRowIds.has(row.id)),
+                selections: cache.selections,
+                hiddenRowIds: cache.hiddenRowIds
+            };
+        };
+
+        const parseImportLogUrlForCache = (url) => {
+            try {
+                const parsedUrl = new URL(url);
+                const reportMatch = parsedUrl.pathname.match(/\/reports\/([^/]+)/);
+                const fightRaw = parsedUrl.searchParams.get("fight");
+                if (!reportMatch || !/^\d+$/.test(String(fightRaw || ""))) return null;
+                return { reportId: reportMatch[1], fightId: Number(fightRaw) };
+            } catch (error) {
+                const reportMatch = String(url || "").match(/\/reports\/([A-Za-z0-9]+)/);
+                const fightMatch = String(url || "").match(/[?&]fight=(\d+)/);
+                if (!reportMatch || !fightMatch) return null;
+                return { reportId: reportMatch[1], fightId: Number(fightMatch[1]) };
+            }
+        };
+
+        const getSourceIdFromImportedRow = (row) => (
+            Number(row.sourceId || String(row.id || "").split("-").pop() || 0)
+        );
+
+        const getCachedImportPlayers = (bossSlug, url) => {
+            const importKey = parseImportLogUrlForCache(url);
+            if (!importKey) return null;
+            const cache = readStoredImportedLogCache(bossSlug);
+            const rows = cache.rows.filter(row => (
+                row.reportId === importKey.reportId
+                && Number(row.fightId) === Number(importKey.fightId)
+            ));
+            if (!rows.length) return null;
+            return {
+                report_id: importKey.reportId,
+                fight_id: importKey.fightId,
+                title: rows[0].title || "Cached FF Logs Pull",
+                cached: true,
+                players: rows.map(row => ({
+                    source_id: getSourceIdFromImportedRow(row),
+                    name: row.name,
+                    spec_slug: row.specSlug,
+                    cached: true
+                }))
+            };
+        };
+
+        const writeStoredImportedLogs = (bossSlug, rows, selections, options = {}) => {
             try {
                 const safeRows = Array.isArray(rows) ? rows : [];
+                const cache = readStoredImportedLogCache(bossSlug);
+                const rowMap = new Map(cache.rows.map(row => [row.id, row]));
+                safeRows.forEach(row => rowMap.set(row.id, row));
+                const allRows = [...rowMap.values()];
                 const key = getImportedLogsStorageKey(bossSlug);
-                if (!safeRows.length) {
+                if (!allRows.length) {
                     localStorage.removeItem(key);
                     return;
                 }
+                const hiddenRowIds = new Set(cache.hiddenRowIds);
+                (options.hideRowIds || []).forEach(rowId => hiddenRowIds.add(rowId));
+                (options.unhideRowIds || []).forEach(rowId => hiddenRowIds.delete(rowId));
+                const rowIds = new Set(allRows.map(row => row.id));
+                const mergedSelections = { ...cache.selections, ...(selections || {}) };
+                const safeSelections = Object.fromEntries(
+                    Object.entries(mergedSelections).filter(([rowId]) => rowIds.has(rowId))
+                );
                 localStorage.setItem(key, JSON.stringify({
-                    version: 1,
-                    rows: safeRows,
-                    selections: serializeImportedSpellSelections(selections)
+                    version: 2,
+                    rows: allRows,
+                    selections: serializeImportedSpellSelections(safeSelections),
+                    hiddenRowIds: [...hiddenRowIds].filter(rowId => rowIds.has(rowId))
                 }));
             } catch (error) {
                 console.warn("[M-Spec] Could not store imported logs.", error);
@@ -1935,6 +2006,12 @@
                 setImportMeta(null);
                 setImportLoading(true);
                 try {
+                    const cachedData = getCachedImportPlayers(selectedBoss, importUrl);
+                    if (cachedData) {
+                        setImportPlayers(cachedData.players || []);
+                        setImportMeta(cachedData);
+                        return;
+                    }
                     const data = await postImportLog("players", { url: importUrl });
                     setImportPlayers(data.players || []);
                     setImportMeta(data);
@@ -1949,14 +2026,38 @@
                 setImportError("");
                 setImportLoading(true);
                 try {
+                    const cachedRowId = importMeta?.report_id && importMeta?.fight_id
+                        ? getImportedLogRowId(importMeta.report_id, importMeta.fight_id, player.source_id)
+                        : null;
+                    if (cachedRowId) {
+                        const cache = readStoredImportedLogCache(selectedBoss);
+                        const cachedRow = cache.rows.find(row => row.id === cachedRowId);
+                        if (cachedRow) {
+                            const cachedSelection = cache.selections[cachedRowId]
+                                || new Set(getDefaultSelectedSpellIds(cachedRow.spells || {}, spellCategories));
+                            const nextImportedRows = [cachedRow, ...importedRows.filter(row => row.id !== cachedRow.id)];
+                            const nextImportedSelections = {
+                                ...importedSpellSelections,
+                                [cachedRow.id]: cachedSelection
+                            };
+                            setImportedRows(nextImportedRows);
+                            setImportedSpellSelections(nextImportedSelections);
+                            writeStoredImportedLogs(selectedBoss, nextImportedRows, nextImportedSelections, {
+                                unhideRowIds: [cachedRow.id]
+                            });
+                            setImportModalOpen(false);
+                            return;
+                        }
+                    }
                     const data = await postImportLog("casts", { url: importUrl, source_id: player.source_id });
                     const durationSeconds = (data.duration || 0) / 1000;
                     const specSpellMap = await fetchSpellData(data.player.spec_slug);
                     const importedSpells = mergeSpellMaps(specSpellMap, data.spells || {});
                     const importedRow = {
-                        id: `import-${data.report_id}-${data.fight_id}-${data.player.source_id}`,
+                        id: getImportedLogRowId(data.report_id, data.fight_id, data.player.source_id),
                         name: data.player.name,
                         specSlug: data.player.spec_slug,
+                        sourceId: data.player.source_id,
                         reportId: data.report_id,
                         fightId: data.fight_id,
                         title: data.title,
@@ -1986,7 +2087,9 @@
                     };
                     setImportedRows(nextImportedRows);
                     setImportedSpellSelections(nextImportedSelections);
-                    writeStoredImportedLogs(selectedBoss, nextImportedRows, nextImportedSelections);
+                    writeStoredImportedLogs(selectedBoss, nextImportedRows, nextImportedSelections, {
+                        unhideRowIds: [importedRow.id]
+                    });
                     setImportModalOpen(false);
                 } catch (error) {
                     setImportError(error.message || "Could not import player casts.");
@@ -2875,7 +2978,9 @@
                                                     delete nextImportedSelections[importedRow.id];
                                                     setImportedRows(nextImportedRows);
                                                     setImportedSpellSelections(nextImportedSelections);
-                                                    writeStoredImportedLogs(selectedBoss, nextImportedRows, nextImportedSelections);
+                                                    writeStoredImportedLogs(selectedBoss, nextImportedRows, nextImportedSelections, {
+                                                        hideRowIds: [importedRow.id]
+                                                    });
                                                     if (importSpellMenuRowId === importedRow.id) setImportSpellMenuRowId(null);
                                                 }}
                                                 className="ml-2 text-gray-500 hover:text-white"
