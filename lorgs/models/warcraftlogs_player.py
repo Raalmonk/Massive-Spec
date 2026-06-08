@@ -7,6 +7,7 @@ from typing import Optional
 # IMPORT LOCAL LIBRARIES
 from lorgs.clients import wcl
 from lorgs.limit_breaks import LIMIT_BREAKS
+from lorgs.limit_breaks import is_limit_break_spell_id
 from lorgs.models.warcraftlogs_actor import BaseActor
 from lorgs.models.wow_class import WowClass
 from lorgs.models.wow_spec import WowSpec
@@ -80,9 +81,13 @@ class Player(BaseActor):
         target_filter = get_filter("target")
 
         # Casts
-        casts_query = build_spell_query(*self.actor_type.all_spells, *LIMIT_BREAKS)
+        casts_query = build_spell_query(*self.actor_type.all_spells)
         if casts_query and source_filter:
             casts_query = f"{source_filter} and ({casts_query})"
+
+        # Limit Break is a raid event: every row should show it, regardless of who pressed it.
+        limit_break_query = build_spell_query(*LIMIT_BREAKS)
+        casts_query = self.combine_queries(casts_query, limit_break_query)
 
         # Auras
         auras_query = build_spell_query(*self.actor_type.all_buffs, *self.actor_type.all_debuffs)
@@ -172,3 +177,8 @@ class Player(BaseActor):
             event.abilityGameID = -1
 
         return super().process_event(event)
+
+    def should_include_cast_event(self, event: "wcl.ReportEvent", cast_actor_id: int) -> bool:
+        if event.type == "cast" and is_limit_break_spell_id(event.abilityGameID):
+            return True
+        return super().should_include_cast_event(event, cast_actor_id)

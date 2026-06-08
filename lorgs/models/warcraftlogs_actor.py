@@ -171,6 +171,10 @@ class BaseActor(warcraftlogs_base.BaseModel):
         """
         return event
 
+    def should_include_cast_event(self, event: wcl.ReportEvent, cast_actor_id: int) -> bool:
+        """Return whether a raw event belongs in this actor's cast list."""
+        return not self._has_source_id or cast_actor_id == self.source_id
+
     def set_source_id_from_events(self, casts: list[wcl.ReportEvent], force=False):
         """Set the Source ID from the cast data.
 
@@ -216,7 +220,7 @@ class BaseActor(warcraftlogs_base.BaseModel):
                 cast_actor_id = cast_data.targetID
 
             # Skip if the Source ID doesn't match
-            if self._has_source_id and (cast_actor_id != self.source_id):
+            if not self.should_include_cast_event(cast_data, cast_actor_id):
                 continue
 
             # create the cast object

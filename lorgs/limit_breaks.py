@@ -41,3 +41,8 @@ LIMIT_BREAKS = [
 ]
 
 LIMIT_BREAK_SPELL_BY_ID = {spell.spell_id: spell for spell in LIMIT_BREAKS}
+LIMIT_BREAK_SPELL_IDS = set(LIMIT_BREAK_SPELL_BY_ID)
+
+
+def is_limit_break_spell_id(spell_id: int) -> bool:
+    return spell_id in LIMIT_BREAK_SPELL_IDS
