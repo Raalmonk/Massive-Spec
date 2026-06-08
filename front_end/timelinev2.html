@@ -2067,7 +2067,11 @@
                 });
                 if (!res.ok) {
                     const text = await res.text();
-                    throw new Error(text || `Import failed (${res.status})`);
+                    let message = text || `Import failed (${res.status})`;
+                    try {
+                        message = JSON.parse(text).detail || message;
+                    } catch (e) {}
+                    throw new Error(message);
                 }
                 return res.json();
             };

@@ -3,6 +3,13 @@
 from __future__ import annotations
 
 import re
+import json
+import os
+import time
+from contextlib import contextmanager
+from datetime import datetime
+from datetime import timezone
+from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs
 from urllib.parse import urlparse
@@ -14,6 +21,62 @@ from lorgs.clients.wcl import InvalidReport
 from lorgs.models.warcraftlogs_report import Report
 
 router = fastapi.APIRouter(tags=["import_log"], prefix="/import_log")
+IMPORT_LOG_HOURLY_LIMIT = int(os.getenv("MSPEC_IMPORT_LOG_HOURLY_LIMIT", "2500"))
+IMPORT_LOG_LIMIT_MESSAGE = "正在使用的玩家过多，请稍后"
+RUNTIME_DIR = Path(os.getenv("MSPEC_RUNTIME_DIR", ".runtime"))
+IMPORT_LOG_RATE_STATE_PATH = RUNTIME_DIR / "import_log_rate_limit.json"
+IMPORT_LOG_RATE_LOCK_PATH = RUNTIME_DIR / "import_log_rate_limit.lock"
+
+
+@contextmanager
+def import_log_rate_lock():
+    """Cross-process lock for the import-log hourly counter."""
+    RUNTIME_DIR.mkdir(parents=True, exist_ok=True)
+    with IMPORT_LOG_RATE_LOCK_PATH.open("a+b") as lock_file:
+        if os.name == "nt":
+            import msvcrt
+
+            msvcrt.locking(lock_file.fileno(), msvcrt.LK_LOCK, 1)
+            try:
+                yield
+            finally:
+                lock_file.seek(0)
+                msvcrt.locking(lock_file.fileno(), msvcrt.LK_UNLCK, 1)
+        else:
+            import fcntl
+
+            fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
+            try:
+                yield
+            finally:
+                fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
+
+
+def check_import_log_hourly_limit() -> None:
+    """Allow at most IMPORT_LOG_HOURLY_LIMIT import-log backend queries per UTC hour."""
+    if IMPORT_LOG_HOURLY_LIMIT <= 0:
+        return
+
+    hour_key = datetime.now(timezone.utc).strftime("%Y%m%d%H")
+    with import_log_rate_lock():
+        state = {"hour": hour_key, "count": 0}
+        if IMPORT_LOG_RATE_STATE_PATH.exists():
+            try:
+                state = json.loads(IMPORT_LOG_RATE_STATE_PATH.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                state = {"hour": hour_key, "count": 0}
+
+        if state.get("hour") != hour_key:
+            state = {"hour": hour_key, "count": 0}
+
+        count = int(state.get("count") or 0)
+        if count >= IMPORT_LOG_HOURLY_LIMIT:
+            raise fastapi.HTTPException(status_code=429, detail=IMPORT_LOG_LIMIT_MESSAGE)
+
+        IMPORT_LOG_RATE_STATE_PATH.write_text(
+            json.dumps({"hour": hour_key, "count": count + 1, "updated_at": int(time.time())}),
+            encoding="utf-8",
+        )
 
 
 class ImportLogRequest(pydantic.BaseModel):
@@ -64,6 +127,7 @@ async def load_fight_from_url(url: str):
 @router.post("/players")
 async def list_import_log_players(payload: ImportLogRequest) -> dict[str, Any]:
     """List player choices for the fight in a pasted FF Logs URL."""
+    check_import_log_hourly_limit()
     report, fight = await load_fight_from_url(payload.url)
     players = [
         {
@@ -90,6 +154,7 @@ async def list_import_log_players(payload: ImportLogRequest) -> dict[str, Any]:
 @router.post("/casts")
 async def load_import_log_casts(payload: ImportLogCastsRequest) -> dict[str, Any]:
     """Load one selected player's casts for the fight in a pasted FF Logs URL."""
+    check_import_log_hourly_limit()
     report, fight = await load_fight_from_url(payload.url)
     player = fight.get_player(source_id=payload.source_id)
     if not player:
