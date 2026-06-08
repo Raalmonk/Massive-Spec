@@ -2586,10 +2586,16 @@
                                                     {row.isCombined ? "Pair" : "Buddy"}
                                                 </div>
                                                 <div className="flex h-full min-w-0 flex-1 items-center">
-                                                    <BuddyNameCell
-                                                        name={buddy.name}
-                                                        dps={buddy.dps || 0}
-                                                    />
+                                                    {row.isCombined ? (
+                                                        <div className="min-w-0 truncate text-xs font-bold text-gray-600">
+                                                            {buddy.name}
+                                                        </div>
+                                                    ) : (
+                                                        <BuddyNameCell
+                                                            name={buddy.name}
+                                                            dps={buddy.dps || 0}
+                                                        />
+                                                    )}
                                                 </div>
                                                 <div className="w-8 ml-1"></div>
                                                 <div className="w-8 ml-1 flex justify-center items-center">

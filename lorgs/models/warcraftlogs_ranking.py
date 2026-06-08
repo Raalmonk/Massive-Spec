@@ -39,6 +39,8 @@ RANKING_REGION_LIMITS = {
     "kr": 10,
 }
 
+RANKING_PARTITIONS = tuple(range(1, 11))
+
 
 class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
     # Fields
@@ -110,7 +112,6 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         difficulty_id = DIFFICULTY_IDS.get(self.difficulty) or 101
 
         real_class_name = "Global"
-        cn_class_name = "Global"
         spec_name = self.spec.name_slug_cap
 
         # 2. 定义查询构建函数 (支持传入不同的 class_name)
@@ -127,15 +128,18 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             """
 
         # 3. 组合查询：Global 用具体名，CN 用 "Global"
+        partition_queries = "\n".join(
+            f"p{partition}: {build_rankings_query(real_class_name, f'partition: {partition}')}"
+            for partition in RANKING_PARTITIONS
+        )
+
         return textwrap.dedent(
             f"""\
         worldData
         {{
             encounter(id: {self.boss.id})
             {{
-                global: {build_rankings_query(real_class_name, 'partition: 7')}
-                cn: {build_rankings_query(cn_class_name, 'partition: 3, serverRegion: "CN"')}
-                kr: {build_rankings_query(real_class_name, 'partition: 5')}
+                {partition_queries}
             }}
         }}
         """
@@ -237,21 +241,40 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         def valid_rankings(rankings: list[wcl.CharacterRanking]) -> list[wcl.CharacterRanking]:
             return [ranking for ranking in rankings if not ranking.hidden and ranking.report]
 
-        global_data = encounter_data.get("global", {})
-        global_rankings = [
-            ranking
-            for ranking in valid_rankings(wcl.CharacterRankings(**global_data).rankings)
-            if ranking.server.region not in ("CN", "KR")
-        ][: RANKING_REGION_LIMITS["global"]]
+        ranking_by_key: dict[tuple[str, int, str], wcl.CharacterRanking] = {}
+        for partition in RANKING_PARTITIONS:
+            partition_data = encounter_data.get(f"p{partition}", {})
+            for ranking in valid_rankings(wcl.CharacterRankings(**partition_data).rankings):
+                report = ranking.report
+                key = (report.code, report.fightID, ranking.name)
+                old_ranking = ranking_by_key.get(key)
+                if old_ranking is None or ranking.amount > old_ranking.amount:
+                    ranking_by_key[key] = ranking
 
-        cn_data = encounter_data.get("cn", {})
-        cn_rankings = valid_rankings(wcl.CharacterRankings(**cn_data).rankings)[: RANKING_REGION_LIMITS["cn"]]
+        regional_rankings: dict[str, list[wcl.CharacterRanking]] = {
+            "global": [],
+            "cn": [],
+            "kr": [],
+        }
+        for ranking in ranking_by_key.values():
+            region = ranking.server.region
+            if region == "CN":
+                regional_rankings["cn"].append(ranking)
+            elif region == "KR":
+                regional_rankings["kr"].append(ranking)
+            else:
+                regional_rankings["global"].append(ranking)
+
+        for rankings in regional_rankings.values():
+            rankings.sort(key=lambda ranking: ranking.amount, reverse=True)
+
+        global_rankings = regional_rankings["global"][: RANKING_REGION_LIMITS["global"]]
+        cn_rankings = regional_rankings["cn"][: RANKING_REGION_LIMITS["cn"]]
 
         if cn_rankings:
             logger.info(f"[CN Data Check] First CN Player: {cn_rankings[0].name}")
 
-        kr_data = encounter_data.get("kr", {})
-        kr_rankings = valid_rankings(wcl.CharacterRankings(**kr_data).rankings)[: RANKING_REGION_LIMITS["kr"]]
+        kr_rankings = regional_rankings["kr"][: RANKING_REGION_LIMITS["kr"]]
 
         rankings = global_rankings + cn_rankings + kr_rankings
         logger.info(
