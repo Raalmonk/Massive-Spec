@@ -39,7 +39,7 @@ WHITE_MAGE_MAIN.add_spell(spell_id=25861, cooldown=60, duration=8, name="Aquavei
 WHITE_MAGE_MAIN.add_spell(spell_id=7432, cooldown=30, name="Divine Benison", show=False,icon="Divine_Benison.png", tags=[SpellTag.DEFENSIVE])
 WHITE_MAGE_MAIN.add_spell(spell_id=16531, cooldown=0, name="Afflatus_Solace", show=False,icon="Afflatus_Solace.png", tags=[SpellTag.DEFENSIVE])
 WHITE_MAGE_MAIN.add_spell(spell_id=135, cooldown=0, name="Cure II", show=False,icon="Cure_II.png", tags=[SpellTag.DEFENSIVE])
-WHITE_MAGE_MAIN.add_spell(spell_id=1000158, cooldown=0, name="Regen", duration = 18,show=False,icon="Regen.png", tags=[SpellTag.DEFENSIVE])
+WHITE_MAGE_MAIN.add_spell(spell_id=137, cooldown=0, name="Regen", duration = 18,show=False,icon="Regen.png", tags=[SpellTag.DEFENSIVE])
 # Party Mitigation
 WHITE_MAGE_MAIN.add_spell(spell_id=25862, cooldown=180,  name="Liturgy of the Bell", show=True,icon="Liturgy_of_the_Bell.png", tags=[SpellTag.RAID_CD])
 WHITE_MAGE_MAIN.add_spell(spell_id=16536, cooldown=120, duration=20, name="Temperance", show=True,icon="Temperance.png", tags=[SpellTag.RAID_CD])

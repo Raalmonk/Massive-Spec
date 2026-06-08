@@ -104,6 +104,32 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
 
         return sorted(reports, key=get_total, reverse=True)
 
+    @staticmethod
+    def normalize_region(region: str) -> str:
+        """Normalize FF Logs server region labels across global and localized endpoints."""
+        normalized = (region or "").strip()
+        region_map = {
+            "\u56fd\u670d": "CN",
+            "\u570b\u670d": "CN",
+            "\u4e2d\u570b\u670d": "CN",
+            "\u4e2d\u56fd\u670d": "CN",
+            "\uc911\uad6d": "CN",
+            "\u5317\u7f8e\u670d": "NA",
+            "\u5317\u7c73": "NA",
+            "\ubd81\ubbf8": "NA",
+            "\u6b27\u6d32\u670d": "EU",
+            "\u6b50\u6d32\u670d": "EU",
+            "\u6b27\u5dde": "EU",
+            "\uc720\ub7fd": "EU",
+            "\u65e5\u672c\u670d": "JP",
+            "\u65e5\u672c": "JP",
+            "\uc77c\ubcf8": "JP",
+            "\u97e9\u56fd\u670d": "KR",
+            "\u97d3\u570b": "KR",
+            "\ud55c\uad6d": "KR",
+        }
+        return region_map.get(normalized, normalized.upper())
+
     ############################################################################
     # Query: Rankings
     #
@@ -219,13 +245,13 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             report_id=report_data.code,
             start_time=report_data.startTime,
             fights=[fight],
-            region=ranking_data.server.region,
+            region=self.normalize_region(ranking_data.server.region),
         )
         self.reports.append(report)
 
     def add_new_fights(self, rankings: list[wcl.CharacterRanking]):
         """Add new Fights."""
-        old_reports = self.get_old_reports()
+        old_reports = set(self.get_old_reports())
 
         for ranking_data in rankings:
             report_data = ranking_data.report
@@ -233,23 +259,29 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             if key in old_reports:
                 continue
             self.add_new_fight(ranking_data)
+            old_reports.add(key)
 
     def process_query_result(self, **query_result: typing.Any):
         """Process the Ranking Results."""
-        encounter_data = query_result.get("worldData", {}).get("encounter", {})
+        self.process_query_results(query_result)
+
+    def process_query_results(self, *query_results: typing.Any):
+        """Process and merge ranking results from one or more FF Logs endpoints."""
 
         def valid_rankings(rankings: list[wcl.CharacterRanking]) -> list[wcl.CharacterRanking]:
             return [ranking for ranking in rankings if not ranking.hidden and ranking.report]
 
         ranking_by_key: dict[tuple[str, int, str], wcl.CharacterRanking] = {}
-        for partition in RANKING_PARTITIONS:
-            partition_data = encounter_data.get(f"p{partition}", {})
-            for ranking in valid_rankings(wcl.CharacterRankings(**partition_data).rankings):
-                report = ranking.report
-                key = (report.code, report.fightID, ranking.name)
-                old_ranking = ranking_by_key.get(key)
-                if old_ranking is None or ranking.amount > old_ranking.amount:
-                    ranking_by_key[key] = ranking
+        for query_result in query_results:
+            encounter_data = query_result.get("worldData", {}).get("encounter", {})
+            for partition in RANKING_PARTITIONS:
+                partition_data = encounter_data.get(f"p{partition}", {})
+                for ranking in valid_rankings(wcl.CharacterRankings(**partition_data).rankings):
+                    report = ranking.report
+                    key = (report.code, report.fightID, ranking.name)
+                    old_ranking = ranking_by_key.get(key)
+                    if old_ranking is None or ranking.amount > old_ranking.amount:
+                        ranking_by_key[key] = ranking
 
         regional_rankings: dict[str, list[wcl.CharacterRanking]] = {
             "global": [],
@@ -257,7 +289,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             "kr": [],
         }
         for ranking in ranking_by_key.values():
-            region = ranking.server.region
+            region = self.normalize_region(ranking.server.region)
             if region == "CN":
                 regional_rankings["cn"].append(ranking)
             elif region == "KR":
@@ -287,11 +319,14 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         self.add_new_fights(rankings)
         self.post_init()
 
-    async def load_rankings(self) -> None:
+    async def load_rankings(self, regions: Optional[typing.Iterable[str]] = None) -> None:
         """Fetch the current Ranking Data"""
         query = self.get_query()
-        result = await self.client.query(query)
-        self.process_query_result(**result)
+        query_results = []
+        for region in regions or ("",):
+            result = await self.client.query(query, region=region)
+            query_results.append(result)
+        self.process_query_results(*query_results)
 
     def _build_report_metric_totals_query(self, report: Report) -> str:
         fight_ids = sorted({fight.fight_id for fight in report.fights if fight.fight_id})
@@ -476,7 +511,12 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
     ############################################################################
     # Query: Both
     #
-    async def load(self, limit=50, clear_old=False) -> None:
+    async def load(
+        self,
+        limit=50,
+        clear_old=False,
+        ranking_regions: Optional[typing.Iterable[str]] = None,
+    ) -> None:
         """Get Top Ranks for a given boss and spec."""
         logger.info(f"--- [v4-FINAL] LOADING WITH STRICT MANIFEST (No-Compromise) ---") 
         logger.info(f"{self.boss.name} vs. {self.spec.name} {self.spec.wow_class.name} START | limit={limit} | clear_old={clear_old}")
@@ -485,7 +525,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             self.reports = []
 
         # 1. Load Rankings (绝对真理)
-        await self.load_rankings()
+        await self.load_rankings(regions=ranking_regions)
         self.reports = self.sort_reports(self.reports)
 
         # ============================================================

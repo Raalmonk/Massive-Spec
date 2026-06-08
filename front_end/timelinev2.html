@@ -265,6 +265,13 @@
                 invalidFflogsCredentials: 'Your FF Logs client ID or client secret may be incorrect. Please re-enter them.',
                 importUrlHelp: 'Paste a full FF Logs report URL with a numeric fight value, for example fight=9. Do not use fight=last. Open the specific pull in FF Logs first, then copy the URL after the pull number appears.',
                 numericFightError: 'The FF Logs URL must include a numeric fight value, such as fight=9. fight=last is not supported. Open that pull in FF Logs first, then copy the URL after it changes to a number.',
+                importRateLimitError: 'Too many players are importing right now. Please wait until the next hourly quota refresh, or use your own FF Logs API client.',
+                missingReportIdError: 'Could not find a report ID in the URL. Paste the full FF Logs report link starting with https://.',
+                reportNotFoundError: 'Report not found. Check that the link is correct and visible to FF Logs.',
+                noReportPermissionError: 'M-Spec does not have permission to view this report. Make the report public or use a client that can access it.',
+                fightNotFoundError: 'Fight not found in this report. Open the exact pull in FF Logs and copy the URL after fight becomes a number.',
+                playerNotFoundError: 'Player not found in this fight. Reload the player list and choose again.',
+                importGenericError: 'Import failed. Please try again later.',
                 role_Tanks: 'Tanks',
                 role_Healers: 'Healers',
                 role_Melee: 'Melee',
@@ -354,6 +361,13 @@
                 invalidFflogsCredentials: '你的 FF Logs client ID 或 client secret 可能有问题，请重新输入。',
                 importUrlHelp: '请粘贴完整 FF Logs 链接，并且 fight 必须是数字，例如 fight=9。不要用 fight=last。解决办法：先在 FF Logs 里点进这一 pull，再复制地址栏里已经变成数字的链接。',
                 numericFightError: 'FF Logs 链接必须包含数字 fight，例如 fight=9。不能使用 fight=last。请先在 FF Logs 里点进这一 pull，再复制地址栏里变成数字后的链接。',
+                importRateLimitError: '正在使用导入功能的玩家过多。请等到下一个整点额度刷新，或使用自己的 FF Logs API client。',
+                missingReportIdError: '链接里找不到 report ID。请粘贴完整 FF Logs 链接，必须包含前面的 https://。',
+                reportNotFoundError: '找不到这份 Log。请检查链接是否正确，以及 FF Logs 上是否可见。',
+                noReportPermissionError: 'M-Spec 没有权限读取这份 Log。请把 Log 设为公开，或使用有权限读取它的 client。',
+                fightNotFoundError: '这份 Log 里找不到这一 pull。请在 FF Logs 里点进具体 pull，等地址里的 fight 变成数字后再复制。',
+                playerNotFoundError: '这一 pull 里找不到这个玩家。请重新加载玩家列表再选择。',
+                importGenericError: '导入失败，请稍后再试。',
                 role_Tanks: '坦克',
                 role_Healers: '治疗',
                 role_Melee: '近战',
@@ -443,6 +457,13 @@
                 invalidFflogsCredentials: 'FF Logs client ID または client secret が間違っている可能性があります。再入力してください。',
                 importUrlHelp: '数字の fight を含む完全な FF Logs URL を貼り付けてください。例: fight=9。fight=last は使えません。FF Logs で該当 pull を開き、URL が数字になってからコピーしてください。',
                 numericFightError: 'FF Logs URL には fight=9 のような数字の fight が必要です。fight=last は使えません。FF Logs で該当 pull を開き、URL が数字になってからコピーしてください。',
+                importRateLimitError: '現在インポート機能の利用者が多すぎます。次の正時に共有枠が更新されるまで待つか、自分の FF Logs API client を使用してください。',
+                missingReportIdError: 'URL から report ID を取得できません。https:// から始まる完全な FF Logs レポート URL を貼り付けてください。',
+                reportNotFoundError: 'レポートが見つかりません。リンクが正しいか、FF Logs 上で閲覧可能か確認してください。',
+                noReportPermissionError: 'M-Spec にはこのレポートを閲覧する権限がありません。レポートを公開するか、閲覧権限のある client を使用してください。',
+                fightNotFoundError: 'このレポート内に該当 pull が見つかりません。FF Logs で対象 pull を開き、fight が数字になってから URL をコピーしてください。',
+                playerNotFoundError: 'この pull 内に該当プレイヤーが見つかりません。プレイヤー一覧を再読み込みして選び直してください。',
+                importGenericError: 'インポートに失敗しました。しばらくしてから再試行してください。',
                 role_Tanks: 'タンク',
                 role_Healers: 'ヒーラー',
                 role_Melee: '近接',
@@ -532,6 +553,13 @@
                 invalidFflogsCredentials: 'FF Logs client ID 또는 client secret 이 잘못되었을 수 있습니다. 다시 입력해 주세요.',
                 importUrlHelp: '숫자 fight 값이 포함된 전체 FF Logs URL 을 붙여넣으세요. 예: fight=9. fight=last 는 사용할 수 없습니다. FF Logs 에서 해당 pull 을 먼저 연 뒤, URL 이 숫자로 바뀐 후 복사하세요.',
                 numericFightError: 'FF Logs URL 에는 fight=9 처럼 숫자 fight 값이 필요합니다. fight=last 는 사용할 수 없습니다. FF Logs 에서 해당 pull 을 먼저 연 뒤, URL 이 숫자로 바뀐 후 복사하세요.',
+                importRateLimitError: '현재 가져오기 기능을 사용하는 플레이어가 너무 많습니다. 다음 정시에 공용 한도가 갱신될 때까지 기다리거나 본인의 FF Logs API client 를 사용해 주세요.',
+                missingReportIdError: 'URL 에서 report ID 를 찾을 수 없습니다. https:// 로 시작하는 전체 FF Logs 리포트 링크를 붙여넣어 주세요.',
+                reportNotFoundError: '리포트를 찾을 수 없습니다. 링크가 올바른지, FF Logs 에서 볼 수 있는지 확인해 주세요.',
+                noReportPermissionError: 'M-Spec 에 이 리포트를 볼 권한이 없습니다. 리포트를 공개하거나 접근 권한이 있는 client 를 사용해 주세요.',
+                fightNotFoundError: '이 리포트에서 해당 pull 을 찾을 수 없습니다. FF Logs 에서 정확한 pull 을 열고 fight 가 숫자로 바뀐 뒤 URL 을 복사해 주세요.',
+                playerNotFoundError: '이 pull 에서 해당 플레이어를 찾을 수 없습니다. 플레이어 목록을 다시 불러온 뒤 선택해 주세요.',
+                importGenericError: '가져오기에 실패했습니다. 잠시 후 다시 시도해 주세요.',
                 role_Tanks: '탱커',
                 role_Healers: '힐러',
                 role_Melee: '근접',
@@ -2274,11 +2302,19 @@
 
             const getImportErrorMessage = (error) => {
                 const message = error?.message || "";
+                const normalizedMessage = message.toLowerCase();
                 const usingUserCredentials = Boolean(userFflogsCredentials.clientId && userFflogsCredentials.clientSecret);
                 if (usingUserCredentials && [401, 403, 500].includes(error?.status)) return t("invalidFflogsCredentials");
-                if (usingUserCredentials && message.toLowerCase().includes("internal server error")) return t("invalidFflogsCredentials");
-                if (message.includes("numeric fight query parameter")) return t("numericFightError");
-                return message;
+                if (usingUserCredentials && normalizedMessage.includes("internal server error")) return t("invalidFflogsCredentials");
+                if (error?.status === 429 || message.includes("正在使用的玩家过多") || message.includes("IMPORT_LOG_RATE_LIMITED")) return t("importRateLimitError");
+                if (normalizedMessage.includes("numeric fight query parameter")) return t("numericFightError");
+                if (normalizedMessage.includes("could not find report id")) return t("missingReportIdError");
+                if (normalizedMessage.includes("report not found")) return t("reportNotFoundError");
+                if (normalizedMessage.includes("no permission")) return t("noReportPermissionError");
+                if (normalizedMessage.includes("fight not found")) return t("fightNotFoundError");
+                if (normalizedMessage.includes("player not found")) return t("playerNotFoundError");
+                if (normalizedMessage.includes("internal server error")) return t("importGenericError");
+                return message || t("importGenericError");
             };
 
             const handleLoadImportPlayers = async () => {
@@ -2307,7 +2343,7 @@
                         setManualFflogsClientId(previousClientId);
                         setManualFflogsClientSecret("");
                     }
-                    setImportError(getImportErrorMessage(error) || "Could not load players.");
+                    setImportError(getImportErrorMessage(error) || t("importGenericError"));
                 } finally {
                     setImportLoading(false);
                 }
@@ -2392,7 +2428,7 @@
                         setManualFflogsClientId(previousClientId);
                         setManualFflogsClientSecret("");
                     }
-                    setImportError(getImportErrorMessage(error) || "Could not import player casts.");
+                    setImportError(getImportErrorMessage(error) || t("importGenericError"));
                 } finally {
                     setImportLoading(false);
                 }

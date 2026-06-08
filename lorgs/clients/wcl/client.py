@@ -91,6 +91,7 @@ class WarcraftlogsClient(BaseClient):
     # FF Logs API v2 Endpoints
     URL_API = "https://www.fflogs.com/api/v2/client"
     URL_API_CN = "https://cn.fflogs.com/api/v2/client"
+    URL_API_KR = "https://ko.fflogs.com/api/v2/client"
     URL_AUTH = "https://www.fflogs.com/oauth/token"
 
     def __init__(self, client_id: str = "", client_secret: str = "", auth_token: str = "") -> None:
@@ -184,7 +185,12 @@ class WarcraftlogsClient(BaseClient):
         gql_query = f"query {{ {query} }}"
 
         # 1. Select URL
-        url = self.URL_API_CN if region == "CN" else self.URL_API
+        region = (region or "").upper()
+        regional_urls = {
+            "CN": self.URL_API_CN,
+            "KR": self.URL_API_KR,
+        }
+        url = regional_urls.get(region, self.URL_API)
 
         try:
             # 2. Run
@@ -197,15 +203,19 @@ class WarcraftlogsClient(BaseClient):
             return result.get("data", {})  # type: ignore
 
         except InvalidReport:
-            # 3. Retry on CN
+            # 3. Retry regional FF Logs endpoints when a report is absent on the global endpoint.
             if not region and url == self.URL_API:
-                logger.info("[WCL] Report not found on Global. Retrying on CN endpoint...")
-                result = await super().query(self.URL_API_CN, gql_query)
+                for retry_region, retry_url in regional_urls.items():
+                    try:
+                        logger.info("[WCL] Report not found on Global. Retrying on %s endpoint...", retry_region)
+                        result = await super().query(retry_url, gql_query)
 
-                if raise_errors:
-                    self.raise_errors(result)
+                        if raise_errors:
+                            self.raise_errors(result)
 
-                return result.get("data", {})
+                        return result.get("data", {})
+                    except InvalidReport:
+                        continue
             raise
 
     async def multiquery(self, queries: list[str], raise_errors=True) -> list[typing.Any]:

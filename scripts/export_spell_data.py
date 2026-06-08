@@ -1,5 +1,6 @@
 import sys
 import os
+import json
 
 # --- 🟢 必须最先执行：设置 AWS 假环境变量 ---
 # 只有先设置了这些，后面导入 lorgs 时 boto3 才不会报错

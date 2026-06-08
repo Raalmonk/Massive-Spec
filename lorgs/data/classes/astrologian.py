@@ -39,6 +39,7 @@ ASTROLOGIAN_MAIN.add_spell(spell_id=7444, cooldown=1, name="Lord of Crowns", ico
 ASTROLOGIAN_MAIN.add_spell(spell_id=3614, cooldown=40, name="Essential Dignity", icon="Essential_Dignity.png",show=False, tags=[SpellTag.DEFENSIVE])
 ASTROLOGIAN_MAIN.add_spell(spell_id=25873, cooldown=60, duration=8, name="Exaltation", icon="Exaltation.png", show=False,tags=[SpellTag.DEFENSIVE])
 ASTROLOGIAN_MAIN.add_spell(spell_id=16556, cooldown=30, name="Celestial Intersection", icon="Celestial_Intersection.png", show=False,tags=[SpellTag.DEFENSIVE])
+ASTROLOGIAN_MAIN.add_spell(spell_id=1000846, cooldown=120, duration=20, name="Synastry", icon="Synastry.png", show=False,tags=[SpellTag.DEFENSIVE])
 ASTROLOGIAN_MAIN.add_spell(spell_id=3595, cooldown=0, duation=15,name="Aspected Benefic", icon="Aspected_Benefic.png", show=False,tags=[SpellTag.DEFENSIVE])
 ASTROLOGIAN_MAIN.add_spell(spell_id=3610, cooldown=0, duation=0,name="Benefic II", icon="Benefic_II.png", show=False,tags=[SpellTag.DEFENSIVE])
 

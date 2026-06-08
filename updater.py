@@ -69,6 +69,7 @@ BOSS_CONFIG = {
 }
 
 DEFAULT_METRIC = "rdps"
+DEFAULT_RANKING_REGIONS = ("", "CN", "KR")
 
 
 async def _do_update_spec(spec, boss_slug, timestamp_folder):
@@ -77,6 +78,7 @@ async def _do_update_spec(spec, boss_slug, timestamp_folder):
     config = BOSS_CONFIG.get(boss_slug, {})
     difficulty = config.get("difficulty", "mythic")
     metric = config.get("metric", DEFAULT_METRIC)
+    ranking_regions = config.get("ranking_regions", DEFAULT_RANKING_REGIONS)
     
     # 1. 获取排名数据 (网络请求) - 保持不变
     ranking = SpecRanking.get_or_create(
@@ -87,7 +89,7 @@ async def _do_update_spec(spec, boss_slug, timestamp_folder):
     )
     
     # 这里的 clear_old=True 配合我们之前的讨论，保证数据纯净
-    await ranking.load(limit=100, clear_old=True)
+    await ranking.load(limit=100, clear_old=True, ranking_regions=ranking_regions)
     
     # 2. 序列化数据 - 保持不变
     data = ranking.model_dump(exclude_unset=True, by_alias=True)

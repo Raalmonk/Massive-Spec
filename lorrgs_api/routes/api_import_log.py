@@ -26,7 +26,7 @@ from lorgs.models.warcraftlogs_report import Report
 
 router = fastapi.APIRouter(tags=["import_log"], prefix="/import_log")
 IMPORT_LOG_HOURLY_LIMIT = int(os.getenv("MSPEC_IMPORT_LOG_HOURLY_LIMIT", "2500"))
-IMPORT_LOG_LIMIT_MESSAGE = "正在使用的玩家过多，请稍后"
+IMPORT_LOG_LIMIT_MESSAGE = "IMPORT_LOG_RATE_LIMITED"
 RUNTIME_DIR = Path(os.getenv("MSPEC_RUNTIME_DIR", ".runtime"))
 IMPORT_LOG_RATE_STATE_PATH = RUNTIME_DIR / "import_log_rate_limit.json"
 IMPORT_LOG_RATE_LOCK_PATH = RUNTIME_DIR / "import_log_rate_limit.lock"
