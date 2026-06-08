@@ -36,3 +36,7 @@ tsconfig.tsbuildinfo
 # wip
 docs
 spell_data.json
+
+################
+# Generated frontend ranking data
+front_end/data/spec_ranking_*.json
