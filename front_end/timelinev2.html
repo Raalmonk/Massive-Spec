@@ -102,6 +102,7 @@
         const DRAG_THRESHOLD = 6;
         const MIN_ZOOM = 1;
         const MAX_ZOOM = 100;
+        const LIMIT_BREAK_ICON = './images/spells/Limit_Break.png';
 
         // Palette for Duration Bars (Sequential assignment)
         const DURATION_PALETTE = [
@@ -109,6 +110,63 @@
             '#34D399', '#22D3EE', '#60A5FA', '#818CF8', 
             '#A78BFA', '#E879F9', '#FB7185', '#F472B6'
         ];
+
+        const LIMIT_BREAK_SPELLS = {
+            197: "Shield Wall",
+            198: "Stronghold",
+            199: "Last Bastion",
+            200: "Braver",
+            201: "Bladedance",
+            202: "Final Heaven",
+            203: "Skyshard",
+            204: "Starstorm",
+            205: "Meteor",
+            206: "Healing Wind",
+            207: "Breath of the Earth",
+            208: "Pulse of Life",
+            4238: "Big Shot",
+            4239: "Desperado",
+            4240: "Land Waker",
+            4241: "Dark Force",
+            4242: "Dragonsong Dive",
+            4243: "Chimatsuri",
+            4244: "Sagittarius Arrow",
+            4245: "Satellite Beam",
+            4246: "Teraflare",
+            4247: "Angel Feathers",
+            4248: "Astral Stasis",
+            7861: "Doom of the Living",
+            7862: "Vermilion Scourge",
+            17105: "Gunmetal Soul",
+            17106: "Crimson Lotus",
+            24858: "The End",
+            24859: "Techne Makre",
+            34866: "World-swallower",
+            34867: "Chromatic Fantasy"
+        };
+        const LIMIT_BREAK_IDS = new Set(Object.keys(LIMIT_BREAK_SPELLS).map(Number));
+        const isLimitBreakSpellId = (spellId) => LIMIT_BREAK_IDS.has(Number(spellId));
+        const getLimitBreakSpell = (spellId) => ({
+            id: Number(spellId),
+            name: LIMIT_BREAK_SPELLS[Number(spellId)] || `Limit Break ${spellId}`,
+            image: LIMIT_BREAK_ICON,
+            cd: 0,
+            duration: 0,
+            color: '#f59e0b',
+            category: 'LIMIT_BREAK',
+            show: true
+        });
+
+        const BOSS_TIMELINE_TYPES = {
+            mech: { label: 'Mech', color: '#facc15' },
+            tb: { label: 'TB', color: '#60a5fa' },
+            aoe: { label: 'AOE', color: '#fb923c' }
+        };
+        const normalizeBossTimelineType = (type) => {
+            const normalized = String(type || 'mech').toLowerCase();
+            return normalized === 'mechanic' ? 'mech' : normalized;
+        };
+        const getBossTimelineColor = (type, color) => color || BOSS_TIMELINE_TYPES[type]?.color || BOSS_TIMELINE_TYPES.mech.color;
 
         // --- Mock Data Layer ---
         const fetchSpellCategories = async () => ({
@@ -257,6 +315,7 @@
         const mergeSpellMaps = (baseSpells, observedSpells) => {
             const merged = { ...baseSpells };
             Object.entries(observedSpells || {}).forEach(([spellId, spell]) => {
+                if (isLimitBreakSpellId(spellId)) return;
                 const base = merged[spellId] || {};
                 merged[spellId] = {
                     ...spell,
@@ -398,7 +457,8 @@
                     timestamp: c.ts ? c.ts / 1000 : (c.timestamp || 0),
                     duration: c.duration || (durationSpellMap[c.spell_id] ? durationSpellMap[c.spell_id].duration : 0),
                     specSlug: ownerSpecSlug,
-                    ownerName
+                    ownerName,
+                    isLimitBreak: isLimitBreakSpellId(c.spell_id)
                 }));
 
                 if (combinedConfig) {
@@ -589,15 +649,19 @@
                 
                 const list = Array.isArray(data) ? data : Object.values(data);
 
-                return list.map(spell => ({
-                    id: spell.id || spell.spell_id,
-                    name: spell.name || 'Unknown',
-                    time: (spell.time > 10000) ? (spell.time / 1000) : (spell.time || spell.timestamp || 0),
-                    duration: spell.duration || 0,
-                    color: spell.color || '#ff4444', 
-                    icon: spell.icon ? `./images/spells/${spell.icon}` : null,
-                    type: spell.type || 'mechanic'
-                })).sort((a, b) => a.time - b.time);
+                return list.map(spell => {
+                    const type = normalizeBossTimelineType(spell.type);
+                    const isTimelineMarker = type !== "phase" && type !== "window";
+                    return {
+                        id: spell.id || spell.spell_id,
+                        name: spell.name || 'Unknown',
+                        time: (spell.time > 10000) ? (spell.time / 1000) : (spell.time || spell.timestamp || 0),
+                        duration: spell.duration || (isTimelineMarker ? 1 : 0),
+                        color: getBossTimelineColor(type, spell.color),
+                        icon: spell.icon ? `./images/spells/${spell.icon}` : null,
+                        type
+                    };
+                }).sort((a, b) => a.time - b.time);
 
             } catch (e) {
                 console.warn(`[离线模式] 无法加载 ${fileName}，Boss 轴将隐藏。`, e);
@@ -1017,6 +1081,12 @@
             
             const [showPhases, setShowPhases] = useState(true);
             const [showBossRow, setShowBossRow] = useState(true);
+            const [showLimitBreak, setShowLimitBreak] = useState(true);
+            const [bossTimelineTypeVisibility, setBossTimelineTypeVisibility] = useState({
+                mech: true,
+                tb: true,
+                aoe: true
+            });
             const [showBuddy, setShowBuddy] = useState(false);
             const [buddySpellMaps, setBuddySpellMaps] = useState({});
             const [buddySpellSelections, setBuddySpellSelections] = useState({});
@@ -1280,6 +1350,13 @@
                 });
             };
 
+            const toggleBossTimelineType = (type) => {
+                setBossTimelineTypeVisibility(prev => ({
+                    ...prev,
+                    [type]: !prev[type]
+                }));
+            };
+
             const postImportLog = async (path, payload) => {
                 const res = await fetch(`/api/import_log/${path}`, {
                     method: "POST",
@@ -1334,11 +1411,12 @@
                             timestamp: p.time !== undefined ? p.time : ((p.ts || 0) / 1000)
                         })),
                         casts: (data.casts || []).map(c => {
-                            const spell = importedSpells[String(c.spell_id)] || {};
+                            const spell = isLimitBreakSpellId(c.spell_id) ? getLimitBreakSpell(c.spell_id) : (importedSpells[String(c.spell_id)] || {});
                             return {
                                 spellId: c.spell_id,
                                 timestamp: c.ts ? c.ts / 1000 : 0,
-                                duration: c.duration || spell.duration || 0
+                                duration: c.duration || spell.duration || 0,
+                                isLimitBreak: isLimitBreakSpellId(c.spell_id)
                             };
                         })
                     };
@@ -1394,8 +1472,12 @@
                 backgroundPosition: "0 0"
             }), [tickSettings.major, zoom]);
             const bossTimelineMechanics = useMemo(
-                () => bossMechanics.filter(m => m.type !== "phase" && m.type !== "window"),
-                [bossMechanics]
+                () => bossMechanics.filter(m => (
+                    m.type !== "phase"
+                    && m.type !== "window"
+                    && bossTimelineTypeVisibility[normalizeBossTimelineType(m.type)]
+                )),
+                [bossMechanics, bossTimelineTypeVisibility]
             );
             const timelinePhases = useMemo(() => {
                 const nativePhaseRow = rankData.find(row => row.phases && row.phases.length);
@@ -1785,6 +1867,23 @@
                             </div>
                         ))}
 
+                        <div className="flex flex-col gap-1">
+                            <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                                Limit Break
+                            </div>
+                            <button
+                                title="Show limit break casts"
+                                onClick={() => setShowLimitBreak(prev => !prev)}
+                                className={`relative h-8 w-8 overflow-hidden rounded border transition ${
+                                    showLimitBreak
+                                        ? 'border-[#00FF96] opacity-100 shadow-[0_0_10px_rgba(0,255,150,0.12)] grayscale-0'
+                                        : 'border-gray-800 opacity-30 grayscale hover:opacity-70 hover:border-gray-600'
+                                }`}
+                            >
+                                <img src={LIMIT_BREAK_ICON} alt="Limit Break" draggable={false} className="h-full w-full object-cover" />
+                            </button>
+                        </div>
+
                         {isBuddySupported && (
                             <div className="flex flex-col gap-1 border-l border-gray-700 pl-4 shrink-0" ref={buddyMenuRef}>
                                 <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
@@ -1876,6 +1975,32 @@
                                 </div>
                             </div>
                         )}
+
+                        <div className="flex flex-col gap-1 border-l border-gray-700 pl-4 shrink-0">
+                            <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                                Boss Timeline
+                            </div>
+                            <div className="flex items-center gap-1 h-8">
+                                {Object.entries(BOSS_TIMELINE_TYPES).map(([type, config]) => {
+                                    const active = bossTimelineTypeVisibility[type];
+                                    return (
+                                        <button
+                                            key={`boss-timeline-toggle-${type}`}
+                                            title={`Show ${config.label}`}
+                                            onClick={() => toggleBossTimelineType(type)}
+                                            className="h-6 min-w-10 px-2 flex items-center justify-center rounded-sm border text-[10px] font-black font-mono uppercase transition-colors"
+                                            style={{
+                                                borderColor: active ? config.color : '#374151',
+                                                color: active ? config.color : '#6b7280',
+                                                backgroundColor: active ? `${config.color}1f` : '#111'
+                                            }}
+                                        >
+                                            {config.label}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
 
                         {/* NEW: Global Toggle */}
                         <div className="hidden">
@@ -1995,8 +2120,8 @@
                                                 <div 
                                                     key={i} 
                                                     className="absolute top-1/2 -translate-y-1/2 h-7 rounded-sm border border-white/15 flex items-center justify-center text-[13px] font-bold text-white/95 overflow-hidden shadow-sm" 
-                                                    style={{ left: `${mech.time * zoom}px`, width: `${Math.max(mech.duration * zoom, 48)}px`, backgroundColor: mech.color }} 
-                                                    title={`${mech.name} (${formatTime(mech.time)}) - ${mech.duration}s`}
+                                                    style={{ left: `${mech.time * zoom}px`, width: `${Math.max(mech.duration * zoom, 48)}px`, backgroundColor: getBossTimelineColor(mech.type, mech.color) }} 
+                                                    title={`${BOSS_TIMELINE_TYPES[mech.type]?.label || 'Boss'}: ${mech.name} (${formatTime(mech.time)}) - ${mech.duration}s`}
                                                 >
                                                     <span className="block max-w-full overflow-hidden whitespace-nowrap px-2 leading-none drop-shadow-[0_1px_1px_rgba(0,0,0,0.75)]">{mech.name}</span>
                                                 </div>
@@ -2005,8 +2130,8 @@
                                                 <div 
                                                     key={i} 
                                                     className="absolute top-1/2 -translate-y-1/2 h-6 w-6 rounded border border-white/20 flex items-center justify-center shadow-sm overflow-hidden" 
-                                                    style={{ left: `${mech.time * zoom}px`, backgroundColor: '#333' }}
-                                                    title={`${mech.name} (${formatTime(mech.time)})`}
+                                                    style={{ left: `${mech.time * zoom}px`, backgroundColor: getBossTimelineColor(mech.type, mech.color) }}
+                                                    title={`${BOSS_TIMELINE_TYPES[mech.type]?.label || 'Boss'}: ${mech.name} (${formatTime(mech.time)})`}
                                                 >
                                                     <RenderIcon spell={mech} />
                                                 </div>
@@ -2028,7 +2153,11 @@
                                     ? selectedSpells
                                     : (importedSpellSelections[importedRow.id] || new Set());
                                 const importedSpellMap = sameSpecAsTimeline ? { ...importedRow.spells, ...spells } : importedRow.spells;
-                                const visibleImportedCasts = importedRow.casts.filter(cast => importedVisibleSpellIds.has(Number(cast.spellId)));
+                                const visibleImportedCasts = importedRow.casts.filter(cast => (
+                                    isLimitBreakSpellId(cast.spellId)
+                                        ? showLimitBreak
+                                        : importedVisibleSpellIds.has(Number(cast.spellId))
+                                ));
                                 const { processedCasts: processedImportedCasts, maxTracks: importedMaxTracks } = isCollapsed
                                     ? { processedCasts: visibleImportedCasts.map(c => ({ ...c, trackIndex: 0 })), maxTracks: 1 }
                                     : calculateCastTracks(visibleImportedCasts);
@@ -2170,13 +2299,13 @@
 
                                             {processedImportedCasts.map((cast, cIdx) => {
                                                 const isFocusedSpell = isFocusedSpellId(cast.spellId);
-                                                const spell = importedSpellMap[String(cast.spellId)] || {
+                                                const spell = isLimitBreakSpellId(cast.spellId) ? getLimitBreakSpell(cast.spellId) : (importedSpellMap[String(cast.spellId)] || {
                                                     id: cast.spellId,
                                                     name: `ID: ${cast.spellId}`,
                                                     image: null,
                                                     cd: 0,
                                                     color: '#666666'
-                                                };
+                                                });
                                                 const timeUntilKill = importedRow.killTimeSeconds ? (importedRow.killTimeSeconds - cast.timestamp) : 99999;
                                                 if (timeUntilKill <= 0) return null;
 
@@ -2280,13 +2409,14 @@
                                 const visibleCasts = row.casts
                                     .map(cast => {
                                         const castSpellMap = row.isCombined ? (buddySpellMaps[cast.specSlug] || {}) : spells;
-                                        const spell = castSpellMap[cast.spellId] || {};
+                                        const spell = isLimitBreakSpellId(cast.spellId) ? getLimitBreakSpell(cast.spellId) : (castSpellMap[cast.spellId] || {});
                                         return {
                                             ...cast,
                                             duration: cast.duration || spell.duration || 0
                                         };
                                     })
                                     .filter(cast => {
+                                        if (isLimitBreakSpellId(cast.spellId)) return showLimitBreak;
                                         const selectedIds = row.isCombined ? (buddySpellSelections[cast.specSlug] || new Set()) : selectedSpells;
                                         return selectedIds.has(Number(cast.spellId));
                                     });
@@ -2312,10 +2442,16 @@
                                 const buddyCasts = buddy
                                     ? (buddy.casts || []).map(cast => ({
                                         ...cast,
-                                        duration: cast.duration || (buddySpellMap[cast.spellId] ? buddySpellMap[cast.spellId].duration : 0)
+                                        duration: cast.duration || (isLimitBreakSpellId(cast.spellId)
+                                            ? getLimitBreakSpell(cast.spellId).duration
+                                            : (buddySpellMap[cast.spellId] ? buddySpellMap[cast.spellId].duration : 0))
                                     }))
                                     : [];
-                                const visibleBuddyCasts = buddyCasts.filter(cast => buddySelectedSpellIds.has(Number(cast.spellId)));
+                                const visibleBuddyCasts = buddyCasts.filter(cast => (
+                                    isLimitBreakSpellId(cast.spellId)
+                                        ? showLimitBreak
+                                        : buddySelectedSpellIds.has(Number(cast.spellId))
+                                ));
                                 const buddyRowHeight = 26;
                                 const buddyTrackHeight = 24;
                                 const { processedCasts: processedBuddyCasts, maxTracks: buddyMaxTracks } = isCollapsed
@@ -2472,13 +2608,13 @@
                                                 const castSpellMap = row.isCombined ? (buddySpellMaps[cast.specSlug] || {}) : spells;
                                                 const castColorMap = row.isCombined ? (buddySpellColorMaps[cast.specSlug] || {}) : spellColorMap;
                                                 
-                                                const spell = castSpellMap[cast.spellId] || {
+                                                const spell = isLimitBreakSpellId(cast.spellId) ? getLimitBreakSpell(cast.spellId) : (castSpellMap[cast.spellId] || {
         id: cast.spellId,
         name: `ID: ${cast.spellId}`,
         image: null, // 没有图片
         cd: 0,
         color: '#666666' // 默认给个灰色
-    };
+    });
 
                                                 // --- KILL TIME CLIPPING LOGIC ---
                                                 const timeUntilKill = row.killTimeSeconds ? (row.killTimeSeconds - cast.timestamp) : 99999;
@@ -2492,7 +2628,6 @@
 
                                                 // Dimensions - Adjusted for Compactness
                                                 const iconHeight = currentTrackHeight * 0.85; 
-                                                const displayDuration = cast.duration || 3;
                                                 const rawDurationWidth = (cast.duration || 0) * zoom;
                                                 const rawCdWidth = (spell.cd || 0) * zoom;
                                                 
@@ -2504,7 +2639,9 @@
                                                 const cdWidth = Math.max(0, Math.min(rawCdWidth, maxVisibleWidth));
 
                                                 // Color Assignment (Consistent per spell)
-                                                const barColor = castColorMap[cast.spellId] || spell.color || '#ffffff';
+                                                const barColor = isLimitBreakSpellId(cast.spellId)
+                                                    ? spell.color
+                                                    : (castColorMap[cast.spellId] || spell.color || '#ffffff');
 
                                                 return (
                                                     <div
@@ -2558,6 +2695,7 @@
                                                                     width: `${iconHeight}px`,
                                                                     minWidth: `${iconHeight}px`
                                                                 }}
+                                                                title={`${spell.name} (${formatTime(cast.timestamp)})`}
                                                             >
                                                                 <RenderIcon spell={spell} className="opacity-100" />
                                                             </div>
@@ -2614,13 +2752,13 @@
                                             <div className="relative h-full z-10 overflow-hidden" style={{ width: `${timelineWidth}px` }}>
                                                 {processedBuddyCasts.map((cast, cIdx) => {
                                                     const isFocusedSpell = isFocusedSpellId(cast.spellId);
-                                                    const spell = buddySpellMap[cast.spellId] || {
+                                                    const spell = isLimitBreakSpellId(cast.spellId) ? getLimitBreakSpell(cast.spellId) : (buddySpellMap[cast.spellId] || {
                                                         id: cast.spellId,
                                                         name: `ID: ${cast.spellId}`,
                                                         image: null,
                                                         cd: 0,
                                                         color: '#666666'
-                                                    };
+                                                    });
                                                     const timeUntilKill = row.killTimeSeconds ? (row.killTimeSeconds - cast.timestamp) : 99999;
                                                     if (timeUntilKill <= 0) return null;
 
@@ -2629,7 +2767,9 @@
                                                     const iconHeight = currentTrackHeight * 0.82;
                                                     const durationWidth = Math.max(0, Math.min((cast.duration || 0) * zoom, timeUntilKill * zoom));
                                                     const cdWidth = Math.max(0, Math.min((spell.cd || 0) * zoom, timeUntilKill * zoom));
-                                                    const barColor = buddyColorMap[cast.spellId] || spell.color || DURATION_PALETTE[cIdx % DURATION_PALETTE.length];
+                                                    const barColor = isLimitBreakSpellId(cast.spellId)
+                                                        ? spell.color
+                                                        : (buddyColorMap[cast.spellId] || spell.color || DURATION_PALETTE[cIdx % DURATION_PALETTE.length]);
 
                                                     return (
                                                         <div

@@ -6,6 +6,7 @@ from typing import Optional
 
 # IMPORT LOCAL LIBRARIES
 from lorgs.clients import wcl
+from lorgs.limit_breaks import LIMIT_BREAKS
 from lorgs.models.warcraftlogs_actor import BaseActor
 from lorgs.models.wow_class import WowClass
 from lorgs.models.wow_spec import WowSpec
@@ -79,7 +80,7 @@ class Player(BaseActor):
         target_filter = get_filter("target")
 
         # Casts
-        casts_query = build_spell_query(*self.actor_type.all_spells)
+        casts_query = build_spell_query(*self.actor_type.all_spells, *LIMIT_BREAKS)
         if casts_query and source_filter:
             casts_query = f"{source_filter} and ({casts_query})"
 
