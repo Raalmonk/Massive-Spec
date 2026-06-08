@@ -100,8 +100,8 @@
         const API_BASE = '';
         const LEFT_PANEL_WIDTH = 260; 
         const DRAG_THRESHOLD = 6;
-        const MIN_ZOOM = 1;
-        const MAX_ZOOM = 100;
+        const MIN_VISIBLE_MINUTES = 1;
+        const MAX_VISIBLE_MINUTES = 21;
         const LIMIT_BREAK_ICON = './images/spells/Limit_Break.png';
 
         // Palette for Duration Bars (Sequential assignment)
@@ -1925,8 +1925,28 @@
                 }
             };
 
-            const handleZoomIn = () => setZoom(prev => Math.min(prev < 5 ? prev + 1 : prev + 5, MAX_ZOOM));
-            const handleZoomOut = () => setZoom(prev => Math.max(prev <= 5 ? prev - 1 : prev - 5, MIN_ZOOM));
+            const getVisibleTimelineWidth = () => (
+                Math.max(320, (scrollContainerRef.current?.clientWidth || window.innerWidth) - LEFT_PANEL_WIDTH - 12)
+            );
+            const clampVisibleMinutes = (minutes) => Math.max(
+                MIN_VISIBLE_MINUTES,
+                Math.min(MAX_VISIBLE_MINUTES, Number(minutes))
+            );
+            const getVisibleMinutesForZoom = (value) => getVisibleTimelineWidth() / (Number(value) * 60);
+            const getZoomForVisibleMinutes = (minutes) => getVisibleTimelineWidth() / (clampVisibleMinutes(minutes) * 60);
+            const clampZoom = (value) => {
+                const minZoom = getZoomForVisibleMinutes(MAX_VISIBLE_MINUTES);
+                const maxZoom = getZoomForVisibleMinutes(MIN_VISIBLE_MINUTES);
+                return Math.max(minZoom, Math.min(maxZoom, Number(value)));
+            };
+            const adjustVisibleMinutes = (direction) => setZoom(prev => {
+                const current = getVisibleMinutesForZoom(prev);
+                const step = current < 5 ? 0.25 : 1;
+                return clampZoom(getZoomForVisibleMinutes(current + direction * step));
+            });
+            const handleZoomIn = () => adjustVisibleMinutes(-1);
+            const handleZoomOut = () => adjustVisibleMinutes(1);
+            const sliderVisibleMinutes = clampVisibleMinutes(getVisibleMinutesForZoom(zoom));
             const formatTime = (s) => `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
             const displayToggleClass = (active) =>
                 `h-6 min-w-10 px-2 flex items-center justify-center rounded-sm border text-[10px] font-black font-mono uppercase transition-colors ${
@@ -2535,6 +2555,16 @@
                         </button>
                         <div className="w-px h-4 bg-gray-700 mx-1"></div>
                         <button onClick={handleZoomOut} className="p-1.5 hover:bg-gray-700 rounded text-gray-400 hover:text-[#00FF96] transition"><ZoomOut size={16} /></button>
+                        <input
+                            type="range"
+                            min={MIN_VISIBLE_MINUTES}
+                            max={MAX_VISIBLE_MINUTES}
+                            step="0.25"
+                            value={Number(sliderVisibleMinutes.toFixed(2))}
+                            onChange={(e) => setZoom(clampZoom(getZoomForVisibleMinutes(e.target.value)))}
+                            className="h-2 w-28 cursor-pointer accent-[#00FF96]"
+                            title={`${sliderVisibleMinutes.toFixed(1)} min visible`}
+                        />
                         <button onClick={handleZoomIn} className="p-1.5 hover:bg-gray-700 rounded text-gray-400 hover:text-[#00FF96] transition"><ZoomIn size={16} /></button>
                     </div>
                 </div>
