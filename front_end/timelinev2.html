@@ -764,6 +764,57 @@
             }
         };
 
+        const getImportedLogsStorageKey = (bossSlug) => `m-spec:imported-logs:${bossSlug}`;
+
+        const serializeImportedSpellSelections = (selections) => (
+            Object.fromEntries(
+                Object.entries(selections || {}).map(([rowId, selectedIds]) => [
+                    rowId,
+                    [...(selectedIds || [])].map(Number)
+                ])
+            )
+        );
+
+        const readStoredImportedLogs = (bossSlug) => {
+            try {
+                const raw = localStorage.getItem(getImportedLogsStorageKey(bossSlug));
+                if (!raw) return { rows: [], selections: {} };
+                const parsed = JSON.parse(raw);
+                const rows = Array.isArray(parsed.rows) ? parsed.rows : [];
+                const rowIds = new Set(rows.map(row => row.id));
+                const selections = Object.fromEntries(
+                    Object.entries(parsed.selections || {})
+                        .filter(([rowId]) => rowIds.has(rowId))
+                        .map(([rowId, selectedIds]) => [
+                            rowId,
+                            new Set((Array.isArray(selectedIds) ? selectedIds : []).map(Number))
+                        ])
+                );
+                return { rows, selections };
+            } catch (error) {
+                console.warn("[M-Spec] Could not read stored imported logs.", error);
+                return { rows: [], selections: {} };
+            }
+        };
+
+        const writeStoredImportedLogs = (bossSlug, rows, selections) => {
+            try {
+                const safeRows = Array.isArray(rows) ? rows : [];
+                const key = getImportedLogsStorageKey(bossSlug);
+                if (!safeRows.length) {
+                    localStorage.removeItem(key);
+                    return;
+                }
+                localStorage.setItem(key, JSON.stringify({
+                    version: 1,
+                    rows: safeRows,
+                    selections: serializeImportedSpellSelections(selections)
+                }));
+            } catch (error) {
+                console.warn("[M-Spec] Could not store imported logs.", error);
+            }
+        };
+
         const mergeSpellMaps = (baseSpells, observedSpells) => {
             const merged = { ...baseSpells };
             Object.entries(observedSpells || {}).forEach(([spellId, spell]) => {
@@ -1496,6 +1547,9 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get(param) || defaultValue;
             };
+            const initialBossSlug = getQueryParam('boss', 'vamp-fatale');
+            const initialSpecSlug = getQueryParam('spec', 'redmage-redmage');
+            const initialImportedLogState = readStoredImportedLogs(initialBossSlug);
             const [uiLanguage, setUiLanguage] = useState(getInitialUiLanguage);
             const t = useCallback((key) => translate(uiLanguage, key), [uiLanguage]);
             const currentLanguage = UI_LANGUAGES.find(lang => lang.id === uiLanguage) || UI_LANGUAGES[0];
@@ -1513,8 +1567,8 @@
             const [isSelectionMode, setIsSelectionMode] = useState(false);
             const [isCurated, setIsCurated] = useState(false);
 
-            const [selectedBoss, setSelectedBoss] = useState(getQueryParam('boss', 'vamp-fatale'));
-            const [selectedSpec, setSelectedSpec] = useState(getQueryParam('spec', 'redmage-redmage'));
+            const [selectedBoss, setSelectedBoss] = useState(initialBossSlug);
+            const [selectedSpec, setSelectedSpec] = useState(initialSpecSlug);
             
             const [selectedRegion, setSelectedRegion] = useState('All');
 
@@ -1525,8 +1579,8 @@
             const [spells, setSpells] = useState({});
             const [bossMechanics, setBossMechanics] = useState([]);
             const [rankData, setRankData] = useState([]);
-            const [importedRows, setImportedRows] = useState([]);
-            const [importedSpellSelections, setImportedSpellSelections] = useState({});
+            const [importedRows, setImportedRows] = useState(initialImportedLogState.rows);
+            const [importedSpellSelections, setImportedSpellSelections] = useState(initialImportedLogState.selections);
             const [importSpellMenuRowId, setImportSpellMenuRowId] = useState(null);
             const [loading, setLoading] = useState(true);
             const [importModalOpen, setImportModalOpen] = useState(false);
@@ -1567,6 +1621,13 @@
             useEffect(() => {
                 writeBuddyVisibility(showBuddy);
             }, [showBuddy]);
+
+            useEffect(() => {
+                const stored = readStoredImportedLogs(selectedBoss);
+                setImportedRows(stored.rows);
+                setImportedSpellSelections(stored.selections);
+                setImportSpellMenuRowId(null);
+            }, [selectedBoss]);
 
             const cycleUiLanguage = useCallback(() => {
                 setUiLanguage(prev => {
@@ -1781,7 +1842,9 @@
                     const current = new Set(prev[rowId] || []);
                     const id = Number(spellId);
                     if (current.has(id)) current.delete(id); else current.add(id);
-                    return { ...prev, [rowId]: current };
+                    const next = { ...prev, [rowId]: current };
+                    writeStoredImportedLogs(selectedBoss, importedRows, next);
+                    return next;
                 });
             };
 
@@ -1794,7 +1857,9 @@
                         const id = Number(s.id);
                         if (allSelected) current.delete(id); else current.add(id);
                     });
-                    return { ...prev, [rowId]: current };
+                    const next = { ...prev, [rowId]: current };
+                    writeStoredImportedLogs(selectedBoss, importedRows, next);
+                    return next;
                 });
             };
 
@@ -1802,7 +1867,9 @@
                 setImportedSpellSelections(prev => {
                     const current = new Set(prev[rowId] || []);
                     const allIds = Object.values(spellMap).map(s => Number(s.id));
-                    return { ...prev, [rowId]: current.size > 0 ? new Set() : new Set(allIds) };
+                    const next = { ...prev, [rowId]: current.size > 0 ? new Set() : new Set(allIds) };
+                    writeStoredImportedLogs(selectedBoss, importedRows, next);
+                    return next;
                 });
             };
 
@@ -1912,11 +1979,14 @@
                             };
                         })
                     };
-                    setImportedRows(prev => [importedRow, ...prev.filter(row => row.id !== importedRow.id)]);
-                    setImportedSpellSelections(prev => ({
-                        ...prev,
+                    const nextImportedRows = [importedRow, ...importedRows.filter(row => row.id !== importedRow.id)];
+                    const nextImportedSelections = {
+                        ...importedSpellSelections,
                         [importedRow.id]: new Set(getDefaultSelectedSpellIds(importedSpells, spellCategories))
-                    }));
+                    };
+                    setImportedRows(nextImportedRows);
+                    setImportedSpellSelections(nextImportedSelections);
+                    writeStoredImportedLogs(selectedBoss, nextImportedRows, nextImportedSelections);
                     setImportModalOpen(false);
                 } catch (error) {
                     setImportError(error.message || "Could not import player casts.");
@@ -2698,9 +2768,10 @@
                                     ? importedRow.phases
                                     : timelinePhases;
                                 const sameSpecAsTimeline = importedRow.specSlug === selectedSpec;
+                                const storedImportedSpellSelection = importedSpellSelections[importedRow.id];
                                 const importedVisibleSpellIds = sameSpecAsTimeline
                                     ? selectedSpells
-                                    : (importedSpellSelections[importedRow.id] || new Set());
+                                    : (storedImportedSpellSelection || new Set(getDefaultSelectedSpellIds(importedRow.spells || {}, spellCategories)));
                                 const importedSpellMap = sameSpecAsTimeline ? { ...importedRow.spells, ...spells } : importedRow.spells;
                                 const visibleImportedCasts = importedRow.casts.filter(cast => (
                                     isLimitBreakSpellId(cast.spellId)
@@ -2799,12 +2870,12 @@
                                             )}
                                             <button
                                                 onClick={() => {
-                                                    setImportedRows(prev => prev.filter(row => row.id !== importedRow.id));
-                                                    setImportedSpellSelections(prev => {
-                                                        const next = { ...prev };
-                                                        delete next[importedRow.id];
-                                                        return next;
-                                                    });
+                                                    const nextImportedRows = importedRows.filter(row => row.id !== importedRow.id);
+                                                    const nextImportedSelections = { ...importedSpellSelections };
+                                                    delete nextImportedSelections[importedRow.id];
+                                                    setImportedRows(nextImportedRows);
+                                                    setImportedSpellSelections(nextImportedSelections);
+                                                    writeStoredImportedLogs(selectedBoss, nextImportedRows, nextImportedSelections);
                                                     if (importSpellMenuRowId === importedRow.id) setImportSpellMenuRowId(null);
                                                 }}
                                                 className="ml-2 text-gray-500 hover:text-white"
