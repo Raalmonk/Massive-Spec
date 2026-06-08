@@ -779,7 +779,7 @@
         const readStoredImportedLogCache = (bossSlug) => {
             try {
                 const raw = localStorage.getItem(getImportedLogsStorageKey(bossSlug));
-                if (!raw) return { rows: [], selections: {}, hiddenRowIds: new Set() };
+                if (!raw) return { rows: [], selections: {}, hiddenRowIds: new Set(), fights: {} };
                 const parsed = JSON.parse(raw);
                 const rows = Array.isArray(parsed.rows) ? parsed.rows : [];
                 const rowIds = new Set(rows.map(row => row.id));
@@ -794,13 +794,14 @@
                 return {
                     rows,
                     selections,
+                    fights: parsed.fights || {},
                     hiddenRowIds: new Set(
                         (Array.isArray(parsed.hiddenRowIds) ? parsed.hiddenRowIds : []).filter(rowId => rowIds.has(rowId))
                     )
                 };
             } catch (error) {
                 console.warn("[M-Spec] Could not read stored imported logs.", error);
-                return { rows: [], selections: {}, hiddenRowIds: new Set() };
+                return { rows: [], selections: {}, hiddenRowIds: new Set(), fights: {} };
             }
         };
 
@@ -828,31 +829,36 @@
             }
         };
 
-        const getSourceIdFromImportedRow = (row) => (
-            Number(row.sourceId || String(row.id || "").split("-").pop() || 0)
-        );
+        const getImportFightCacheKey = (reportId, fightId) => `${reportId}:${fightId}`;
 
         const getCachedImportPlayers = (bossSlug, url) => {
             const importKey = parseImportLogUrlForCache(url);
             if (!importKey) return null;
             const cache = readStoredImportedLogCache(bossSlug);
-            const rows = cache.rows.filter(row => (
-                row.reportId === importKey.reportId
-                && Number(row.fightId) === Number(importKey.fightId)
-            ));
-            if (!rows.length) return null;
-            return {
-                report_id: importKey.reportId,
-                fight_id: importKey.fightId,
-                title: rows[0].title || "Cached FF Logs Pull",
-                cached: true,
-                players: rows.map(row => ({
-                    source_id: getSourceIdFromImportedRow(row),
-                    name: row.name,
-                    spec_slug: row.specSlug,
-                    cached: true
-                }))
-            };
+            return cache.fights[getImportFightCacheKey(importKey.reportId, importKey.fightId)] || null;
+        };
+
+        const writeStoredImportFightPlayers = (bossSlug, data) => {
+            if (!data?.report_id || !data?.fight_id) return;
+            try {
+                const cache = readStoredImportedLogCache(bossSlug);
+                const key = getImportedLogsStorageKey(bossSlug);
+                localStorage.setItem(key, JSON.stringify({
+                    version: 2,
+                    rows: cache.rows,
+                    selections: serializeImportedSpellSelections(cache.selections),
+                    hiddenRowIds: [...cache.hiddenRowIds],
+                    fights: {
+                        ...(cache.fights || {}),
+                        [getImportFightCacheKey(data.report_id, data.fight_id)]: {
+                            ...data,
+                            cached: true
+                        }
+                    }
+                }));
+            } catch (error) {
+                console.warn("[M-Spec] Could not store imported fight players.", error);
+            }
         };
 
         const writeStoredImportedLogs = (bossSlug, rows, selections, options = {}) => {
@@ -879,7 +885,8 @@
                     version: 2,
                     rows: allRows,
                     selections: serializeImportedSpellSelections(safeSelections),
-                    hiddenRowIds: [...hiddenRowIds].filter(rowId => rowIds.has(rowId))
+                    hiddenRowIds: [...hiddenRowIds].filter(rowId => rowIds.has(rowId)),
+                    fights: cache.fights || {}
                 }));
             } catch (error) {
                 console.warn("[M-Spec] Could not store imported logs.", error);
@@ -2015,6 +2022,7 @@
                     const data = await postImportLog("players", { url: importUrl });
                     setImportPlayers(data.players || []);
                     setImportMeta(data);
+                    writeStoredImportFightPlayers(selectedBoss, data);
                 } catch (error) {
                     setImportError(error.message || "Could not load players.");
                 } finally {
