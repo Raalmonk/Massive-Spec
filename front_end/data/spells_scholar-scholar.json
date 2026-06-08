@@ -259,11 +259,25 @@
     "duration": 30.0,
     "color": "#b576e8",
     "load_order": 18,
-    "show": false,
+    "show": true,
     "category": "UTILITY",
     "debug_tags": [
       "utility"
     ]
+  },
+  {
+    "spell_id": 34577600,
+    "name": "Super-Ether [HQ]",
+    "icon": "Super-Ether_HQ.png",
+    "cooldown": 270.0,
+    "duration": 0.0,
+    "color": "#E6B33D",
+    "show": true,
+    "category": "UTILITY",
+    "debug_tags": [
+      "utility"
+    ],
+    "load_order": 19
   },
   {
     "spell_id": 3,
@@ -272,7 +286,7 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#666666",
-    "load_order": 19,
+    "load_order": 20,
     "show": null,
     "category": "UTILITY",
     "debug_tags": [

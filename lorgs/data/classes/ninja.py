@@ -31,6 +31,7 @@ NINJA_MAIN = WowSpec(role=MDPS, wow_class=NINJA, name="Ninja")
 
 # Burst / Cooldowns
 NINJA_MAIN.add_spell(spell_id=36957, cooldown=120, duration=20, name="Dokumori", show=True,icon="Dokumori.png", tags=[SpellTag.DAMAGE])
+NINJA_MAIN.add_event(spell_id=36958, cooldown=120, duration=20, name="Kunai's Bane", show=True, icon="Kunais_Bane.png", event_type="applydebuff", tags=[SpellTag.DAMAGE])
 NINJA_MAIN.add_spell(spell_id=7403, cooldown=120, name="Ten Chi Jin", icon="Ten_Chi_Jin.png",show=False,  tags=[SpellTag.DAMAGE])
 NINJA_MAIN.add_spell(spell_id=16493, cooldown=90, name="Bunshin",show=True, icon="Bunshin.png", tags=[SpellTag.DAMAGE])
 NINJA_MAIN.add_spell(spell_id=2264, cooldown=60, name="Kassatsu",show=True, icon="Kassatsu.png", tags=[SpellTag.DAMAGE])

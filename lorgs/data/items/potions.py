@@ -30,6 +30,7 @@ potion_int = WowPotion(
     color="#b576e8",
     name="Grade 4 Gemdraught of Intelligence [HQ]",
     icon="Grade_4_gemdraught_of_intelligence_icon1.png",
+    show=True,
     tags=[SpellTag.UTILITY],
     item=49237,
 )
@@ -46,6 +47,7 @@ potion_dex = WowPotion(
     color="#b576e8",
     name="Grade 4 Gemdraught of Dexterity",
     icon="Grade_4_gemdraught_of_dexterity_icon1.png",
+    show=True,
     tags=[SpellTag.UTILITY],
     item=49235,
 )
@@ -60,10 +62,25 @@ potion_mind = WowPotion(
     color="#b576e8",
     name="Grade 4 Gemdraught of Mind",
     icon="Grade_4_gemdraught_of_mind_icon1.png",
+    show=True,
     tags=[SpellTag.UTILITY],
     item=49238,
 )
 potion_mind.add_specs(WHITE_MAGE_MAIN, SCHOLAR_MAIN, ASTROLOGIAN_MAIN, SAGE_MAIN)
+
+
+# Super-Ether [HQ]
+super_ether_hq = WowSpell(
+    spell_id=34577600,
+    cooldown=270,
+    duration=0,
+    color="#E6B33D",
+    name="Super-Ether [HQ]",
+    icon="Super-Ether_HQ.png",
+    show=True,
+    tags=[SpellTag.UTILITY],
+)
+super_ether_hq.add_specs(WHITE_MAGE_MAIN, SCHOLAR_MAIN, ASTROLOGIAN_MAIN, SAGE_MAIN)
 
 
 # Grade 4 Gemdraught of Strength
@@ -74,6 +91,7 @@ potion_str = WowPotion(
     color="#b576e8",
     name="Grade 4 Gemdraught of Strength",
     icon="Grade_4_gemdraught_of_strength_icon1.png",
+    show=True,
     tags=[SpellTag.UTILITY],
     item=49234,
 )

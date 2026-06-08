@@ -189,7 +189,7 @@
     "duration": 30.0,
     "color": "#b576e8",
     "load_order": 13,
-    "show": false,
+    "show": true,
     "category": "UTILITY",
     "debug_tags": [
       "utility"

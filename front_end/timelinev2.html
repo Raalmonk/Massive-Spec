@@ -168,6 +168,302 @@
         };
         const getBossTimelineColor = (type, color) => color || BOSS_TIMELINE_TYPES[type]?.color || BOSS_TIMELINE_TYPES.mech.color;
 
+        const UI_LANGUAGE_STORAGE_KEY = 'm-spec:ui-language';
+        const UI_LANGUAGES = [
+            { id: 'en', label: 'EN' },
+            { id: 'zh', label: '中文' },
+            { id: 'ja', label: '日本語' },
+            { id: 'ko', label: '한국어' }
+        ];
+        const I18N = {
+            en: {
+                language: 'Language',
+                loading: 'Loading...',
+                boss: 'Boss',
+                spec: 'Spec',
+                region: 'Region',
+                with: 'Comp Filter',
+                killTime: 'Kill Time',
+                importLog: 'Import Log',
+                select: 'Curate',
+                selected: 'Selected',
+                confirm: 'Confirm',
+                cancel: 'Cancel',
+                curated: 'Curated',
+                close: 'Close',
+                importPull: 'Import FF Logs Pull',
+                loadPlayers: 'Load Players',
+                display: 'Display',
+                all: 'ALL',
+                showAllSpells: 'Show all spells',
+                hideAllSpells: 'Hide all spells',
+                duration: 'Duration',
+                cooldown: 'Cooldown',
+                phases: 'Phases',
+                showBossRow: 'Toggle Boss Row',
+                category_cd: 'CD',
+                category_single_mit: 'Single Mit',
+                category_group_mit: 'Group Mit',
+                category_utility: 'Utility',
+                limitBreak: 'Limit Break',
+                showLimitBreak: 'Show limit break casts',
+                party: 'Party',
+                buddy: 'Buddy',
+                showBuddy: 'Show buddy tank/healer cooldowns',
+                bossTimeline: 'Boss Timeline',
+                mech: 'Mech',
+                tb: 'TB',
+                aoe: 'AOE',
+                rank: 'Rank',
+                rdps: 'RDPS',
+                reg: 'Reg',
+                pair: 'Pair',
+                buffs: 'Buffs',
+                importedLog: 'Imported Log',
+                removeImportedLog: 'Remove imported log',
+                shown: 'shown',
+                filterKillTime: 'Filter Kill Time (Min : Sec)',
+                min: 'Min',
+                max: 'Max',
+                reset: 'Reset',
+                apply: 'Apply',
+                openFFLogs: 'Open in FF Logs',
+                enterCuration: 'Enter Curation Mode',
+                exitCuration: 'Exit Curated Mode',
+                showBossTimelineType: 'Show',
+                selectAtLeastOneRow: 'Please select at least one row.',
+                expandRows: 'Expand Rows (Split lines)',
+                collapseRows: 'Collapse Rows',
+                role_Tanks: 'Tanks',
+                role_Healers: 'Healers',
+                role_Melee: 'Melee',
+                role_Physical_Ranged: 'Physical Ranged',
+                role_Magical_Ranged: 'Magical Ranged'
+            },
+            zh: {
+                language: '语言',
+                loading: '加载中...',
+                boss: 'Boss',
+                spec: '职业',
+                region: '地区',
+                with: '阵容筛选',
+                killTime: '击杀时间',
+                importLog: '导入 Log',
+                select: '精选',
+                selected: '已选择',
+                confirm: '确认',
+                cancel: '取消',
+                curated: '精选',
+                close: '关闭',
+                importPull: '导入 FF Logs Pull',
+                loadPlayers: '读取玩家',
+                display: '显示',
+                all: '全部',
+                showAllSpells: '显示所有技能',
+                hideAllSpells: '隐藏所有技能',
+                duration: '持续时间',
+                cooldown: 'CD',
+                phases: '阶段',
+                showBossRow: '切换 Boss 行',
+                category_cd: 'CD',
+                category_single_mit: '单减',
+                category_group_mit: '团减',
+                category_utility: '功能',
+                limitBreak: 'Limit Break',
+                showLimitBreak: '显示 LB',
+                party: '队伍',
+                buddy: '搭档',
+                showBuddy: '显示另一个同职能技能',
+                bossTimeline: 'Boss 时间轴',
+                mech: '机制',
+                tb: '死刑',
+                aoe: 'AOE',
+                rank: '排名',
+                rdps: 'RDPS',
+                reg: '地区',
+                pair: '搭档',
+                buffs: '团辅',
+                importedLog: '导入 Log',
+                removeImportedLog: '移除导入 Log',
+                shown: '显示',
+                filterKillTime: '筛选击杀时间（分 : 秒）',
+                min: '最小',
+                max: '最大',
+                reset: '重置',
+                apply: '应用',
+                openFFLogs: '打开 FF Logs',
+                enterCuration: '进入精选模式',
+                exitCuration: '退出精选模式',
+                showBossTimelineType: '显示',
+                selectAtLeastOneRow: '请至少选择一行。',
+                expandRows: '展开行',
+                collapseRows: '折叠行',
+                role_Tanks: '坦克',
+                role_Healers: '治疗',
+                role_Melee: '近战',
+                role_Physical_Ranged: '远敏',
+                role_Magical_Ranged: '法系'
+            },
+            ja: {
+                language: '言語',
+                loading: '読み込み中...',
+                boss: 'Boss',
+                spec: 'ジョブ',
+                region: '地域',
+                with: '構成フィルター',
+                killTime: '討伐時間',
+                importLog: 'Log 取込',
+                select: '選抜',
+                selected: '選択中',
+                confirm: '確定',
+                cancel: '取消',
+                curated: '選抜',
+                close: '閉じる',
+                importPull: 'FF Logs Pull 取込',
+                loadPlayers: 'プレイヤー読込',
+                display: '表示',
+                all: '全て',
+                showAllSpells: '全スキル表示',
+                hideAllSpells: '全スキル非表示',
+                duration: '持続',
+                cooldown: 'CD',
+                phases: 'フェーズ',
+                showBossRow: 'Boss 行を切替',
+                category_cd: 'CD',
+                category_single_mit: '単体軽減',
+                category_group_mit: '全体軽減',
+                category_utility: '補助',
+                limitBreak: 'Limit Break',
+                showLimitBreak: 'LB を表示',
+                party: 'パーティ',
+                buddy: '相方',
+                showBuddy: '相方タンク/ヒラのスキルを表示',
+                bossTimeline: 'Boss タイムライン',
+                mech: 'ギミック',
+                tb: 'TB',
+                aoe: 'AOE',
+                rank: '順位',
+                rdps: 'RDPS',
+                reg: '地域',
+                pair: '相方',
+                buffs: 'シナジー',
+                importedLog: '取込 Log',
+                removeImportedLog: '取込 Log を削除',
+                shown: '表示',
+                filterKillTime: '討伐時間フィルター（分 : 秒）',
+                min: '最小',
+                max: '最大',
+                reset: 'リセット',
+                apply: '適用',
+                openFFLogs: 'FF Logs で開く',
+                enterCuration: '選抜モード',
+                exitCuration: '選抜モード終了',
+                showBossTimelineType: '表示',
+                selectAtLeastOneRow: '少なくとも1行を選択してください。',
+                expandRows: '行を展開',
+                collapseRows: '行を折りたたむ',
+                role_Tanks: 'タンク',
+                role_Healers: 'ヒーラー',
+                role_Melee: '近接',
+                role_Physical_Ranged: 'レンジ',
+                role_Magical_Ranged: 'キャスター'
+            },
+            ko: {
+                language: '언어',
+                loading: '불러오는 중...',
+                boss: 'Boss',
+                spec: '직업',
+                region: '지역',
+                with: '조합 필터',
+                killTime: '킬 타임',
+                importLog: 'Log 가져오기',
+                select: '선별',
+                selected: '선택됨',
+                confirm: '확인',
+                cancel: '취소',
+                curated: '선별',
+                close: '닫기',
+                importPull: 'FF Logs Pull 가져오기',
+                loadPlayers: '플레이어 로드',
+                display: '표시',
+                all: '전체',
+                showAllSpells: '모든 스킬 표시',
+                hideAllSpells: '모든 스킬 숨김',
+                duration: '지속',
+                cooldown: 'CD',
+                phases: '페이즈',
+                showBossRow: 'Boss 행 전환',
+                category_cd: 'CD',
+                category_single_mit: '단일 생존기',
+                category_group_mit: '파티 생존기',
+                category_utility: '유틸',
+                limitBreak: 'Limit Break',
+                showLimitBreak: 'LB 표시',
+                party: '파티',
+                buddy: '버디',
+                showBuddy: '다른 탱/힐 스킬 표시',
+                bossTimeline: 'Boss 타임라인',
+                mech: '기믹',
+                tb: 'TB',
+                aoe: 'AOE',
+                rank: '순위',
+                rdps: 'RDPS',
+                reg: '지역',
+                pair: '짝',
+                buffs: '시너지',
+                importedLog: '가져온 Log',
+                removeImportedLog: '가져온 Log 제거',
+                shown: '표시',
+                filterKillTime: '킬 타임 필터 (분 : 초)',
+                min: '최소',
+                max: '최대',
+                reset: '초기화',
+                apply: '적용',
+                openFFLogs: 'FF Logs 열기',
+                enterCuration: '선별 모드',
+                exitCuration: '선별 모드 종료',
+                showBossTimelineType: '표시',
+                selectAtLeastOneRow: '최소 한 줄을 선택해 주세요.',
+                expandRows: '행 펼치기',
+                collapseRows: '행 접기',
+                role_Tanks: '탱커',
+                role_Healers: '힐러',
+                role_Melee: '근접',
+                role_Physical_Ranged: '물리 원거리',
+                role_Magical_Ranged: '마법 원거리'
+            }
+        };
+        const normalizeUiLanguage = (language) => {
+            const normalized = String(language || '').toLowerCase();
+            if (normalized.startsWith('zh')) return 'zh';
+            if (normalized.startsWith('ja')) return 'ja';
+            if (normalized.startsWith('ko')) return 'ko';
+            return 'en';
+        };
+        const getInitialUiLanguage = () => {
+            try {
+                const stored = localStorage.getItem(UI_LANGUAGE_STORAGE_KEY);
+                if (I18N[stored]) return stored;
+            } catch (e) {}
+            return normalizeUiLanguage(navigator.language || navigator.userLanguage || 'en');
+        };
+        const translate = (language, key) => I18N[language]?.[key] || I18N.en[key] || key;
+        const getCategoryLabel = (category, t) => {
+            const key = `category_${String(category.label || '').toLowerCase().replace(/\s+/g, '_')}`;
+            const translated = t(key);
+            return translated === key ? category.label : translated;
+        };
+        const getSpecGroupLabel = (groupLabel, t) => {
+            const key = `role_${String(groupLabel || '').replace(/\s+/g, '_')}`;
+            const translated = t(key);
+            return translated === key ? groupLabel : translated;
+        };
+        const getBossTimelineTypeLabel = (type, t) => {
+            const key = type || 'mech';
+            const translated = t(key);
+            return translated === key ? (BOSS_TIMELINE_TYPES[key]?.label || key) : translated;
+        };
+
         // --- Mock Data Layer ---
         const fetchSpellCategories = async () => ({
             // defaultActive: controls if spells in this category are shown by default
@@ -260,6 +556,124 @@
             }
         };
 
+        const BOSS_OPTIONS = [
+            { id: 'vamp-fatale', label: 'M9S: Vamp Fatale' },
+            { id: 'red-hot-and-deep-blue', label: 'M10S: Red Hot and Deep Blue' },
+            { id: 'the-tyrant', label: 'M11S: The Tyrant' },
+            { id: 'lindwurm', label: 'M12S P1: Lindwurm' },
+            { id: 'lindwurm-ii', label: 'M12S P2: Lindwurm' },
+            { id: 'futures-rewritten', label: 'Futures Rewritten' },
+            { id: 'dancing-mad', label: 'Dancing Mad' }
+        ];
+
+        const SPEC_NAME_TRANSLATIONS = {
+            zh: {
+                'tank-combined': '双T合计',
+                'healer-combined': '双奶合计',
+                'paladin-paladin': '骑士',
+                'warrior-warrior': '战士',
+                'darkknight-darkknight': '暗黑骑士',
+                'gunbreaker-gunbreaker': '绝枪战士',
+                'whitemage-whitemage': '白魔法师',
+                'scholar-scholar': '学者',
+                'astrologian-astrologian': '占星术士',
+                'sage-sage': '贤者',
+                'monk-monk': '武僧',
+                'dragoon-dragoon': '龙骑士',
+                'ninja-ninja': '忍者',
+                'samurai-samurai': '武士',
+                'reaper-reaper': '钐镰客',
+                'viper-viper': '蝰蛇剑士',
+                'bard-bard': '吟游诗人',
+                'machinist-machinist': '机工士',
+                'dancer-dancer': '舞者',
+                'blackmage-blackmage': '黑魔法师',
+                'summoner-summoner': '召唤师',
+                'redmage-redmage': '赤魔法师',
+                'pictomancer-pictomancer': '绘灵法师'
+            },
+            ja: {
+                'tank-combined': 'タンク合算',
+                'healer-combined': 'ヒーラー合算',
+                'paladin-paladin': 'ナイト',
+                'warrior-warrior': '戦士',
+                'darkknight-darkknight': '暗黒騎士',
+                'gunbreaker-gunbreaker': 'ガンブレイカー',
+                'whitemage-whitemage': '白魔道士',
+                'scholar-scholar': '学者',
+                'astrologian-astrologian': '占星術師',
+                'sage-sage': '賢者',
+                'monk-monk': 'モンク',
+                'dragoon-dragoon': '竜騎士',
+                'ninja-ninja': '忍者',
+                'samurai-samurai': '侍',
+                'reaper-reaper': 'リーパー',
+                'viper-viper': 'ヴァイパー',
+                'bard-bard': '吟遊詩人',
+                'machinist-machinist': '機工士',
+                'dancer-dancer': '踊り子',
+                'blackmage-blackmage': '黒魔道士',
+                'summoner-summoner': '召喚士',
+                'redmage-redmage': '赤魔道士',
+                'pictomancer-pictomancer': 'ピクトマンサー'
+            },
+            ko: {
+                'tank-combined': '탱커 합산',
+                'healer-combined': '힐러 합산',
+                'paladin-paladin': '나이트',
+                'warrior-warrior': '전사',
+                'darkknight-darkknight': '암흑기사',
+                'gunbreaker-gunbreaker': '건브레이커',
+                'whitemage-whitemage': '백마도사',
+                'scholar-scholar': '학자',
+                'astrologian-astrologian': '점성술사',
+                'sage-sage': '현자',
+                'monk-monk': '몽크',
+                'dragoon-dragoon': '용기사',
+                'ninja-ninja': '닌자',
+                'samurai-samurai': '사무라이',
+                'reaper-reaper': '리퍼',
+                'viper-viper': '바이퍼',
+                'bard-bard': '음유시인',
+                'machinist-machinist': '기공사',
+                'dancer-dancer': '무도가',
+                'blackmage-blackmage': '흑마도사',
+                'summoner-summoner': '소환사',
+                'redmage-redmage': '적마도사',
+                'pictomancer-pictomancer': '픽토맨서'
+            }
+        };
+
+        const BOSS_NAME_TRANSLATIONS = {
+            zh: {
+                'vamp-fatale': 'M9S：致命美人',
+                'red-hot-and-deep-blue': 'M10S：极限温度差兄弟',
+                'the-tyrant': 'M11S：霸王',
+                'lindwurm': 'M12S P1：亡国大蛇 林德布鲁姆',
+                'lindwurm-ii': 'M12S P2：亡国大蛇 林德布鲁姆',
+                'futures-rewritten': '光暗未来绝境战',
+                'dancing-mad': '妖星乱舞绝境战'
+            },
+            ja: {
+                'vamp-fatale': 'M9S：ヴァンプ・ファタール',
+                'red-hot-and-deep-blue': 'M10S：レッドホット／ディープブルー',
+                'the-tyrant': 'M11S：ザ・タイラント',
+                'lindwurm': 'M12S P1：リンドブルム',
+                'lindwurm-ii': 'M12S P2：リンドブルム',
+                'futures-rewritten': '絶もうひとつの未来',
+                'dancing-mad': '絶妖星乱舞'
+            },
+            ko: {
+                'vamp-fatale': 'M9S: 뱀프 파탈',
+                'red-hot-and-deep-blue': 'M10S: 레드 핫 / 딥 블루',
+                'the-tyrant': 'M11S: 더 타이런트',
+                'lindwurm': 'M12S P1: 린드블룸',
+                'lindwurm-ii': 'M12S P2: 린드블룸',
+                'futures-rewritten': '절 또 하나의 미래',
+                'dancing-mad': '절 요성난무'
+            }
+        };
+
         const isCombinedSpec = (specSlug) => Boolean(COMBINED_SPECS[specSlug]);
         const getCombinedConfig = (specSlug) => COMBINED_SPECS[specSlug] || null;
 
@@ -277,6 +691,14 @@
                 n: (specSlug || "Unknown").split("-")[0].replace(/\b\w/g, c => c.toUpperCase())
             };
         };
+
+        const getLocalizedSpecName = (specSlug, language) => (
+            SPEC_NAME_TRANSLATIONS[language]?.[specSlug] || getSpecInfo(specSlug).n
+        );
+
+        const getLocalizedBossName = (bossSlug, language) => (
+            BOSS_NAME_TRANSLATIONS[language]?.[bossSlug] || BOSS_OPTIONS.find(boss => boss.id === bossSlug)?.label || bossSlug
+        );
 
         const getDefaultSelectedSpellIds = (spellMap, categories) => (
             Object.values(spellMap)
@@ -788,7 +1210,7 @@
             );
         };
 
-        const KillTimeFilter = ({ filterRange, onApply }) => {
+        const KillTimeFilter = ({ filterRange, onApply, t }) => {
             const [isOpen, setIsOpen] = useState(false);
             const ref = useRef(null);
 
@@ -798,7 +1220,7 @@
             const [maxS, setMaxS] = useState('');
 
             const formatDisplay = () => {
-                if (filterRange.min === 0 && filterRange.max >= 9999) return "Kill Time";
+                if (filterRange.min === 0 && filterRange.max >= 9999) return t("killTime");
                 const formatTime = (totalSec) => {
                     if (totalSec >= 9999) return "Max";
                     const m = Math.floor(totalSec / 60);
@@ -862,10 +1284,10 @@
 
                     {isOpen && (
                         <div className="absolute top-full left-0 mt-2 w-64 bg-[#1a1a1a] border border-gray-700 rounded-lg shadow-xl z-[8000] p-4 flex flex-col gap-4">
-                            <h3 className="text-xs font-bold text-gray-500 uppercase">Filter Kill Time (Min : Sec)</h3>
+                            <h3 className="text-xs font-bold text-gray-500 uppercase">{t("filterKillTime")}</h3>
                             
                             <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-300 w-10">Min</span>
+                                <span className="text-sm text-gray-300 w-10">{t("min")}</span>
                                 <div className="flex items-center gap-1">
                                     <input type="number" placeholder="M" value={minM} onChange={(e) => setMinM(e.target.value)} className={inputClass} />
                                     <span className="text-gray-500">:</span>
@@ -874,7 +1296,7 @@
                             </div>
 
                             <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-300 w-10">Max</span>
+                                <span className="text-sm text-gray-300 w-10">{t("max")}</span>
                                 <div className="flex items-center gap-1">
                                     <input type="number" placeholder="M" value={maxM} onChange={(e) => setMaxM(e.target.value)} className={inputClass} />
                                     <span className="text-gray-500">:</span>
@@ -883,8 +1305,8 @@
                             </div>
 
                             <div className="flex items-center justify-between pt-2 border-t border-gray-700 mt-1">
-                                <button onClick={handleReset} className="text-xs text-gray-400 hover:text-white px-2 py-1">Reset</button>
-                                <button onClick={handleApply} className="text-xs bg-[#00FF96] text-black font-bold px-3 py-1.5 rounded hover:bg-[#00cc78]">Apply</button>
+                                <button onClick={handleReset} className="text-xs text-gray-400 hover:text-white px-2 py-1">{t("reset")}</button>
+                                <button onClick={handleApply} className="text-xs bg-[#00FF96] text-black font-bold px-3 py-1.5 rounded hover:bg-[#00cc78]">{t("apply")}</button>
                             </div>
                         </div>
                     )}
@@ -892,7 +1314,7 @@
             );
         };
 
-        const CompositionFilter = ({ activeFilterSpecs, onApply }) => {
+        const CompositionFilter = ({ activeFilterSpecs, onApply, t, uiLanguage }) => {
             const [isOpen, setIsOpen] = useState(false);
             const [tempSelected, setTempSelected] = useState(new Set(activeFilterSpecs));
             const ref = useRef(null);
@@ -926,7 +1348,7 @@
                         onClick={() => setIsOpen(!isOpen)}
                         className={`flex items-center gap-2 px-3 py-1.5 border rounded-md text-sm transition-colors ${activeFilterSpecs.size > 0 ? 'bg-[#00FF96]/20 border-[#00FF96] text-white' : 'bg-black/30 border-gray-700 text-gray-400 hover:border-[#00FF96]'}`}
                     >
-                        <span>With... {activeFilterSpecs.size > 0 && `(${activeFilterSpecs.size})`}</span>
+                        <span>{t("with")} {activeFilterSpecs.size > 0 && `(${activeFilterSpecs.size})`}</span>
                         <ChevronDown size={14} />
                     </button>
 
@@ -935,18 +1357,19 @@
                             <div className="flex flex-col gap-4">
                                 {SPECS.map((group, idx) => (
                                     <div key={idx} className="flex flex-col gap-2">
-                                        <span className="text-[10px] uppercase text-gray-500 font-bold">{group.label}</span>
+                                        <span className="text-[10px] uppercase text-gray-500 font-bold">{getSpecGroupLabel(group.label, t)}</span>
                                         <div className="flex flex-wrap gap-2">
                                             {group.items.filter(item => !item.combined).map(item => {
                                                 const isSelected = tempSelected.has(item.id);
+                                                const itemName = getLocalizedSpecName(item.id, uiLanguage);
                                                 return (
                                                     <button
                                                         key={item.id}
                                                         onClick={() => toggleSpec(item.id)}
                                                         className={`w-9 h-9 flex items-center justify-center rounded border transition-all relative ${isSelected ? 'bg-[#333] border-[#00FF96]' : 'bg-[#252525] border-transparent hover:bg-[#333]'}`}
-                                                        title={item.n}
+                                                        title={itemName}
                                                     >
-                                                        <img src={`./images/classes/${item.icon}`} alt={item.n} draggable={false} className="w-full h-full object-cover rounded-sm" />
+                                                        <img src={`./images/classes/${item.icon}`} alt={itemName} draggable={false} className="w-full h-full object-cover rounded-sm" />
                                                         {isSelected && <div className="absolute inset-0 border-2 border-[#00FF96] rounded pointer-events-none"></div>}
                                                     </button>
                                                 );
@@ -956,8 +1379,8 @@
                                 ))}
                             </div>
                             <div className="flex items-center justify-between pt-2 border-t border-gray-700">
-                                <button onClick={() => setIsOpen(false)} className="text-xs text-gray-400 hover:text-white px-2 py-1">Cancel</button>
-                                <button onClick={handleApply} className="text-xs bg-[#00FF96] text-black font-bold px-3 py-1.5 rounded hover:bg-[#00cc78]">Confirm</button>
+                                <button onClick={() => setIsOpen(false)} className="text-xs text-gray-400 hover:text-white px-2 py-1">{t("cancel")}</button>
+                                <button onClick={handleApply} className="text-xs bg-[#00FF96] text-black font-bold px-3 py-1.5 rounded hover:bg-[#00cc78]">{t("confirm")}</button>
                             </div>
                         </div>
                     )}
@@ -965,12 +1388,12 @@
             );
         };
 
-        const SpecSelector = ({ selectedSpec, onChange }) => {
+        const SpecSelector = ({ selectedSpec, onChange, t, uiLanguage }) => {
             const [isOpen, setIsOpen] = useState(false);
             const ref = useRef(null);
 
             const currentSpecItem = SPECS.flatMap(g => g.items).find(i => i.id === selectedSpec);
-            const currentName = currentSpecItem?.n || 'Red Mage';
+            const currentName = getLocalizedSpecName(selectedSpec, uiLanguage);
             const currentIsCombined = Boolean(currentSpecItem?.combined);
 
             const CombinedMark = ({ compact = false }) => (
@@ -1008,22 +1431,25 @@
                         <div className="absolute top-full left-0 mt-2 w-64 bg-[#1a1a1a] border border-gray-700 rounded-lg shadow-xl z-[8000] p-2 flex flex-col gap-2 max-h-[400px] overflow-y-auto custom-scrollbar">
                             {SPECS.map((group, idx) => (
                                 <div key={idx} className="flex flex-col gap-1">
-                                    <span className="text-[10px] uppercase text-gray-500 font-bold px-1">{group.label}</span>
+                                    <span className="text-[10px] uppercase text-gray-500 font-bold px-1">{getSpecGroupLabel(group.label, t)}</span>
                                     <div className="flex flex-wrap gap-1">
-                                        {group.items.map(item => (
-                                            <button 
-                                                key={item.id}
-                                                onClick={() => { onChange(item.id); setIsOpen(false); }}
-                                                className={`w-8 h-8 flex items-center justify-center rounded border transition-all overflow-hidden ${selectedSpec === item.id ? 'bg-[#333] border-[#00FF96]' : 'bg-[#252525] border-transparent hover:bg-[#333] hover:border-[#00FF96]'}`}
-                                                title={item.n}
-                                            >
-                                                {item.combined ? (
-                                                    <CombinedMark compact />
-                                                ) : (
-                                                    <img src={`./images/classes/${item.icon}`} alt={item.n} draggable={false} className="w-full h-full object-cover" />
-                                                )}
-                                            </button>
-                                        ))}
+                                        {group.items.map(item => {
+                                            const itemName = getLocalizedSpecName(item.id, uiLanguage);
+                                            return (
+                                                <button 
+                                                    key={item.id}
+                                                    onClick={() => { onChange(item.id); setIsOpen(false); }}
+                                                    className={`w-8 h-8 flex items-center justify-center rounded border transition-all overflow-hidden ${selectedSpec === item.id ? 'bg-[#333] border-[#00FF96]' : 'bg-[#252525] border-transparent hover:bg-[#333] hover:border-[#00FF96]'}`}
+                                                    title={itemName}
+                                                >
+                                                    {item.combined ? (
+                                                        <CombinedMark compact />
+                                                    ) : (
+                                                        <img src={`./images/classes/${item.icon}`} alt={itemName} draggable={false} className="w-full h-full object-cover" />
+                                                    )}
+                                                </button>
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             ))}
@@ -1039,6 +1465,9 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get(param) || defaultValue;
             };
+            const [uiLanguage, setUiLanguage] = useState(getInitialUiLanguage);
+            const t = useCallback((key) => translate(uiLanguage, key), [uiLanguage]);
+            const currentLanguage = UI_LANGUAGES.find(lang => lang.id === uiLanguage) || UI_LANGUAGES[0];
 
             const [zoom, setZoom] = useState(5);
             const [isCollapsed, setIsCollapsed] = useState(true); 
@@ -1096,6 +1525,20 @@
             const scrollContainerRef = useRef(null);
             const suppressRowClickRef = useRef(false);
             const buddyMenuRef = useRef(null);
+
+            useEffect(() => {
+                try {
+                    localStorage.setItem(UI_LANGUAGE_STORAGE_KEY, uiLanguage);
+                } catch (e) {}
+                document.documentElement.lang = uiLanguage;
+            }, [uiLanguage]);
+
+            const cycleUiLanguage = useCallback(() => {
+                setUiLanguage(prev => {
+                    const currentIndex = UI_LANGUAGES.findIndex(lang => lang.id === prev);
+                    return UI_LANGUAGES[(currentIndex + 1) % UI_LANGUAGES.length].id;
+                });
+            }, []);
 
             const spellColorMap = useMemo(() => {
                 const map = {};
@@ -1572,7 +2015,7 @@
             // FEATURE: Handle Confirm Selection
             const handleConfirmSelection = () => {
                 if (selectedRowIds.size === 0) {
-                    alert("Please select at least one row.");
+                    alert(t("selectAtLeastOneRow"));
                     return;
                 }
                 
@@ -1597,7 +2040,7 @@
             };
 
 
-            if (loading) return <div className="h-screen bg-[#121212] flex items-center justify-center text-[#00FF96]">Loading...</div>;
+            if (loading) return <div className="h-screen bg-[#121212] flex items-center justify-center text-[#00FF96]">{t("loading")}</div>;
 
             return (
                 <div className="flex flex-col h-screen bg-[#121212] text-gray-300 font-sans overflow-hidden">
@@ -1611,39 +2054,37 @@
                             </a>
                         </div>
                         <div className="flex items-center gap-2">
-                            <span className="text-gray-400 text-sm">Boss:</span>
+                            <span className="text-gray-400 text-sm">{t("boss")}:</span>
                             <div className="relative">
                                 <select 
                                     value={selectedBoss} 
                                     onChange={(e) => updateUrlAndReload('boss', e.target.value)} 
                                     className="nav-select h-8 min-w-[180px] appearance-none rounded-md border border-gray-700 bg-[#101010] px-3 pr-8 text-sm font-medium text-gray-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] outline-none transition-colors hover:border-[#00FF96]/70 hover:bg-[#151515] focus:border-[#00FF96] cursor-pointer"
                                 >
-                                    <option value="vamp-fatale">M9S: Vamp Fatale</option>
-                                    <option value="red-hot-and-deep-blue">M10S: Red Hot and Deep Blue</option>
-                                    <option value="the-tyrant">M11S: The Tyrant</option>
-                                    <option value="lindwurm">M12S P1: Lindwurm</option>
-                                    <option value="lindwurm-ii">M12S P2: Lindwurm</option>
-                                    <option value="futures-rewritten">Futures Rewritten</option>
-                                    <option value="dancing-mad">Dancing Mad</option>
+                                    {BOSS_OPTIONS.map(boss => (
+                                        <option key={boss.id} value={boss.id}>{getLocalizedBossName(boss.id, uiLanguage)}</option>
+                                    ))}
                                 </select>
                                 <ChevronDown size={14} className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500" />
                             </div>
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
-                            <span className="text-gray-400 text-sm">Spec:</span>
+                            <span className="text-gray-400 text-sm">{t("spec")}:</span>
                             <SpecSelector 
                                 selectedSpec={selectedSpec} 
                                 onChange={(id) => updateUrlAndReload('spec', id)} 
+                                t={t}
+                                uiLanguage={uiLanguage}
                             />
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
                             
-                            <span className="text-gray-400 text-sm">Region:</span>
+                            <span className="text-gray-400 text-sm">{t("region")}:</span>
                             <div className="relative">
                                 <select
                                     value={selectedRegion}
                                     onChange={(e) => setSelectedRegion(e.target.value)}
                                     className="nav-select h-8 min-w-[82px] appearance-none rounded-md border border-gray-700 bg-[#101010] px-3 pr-8 text-sm font-medium text-gray-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] outline-none transition-colors hover:border-[#00FF96]/70 hover:bg-[#151515] focus:border-[#00FF96] cursor-pointer"
                                 >
-                                    <option value="All">All</option>
+                                    <option value="All">{t("all")}</option>
                                     <option value="JP">JP</option>
                                     <option value="NA">NA</option>
                                     <option value="EU">EU</option>
@@ -1655,11 +2096,11 @@
                             </div>
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
 
-                            <CompositionFilter activeFilterSpecs={activeFilterSpecs} onApply={setActiveFilterSpecs} />
+                            <CompositionFilter activeFilterSpecs={activeFilterSpecs} onApply={setActiveFilterSpecs} t={t} uiLanguage={uiLanguage} />
 
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
                             
-                            <KillTimeFilter filterRange={killTimeRange} onApply={setKillTimeRange} />
+                            <KillTimeFilter filterRange={killTimeRange} onApply={setKillTimeRange} t={t} />
 
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
 
@@ -1669,10 +2110,10 @@
                                     setImportError("");
                                 }}
                                 className="flex items-center gap-2 px-3 py-1.5 border border-gray-700 rounded-md text-sm text-gray-400 hover:border-[#00FF96] hover:text-white transition-colors bg-black/30"
-                                title="Import one FF Logs pull"
+                                title={t("importLog")}
                             >
                                 <ExternalLink size={14} />
-                                <span>Import Log</span>
+                                <span>{t("importLog")}</span>
                             </button>
 
                             {/* NEW FEATURE: Curation Buttons */}
@@ -1681,10 +2122,10 @@
                                 <button 
                                     onClick={() => { setIsSelectionMode(true); setSelectedRowIds(new Set()); }}
                                     className="flex items-center gap-2 px-3 py-1.5 border border-gray-700 rounded-md text-sm text-gray-400 hover:border-[#00FF96] hover:text-white transition-colors bg-black/30"
-                                    title="Enter Curation Mode"
+                                    title={t("enterCuration")}
                                 >
                                     <MousePointer2 size={14} />
-                                    <span>Select</span>
+                                    <span>{t("select")}</span>
                                 </button>
                             )}
 
@@ -1692,21 +2133,21 @@
                             {isSelectionMode && (
                                 <div className="flex items-center gap-2 animate-in fade-in zoom-in duration-200">
                                     <span className="text-xs font-bold text-[#3B82F6] mr-1">
-                                        Selected: {selectedRowIds.size}
+                                        {t("selected")}: {selectedRowIds.size}
                                     </span>
                                     <button 
                                         onClick={handleConfirmSelection}
                                         className="flex items-center gap-1 px-3 py-1.5 bg-[#3B82F6] text-white font-bold rounded-md text-sm hover:bg-blue-600 transition-colors shadow-lg shadow-blue-500/20"
                                     >
                                         <CheckCircle2 size={14} />
-                                        <span>Confirm</span>
+                                        <span>{t("confirm")}</span>
                                     </button>
                                     <button 
                                         onClick={() => setIsSelectionMode(false)}
                                         className="flex items-center gap-1 px-3 py-1.5 border border-red-500/50 text-red-400 rounded-md text-sm hover:bg-red-500/10 transition-colors"
                                     >
                                         <XCircle size={14} />
-                                        <span>Cancel</span>
+                                        <span>{t("cancel")}</span>
                                     </button>
                                 </div>
                             )}
@@ -1717,10 +2158,10 @@
                                     <button 
                                         onClick={handleExitCuration}
                                         className="flex items-center gap-2 px-3 py-1.5 bg-[#3B82F6]/20 border border-[#3B82F6] text-white rounded-md text-sm hover:bg-[#3B82F6]/30 transition-colors"
-                                        title="Exit Curated Mode"
+                                        title={t("exitCuration")}
                                     >
                                         <CheckCircle2 size={14} className="text-[#3B82F6]" />
-                                        <span>Curated ({curatedRowIds.size})</span>
+                                        <span>{t("curated")} ({curatedRowIds.size})</span>
                                         <XCircle size={14} className="ml-1 opacity-50 hover:opacity-100" />
                                     </button>
                                 </div>
@@ -1729,7 +2170,14 @@
                         </div>
                     </div>
                     {/* Right side with Discord Icon */}
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={cycleUiLanguage}
+                            className="h-8 min-w-[54px] rounded-md border border-gray-700 bg-black/30 px-2 text-xs font-black text-gray-300 transition-colors hover:border-[#00FF96] hover:text-white"
+                            title={t("language")}
+                        >
+                            {currentLanguage.label}
+                        </button>
                         <a 
                             href="https://discord.gg/SZRX5fVUeG" 
                             target="_blank" 
@@ -1748,11 +2196,11 @@
                     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70">
                         <div className="w-[520px] max-w-[calc(100vw-32px)] rounded-md border border-gray-700 bg-[#181818] shadow-2xl">
                             <div className="flex items-center justify-between border-b border-gray-800 px-4 py-3">
-                                <div className="font-bold text-white">Import FF Logs Pull</div>
+                                <div className="font-bold text-white">{t("importPull")}</div>
                                 <button
                                     onClick={() => setImportModalOpen(false)}
                                     className="text-gray-500 hover:text-white"
-                                    title="Close"
+                                    title={t("close")}
                                 >
                                     <XCircle size={18} />
                                 </button>
@@ -1770,7 +2218,7 @@
                                         disabled={importLoading || !importUrl.trim()}
                                         className="rounded-sm border border-[#00FF96] bg-[#00FF96]/10 px-3 py-1.5 text-sm font-bold text-[#00FF96] disabled:cursor-not-allowed disabled:border-gray-700 disabled:text-gray-600"
                                     >
-                                        {importLoading ? "Loading..." : "Load Players"}
+                                        {importLoading ? t("loading") : t("loadPlayers")}
                                     </button>
                                     {importMeta && (
                                         <span className="truncate text-xs text-gray-500">
@@ -1787,6 +2235,7 @@
                                     <div className="max-h-72 overflow-auto rounded border border-gray-800 bg-black/20">
                                         {importPlayers.map(player => {
                                             const specInfo = getSpecInfo(player.spec_slug);
+                                            const specName = getLocalizedSpecName(player.spec_slug, uiLanguage);
                                             const specIcon = specInfo.icon ? `./images/classes/${specInfo.icon}` : null;
                                             return (
                                                 <button
@@ -1797,14 +2246,14 @@
                                                 >
                                                     <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded border border-gray-700 bg-[#111]">
                                                         {specIcon ? (
-                                                            <img src={specIcon} alt={specInfo.n} draggable={false} className="h-full w-full object-cover" />
+                                                            <img src={specIcon} alt={specName} draggable={false} className="h-full w-full object-cover" />
                                                         ) : (
-                                                            <span className="text-[10px] font-black text-gray-400">{specInfo.n.slice(0, 2).toUpperCase()}</span>
+                                                            <span className="text-[10px] font-black text-gray-400">{specName.slice(0, 2).toUpperCase()}</span>
                                                         )}
                                                     </span>
                                                     <span className="min-w-0 flex-1">
                                                         <span className="block truncate font-bold text-white">{player.name}</span>
-                                                        <span className="block text-[11px] font-bold uppercase tracking-wide text-gray-500">{specInfo.n}</span>
+                                                        <span className="block text-[11px] font-bold uppercase tracking-wide text-gray-500">{specName}</span>
                                                     </span>
                                                     <span className="text-xs font-mono text-gray-600">#{player.source_id}</span>
                                                 </button>
@@ -1820,25 +2269,25 @@
                 {/* Control Bar */}
                 <div className="bg-[#181818] border-b border-gray-800 px-4 py-2 shrink-0 flex items-center gap-4 overflow-visible no-scrollbar shadow-md z-[5000]">
                     <div className="flex flex-col gap-1 border-r border-gray-700 pr-4 shrink-0">
-                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Display</span>
+                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">{t("display")}</span>
                         <div className="flex items-center gap-1">
                             <button
-                                title={selectedSpells.size > 0 ? "Hide all spells" : "Show all spells"}
+                                title={selectedSpells.size > 0 ? t("hideAllSpells") : t("showAllSpells")}
                                 onClick={toggleAllSpells}
                                 className={displayToggleClass(selectedSpells.size > 0)}
                             >
-                                ALL
+                                {t("all")}
                             </button>
-                            <button title="Duration" onClick={() => setShowDuration(!showDuration)} className={displayToggleClass(showDuration)}>DU</button>
-                            <button title="Cooldown" onClick={() => setShowCooldown(!showCooldown)} className={displayToggleClass(showCooldown)}>CD</button>
+                            <button title={t("duration")} onClick={() => setShowDuration(!showDuration)} className={displayToggleClass(showDuration)}>{t("duration")}</button>
+                            <button title={t("cooldown")} onClick={() => setShowCooldown(!showCooldown)} className={displayToggleClass(showCooldown)}>CD</button>
                         
-                            <button title="Phases" onClick={() => setShowPhases(!showPhases)} className={displayToggleClass(showPhases)}>PH</button>
+                            <button title={t("phases")} onClick={() => setShowPhases(!showPhases)} className={displayToggleClass(showPhases)}>{t("phases")}</button>
                         </div>
                     </div>
                     <div className="flex flex-col gap-1 border-r border-gray-700 pr-4 shrink-0">
                         <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Boss</span>
                         <div className="flex items-center gap-2">
-                            <div className={`w-8 h-8 rounded border-2 overflow-hidden cursor-pointer transition ${showBossRow ? 'border-[#00FF96] opacity-100' : 'border-gray-700 opacity-50 grayscale'}`} onClick={() => setShowBossRow(!showBossRow)} title="Toggle Boss Row">
+                            <div className={`w-8 h-8 rounded border-2 overflow-hidden cursor-pointer transition ${showBossRow ? 'border-[#00FF96] opacity-100' : 'border-gray-700 opacity-50 grayscale'}`} onClick={() => setShowBossRow(!showBossRow)} title={t("showBossRow")}>
                                 <img src="./images/classes/inv_achievement_raiddragon_sarkareth.jpg" alt="Boss" draggable={false} className="w-full h-full object-cover" />
                             </div>
                         </div>
@@ -1847,7 +2296,7 @@
                         {!isCombined && Object.entries(spellCategories).map(([catKey, category]) => (
                             <div key={catKey} className="flex flex-col gap-1">
                                 <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-white" onClick={() => toggleCategory(catKey)}>
-                                    <CategoryIcon type={category.iconType} /> {category.label}
+                                    <CategoryIcon type={category.iconType} /> {getCategoryLabel(category, t)}
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                     {(spellsByCategory[catKey] || []).map(spell => {
@@ -1869,10 +2318,10 @@
 
                         <div className="flex flex-col gap-1">
                             <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
-                                Limit Break
+                                {t("limitBreak")}
                             </div>
                             <button
-                                title="Show limit break casts"
+                                title={t("showLimitBreak")}
                                 onClick={() => setShowLimitBreak(prev => !prev)}
                                 className={`relative h-8 w-8 overflow-hidden rounded border transition ${
                                     showLimitBreak
@@ -1887,21 +2336,22 @@
                         {isBuddySupported && (
                             <div className="flex flex-col gap-1 border-l border-gray-700 pl-4 shrink-0" ref={buddyMenuRef}>
                                 <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
-                                    Party
+                                    {t("party")}
                                 </div>
                                 <div className="flex items-center gap-0.5 h-8">
                                     {!isCombined && (
                                         <button
-                                            title="Show buddy tank/healer cooldowns"
+                                            title={t("showBuddy")}
                                             onClick={() => setShowBuddy(prev => !prev)}
                                             className={`${displayToggleClass(showBuddy)} px-3`}
                                         >
-                                            Buddy
+                                            {t("buddy")}
                                         </button>
                                     )}
                                     {(isCombined || showBuddy) && buddySpecOptions.map(specInfo => {
                                         const spellMap = buddySpellMaps[specInfo.id] || {};
                                         const selectedIds = buddySpellSelections[specInfo.id] || new Set();
+                                        const specName = getLocalizedSpecName(specInfo.id, uiLanguage);
                                         return (
                                             <div key={`buddy-filter-${specInfo.id}`} className="relative">
                                                 <button
@@ -1910,9 +2360,9 @@
                                                         setBuddySpellMenuSpec(prev => prev === specInfo.id ? null : specInfo.id);
                                                     }}
                                                     className={`h-8 min-w-[30px] border-0 bg-transparent p-0 overflow-visible rounded-sm transition flex items-center justify-center ${selectedIds.size > 0 ? 'opacity-100' : 'opacity-35 grayscale hover:opacity-70'}`}
-                                                    title={`${specInfo.n} buddy spells`}
+                                                    title={`${specName} buddy spells`}
                                                 >
-                                                    <img src={`./images/classes/${specInfo.icon}`} alt={specInfo.n} draggable={false} className="h-7 w-7 rounded-sm object-cover shadow-sm" />
+                                                    <img src={`./images/classes/${specInfo.icon}`} alt={specName} draggable={false} className="h-7 w-7 rounded-sm object-cover shadow-sm" />
                                                 </button>
                                                 {buddySpellMenuSpec === specInfo.id && (
                                                     <div
@@ -1923,15 +2373,15 @@
                                                             <div className="flex min-w-0 items-center gap-2">
                                                                 <img src={`./images/classes/${specInfo.icon}`} alt="" draggable={false} className="h-6 w-6 rounded-sm object-cover" />
                                                                 <div className="min-w-0">
-                                                                    <div className="truncate text-xs font-bold text-white">{specInfo.n}</div>
-                                                                    <div className="text-[10px] font-mono text-gray-500">{selectedIds.size} shown</div>
+                                                                    <div className="truncate text-xs font-bold text-white">{specName}</div>
+                                                                    <div className="text-[10px] font-mono text-gray-500">{selectedIds.size} {t("shown")}</div>
                                                                 </div>
                                                             </div>
                                                             <button
                                                                 onClick={() => toggleAllBuddySpells(specInfo.id)}
                                                                 className="rounded border border-gray-700 px-2 py-1 text-[10px] font-bold text-gray-400 hover:border-[#00FF96] hover:text-white"
                                                             >
-                                                                ALL
+                                                                {t("all")}
                                                             </button>
                                                         </div>
                                                         <div className="space-y-3">
@@ -1946,7 +2396,7 @@
                                                                             onClick={() => toggleBuddyCategory(specInfo.id, catKey)}
                                                                             className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-gray-500 hover:text-white"
                                                                         >
-                                                                            <CategoryIcon type={category.iconType} /> {category.label}
+                                                                            <CategoryIcon type={category.iconType} /> {getCategoryLabel(category, t)}
                                                                         </button>
                                                                         <div className="flex flex-wrap gap-1.5">
                                                                             {categorySpells.map(spell => {
@@ -1978,7 +2428,7 @@
 
                         <div className="flex flex-col gap-1 border-l border-gray-700 pl-4 shrink-0">
                             <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
-                                Boss Timeline
+                                {t("bossTimeline")}
                             </div>
                             <div className="flex items-center gap-1 h-8">
                                 {Object.entries(BOSS_TIMELINE_TYPES).map(([type, config]) => {
@@ -1986,7 +2436,7 @@
                                     return (
                                         <button
                                             key={`boss-timeline-toggle-${type}`}
-                                            title={`Show ${config.label}`}
+                                            title={`${t("showBossTimelineType")} ${getBossTimelineTypeLabel(type, t)}`}
                                             onClick={() => toggleBossTimelineType(type)}
                                             className="h-6 min-w-10 px-2 flex items-center justify-center rounded-sm border text-[10px] font-black font-mono uppercase transition-colors"
                                             style={{
@@ -1995,7 +2445,7 @@
                                                 backgroundColor: active ? `${config.color}1f` : '#111'
                                             }}
                                         >
-                                            {config.label}
+                                            {getBossTimelineTypeLabel(type, t)}
                                         </button>
                                     );
                                 })}
@@ -2011,7 +2461,7 @@
                             >
                                 <span className="flex items-center gap-1">
                                     <SlidersHorizontal size={14} />
-                                    ALL
+                                    {t("all")}
                                 </span>
                             </div>
                             <div className="flex items-center gap-1.5 h-8">
@@ -2019,7 +2469,7 @@
                                     onClick={toggleAllSpells}
                                     className={`h-8 px-3 flex items-center justify-center rounded border text-[11px] font-black tracking-wide transition-all ${selectedSpells.size > 0 ? 'bg-white/10 border-gray-500 text-white' : 'bg-transparent border-gray-800 text-gray-500 hover:border-gray-600 hover:text-white'}`}
                                 >
-                                    ALL
+                                    {t("all")}
                                 </button>
                             </div>
                         </div>
@@ -2030,7 +2480,7 @@
                         <button
                             onClick={() => setIsCollapsed(!isCollapsed)}
                             className={`p-1.5 rounded transition ${!isCollapsed ? 'text-[#00FF96] bg-gray-700' : 'text-gray-400 hover:text-white hover:bg-gray-700'}`}
-                            title={isCollapsed ? "Expand Rows (Split lines)" : "Collapse Rows"}
+                            title={isCollapsed ? t("expandRows") : t("collapseRows")}
                         >
                             <Layers size={16} />
                         </button>
@@ -2053,11 +2503,11 @@
                             {/* Sticky Header: Time Ruler */}
                             <div className="sticky top-0 z-[3000] flex h-8 bg-[#202020] border-b border-gray-700/80 shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
                                 <div className="sticky left-0 bg-[#202020] border-r border-gray-700/90 shrink-0 flex items-center px-4 text-[11px] font-bold text-gray-500 uppercase z-[3100] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
-                                    <div className="w-8 text-center mr-2 text-[#00FF96]">Rank</div>
-                                    <div className="flex-1 text-left">RDPS</div>
-                                    <div className="w-8 text-center text-gray-600">Reg</div>
-                                    <div className="w-8 text-center text-gray-600">{isCombined ? "Spec" : "Pair"}</div>
-                                    <div className="w-8 text-center text-gray-600 ml-1">Buffs</div>
+                                    <div className="w-8 text-center mr-2 text-[#00FF96]">{t("rank")}</div>
+                                    <div className="flex-1 text-left">{t("rdps")}</div>
+                                    <div className="w-8 text-center text-gray-600">{t("reg")}</div>
+                                    <div className="w-8 text-center text-gray-600">{isCombined ? t("spec") : t("pair")}</div>
+                                    <div className="w-8 text-center text-gray-600 ml-1">{t("buffs")}</div>
                                 </div>
                                 <div className="relative h-full" style={{ width: `${timelineWidth}px` }}>
                                     {/* UPDATED: Dynamic Ticks (Feature 1) */}
@@ -2111,7 +2561,7 @@
                             {showBossRow && (
                                 <div className="flex h-10 border-b border-gray-800/60 bg-[#151515] hover:bg-[#1a1a1a] transition-colors group relative sticky top-8 z-40">
                                     <div className="sticky left-0 bg-[#181818] border-r border-gray-700/90 shrink-0 flex items-center px-4 z-[1000] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
-                                        <div className="flex-1 font-bold text-gray-300">Boss Timeline</div>
+                                        <div className="flex-1 font-bold text-gray-300">{t("bossTimeline")}</div>
                                     </div>
                                     <div className="relative h-full z-10 overflow-hidden" style={{ width: `${timelineWidth}px` }}>
                                         {bossTimelineMechanics.map((mech, i) => (
@@ -2121,7 +2571,7 @@
                                                     key={i} 
                                                     className="absolute top-1/2 -translate-y-1/2 h-7 rounded-sm border border-white/15 flex items-center justify-center text-[13px] font-bold text-white/95 overflow-hidden shadow-sm" 
                                                     style={{ left: `${mech.time * zoom}px`, width: `${Math.max(mech.duration * zoom, 48)}px`, backgroundColor: getBossTimelineColor(mech.type, mech.color) }} 
-                                                    title={`${BOSS_TIMELINE_TYPES[mech.type]?.label || 'Boss'}: ${mech.name} (${formatTime(mech.time)}) - ${mech.duration}s`}
+                                                    title={`${getBossTimelineTypeLabel(mech.type, t) || t("boss")}: ${mech.name} (${formatTime(mech.time)}) - ${mech.duration}s`}
                                                 >
                                                     <span className="block max-w-full overflow-hidden whitespace-nowrap px-2 leading-none drop-shadow-[0_1px_1px_rgba(0,0,0,0.75)]">{mech.name}</span>
                                                 </div>
@@ -2131,7 +2581,7 @@
                                                     key={i} 
                                                     className="absolute top-1/2 -translate-y-1/2 h-6 w-6 rounded border border-white/20 flex items-center justify-center shadow-sm overflow-hidden" 
                                                     style={{ left: `${mech.time * zoom}px`, backgroundColor: getBossTimelineColor(mech.type, mech.color) }}
-                                                    title={`${BOSS_TIMELINE_TYPES[mech.type]?.label || 'Boss'}: ${mech.name} (${formatTime(mech.time)})`}
+                                                    title={`${getBossTimelineTypeLabel(mech.type, t) || t("boss")}: ${mech.name} (${formatTime(mech.time)})`}
                                                 >
                                                     <RenderIcon spell={mech} />
                                                 </div>
@@ -2163,6 +2613,7 @@
                                     : calculateCastTracks(visibleImportedCasts);
                                 const totalHeight = isCollapsed ? rowHeight : Math.max(rowHeight, importedMaxTracks * trackHeight);
                                 const specInfo = getSpecInfo(importedRow.specSlug);
+                                const specName = getLocalizedSpecName(importedRow.specSlug, uiLanguage);
                                 const endLabel = importedRow.kill ? "Kill" : "Wipe";
                                 const percentLabel = !importedRow.kill && importedRow.percent ? ` ${Number(importedRow.percent).toFixed(1)}%` : "";
 
@@ -2175,7 +2626,7 @@
                                     >
                                         <div className={`sticky left-0 bg-[#0b1713] border-r border-gray-700/90 shrink-0 flex items-center px-4 transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.25)] ${importSpellMenuRowId === importedRow.id ? 'z-[1100]' : 'z-[1000]'}`} style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
                                             <div className="flex min-w-0 flex-1 flex-col">
-                                                <span className="text-[9px] font-black uppercase leading-none text-[#00FF96]">Imported Log</span>
+                                                <span className="text-[9px] font-black uppercase leading-none text-[#00FF96]">{t("importedLog")}</span>
                                                 <span className="truncate text-[13px] font-bold leading-tight text-white">{importedRow.name}</span>
                                             </div>
                                             {!sameSpecAsTimeline && (
@@ -2186,7 +2637,7 @@
                                                             setImportSpellMenuRowId(importSpellMenuRowId === importedRow.id ? null : importedRow.id);
                                                         }}
                                                         className="flex h-6 items-center gap-1 rounded border border-gray-700 bg-black/30 px-2 text-[11px] font-bold text-gray-300 hover:border-[#00FF96] hover:text-white"
-                                                        title={`${specInfo.n} spell filters`}
+                                                        title={`${specName} spell filters`}
                                                     >
                                                         <SlidersHorizontal size={13} />
                                                         {importedVisibleSpellIds.size}
@@ -2199,15 +2650,15 @@
                                                             <div className="mb-2 flex items-center justify-between border-b border-gray-800 pb-2">
                                                                 <div className="flex min-w-0 items-center gap-2">
                                                                     <div className="min-w-0">
-                                                                        <div className="truncate text-xs font-bold text-white">{specInfo.n}</div>
-                                                                        <div className="text-[10px] font-mono text-gray-500">{importedVisibleSpellIds.size} shown</div>
+                                                                        <div className="truncate text-xs font-bold text-white">{specName}</div>
+                                                                        <div className="text-[10px] font-mono text-gray-500">{importedVisibleSpellIds.size} {t("shown")}</div>
                                                                     </div>
                                                                 </div>
                                                                 <button
                                                                     onClick={() => toggleAllImportedSpells(importedRow.id, importedSpellMap)}
                                                                     className="rounded border border-gray-700 px-2 py-1 text-[10px] font-bold text-gray-400 hover:border-[#00FF96] hover:text-white"
                                                                 >
-                                                                    ALL
+                                                                    {t("all")}
                                                                 </button>
                                                             </div>
                                                             <div className="space-y-3">
@@ -2222,7 +2673,7 @@
                                                                                 onClick={() => toggleImportedCategory(importedRow.id, importedSpellMap, catKey)}
                                                                                 className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-gray-500 hover:text-white"
                                                                             >
-                                                                                <CategoryIcon type={category.iconType} /> {category.label}
+                                                                                <CategoryIcon type={category.iconType} /> {getCategoryLabel(category, t)}
                                                                             </button>
                                                                             <div className="flex flex-wrap gap-1.5">
                                                                                 {categorySpells.map(spell => {
@@ -2258,7 +2709,7 @@
                                                     if (importSpellMenuRowId === importedRow.id) setImportSpellMenuRowId(null);
                                                 }}
                                                 className="ml-2 text-gray-500 hover:text-white"
-                                                title="Remove imported log"
+                                                title={t("removeImportedLog")}
                                             >
                                                 <XCircle size={15} />
                                             </button>
@@ -2534,7 +2985,7 @@
                                                             alt={row.combinedPlayers[0].specSlug}
                                                             draggable={false}
                                                             className="w-5 h-5 object-contain"
-                                                            title={getSpecInfo(row.combinedPlayers[0].specSlug).n}
+                                                            title={getLocalizedSpecName(row.combinedPlayers[0].specSlug, uiLanguage)}
                                                         />
                                                     )
                                                 ) : (
@@ -2721,7 +3172,7 @@
                                         >
                                             <div className="sticky left-0 bg-[#101614] group-hover/buddy:bg-[#13201b] border-r border-gray-700/90 shrink-0 flex items-center px-4 z-[1000] transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.2)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
                                                 <div className="w-8 text-center mr-2 text-[10px] font-black uppercase tracking-wide text-gray-600">
-                                                    {row.isCombined ? "Pair" : "Buddy"}
+                                                    {row.isCombined ? t("pair") : t("buddy")}
                                                 </div>
                                                 <div className="flex h-full min-w-0 flex-1 items-center">
                                                     {row.isCombined ? (
@@ -2743,7 +3194,7 @@
                                                             alt={buddy.specSlug}
                                                             draggable={false}
                                                             className="w-5 h-5 object-contain"
-                                                            title={getSpecInfo(buddy.specSlug).n}
+                                                            title={getLocalizedSpecName(buddy.specSlug, uiLanguage)}
                                                         />
                                                     )}
                                                 </div>
