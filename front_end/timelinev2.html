@@ -173,6 +173,8 @@
         const ZOOM_VISIBLE_MINUTES_STORAGE_KEY = 'm-spec:visible-minutes';
         const ZOOM_VISIBLE_MINUTES_MIGRATION_KEY = 'm-spec:visible-minutes-migration';
         const ZOOM_VISIBLE_MINUTES_MIGRATION = 'default-6m-2026-06-08';
+        const USER_FFLOGS_CLIENT_ID_STORAGE_KEY = 'm-spec:fflogs-client-id';
+        const USER_FFLOGS_CLIENT_SECRET_STORAGE_KEY = 'm-spec:fflogs-client-secret';
         const UI_LANGUAGES = [
             { id: 'en', label: 'EN' },
             { id: 'zh', label: '中文' },
@@ -238,6 +240,31 @@
                 selectAtLeastOneRow: 'Please select at least one row.',
                 expandRows: 'Expand Rows (Split lines)',
                 collapseRows: 'Collapse Rows',
+                apiSettings: 'API Settings',
+                publicImportActive: 'Using the shared import quota. If it is full, you can use your own FF Logs API client.',
+                userApiActive: 'Personal FF Logs API client enabled. This import will not use the shared quota.',
+                apiLimitTitle: 'Shared Import Quota Is Full',
+                apiLimitSubtitle: 'You can wait for the shared quota to refresh at the next hour, or use your own FF Logs v2 API client now.',
+                apiDisclosure: 'Your FF Logs client ID and client secret will be sent to the M-Spec server so the server can request FF Logs on your behalf. The M-Spec server will not store them locally, write them to a database, or intentionally log them. They are saved in your own browser and used automatically for future imports. Keep the secret private.',
+                apiTokenInstructionsTitle: 'Create Your Own FF Logs v2 API Client',
+                apiTokenInstructionsBody: 'Open the FF Logs client page and click Create a Client. Fill the form exactly like this, then copy the client ID and client secret shown after creation. The secret will never be shown again.',
+                apiClientPageLabel: 'FF Logs clients page',
+                apiClientNameLabel: 'Application name',
+                apiRedirectUrlLabel: 'Redirect URL',
+                apiPublicClientLabel: 'Public Client checkbox',
+                apiPublicClientValue: 'Leave unchecked. M-Spec needs the client secret.',
+                copy: 'Copy',
+                copied: 'Copied',
+                apiTokenInputLabel: 'FF Logs Client ID / Client Secret',
+                apiClientIdPlaceholder: 'Client ID',
+                apiClientSecretPlaceholder: 'Client Secret',
+                save: 'Save',
+                savedUserApiNotice: 'This browser has a personal FF Logs API client saved. Imports will prefer it.',
+                clear: 'Clear',
+                missingFflogsToken: 'Please enter both FF Logs client ID and client secret.',
+                invalidFflogsCredentials: 'Your FF Logs client ID or client secret may be incorrect. Please re-enter them.',
+                importUrlHelp: 'Paste a full FF Logs report URL with a numeric fight value, for example fight=9. Do not use fight=last. Open the specific pull in FF Logs first, then copy the URL after the pull number appears.',
+                numericFightError: 'The FF Logs URL must include a numeric fight value, such as fight=9. fight=last is not supported. Open that pull in FF Logs first, then copy the URL after it changes to a number.',
                 role_Tanks: 'Tanks',
                 role_Healers: 'Healers',
                 role_Melee: 'Melee',
@@ -302,6 +329,31 @@
                 selectAtLeastOneRow: '请至少选择一行。',
                 expandRows: '展开行',
                 collapseRows: '折叠行',
+                apiSettings: 'API 设置',
+                publicImportActive: '使用公共额度导入。公共额度满时可以改用自己的 FF Logs API。',
+                userApiActive: '已启用个人 FF Logs API client，本次导入不占用公共额度。',
+                apiLimitTitle: '公共导入额度已满',
+                apiLimitSubtitle: '你可以等到下一个整点公共额度刷新，也可以现在使用自己的 FF Logs v2 API client 继续导入。',
+                apiDisclosure: '你的 FF Logs client ID 和 client secret 会上传到 M-Spec 服务器，由服务器代为请求 FF Logs。M-Spec 服务器不会在本地保存它们，也不会写入数据库或日志。它们会保存在你自己的浏览器中，之后导入 Log 时自动使用。请不要把 client secret 分享给别人。',
+                apiTokenInstructionsTitle: '创建自己的 FF Logs v2 API Client',
+                apiTokenInstructionsBody: '打开 FF Logs client 页面，点击 Create a Client。按下面这样填写表格。创建成功后 FF Logs 会显示 client ID 和 client secret，请立刻复制这两个内容；secret 只会显示一次，丢了就只能删掉 client 重新创建。',
+                apiClientPageLabel: 'FF Logs clients 页面',
+                apiClientNameLabel: '应用名称',
+                apiRedirectUrlLabel: 'Redirect URL',
+                apiPublicClientLabel: 'Public Client 选项',
+                apiPublicClientValue: '不要勾选。M-Spec 需要 client secret。',
+                copy: '复制',
+                copied: '已复制',
+                apiTokenInputLabel: 'FF Logs Client ID / Client Secret',
+                apiClientIdPlaceholder: 'Client ID',
+                apiClientSecretPlaceholder: 'Client Secret',
+                save: '保存',
+                savedUserApiNotice: '当前浏览器已经保存个人 FF Logs API client，导入时会优先使用它。',
+                clear: '清除',
+                missingFflogsToken: '请同时输入 FF Logs client ID 和 client secret。',
+                invalidFflogsCredentials: '你的 FF Logs client ID 或 client secret 可能有问题，请重新输入。',
+                importUrlHelp: '请粘贴完整 FF Logs 链接，并且 fight 必须是数字，例如 fight=9。不要用 fight=last。解决办法：先在 FF Logs 里点进这一 pull，再复制地址栏里已经变成数字的链接。',
+                numericFightError: 'FF Logs 链接必须包含数字 fight，例如 fight=9。不能使用 fight=last。请先在 FF Logs 里点进这一 pull，再复制地址栏里变成数字后的链接。',
                 role_Tanks: '坦克',
                 role_Healers: '治疗',
                 role_Melee: '近战',
@@ -366,6 +418,31 @@
                 selectAtLeastOneRow: '少なくとも1行を選択してください。',
                 expandRows: '行を展開',
                 collapseRows: '行を折りたたむ',
+                apiSettings: 'API 設定',
+                publicImportActive: '共有インポート枠を使用中です。上限に達した場合は自分の FF Logs API client を使用できます。',
+                userApiActive: '個人 FF Logs API client が有効です。このインポートは共有枠を使用しません。',
+                apiLimitTitle: '共有インポート枠が上限に達しました',
+                apiLimitSubtitle: '次の正時に共有枠が更新されるまで待つか、自分の FF Logs v2 API client を使って続行できます。',
+                apiDisclosure: 'あなたの FF Logs client ID と client secret は M-Spec サーバーへ送信され、サーバーが代理で FF Logs にリクエストします。M-Spec サーバーはそれらをローカル保存せず、データベースやログにも意図的に書き込みません。それらはあなたのブラウザに保存され、今後のインポートで自動使用されます。client secret を他人に共有しないでください。',
+                apiTokenInstructionsTitle: '自分の FF Logs v2 API Client を作成する',
+                apiTokenInstructionsBody: 'FF Logs client ページを開き、Create a Client をクリックします。下の内容でフォームを入力してください。作成後、client ID と client secret が表示されます。secret は一度しか表示されないため、必ずその場でコピーしてください。',
+                apiClientPageLabel: 'FF Logs clients ページ',
+                apiClientNameLabel: 'アプリ名',
+                apiRedirectUrlLabel: 'Redirect URL',
+                apiPublicClientLabel: 'Public Client チェック',
+                apiPublicClientValue: 'チェックしないでください。M-Spec は client secret を使用します。',
+                copy: 'コピー',
+                copied: 'コピー済み',
+                apiTokenInputLabel: 'FF Logs Client ID / Client Secret',
+                apiClientIdPlaceholder: 'Client ID',
+                apiClientSecretPlaceholder: 'Client Secret',
+                save: '保存',
+                savedUserApiNotice: 'このブラウザには個人 FF Logs API client が保存されています。インポート時に優先して使用されます。',
+                clear: '削除',
+                missingFflogsToken: 'FF Logs client ID と client secret の両方を入力してください。',
+                invalidFflogsCredentials: 'FF Logs client ID または client secret が間違っている可能性があります。再入力してください。',
+                importUrlHelp: '数字の fight を含む完全な FF Logs URL を貼り付けてください。例: fight=9。fight=last は使えません。FF Logs で該当 pull を開き、URL が数字になってからコピーしてください。',
+                numericFightError: 'FF Logs URL には fight=9 のような数字の fight が必要です。fight=last は使えません。FF Logs で該当 pull を開き、URL が数字になってからコピーしてください。',
                 role_Tanks: 'タンク',
                 role_Healers: 'ヒーラー',
                 role_Melee: '近接',
@@ -430,6 +507,31 @@
                 selectAtLeastOneRow: '최소 한 줄을 선택해 주세요.',
                 expandRows: '행 펼치기',
                 collapseRows: '행 접기',
+                apiSettings: 'API 설정',
+                publicImportActive: '공용 가져오기 한도를 사용 중입니다. 한도가 찼다면 본인의 FF Logs API client 를 사용할 수 있습니다.',
+                userApiActive: '개인 FF Logs API client 가 활성화되었습니다. 이 가져오기는 공용 한도를 사용하지 않습니다.',
+                apiLimitTitle: '공용 가져오기 한도가 가득 찼습니다',
+                apiLimitSubtitle: '다음 정시에 공용 한도가 갱신될 때까지 기다리거나, 본인의 FF Logs v2 API client 를 사용해 계속 가져올 수 있습니다.',
+                apiDisclosure: 'FF Logs client ID 와 client secret 은 M-Spec 서버로 전송되며, 서버가 대신 FF Logs 에 요청합니다. M-Spec 서버는 이를 로컬에 저장하지 않고 데이터베이스나 로그에도 의도적으로 기록하지 않습니다. 이 정보는 사용자의 브라우저에 저장되어 이후 Log 가져오기에 자동으로 사용됩니다. client secret 을 다른 사람에게 공유하지 마세요.',
+                apiTokenInstructionsTitle: '본인의 FF Logs v2 API Client 만들기',
+                apiTokenInstructionsBody: 'FF Logs client 페이지를 열고 Create a Client 를 클릭하세요. 아래 값으로 폼을 입력하세요. 생성 후 client ID 와 client secret 이 표시됩니다. secret 은 한 번만 표시되므로 반드시 바로 복사하세요.',
+                apiClientPageLabel: 'FF Logs clients 페이지',
+                apiClientNameLabel: '애플리케이션 이름',
+                apiRedirectUrlLabel: 'Redirect URL',
+                apiPublicClientLabel: 'Public Client 체크',
+                apiPublicClientValue: '체크하지 마세요. M-Spec 은 client secret 이 필요합니다.',
+                copy: '복사',
+                copied: '복사됨',
+                apiTokenInputLabel: 'FF Logs Client ID / Client Secret',
+                apiClientIdPlaceholder: 'Client ID',
+                apiClientSecretPlaceholder: 'Client Secret',
+                save: '저장',
+                savedUserApiNotice: '이 브라우저에 개인 FF Logs API client 가 저장되어 있습니다. 가져오기 시 우선 사용됩니다.',
+                clear: '삭제',
+                missingFflogsToken: 'FF Logs client ID 와 client secret 을 모두 입력해 주세요.',
+                invalidFflogsCredentials: 'FF Logs client ID 또는 client secret 이 잘못되었을 수 있습니다. 다시 입력해 주세요.',
+                importUrlHelp: '숫자 fight 값이 포함된 전체 FF Logs URL 을 붙여넣으세요. 예: fight=9. fight=last 는 사용할 수 없습니다. FF Logs 에서 해당 pull 을 먼저 연 뒤, URL 이 숫자로 바뀐 후 복사하세요.',
+                numericFightError: 'FF Logs URL 에는 fight=9 처럼 숫자 fight 값이 필요합니다. fight=last 는 사용할 수 없습니다. FF Logs 에서 해당 pull 을 먼저 연 뒤, URL 이 숫자로 바뀐 후 복사하세요.',
                 role_Tanks: '탱커',
                 role_Healers: '힐러',
                 role_Melee: '근접',
@@ -516,6 +618,12 @@
             window.history.replaceState({}, '', url);
         };
         const translate = (language, key) => I18N[language]?.[key] || I18N.en[key] || key;
+        const translateWithValues = (language, key, values = {}) => (
+            Object.entries(values).reduce(
+                (text, [name, value]) => text.replaceAll(`{${name}}`, value),
+                translate(language, key)
+            )
+        );
         const getCategoryLabel = (category, t) => {
             const key = `category_${String(category.label || '').toLowerCase().replace(/\s+/g, '_')}`;
             const translated = t(key);
@@ -772,6 +880,34 @@
             event?.name_i18n?.[language] || event?.name || 'Unknown'
         );
 
+        const CopyValue = ({ value, label, t }) => {
+            const [copied, setCopied] = useState(false);
+            const handleCopy = async () => {
+                try {
+                    await navigator.clipboard.writeText(value);
+                    setCopied(true);
+                    window.setTimeout(() => setCopied(false), 1200);
+                } catch (error) {
+                    console.warn("[M-Spec] Could not copy value.", error);
+                }
+            };
+            return (
+                <div className="rounded border border-gray-800 bg-black/25 p-2">
+                    <div className="mb-1 text-[10px] font-black uppercase tracking-wide text-gray-500">{label}</div>
+                    <div className="flex items-center gap-2">
+                        <code className="min-w-0 flex-1 truncate rounded bg-black/40 px-2 py-1.5 text-xs text-gray-200">{value}</code>
+                        <button
+                            type="button"
+                            onClick={handleCopy}
+                            className="shrink-0 rounded border border-gray-700 px-2 py-1 text-xs font-bold text-gray-300 hover:border-[#00FF96] hover:text-white"
+                        >
+                            {copied ? t("copied") : t("copy")}
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
         const getDefaultSelectedSpellIds = (spellMap, categories) => (
             Object.values(spellMap)
                 .filter(s => {
@@ -802,6 +938,31 @@
                 localStorage.setItem(getSpellSelectionStorageKey(specSlug), JSON.stringify([...selectedIds].map(Number)));
             } catch (error) {
                 console.warn("[M-Spec] Could not store spell selection.", error);
+            }
+        };
+
+        const readStoredUserFflogsCredentials = () => {
+            try {
+                return {
+                    clientId: localStorage.getItem(USER_FFLOGS_CLIENT_ID_STORAGE_KEY) || "",
+                    clientSecret: localStorage.getItem(USER_FFLOGS_CLIENT_SECRET_STORAGE_KEY) || ""
+                };
+            } catch (error) {
+                return { clientId: "", clientSecret: "" };
+            }
+        };
+
+        const writeStoredUserFflogsCredentials = (clientId, clientSecret) => {
+            try {
+                if (clientId && clientSecret) {
+                    localStorage.setItem(USER_FFLOGS_CLIENT_ID_STORAGE_KEY, clientId);
+                    localStorage.setItem(USER_FFLOGS_CLIENT_SECRET_STORAGE_KEY, clientSecret);
+                } else {
+                    localStorage.removeItem(USER_FFLOGS_CLIENT_ID_STORAGE_KEY);
+                    localStorage.removeItem(USER_FFLOGS_CLIENT_SECRET_STORAGE_KEY);
+                }
+            } catch (error) {
+                console.warn("[M-Spec] Could not store FF Logs credentials.", error);
             }
         };
 
@@ -1732,6 +1893,11 @@
             const [importMeta, setImportMeta] = useState(null);
             const [importError, setImportError] = useState("");
             const [importLoading, setImportLoading] = useState(false);
+            const [apiHelpOpen, setApiHelpOpen] = useState(false);
+            const [userFflogsCredentials, setUserFflogsCredentials] = useState(readStoredUserFflogsCredentials);
+            const [manualFflogsClientId, setManualFflogsClientId] = useState("");
+            const [manualFflogsClientSecret, setManualFflogsClientSecret] = useState("");
+            const [apiHelpError, setApiHelpError] = useState("");
 
             const [showDuration, setShowDuration] = useState(true);
             const [showCooldown, setShowCooldown] = useState(false);
@@ -2059,10 +2225,38 @@
                 }));
             };
 
+            const saveManualFflogsToken = () => {
+                const clientId = manualFflogsClientId.trim();
+                const clientSecret = manualFflogsClientSecret.trim();
+                if (!clientId || !clientSecret) {
+                    setApiHelpError(t("missingFflogsToken"));
+                    return;
+                }
+                writeStoredUserFflogsCredentials(clientId, clientSecret);
+                setUserFflogsCredentials({ clientId, clientSecret });
+                setManualFflogsClientId("");
+                setManualFflogsClientSecret("");
+                setApiHelpError("");
+                setApiHelpOpen(false);
+            };
+
+            const clearUserFflogsToken = () => {
+                writeStoredUserFflogsCredentials("", "");
+                setUserFflogsCredentials({ clientId: "", clientSecret: "" });
+                setManualFflogsClientId("");
+                setManualFflogsClientSecret("");
+                setApiHelpError("");
+            };
+
             const postImportLog = async (path, payload) => {
+                const headers = { "Content-Type": "application/json" };
+                if (userFflogsCredentials.clientId && userFflogsCredentials.clientSecret) {
+                    headers["X-MSpec-FFLogs-Client-ID"] = userFflogsCredentials.clientId;
+                    headers["X-MSpec-FFLogs-Client-Secret"] = userFflogsCredentials.clientSecret;
+                }
                 const res = await fetch(`/api/import_log/${path}`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers,
                     body: JSON.stringify(payload)
                 });
                 if (!res.ok) {
@@ -2071,9 +2265,20 @@
                     try {
                         message = JSON.parse(text).detail || message;
                     } catch (e) {}
-                    throw new Error(message);
+                    const error = new Error(message);
+                    error.status = res.status;
+                    throw error;
                 }
                 return res.json();
+            };
+
+            const getImportErrorMessage = (error) => {
+                const message = error?.message || "";
+                const usingUserCredentials = Boolean(userFflogsCredentials.clientId && userFflogsCredentials.clientSecret);
+                if (usingUserCredentials && [401, 403, 500].includes(error?.status)) return t("invalidFflogsCredentials");
+                if (usingUserCredentials && message.toLowerCase().includes("internal server error")) return t("invalidFflogsCredentials");
+                if (message.includes("numeric fight query parameter")) return t("numericFightError");
+                return message;
             };
 
             const handleLoadImportPlayers = async () => {
@@ -2093,7 +2298,16 @@
                     setImportMeta(data);
                     writeStoredImportFightPlayers(selectedBoss, data);
                 } catch (error) {
-                    setImportError(error.message || "Could not load players.");
+                    if (error.status === 429) setApiHelpOpen(true);
+                    if ((userFflogsCredentials.clientId && userFflogsCredentials.clientSecret) && [401, 403, 500].includes(error.status)) {
+                        const previousClientId = userFflogsCredentials.clientId;
+                        setApiHelpOpen(true);
+                        writeStoredUserFflogsCredentials("", "");
+                        setUserFflogsCredentials({ clientId: "", clientSecret: "" });
+                        setManualFflogsClientId(previousClientId);
+                        setManualFflogsClientSecret("");
+                    }
+                    setImportError(getImportErrorMessage(error) || "Could not load players.");
                 } finally {
                     setImportLoading(false);
                 }
@@ -2169,7 +2383,16 @@
                     });
                     setImportModalOpen(false);
                 } catch (error) {
-                    setImportError(error.message || "Could not import player casts.");
+                    if (error.status === 429) setApiHelpOpen(true);
+                    if ((userFflogsCredentials.clientId && userFflogsCredentials.clientSecret) && [401, 403, 500].includes(error.status)) {
+                        const previousClientId = userFflogsCredentials.clientId;
+                        setApiHelpOpen(true);
+                        writeStoredUserFflogsCredentials("", "");
+                        setUserFflogsCredentials({ clientId: "", clientSecret: "" });
+                        setManualFflogsClientId(previousClientId);
+                        setManualFflogsClientSecret("");
+                    }
+                    setImportError(getImportErrorMessage(error) || "Could not import player casts.");
                 } finally {
                     setImportLoading(false);
                 }
@@ -2536,6 +2759,9 @@
                                     placeholder="https://www.fflogs.com/reports/...?...fight=9&type=damage-done"
                                     className="w-full rounded border border-gray-700 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-[#00FF96]"
                                 />
+                                <div className="text-[11px] leading-relaxed text-gray-500">
+                                    {t("importUrlHelp")}
+                                </div>
                                 <div className="flex items-center gap-2">
                                     <button
                                         onClick={handleLoadImportPlayers}
@@ -2583,6 +2809,79 @@
                                                 </button>
                                             );
                                         })}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {apiHelpOpen && (
+                    <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/75">
+                        <div className="max-h-[88vh] w-[680px] max-w-[calc(100vw-28px)] overflow-auto rounded-md border border-gray-700 bg-[#181818] shadow-2xl">
+                            <div className="flex items-center justify-between border-b border-gray-800 px-5 py-4">
+                                <div>
+                                    <div className="text-base font-black text-white">{t("apiLimitTitle")}</div>
+                                    <div className="mt-1 text-xs text-gray-500">{t("apiLimitSubtitle")}</div>
+                                </div>
+                                <button onClick={() => setApiHelpOpen(false)} className="text-gray-500 hover:text-white" title={t("close")}>
+                                    <XCircle size={20} />
+                                </button>
+                            </div>
+                            <div className="space-y-4 p-5 text-sm text-gray-300">
+                                <div className="rounded border border-yellow-500/30 bg-yellow-950/20 px-3 py-2 text-xs leading-relaxed text-yellow-100/90">
+                                    {t("apiDisclosure")}
+                                </div>
+
+                                <div className="space-y-2">
+                                    <div className="font-black text-white">{t("apiTokenInstructionsTitle")}</div>
+                                    <div className="text-xs leading-relaxed text-gray-400">
+                                        {t("apiTokenInstructionsBody")}
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <CopyValue value="https://www.fflogs.com/api/clients/" label={t("apiClientPageLabel")} t={t} />
+                                        <CopyValue value="M-Spec personal import" label={t("apiClientNameLabel")} t={t} />
+                                        <CopyValue value="https://raalm.com/m-spec/main_menu.html#" label={t("apiRedirectUrlLabel")} t={t} />
+                                        <div className="rounded border border-gray-800 bg-black/25 p-2">
+                                            <div className="mb-1 text-[10px] font-black uppercase tracking-wide text-gray-500">{t("apiPublicClientLabel")}</div>
+                                            <div className="text-xs text-gray-300">{t("apiPublicClientValue")}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="border-t border-gray-800 pt-4">
+                                    <div className="mb-2 text-xs font-bold uppercase tracking-wide text-gray-500">{t("apiTokenInputLabel")}</div>
+                                    <div className="grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
+                                        <input
+                                            value={manualFflogsClientId}
+                                            onChange={(e) => setManualFflogsClientId(e.target.value)}
+                                            placeholder={t("apiClientIdPlaceholder")}
+                                            className="min-w-0 flex-1 rounded border border-gray-700 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-[#00FF96]"
+                                        />
+                                        <input
+                                            value={manualFflogsClientSecret}
+                                            onChange={(e) => setManualFflogsClientSecret(e.target.value)}
+                                            placeholder={t("apiClientSecretPlaceholder")}
+                                            className="min-w-0 flex-1 rounded border border-gray-700 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-[#00FF96]"
+                                        />
+                                        <button onClick={saveManualFflogsToken} className="rounded-sm border border-gray-700 px-3 py-1.5 text-sm font-bold text-gray-300 hover:border-[#00FF96] hover:text-white">
+                                            {t("save")}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {userFflogsCredentials.clientId && userFflogsCredentials.clientSecret && (
+                                    <div className="flex items-center justify-between rounded border border-[#00FF96]/30 bg-[#00FF96]/10 px-3 py-2 text-xs text-[#00FF96]">
+                                        <span>{t("savedUserApiNotice")}</span>
+                                        <button onClick={clearUserFflogsToken} className="rounded border border-[#00FF96]/40 px-2 py-1 font-bold hover:bg-[#00FF96]/10">
+                                            {t("clear")}
+                                        </button>
+                                    </div>
+                                )}
+
+                                {apiHelpError && (
+                                    <div className="rounded border border-red-500/40 bg-red-950/30 px-3 py-2 text-xs text-red-300">
+                                        {apiHelpError}
                                     </div>
                                 )}
                             </div>

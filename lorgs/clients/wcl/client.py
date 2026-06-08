@@ -93,7 +93,7 @@ class WarcraftlogsClient(BaseClient):
     URL_API_CN = "https://cn.fflogs.com/api/v2/client"
     URL_AUTH = "https://www.fflogs.com/oauth/token"
 
-    def __init__(self, client_id: str = "", client_secret: str = "") -> None:
+    def __init__(self, client_id: str = "", client_secret: str = "", auth_token: str = "") -> None:
         super().__init__()
 
         # credentials
@@ -101,7 +101,7 @@ class WarcraftlogsClient(BaseClient):
         self.client_secret = client_secret or os.getenv("WCL_CLIENT_SECRET")
         self.headers: dict[str, str] = {}
 
-        auth_token = os.getenv("WCL_AUTH_TOKEN")
+        auth_token = auth_token or os.getenv("WCL_AUTH_TOKEN")
         if auth_token:
             self.headers["Authorization"] = "Bearer " + auth_token
 

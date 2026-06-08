@@ -3,6 +3,7 @@ from __future__ import annotations
 # IMPORT STANRD LIBRARIES
 import abc
 import asyncio
+import contextvars
 import json
 import re
 import typing
@@ -76,11 +77,26 @@ def query_args_to_mongo(*query_args: str, prefix="") -> dict[str, str]:
 
 
 W = typing.TypeVar("W", bound="wclclient_mixin")
+WCL_CLIENT_OVERRIDE: contextvars.ContextVar[typing.Optional[WarcraftlogsClient]] = contextvars.ContextVar(
+    "WCL_CLIENT_OVERRIDE",
+    default=None,
+)
+
+
+def set_wcl_client_override(client: typing.Optional[WarcraftlogsClient]) -> contextvars.Token:
+    return WCL_CLIENT_OVERRIDE.set(client)
+
+
+def reset_wcl_client_override(token: contextvars.Token) -> None:
+    WCL_CLIENT_OVERRIDE.reset(token)
 
 
 class wclclient_mixin:
     @property
     def client(self) -> WarcraftlogsClient:
+        override = WCL_CLIENT_OVERRIDE.get()
+        if override is not None:
+            return override
         return WarcraftlogsClient.get_instance()
 
     @abc.abstractmethod

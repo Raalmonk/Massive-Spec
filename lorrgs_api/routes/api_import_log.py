@@ -7,6 +7,7 @@ import json
 import os
 import time
 from contextlib import contextmanager
+from contextlib import asynccontextmanager
 from datetime import datetime
 from datetime import timezone
 from pathlib import Path
@@ -16,8 +17,11 @@ from urllib.parse import urlparse
 
 import fastapi
 import pydantic
+import aiohttp
 
+from lorgs.clients.wcl import WarcraftlogsClient
 from lorgs.clients.wcl import InvalidReport
+from lorgs.models import warcraftlogs_base
 from lorgs.models.warcraftlogs_report import Report
 
 router = fastapi.APIRouter(tags=["import_log"], prefix="/import_log")
@@ -26,6 +30,8 @@ IMPORT_LOG_LIMIT_MESSAGE = "正在使用的玩家过多，请稍后"
 RUNTIME_DIR = Path(os.getenv("MSPEC_RUNTIME_DIR", ".runtime"))
 IMPORT_LOG_RATE_STATE_PATH = RUNTIME_DIR / "import_log_rate_limit.json"
 IMPORT_LOG_RATE_LOCK_PATH = RUNTIME_DIR / "import_log_rate_limit.lock"
+USER_CLIENT_ID_HEADER = "x-mspec-fflogs-client-id"
+USER_CLIENT_SECRET_HEADER = "x-mspec-fflogs-client-secret"
 
 
 @contextmanager
@@ -79,6 +85,35 @@ def check_import_log_hourly_limit() -> None:
         )
 
 
+def get_user_fflogs_credentials(request: fastapi.Request) -> tuple[str, str]:
+    client_id = (request.headers.get(USER_CLIENT_ID_HEADER) or "").strip()
+    client_secret = (request.headers.get(USER_CLIENT_SECRET_HEADER) or "").strip()
+    return client_id, client_secret
+
+
+@asynccontextmanager
+async def user_fflogs_client(client_id: str, client_secret: str):
+    if not client_id or not client_secret:
+        yield
+        return
+
+    client = WarcraftlogsClient(client_id=client_id, client_secret=client_secret)
+    override_token = warcraftlogs_base.set_wcl_client_override(client)
+    try:
+        try:
+            yield
+        except aiohttp.ClientResponseError as error:
+            if error.status in (400, 401, 403):
+                raise fastapi.HTTPException(
+                    status_code=401,
+                    detail="Your FF Logs client ID or client secret may be incorrect. Please re-enter them.",
+                )
+            raise
+    finally:
+        warcraftlogs_base.reset_wcl_client_override(override_token)
+        await client.session.close()
+
+
 class ImportLogRequest(pydantic.BaseModel):
     url: str
 
@@ -125,10 +160,13 @@ async def load_fight_from_url(url: str):
 
 
 @router.post("/players")
-async def list_import_log_players(payload: ImportLogRequest) -> dict[str, Any]:
+async def list_import_log_players(payload: ImportLogRequest, request: fastapi.Request) -> dict[str, Any]:
     """List player choices for the fight in a pasted FF Logs URL."""
-    check_import_log_hourly_limit()
-    report, fight = await load_fight_from_url(payload.url)
+    user_client_id, user_client_secret = get_user_fflogs_credentials(request)
+    if not (user_client_id and user_client_secret):
+        check_import_log_hourly_limit()
+    async with user_fflogs_client(user_client_id, user_client_secret):
+        report, fight = await load_fight_from_url(payload.url)
     players = [
         {
             "source_id": player.source_id,
@@ -152,53 +190,56 @@ async def list_import_log_players(payload: ImportLogRequest) -> dict[str, Any]:
 
 
 @router.post("/casts")
-async def load_import_log_casts(payload: ImportLogCastsRequest) -> dict[str, Any]:
+async def load_import_log_casts(payload: ImportLogCastsRequest, request: fastapi.Request) -> dict[str, Any]:
     """Load one selected player's casts for the fight in a pasted FF Logs URL."""
-    check_import_log_hourly_limit()
-    report, fight = await load_fight_from_url(payload.url)
-    player = fight.get_player(source_id=payload.source_id)
-    if not player:
-        raise fastapi.HTTPException(status_code=404, detail="Player not found in fight.")
+    user_client_id, user_client_secret = get_user_fflogs_credentials(request)
+    if not (user_client_id and user_client_secret):
+        check_import_log_hourly_limit()
+    async with user_fflogs_client(user_client_id, user_client_secret):
+        report, fight = await load_fight_from_url(payload.url)
+        player = fight.get_player(source_id=payload.source_id)
+        if not player:
+            raise fastapi.HTTPException(status_code=404, detail="Player not found in fight.")
 
-    await player.load(raise_errors=True)
+        await player.load(raise_errors=True)
 
-    casts = []
-    spells = {}
-    for cast in player.casts:
-        spell = cast.spell
-        casts.append(
-            {
-                "spell_id": cast.spell_id,
-                "ts": cast.timestamp,
-                "c": cast.counter,
-                "duration": (cast.duration or (spell.duration * 1000 if spell else 0)) / 1000,
-            }
-        )
-        if spell:
-            spells[str(cast.spell_id)] = {
-                "id": cast.spell_id,
-                "name": spell.name,
-                "icon": f"./images/spells/{spell.icon}" if spell.icon else None,
-                "duration": spell.duration or 0,
-                "cd": spell.cooldown or 0,
-                "color": spell.color or "#666666",
-            }
+        casts = []
+        spells = {}
+        for cast in player.casts:
+            spell = cast.spell
+            casts.append(
+                {
+                    "spell_id": cast.spell_id,
+                    "ts": cast.timestamp,
+                    "c": cast.counter,
+                    "duration": (cast.duration or (spell.duration * 1000 if spell else 0)) / 1000,
+                }
+            )
+            if spell:
+                spells[str(cast.spell_id)] = {
+                    "id": cast.spell_id,
+                    "name": spell.name,
+                    "icon": f"./images/spells/{spell.icon}" if spell.icon else None,
+                    "duration": spell.duration or 0,
+                    "cd": spell.cooldown or 0,
+                    "color": spell.color or "#666666",
+                }
 
-    return {
-        "report_id": report.report_id,
-        "fight_id": fight.fight_id,
-        "title": report.title,
-        "duration": fight.duration,
-        "kill": fight.kill,
-        "percent": fight.percent,
-        "player": {
-            "source_id": player.source_id,
-            "name": player.name,
-            "class_slug": player.class_slug,
-            "spec_slug": player.spec_slug,
-            "total": player.total,
-        },
-        "phases": [phase.model_dump(by_alias=True) for phase in fight.phases],
-        "casts": casts,
-        "spells": spells,
-    }
+        return {
+            "report_id": report.report_id,
+            "fight_id": fight.fight_id,
+            "title": report.title,
+            "duration": fight.duration,
+            "kill": fight.kill,
+            "percent": fight.percent,
+            "player": {
+                "source_id": player.source_id,
+                "name": player.name,
+                "class_slug": player.class_slug,
+                "spec_slug": player.spec_slug,
+                "total": player.total,
+            },
+            "phases": [phase.model_dump(by_alias=True) for phase in fight.phases],
+            "casts": casts,
+            "spells": spells,
+        }
