@@ -94,6 +94,7 @@ prepare_generated_rankings_for_pull() {
 pull_latest_code() {
     log "Pulling latest code with --ff-only..."
     if git pull --ff-only; then
+        restore_generated_rankings_from_backup
         return
     fi
 
