@@ -102,6 +102,7 @@
         const DRAG_THRESHOLD = 6;
         const MIN_VISIBLE_MINUTES = 1;
         const MAX_VISIBLE_MINUTES = 21;
+        const DEFAULT_VISIBLE_MINUTES = 6;
         const LIMIT_BREAK_ICON = './images/spells/Limit_Break.png';
 
         // Palette for Duration Bars (Sequential assignment)
@@ -170,6 +171,8 @@
 
         const UI_LANGUAGE_STORAGE_KEY = 'm-spec:ui-language';
         const ZOOM_VISIBLE_MINUTES_STORAGE_KEY = 'm-spec:visible-minutes';
+        const ZOOM_VISIBLE_MINUTES_MIGRATION_KEY = 'm-spec:visible-minutes-migration';
+        const ZOOM_VISIBLE_MINUTES_MIGRATION = 'default-6m-2026-06-08';
         const UI_LANGUAGES = [
             { id: 'en', label: 'EN' },
             { id: 'zh', label: '中文' },
@@ -450,6 +453,11 @@
         };
         const getStoredVisibleMinutes = () => {
             try {
+                if (localStorage.getItem(ZOOM_VISIBLE_MINUTES_MIGRATION_KEY) !== ZOOM_VISIBLE_MINUTES_MIGRATION) {
+                    localStorage.removeItem(ZOOM_VISIBLE_MINUTES_STORAGE_KEY);
+                    localStorage.setItem(ZOOM_VISIBLE_MINUTES_MIGRATION_KEY, ZOOM_VISIBLE_MINUTES_MIGRATION);
+                    return null;
+                }
                 const stored = Number(localStorage.getItem(ZOOM_VISIBLE_MINUTES_STORAGE_KEY));
                 if (Number.isFinite(stored)) {
                     return Math.max(MIN_VISIBLE_MINUTES, Math.min(MAX_VISIBLE_MINUTES, stored));
@@ -459,13 +467,29 @@
         };
         const getInitialZoom = () => {
             const storedVisibleMinutes = getStoredVisibleMinutes();
-            if (storedVisibleMinutes !== null) {
-                const visibleWidth = Math.max(320, (window.innerWidth || 1280) - LEFT_PANEL_WIDTH - 12);
-                return visibleWidth / (storedVisibleMinutes * 60);
-            }
-            return 5;
+            const visibleMinutes = storedVisibleMinutes !== null ? storedVisibleMinutes : DEFAULT_VISIBLE_MINUTES;
+            const visibleWidth = Math.max(320, (window.innerWidth || 1280) - LEFT_PANEL_WIDTH - 12);
+            return visibleWidth / (visibleMinutes * 60);
         };
         const BUDDY_VISIBILITY_STORAGE_KEY = 'm-spec:show-buddy';
+        const SPELL_SELECTION_MIGRATIONS = {
+            'reaper-reaper': 'rpr-defaults-2026-06-08',
+            'viper-viper': 'vpr-defaults-2026-06-08'
+        };
+        const getSpellSelectionStorageKey = (specSlug) => `m-spec:selected-spells:${specSlug}`;
+        const getSpellSelectionMigrationKey = (specSlug) => `m-spec:selected-spells-migration:${specSlug}`;
+        const applySpellSelectionMigration = (specSlug) => {
+            const migration = SPELL_SELECTION_MIGRATIONS[specSlug];
+            if (!migration) return false;
+            try {
+                const migrationKey = getSpellSelectionMigrationKey(specSlug);
+                if (localStorage.getItem(migrationKey) === migration) return false;
+                localStorage.removeItem(getSpellSelectionStorageKey(specSlug));
+                localStorage.setItem(migrationKey, migration);
+                return true;
+            } catch (e) {}
+            return false;
+        };
         const parseBooleanParam = (value) => {
             if (value === null || value === undefined) return null;
             const normalized = String(value).trim().toLowerCase();
@@ -760,10 +784,9 @@
                 .map(s => Number(s.id))
         );
 
-        const getSpellSelectionStorageKey = (specSlug) => `m-spec:selected-spells:${specSlug}`;
-
         const readStoredSpellSelection = (specSlug, spellMap) => {
             try {
+                if (applySpellSelectionMigration(specSlug)) return null;
                 const raw = localStorage.getItem(getSpellSelectionStorageKey(specSlug));
                 if (raw === null) return null;
                 const validIds = new Set(Object.values(spellMap).map(spell => Number(spell.id)));
