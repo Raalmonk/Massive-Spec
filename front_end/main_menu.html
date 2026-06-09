@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M-Spec - Cooldown Usage Analysis</title>
+    <title>M-Spec</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
@@ -79,6 +79,14 @@
                         <span class="text-monk">M-</span>Spec
                     </a>
                 </div>
+                <button
+                    id="language-toggle"
+                    type="button"
+                    class="rounded border border-gray-700 bg-gray-950/70 px-3 py-1.5 text-xs font-bold text-gray-300 hover:border-monk hover:text-white"
+                    aria-label="Language"
+                >
+                    EN
+                </button>
             </div>
         </div>
     </nav>
@@ -93,12 +101,12 @@
             <div class="lg:col-span-4 xl:col-span-3 space-y-8 order-2 lg:order-1">
                 <!-- Intro Section -->
                 <div>
-                    <h1 class="text-3xl font-bold text-white mb-4">What is this?</h1>
+                    <h1 class="text-3xl font-bold text-white mb-4" data-i18n="introTitle">What is this?</h1>
                     <!-- Reverted font size to text-sm -->
                     <div class="text-gray-400 space-y-2 text-sm leading-relaxed">
-                        <p>This website looks at the current <span class="text-monk font-semibold">top 50 logs for every job</span> and visualizes <span class="text-monk font-semibold">"relevant"</span> spells on an encounter timeline.</p>
-                        <p>This lets you easily compare multiple high performing logs against each other.</p>
-                        <p class="font-medium text-gray-300">No more sifting through individual FFLogs manually!</p>
+                        <p data-i18n-html="introBody1">This website looks at the current <span class="text-monk font-semibold">top 100 logs for every job</span> and visualizes <span class="text-monk font-semibold">relevant</span> spells on an encounter timeline.</p>
+                        <p data-i18n="introBody2">This lets you compare high performing logs, buddy cooldowns, and imported pulls against each other.</p>
+                        <p class="font-medium text-gray-300" data-i18n="introBody3">No more sifting through individual FF Logs manually.</p>
                     </div>
                 </div>
 
@@ -109,7 +117,7 @@
                             <i class="fas fa-comment-dots text-monk mt-1"></i>
                         </div>
                         <div class="ml-3 flex-1">
-                            <div class="text-green-100/90 text-sm font-medium leading-relaxed italic mb-2">
+                            <div class="text-green-100/90 text-sm font-medium leading-relaxed italic mb-2" data-i18n="quote">
                                 "...我觉得你木桩打的已经没有问题了，不要再研究那一点点手法，把你的时间花到研究BOSS上"
                             </div>
                             <div class="text-right flex items-center justify-end">
@@ -128,11 +136,11 @@
                         </div>
                         <div class="ml-3">
                             <!-- Reverted header size to text-base and text size to text-xs -->
-                            <h3 class="text-base font-bold text-yellow-500 mb-2">Disclaimer</h3>
+                            <h3 class="text-base font-bold text-yellow-500 mb-2" data-i18n="disclaimerTitle">Disclaimer</h3>
                             <div class="text-yellow-100/80 space-y-2 text-xs leading-relaxed">
-                                <p class="font-semibold">Do not simply copy paste the timings you see here!</p>
-                                <p>You will have to <span class="text-white font-medium">adapt your cooldowns</span> based on your static's strats and kill times.</p>
-                                <p>Just seeing what people are doing successfully will not make it work for you, <span class="underline decoration-yellow-500/50">unless you understand why.</span></p>
+                                <p class="font-semibold" data-i18n="disclaimer1">Do not simply copy paste the timings you see here.</p>
+                                <p data-i18n-html="disclaimer2">You still need to <span class="text-white font-medium">adapt your cooldowns</span> based on your group's strategy and kill time.</p>
+                                <p data-i18n-html="disclaimer3">Seeing what worked for other groups helps most when you also understand <span class="underline decoration-yellow-500/50">why</span>.</p>
                             </div>
                         </div>
                     </div>
@@ -141,7 +149,7 @@
 
             <!-- Right Column: Top Parses by Job (Width: ~70%) -->
             <div class="lg:col-span-8 xl:col-span-9 order-1 lg:order-2">
-                <h2 class="text-2xl font-bold text-white mb-6 border-b border-gray-800 pb-2">Top Parses by Job</h2>
+                <h2 class="text-2xl font-bold text-white mb-6 border-b border-gray-800 pb-2" data-i18n="jobSectionTitle">Dancing Mad Timelines</h2>
                 
                 <div class="space-y-4">
                     
@@ -292,11 +300,11 @@
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-4 md:mb-0">
                     <span class="text-xl font-bold text-gray-500">M-Spec</span>
-                    <p class="text-gray-600 text-sm mt-1">© 2026 M-Spec. Not affiliated with Square Enix.</p>
+                    <p class="text-gray-600 text-sm mt-1" data-i18n="copyright">© 2026 M-Spec. Not affiliated with Square Enix.</p>
                 </div>
                 
                 <div class="flex flex-wrap justify-center gap-6">
-                    <a href="https://discord.gg/sanrrfanclub" target="_blank" class="text-gray-400 hover:text-white transition flex items-center gap-2 group">
+                    <a href="https://discord.gg/SZRX5fVUeG" target="_blank" class="text-gray-400 hover:text-white transition flex items-center gap-2 group">
                         <i class="fab fa-discord group-hover:text-indigo-500"></i>
                         <span>Discord</span>
                     </a>
@@ -307,6 +315,263 @@
 
     <!-- Logic -->
     <script>
+        const UI_LANGUAGE_STORAGE_KEY = 'm-spec:ui-language';
+        const UI_LANGUAGES = [
+            { id: 'en', label: 'EN' },
+            { id: 'zh', label: '中文' },
+            { id: 'ja', label: '日本語' },
+            { id: 'ko', label: '한국어' }
+        ];
+
+        const I18N = {
+            en: {
+                pageTitle: 'M-Spec',
+                language: 'Language',
+                introTitle: 'What is this?',
+                introBody1: 'M-Spec compares the current <span class="text-monk font-semibold">top 100 logs for every job</span> and visualizes <span class="text-monk font-semibold">relevant</span> spells on an encounter timeline.',
+                introBody2: 'This lets you compare high performing logs, buddy cooldowns, and imported pulls against each other.',
+                introBody3: 'No more sifting through individual FF Logs manually.',
+                quote: '"...your dummy rotation is already fine. Stop polishing tiny rotation details and spend that time studying the boss."',
+                quoteBy: 'Dianziwang',
+                disclaimerTitle: 'Disclaimer',
+                disclaimer1: 'Do not simply copy paste the timings you see here.',
+                disclaimer2: 'You still need to <span class="text-white font-medium">adapt your cooldowns</span> based on your group\'s strategy and kill time.',
+                disclaimer3: 'Seeing what worked for other groups helps most when you also understand <span class="underline decoration-yellow-500/50">why</span>.',
+                jobSectionTitle: 'Dancing Mad Timelines',
+                copyright: '© 2026 M-Spec. Not affiliated with Square Enix.',
+                roles: ['Tank', 'Healer', 'Melee', 'Phys Ranged', 'Magic Ranged'],
+                jobs: {
+                    'paladin-paladin': 'Paladin',
+                    'warrior-warrior': 'Warrior',
+                    'darkknight-darkknight': 'Dark Knight',
+                    'gunbreaker-gunbreaker': 'Gunbreaker',
+                    'whitemage-whitemage': 'White Mage',
+                    'scholar-scholar': 'Scholar',
+                    'astrologian-astrologian': 'Astrologian',
+                    'sage-sage': 'Sage',
+                    'monk-monk': 'Monk',
+                    'dragoon-dragoon': 'Dragoon',
+                    'ninja-ninja': 'Ninja',
+                    'samurai-samurai': 'Samurai',
+                    'reaper-reaper': 'Reaper',
+                    'viper-viper': 'Viper',
+                    'bard-bard': 'Bard',
+                    'machinist-machinist': 'Machinist',
+                    'dancer-dancer': 'Dancer',
+                    'blackmage-blackmage': 'Black Mage',
+                    'summoner-summoner': 'Summoner',
+                    'redmage-redmage': 'Red Mage',
+                    'pictomancer-pictomancer': 'Pictomancer'
+                }
+            },
+            zh: {
+                pageTitle: 'M-Spec',
+                language: '语言',
+                introTitle: '这是什么？',
+                introBody1: 'M-Spec 会整理每个职业当前的 <span class="text-monk font-semibold">前 100 个高分 Log</span>，并把 <span class="text-monk font-semibold">关键技能</span> 画在副本时间轴上。',
+                introBody2: '你可以把顶尖玩家、搭档减伤和自己导入的 pull 放在一起对照。',
+                introBody3: '不用再一个一个 FF Logs 手动翻了。',
+                quote: '"...我觉得你木桩打的已经没有问题了，不要再研究那一点点手法，把你的时间花到研究 BOSS 上。"',
+                quoteBy: '点子王',
+                disclaimerTitle: '提醒',
+                disclaimer1: '不要直接照抄这里看到的时间点。',
+                disclaimer2: '你仍然需要根据自己队伍的打法和击杀时间 <span class="text-white font-medium">调整技能轴</span>。',
+                disclaimer3: '看别人怎么成功很有用，但前提是你也理解 <span class="underline decoration-yellow-500/50">为什么</span>。',
+                jobSectionTitle: '妖星乱舞绝境战时间轴',
+                copyright: '© 2026 M-Spec。与 Square Enix 无官方关联。',
+                roles: ['坦克', '治疗', '近战', '远敏', '法系'],
+                jobs: {
+                    'paladin-paladin': '骑士',
+                    'warrior-warrior': '战士',
+                    'darkknight-darkknight': '暗黑骑士',
+                    'gunbreaker-gunbreaker': '绝枪战士',
+                    'whitemage-whitemage': '白魔法师',
+                    'scholar-scholar': '学者',
+                    'astrologian-astrologian': '占星术士',
+                    'sage-sage': '贤者',
+                    'monk-monk': '武僧',
+                    'dragoon-dragoon': '龙骑士',
+                    'ninja-ninja': '忍者',
+                    'samurai-samurai': '武士',
+                    'reaper-reaper': '钐镰客',
+                    'viper-viper': '蝰蛇剑士',
+                    'bard-bard': '吟游诗人',
+                    'machinist-machinist': '机工士',
+                    'dancer-dancer': '舞者',
+                    'blackmage-blackmage': '黑魔法师',
+                    'summoner-summoner': '召唤师',
+                    'redmage-redmage': '赤魔法师',
+                    'pictomancer-pictomancer': '绘灵法师'
+                }
+            },
+            ja: {
+                pageTitle: 'M-Spec',
+                language: '言語',
+                introTitle: 'これは何？',
+                introBody1: 'M-Spec は各ジョブの現在の <span class="text-monk font-semibold">上位 100 件のログ</span>を比較し、<span class="text-monk font-semibold">重要なスキル</span>をタイムライン上に表示します。',
+                introBody2: '上位ログ、相方の軽減、取り込んだ自分の pull を並べて確認できます。',
+                introBody3: 'FF Logs を一件ずつ開いて探す必要はありません。',
+                quote: '"...木人回しはもう十分です。細かい回しを詰め続けるより、その時間をボス研究に使いましょう。"',
+                quoteBy: 'Dianziwang',
+                disclaimerTitle: '注意',
+                disclaimer1: 'ここに表示されたタイミングをそのままコピーしないでください。',
+                disclaimer2: '固定の処理法や討伐時間に合わせて <span class="text-white font-medium">スキル回しを調整</span>する必要があります。',
+                disclaimer3: '他の攻略例は、<span class="underline decoration-yellow-500/50">なぜそうしているか</span>を理解してこそ役に立ちます。',
+                jobSectionTitle: '絶妖星乱舞 タイムライン',
+                copyright: '© 2026 M-Spec。Square Enix とは関係ありません。',
+                roles: ['タンク', 'ヒーラー', '近接', 'レンジ', 'キャスター'],
+                jobs: {
+                    'paladin-paladin': 'ナイト',
+                    'warrior-warrior': '戦士',
+                    'darkknight-darkknight': '暗黒騎士',
+                    'gunbreaker-gunbreaker': 'ガンブレイカー',
+                    'whitemage-whitemage': '白魔道士',
+                    'scholar-scholar': '学者',
+                    'astrologian-astrologian': '占星術師',
+                    'sage-sage': '賢者',
+                    'monk-monk': 'モンク',
+                    'dragoon-dragoon': '竜騎士',
+                    'ninja-ninja': '忍者',
+                    'samurai-samurai': '侍',
+                    'reaper-reaper': 'リーパー',
+                    'viper-viper': 'ヴァイパー',
+                    'bard-bard': '吟遊詩人',
+                    'machinist-machinist': '機工士',
+                    'dancer-dancer': '踊り子',
+                    'blackmage-blackmage': '黒魔道士',
+                    'summoner-summoner': '召喚士',
+                    'redmage-redmage': '赤魔道士',
+                    'pictomancer-pictomancer': 'ピクトマンサー'
+                }
+            },
+            ko: {
+                pageTitle: 'M-Spec',
+                language: '언어',
+                introTitle: '이 사이트는 무엇인가요?',
+                introBody1: 'M-Spec은 각 잡의 현재 <span class="text-monk font-semibold">상위 100개 로그</span>를 비교하고, <span class="text-monk font-semibold">중요 스킬</span>을 전투 타임라인에 표시합니다.',
+                introBody2: '상위 로그, 파트너 생존기, 직접 가져온 pull을 한 화면에서 비교할 수 있습니다.',
+                introBody3: 'FF Logs를 하나씩 열어 뒤질 필요가 없습니다.',
+                quote: '"...허수아비 딜 사이클은 이미 충분합니다. 아주 작은 운용 차이보다 보스 연구에 시간을 쓰세요."',
+                quoteBy: 'Dianziwang',
+                disclaimerTitle: '주의',
+                disclaimer1: '여기에 보이는 타이밍을 그대로 복사하지 마세요.',
+                disclaimer2: '파티의 공략 방식과 클리어 시간에 맞춰 <span class="text-white font-medium">스킬 타이밍을 조정</span>해야 합니다.',
+                disclaimer3: '다른 파티의 성공 사례는 <span class="underline decoration-yellow-500/50">왜 그렇게 했는지</span> 이해할 때 가장 도움이 됩니다.',
+                jobSectionTitle: '절 요성난무 타임라인',
+                copyright: '© 2026 M-Spec. Square Enix와 관련이 없습니다.',
+                roles: ['탱커', '힐러', '근접', '물리 원거리', '마법 원거리'],
+                jobs: {
+                    'paladin-paladin': '나이트',
+                    'warrior-warrior': '전사',
+                    'darkknight-darkknight': '암흑기사',
+                    'gunbreaker-gunbreaker': '건브레이커',
+                    'whitemage-whitemage': '백마도사',
+                    'scholar-scholar': '학자',
+                    'astrologian-astrologian': '점성술사',
+                    'sage-sage': '현자',
+                    'monk-monk': '몽크',
+                    'dragoon-dragoon': '용기사',
+                    'ninja-ninja': '닌자',
+                    'samurai-samurai': '사무라이',
+                    'reaper-reaper': '리퍼',
+                    'viper-viper': '바이퍼',
+                    'bard-bard': '음유시인',
+                    'machinist-machinist': '기공사',
+                    'dancer-dancer': '무도가',
+                    'blackmage-blackmage': '흑마도사',
+                    'summoner-summoner': '소환사',
+                    'redmage-redmage': '적마도사',
+                    'pictomancer-pictomancer': '픽토맨서'
+                }
+            }
+        };
+
+        const normalizeUiLanguage = (language) => {
+            const normalized = String(language || '').toLowerCase();
+            if (normalized.startsWith('zh')) return 'zh';
+            if (normalized.startsWith('ja')) return 'ja';
+            if (normalized.startsWith('ko')) return 'ko';
+            return 'en';
+        };
+
+        const getInitialUiLanguage = () => {
+            try {
+                const stored = localStorage.getItem(UI_LANGUAGE_STORAGE_KEY);
+                if (I18N[stored]) return stored;
+            } catch (e) {}
+            return normalizeUiLanguage(navigator.language || navigator.userLanguage || 'en');
+        };
+
+        const getSpecFromHref = (href) => {
+            try {
+                const url = new URL(href, window.location.href);
+                return url.searchParams.get('spec');
+            } catch (e) {
+                return null;
+            }
+        };
+
+        const applyLanguage = (language) => {
+            const lang = I18N[language] ? language : 'en';
+            const strings = I18N[lang];
+            document.documentElement.lang = lang;
+            document.title = strings.pageTitle;
+
+            document.querySelectorAll('[data-i18n]').forEach((node) => {
+                const key = node.dataset.i18n;
+                if (strings[key]) node.textContent = strings[key];
+            });
+            document.querySelectorAll('[data-i18n-html]').forEach((node) => {
+                const key = node.dataset.i18nHtml;
+                if (strings[key]) node.innerHTML = strings[key];
+            });
+
+            const quoteBy = document.querySelector('.text-right .text-monk');
+            if (quoteBy) quoteBy.textContent = strings.quoteBy;
+
+            const rows = document.querySelectorAll('.space-y-4 > .flex.flex-col');
+            rows.forEach((row, index) => {
+                const label = row.querySelector('.w-32');
+                if (!label || !strings.roles[index]) return;
+                const icon = label.querySelector('span');
+                label.textContent = '';
+                if (icon) label.appendChild(icon);
+                label.appendChild(document.createTextNode(strings.roles[index]));
+            });
+
+            document.querySelectorAll('a[href*="spec="]').forEach((link) => {
+                const spec = getSpecFromHref(link.getAttribute('href'));
+                const label = link.querySelector('span:last-child');
+                if (spec && label && strings.jobs[spec]) label.textContent = strings.jobs[spec];
+            });
+
+            const languageToggle = document.getElementById('language-toggle');
+            const activeLanguage = UI_LANGUAGES.find(item => item.id === lang) || UI_LANGUAGES[0];
+            if (languageToggle) {
+                languageToggle.textContent = activeLanguage.label;
+                languageToggle.setAttribute('aria-label', strings.language);
+                languageToggle.title = strings.language;
+            }
+        };
+
+        const cycleLanguage = () => {
+            const current = getInitialUiLanguage();
+            const currentIndex = UI_LANGUAGES.findIndex(item => item.id === current);
+            const next = UI_LANGUAGES[(currentIndex + 1) % UI_LANGUAGES.length].id;
+            try {
+                localStorage.setItem(UI_LANGUAGE_STORAGE_KEY, next);
+            } catch (e) {}
+            applyLanguage(next);
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyLanguage(getInitialUiLanguage());
+            document.getElementById('language-toggle')?.addEventListener('click', (event) => {
+                event.stopPropagation();
+                cycleLanguage();
+            });
+        });
+
         // --- Interaction ---
         function closeAllDropdowns() {
             const dropdowns = document.querySelectorAll('[id^="dropdown-"]');
