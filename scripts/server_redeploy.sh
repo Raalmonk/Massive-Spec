@@ -135,7 +135,7 @@ start_main() {
     fi
 
     log "Starting main.py behind ${MAIN_LOCK}..."
-    nohup flock -n "${MAIN_LOCK}" "${PYTHON_BIN}" main.py >> main.log 2>&1 &
+    (exec 9>&-; nohup flock -n "${MAIN_LOCK}" "${PYTHON_BIN}" main.py >> main.log 2>&1 &)
     sleep 3
 
     if pgrep -f "flock -n ${MAIN_LOCK}|${PYTHON_BIN} main.py|uvicorn.*main:app" >/dev/null 2>&1; then
@@ -152,7 +152,7 @@ start_updater() {
     fi
 
     log "Starting updater.py behind ${UPDATER_LOCK}..."
-    nohup flock -n "${UPDATER_LOCK}" "${PYTHON_BIN}" updater.py >> updater.log 2>&1 &
+    (exec 9>&-; nohup flock -n "${UPDATER_LOCK}" "${PYTHON_BIN}" updater.py >> updater.log 2>&1 &)
     sleep 3
 
     if pgrep -f "flock -n ${UPDATER_LOCK}|${PYTHON_BIN} updater.py" >/dev/null 2>&1; then
