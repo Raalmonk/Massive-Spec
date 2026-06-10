@@ -147,6 +147,14 @@
             34867: "Chromatic Fantasy"
         };
         const LIMIT_BREAK_IDS = new Set(Object.keys(LIMIT_BREAK_SPELLS).map(Number));
+        const DANCER_DEVILMENT_ID = 16011;
+        const DANCER_TANGO_EARLY_SECONDS = 2;
+        const DANCER_TANGO_DURATION_SECONDS = 20;
+        const RAID_BUFF_FOCUS_IDS = new Set([
+            118, 2248, 2258, 3557, 7396, 7436, 7520,
+            15998, 16004, 16552, 24405, 25785, 25801,
+            34675, 36957, 36958
+        ]);
         const isLimitBreakSpellId = (spellId) => LIMIT_BREAK_IDS.has(Number(spellId));
         const getLimitBreakSpell = (spellId) => ({
             id: Number(spellId),
@@ -225,6 +233,8 @@
                 party: 'Party',
                 buddy: 'Buddy',
                 showBuddy: 'Show buddy tank/healer cooldowns',
+                technicalTangoWindow: 'TG',
+                zoomTechnicalTangoWindow: 'Only show buddy casts from 2s before Devilment until Devilment ends',
                 bossTimeline: 'Boss Timeline',
                 mech: 'Mech',
                 tb: 'TB',
@@ -329,6 +339,8 @@
                 party: '队伍',
                 buddy: '搭档',
                 showBuddy: '显示另一个同职能技能',
+                technicalTangoWindow: 'TG',
+                zoomTechnicalTangoWindow: '只显示搭档在进攻之探戈前 2 秒到结束期间的技能',
                 bossTimeline: 'Boss 时间轴',
                 mech: '机制',
                 tb: '死刑',
@@ -433,6 +445,8 @@
                 party: 'パーティ',
                 buddy: '相方',
                 showBuddy: '相方タンク/ヒラのスキルを表示',
+                technicalTangoWindow: 'TG',
+                zoomTechnicalTangoWindow: '相方のスキルを攻めのタンゴ2秒前から終了までに絞り込み',
                 bossTimeline: 'Boss タイムライン',
                 mech: 'ギミック',
                 tb: 'TB',
@@ -537,6 +551,8 @@
                 party: '파티',
                 buddy: '버디',
                 showBuddy: '다른 탱/힐 스킬 표시',
+                technicalTangoWindow: 'TG',
+                zoomTechnicalTangoWindow: '버디 스킬을 데빌먼트 2초 전부터 종료까지로 필터',
                 bossTimeline: 'Boss 타임라인',
                 mech: '기믹',
                 tb: 'TB',
@@ -2191,16 +2207,19 @@
                 aoe: true
             });
             const [showBuddy, setShowBuddy] = useState(getInitialBuddyVisibility);
+            const [showDancerTangoBuddyWindow, setShowDancerTangoBuddyWindow] = useState(false);
             const [buddySpellMaps, setBuddySpellMaps] = useState({});
             const [buddySpellSelections, setBuddySpellSelections] = useState({});
             const [buddySpellMenuSpec, setBuddySpellMenuSpec] = useState(null);
             const [otherMenuOpen, setOtherMenuOpen] = useState(false);
 
             const [selectedSpells, setSelectedSpells] = useState(new Set());
+            const [timeRangeSelection, setTimeRangeSelection] = useState(null);
             const scrollContainerRef = useRef(null);
             const suppressRowClickRef = useRef(false);
             const buddyMenuRef = useRef(null);
             const otherMenuRef = useRef(null);
+            const timeRangeSelectionRef = useRef(null);
 
             useEffect(() => {
                 try {
@@ -2212,6 +2231,12 @@
             useEffect(() => {
                 writeBuddyVisibility(showBuddy);
             }, [showBuddy]);
+
+            useEffect(() => {
+                if (selectedSpec !== 'dancer-dancer') {
+                    setShowDancerTangoBuddyWindow(false);
+                }
+            }, [selectedSpec]);
 
             useEffect(() => {
                 const stored = readStoredImportedLogs(selectedBoss);
@@ -2361,7 +2386,8 @@
 
             const focusedSpellGroups = useMemo(() => [
                 new Set([30, 43, 3638, 16152]), // Tank invulnerabilities
-                new Set([37013, 37016]) // Scholar Concitation / Accession
+                new Set([37013, 37016]), // Scholar Concitation / Accession
+                RAID_BUFF_FOCUS_IDS
             ], []);
             const getFocusedSpellGroup = useCallback((spellId) => {
                 const id = Number(spellId);
@@ -2721,9 +2747,9 @@
                 }
             };
 
-            const getVisibleTimelineWidth = () => (
+            const getVisibleTimelineWidth = useCallback(() => (
                 Math.max(240, (scrollContainerRef.current?.clientWidth || window.innerWidth) - leftPanelWidth - 12)
-            );
+            ), [leftPanelWidth]);
             const clampVisibleMinutes = (minutes) => Math.max(
                 MIN_VISIBLE_MINUTES,
                 Math.min(MAX_VISIBLE_MINUTES, Number(minutes))
@@ -2735,11 +2761,26 @@
                 const maxZoom = getZoomForVisibleMinutes(MIN_VISIBLE_MINUTES);
                 return Math.max(minZoom, Math.min(maxZoom, Number(value)));
             };
-            const adjustVisibleMinutes = (direction) => setZoom(prev => {
-                const current = getVisibleMinutesForZoom(prev);
+            const setZoomAroundTime = useCallback((nextZoomValue, anchorTime = null) => {
+                const nextZoom = clampZoom(nextZoomValue);
+                const container = scrollContainerRef.current;
+                const visibleWidth = getVisibleTimelineWidth();
+                const oldZoom = Number(zoom) || nextZoom;
+                const centerTime = anchorTime !== null && Number.isFinite(anchorTime)
+                    ? anchorTime
+                    : ((container?.scrollLeft || 0) + visibleWidth / 2) / oldZoom;
+
+                setZoom(nextZoom);
+                window.requestAnimationFrame(() => {
+                    if (!container) return;
+                    container.scrollLeft = Math.max(0, centerTime * nextZoom - visibleWidth / 2);
+                });
+            }, [zoom, getVisibleTimelineWidth, clampZoom]);
+            const adjustVisibleMinutes = (direction) => {
+                const current = getVisibleMinutesForZoom(zoom);
                 const step = current <= 1 ? 0.05 : (current < 5 ? 0.25 : 1);
-                return clampZoom(getZoomForVisibleMinutes(current + direction * step));
-            });
+                setZoomAroundTime(getZoomForVisibleMinutes(current + direction * step));
+            };
             const handleZoomIn = () => adjustVisibleMinutes(-1);
             const handleZoomOut = () => adjustVisibleMinutes(1);
             const sliderVisibleMinutes = clampVisibleMinutes(getVisibleMinutesForZoom(zoom));
@@ -2805,6 +2846,21 @@
                 }))) : [];
                 return Math.max(FIGHT_DURATION, ...killTimes, ...importedKillTimes, ...mechanicEnds, ...importedCastEnds, ...buddyCastEnds) + 30;
             }, [rankData, bossMechanics, importedRows, buddySpellMaps, showBuddy, isCombined, resolveBossTimelineTimestamp]);
+            const zoomToTimeRange = useCallback((startTime, endTime) => {
+                const start = Math.max(0, Math.min(Number(startTime) || 0, Number(endTime) || 0));
+                const end = Math.min(timelineDuration, Math.max(Number(startTime) || 0, Number(endTime) || 0));
+                const rangeSeconds = Math.max(1, end - start);
+                const paddedStart = Math.max(0, start - Math.min(5, rangeSeconds * 0.1));
+                const paddedEnd = Math.min(timelineDuration, end + Math.min(5, rangeSeconds * 0.1));
+                const visibleSeconds = Math.max(1, paddedEnd - paddedStart);
+                const nextZoom = clampZoom(getVisibleTimelineWidth() / visibleSeconds);
+
+                setZoom(nextZoom);
+                window.requestAnimationFrame(() => {
+                    if (!scrollContainerRef.current) return;
+                    scrollContainerRef.current.scrollLeft = Math.max(0, paddedStart * nextZoom);
+                });
+            }, [timelineDuration, getVisibleTimelineWidth, clampZoom]);
             const timelineWidth = timelineDuration * zoom;
             const rowGridStyle = useMemo(() => ({
                 backgroundImage: "linear-gradient(to right, rgba(31,41,55,0.2) 1px, transparent 1px)",
@@ -2822,6 +2878,20 @@
                 })).sort((a, b) => a.displayTime - b.displayTime),
                 [bossMechanics, bossTimelineTypeVisibility, resolveBossTimelineTimestamp]
             );
+            const getDancerTangoWindows = useCallback((casts = []) => (
+                (casts || [])
+                    .filter(cast => Number(cast.spellId) === DANCER_DEVILMENT_ID)
+                    .map(cast => {
+                        const start = Number(cast.timestamp || 0) - DANCER_TANGO_EARLY_SECONDS;
+                        const duration = Number(cast.duration || DANCER_TANGO_DURATION_SECONDS);
+                        return {
+                            start: Math.max(0, start),
+                            end: Number(cast.timestamp || 0) + duration
+                        };
+                    })
+                    .filter(window => Number.isFinite(window.start) && Number.isFinite(window.end) && window.end >= window.start)
+            ), []);
+            const rowHasDancerTangoWindow = useCallback((row) => getDancerTangoWindows(row?.casts || []).length > 0, [getDancerTangoWindows]);
             const getPhaseAnchorTimestamp = useCallback((phases, phaseIndex) => {
                 if (phaseIndex === null || phaseIndex === undefined) return 0;
                 const phase = (phases || [])[phaseIndex];
@@ -2840,6 +2910,53 @@
             const togglePhaseAlignment = useCallback((phaseIndex) => {
                 setPhaseAlignIndex(prev => prev === phaseIndex ? null : phaseIndex);
             }, []);
+
+            const getTimelineTimeFromClientX = useCallback((clientX) => {
+                const container = scrollContainerRef.current;
+                if (!container) return 0;
+                const rect = container.getBoundingClientRect();
+                const timelineX = container.scrollLeft + (clientX - rect.left) - leftPanelWidth;
+                return Math.max(0, Math.min(timelineDuration, timelineX / zoom));
+            }, [leftPanelWidth, timelineDuration, zoom]);
+
+            const onRulerMouseDown = useCallback((e) => {
+                if (e.button !== 0 || e.target.closest('button, a, input, select, textarea')) return;
+                e.preventDefault();
+                e.stopPropagation();
+
+                const startTime = getTimelineTimeFromClientX(e.clientX);
+                timeRangeSelectionRef.current = {
+                    startTime,
+                    endTime: startTime
+                };
+                setTimeRangeSelection({ startTime, endTime: startTime });
+
+                const handleRangeMouseMove = (event) => {
+                    const pending = timeRangeSelectionRef.current;
+                    if (!pending) return;
+                    const endTime = getTimelineTimeFromClientX(event.clientX);
+                    pending.endTime = endTime;
+                    setTimeRangeSelection({ startTime: pending.startTime, endTime });
+                };
+
+                const handleRangeMouseUp = (event) => {
+                    window.removeEventListener('mousemove', handleRangeMouseMove);
+                    window.removeEventListener('mouseup', handleRangeMouseUp);
+
+                    const pending = timeRangeSelectionRef.current;
+                    timeRangeSelectionRef.current = null;
+                    setTimeRangeSelection(null);
+                    if (!pending) return;
+
+                    const endTime = getTimelineTimeFromClientX(event.clientX);
+                    if (Math.abs(endTime - pending.startTime) >= 2) {
+                        zoomToTimeRange(pending.startTime, endTime);
+                    }
+                };
+
+                window.addEventListener('mousemove', handleRangeMouseMove);
+                window.addEventListener('mouseup', handleRangeMouseUp);
+            }, [getTimelineTimeFromClientX, zoomToTimeRange]);
 
             const onMouseDown = useCallback((e) => {
                 if (e.button !== 0 || !scrollContainerRef.current) return;
@@ -3253,7 +3370,7 @@
                 )}
 
                 {/* Control Bar */}
-                <div className="bg-[#181818] border-b border-gray-800 px-4 py-2 shrink-0 flex items-center gap-4 overflow-visible no-scrollbar shadow-md z-[5000]">
+                <div className="bg-[#181818] border-b border-gray-800 px-4 py-2 shrink-0 flex flex-wrap items-start gap-x-4 gap-y-2 overflow-visible no-scrollbar shadow-md z-[5000]">
                     <div className="flex flex-col gap-1 border-r border-gray-700 pr-4 shrink-0">
                         <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">{t("display")}</span>
                         <div className="flex items-center gap-1">
@@ -3279,7 +3396,7 @@
                             </div>
                         </div>
                     </div>
-                    <div className="flex items-center gap-6">
+                    <div className="flex min-w-0 flex-1 flex-wrap items-start gap-x-6 gap-y-2">
                         {!isCombined && Object.entries(spellCategories).map(([catKey, category]) => {
                             const categorySpells = spellsByCategory[catKey] || [];
                             if (catKey === "OTHER") {
@@ -3392,6 +3509,19 @@
                                     {t("party")}
                                 </div>
                                 <div className="flex items-center gap-0.5 h-8">
+                                    {selectedSpec === 'dancer-dancer' && (
+                                        <button
+                                            title={t("zoomTechnicalTangoWindow")}
+                                            onClick={() => {
+                                                setShowBuddy(true);
+                                                setShowDancerTangoBuddyWindow(prev => !prev);
+                                            }}
+                                            disabled={!rankData.some(rowHasDancerTangoWindow)}
+                                            className={`${displayToggleClass(showDancerTangoBuddyWindow)} px-3 disabled:cursor-not-allowed disabled:opacity-35`}
+                                        >
+                                            {t("technicalTangoWindow")}
+                                        </button>
+                                    )}
                                     {!isCombined && (
                                         <button
                                             title={t("showBuddy")}
@@ -3529,8 +3659,8 @@
                         </div>
 
                     </div>
-                    <div className="flex-1"></div>
-                    <div className="flex items-center gap-2 bg-black/20 p-1 rounded-lg border border-gray-800 shrink-0">
+                    <div className="hidden flex-1"></div>
+                    <div className="ml-auto flex items-center gap-2 bg-black/20 p-1 rounded-lg border border-gray-800 shrink-0">
                         <button
                             onClick={() => setIsCollapsed(!isCollapsed)}
                             className={`p-1.5 rounded transition ${!isCollapsed ? 'text-[#00FF96] bg-gray-700' : 'text-gray-400 hover:text-white hover:bg-gray-700'}`}
@@ -3546,7 +3676,7 @@
                             max={MAX_VISIBLE_MINUTES}
                             step="0.05"
                             value={Number(sliderVisibleMinutes.toFixed(2))}
-                            onChange={(e) => setZoom(clampZoom(getZoomForVisibleMinutes(e.target.value)))}
+                            onChange={(e) => setZoomAroundTime(getZoomForVisibleMinutes(e.target.value))}
                             className="h-2 w-28 cursor-pointer accent-[#00FF96]"
                             title={formatVisibleRange(sliderVisibleMinutes)}
                         />
@@ -3584,7 +3714,20 @@
                                         </>
                                     )}
                                 </div>
-                                <div className="relative h-full" style={{ width: `${timelineWidth}px` }}>
+                                <div
+                                    className="relative h-full"
+                                    style={{ width: `${timelineWidth}px` }}
+                                    onMouseDown={onRulerMouseDown}
+                                >
+                                    {timeRangeSelection && (
+                                        <div
+                                            className="absolute top-0 bottom-0 z-[3200] rounded-sm border border-[#00FF96] bg-[#00FF96]/15 pointer-events-none"
+                                            style={{
+                                                left: `${Math.min(timeRangeSelection.startTime, timeRangeSelection.endTime) * zoom}px`,
+                                                width: `${Math.max(2, Math.abs(timeRangeSelection.endTime - timeRangeSelection.startTime) * zoom)}px`
+                                            }}
+                                        />
+                                    )}
                                     {/* UPDATED: Dynamic Ticks (Feature 1) */}
                                     {Array.from({ length: Math.ceil(timelineDuration / tickSettings.minor) + 1 }).map((_, i) => {
                                         const time = i * tickSettings.minor;
@@ -4011,6 +4154,17 @@
                                 const rowBuddies = row.isCombined
                                     ? (row.buddy ? [row.buddy] : [])
                                     : (showBuddy && isBuddySupported ? (row.buddies || (row.buddy ? [row.buddy] : [])) : []);
+                                const dancerTangoWindows = showDancerTangoBuddyWindow && selectedSpec === 'dancer-dancer'
+                                    ? getDancerTangoWindows(row.casts || [])
+                                    : [];
+                                const isInDancerTangoWindow = (cast) => (
+                                    !showDancerTangoBuddyWindow
+                                    || selectedSpec !== 'dancer-dancer'
+                                    || dancerTangoWindows.some(window => (
+                                        Number(cast.timestamp || 0) >= window.start
+                                        && Number(cast.timestamp || 0) <= window.end
+                                    ))
+                                );
                                 const buddyRows = rowBuddies.map((buddy, buddyIdx) => {
                                     const buddySpecSlug = buddy?.specSlug || "";
                                     const buddySpellMap = buddySpecSlug === selectedSpec ? spells : (buddySpellMaps[buddySpecSlug] || {});
@@ -4027,15 +4181,18 @@
                                             : (buddySpellMap[cast.spellId] ? buddySpellMap[cast.spellId].duration : 0))
                                     }));
                                     const visibleBuddyCasts = buddyCasts.filter(cast => (
-                                        isLimitBreakSpellId(cast.spellId)
-                                            ? showLimitBreak
-                                            : (
-                                                buddySelectedSpellIds.has(Number(cast.spellId))
-                                                || (
-                                                    buddySpellMap[cast.spellId]
-                                                    && isSpellSlotSelected(buddySpellMap, buddySelectedSpellIds, buddySpellMap[cast.spellId])
+                                        isInDancerTangoWindow(cast)
+                                        && (
+                                            isLimitBreakSpellId(cast.spellId)
+                                                ? showLimitBreak
+                                                : (
+                                                    buddySelectedSpellIds.has(Number(cast.spellId))
+                                                    || (
+                                                        buddySpellMap[cast.spellId]
+                                                        && isSpellSlotSelected(buddySpellMap, buddySelectedSpellIds, buddySpellMap[cast.spellId])
+                                                    )
                                                 )
-                                            )
+                                        )
                                     ));
                                     const { processedCasts: processedBuddyCasts, maxTracks: buddyMaxTracks } = isCollapsed
                                         ? { processedCasts: visibleBuddyCasts.map(c => ({ ...c, trackIndex: 0 })), maxTracks: 1 }

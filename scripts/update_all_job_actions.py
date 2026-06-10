@@ -230,8 +230,8 @@ add_display_slot(
     "Stone IV",
     "Glare",
     "Glare III",
-    "Glare IV",
 )
+add_display_slot("whitemage-whitemage", "glare-iv", "Glare IV")
 add_display_slot("whitemage-whitemage", "aero-dia", "Aero", "Aero II", "Dia")
 add_display_slot("whitemage-whitemage", "holy", "Holy", "Holy III")
 add_display_slot("whitemage-whitemage", "medica-ii", "Medica II", "Medica III")
