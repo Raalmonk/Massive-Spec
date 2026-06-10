@@ -73,7 +73,6 @@ BOSS_ROTATION = [
 
 DEFAULT_METRIC = "rdps"
 DEFAULT_RANKING_REGIONS = ("", "CN", "KR")
-LEGACY_ULTIMATE_RANKING_REGIONS = ("", "CN")
 
 BOSS_CONFIG = {
     "futures-rewritten": {
@@ -87,27 +86,22 @@ BOSS_CONFIG = {
     "the-unending-coil-of-bahamut": {
         "difficulty": "ultimate",
         "metric": "rdps",
-        "ranking_regions": LEGACY_ULTIMATE_RANKING_REGIONS,
     },
     "the-weapons-refrain": {
         "difficulty": "ultimate",
         "metric": "rdps",
-        "ranking_regions": LEGACY_ULTIMATE_RANKING_REGIONS,
     },
     "the-epic-of-alexander": {
         "difficulty": "ultimate",
         "metric": "rdps",
-        "ranking_regions": LEGACY_ULTIMATE_RANKING_REGIONS,
     },
     "dragonsongs-reprise": {
         "difficulty": "ultimate",
         "metric": "rdps",
-        "ranking_regions": LEGACY_ULTIMATE_RANKING_REGIONS,
     },
     "the-omega-protocol": {
         "difficulty": "ultimate",
         "metric": "rdps",
-        "ranking_regions": LEGACY_ULTIMATE_RANKING_REGIONS,
     },
 }
 

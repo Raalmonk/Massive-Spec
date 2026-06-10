@@ -133,15 +133,18 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
     ############################################################################
     # Query: Rankings
     #
-    def get_query(self) -> str:
+    def get_query(self, server_region: str = "") -> str:
         """Return the Query to load the rankings for this Spec & Boss."""
         difficulty_id = DIFFICULTY_IDS.get(self.difficulty) or 101
 
         real_class_name = "Global"
         spec_name = self.spec.name_slug_cap
+        server_region = self.normalize_region(server_region)
+        server_region_arg = f'serverRegion: "{server_region}"' if server_region in ("CN", "KR") else ""
 
         # 2. 定义查询构建函数 (支持传入不同的 class_name)
         def build_rankings_query(class_name_arg: str, extra_args: str = ""):
+            query_args = "\n".join(arg for arg in (extra_args, server_region_arg) if arg)
             return f"""
                 characterRankings(
                     className: "{class_name_arg}"
@@ -149,7 +152,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                     metric: {self.metric}
                     difficulty: {difficulty_id}
                     includeCombatantInfo: true
-                    {extra_args}
+                    {query_args}
                 )
             """
 
@@ -321,9 +324,9 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
 
     async def load_rankings(self, regions: Optional[typing.Iterable[str]] = None) -> None:
         """Fetch the current Ranking Data"""
-        query = self.get_query()
         query_results = []
         for region in regions or ("",):
+            query = self.get_query(server_region=region)
             result = await self.client.query(query, region=region)
             query_results.append(result)
         self.process_query_results(*query_results)
