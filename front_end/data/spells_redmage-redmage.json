@@ -9,6 +9,8 @@
     "load_order": 0,
     "show": true,
     "category": "MAJOR",
+    "level": 58,
+    "display_slot": "redmage-redmage:embolden",
     "debug_tags": [
       "dps"
     ]
@@ -23,6 +25,8 @@
     "load_order": 1,
     "show": true,
     "category": "MAJOR",
+    "level": 60,
+    "display_slot": "redmage-redmage:manafication",
     "debug_tags": [
       "dps"
     ]
@@ -37,6 +41,8 @@
     "load_order": 2,
     "show": true,
     "category": "MAJOR",
+    "level": 1,
+    "display_slot": "redmage-redmage:enchanted riposte",
     "debug_tags": [
       "dps"
     ]
@@ -51,6 +57,8 @@
     "load_order": 3,
     "show": false,
     "category": "MAJOR",
+    "level": 45,
+    "display_slot": "redmage-redmage:fleche",
     "debug_tags": [
       "dps"
     ]
@@ -65,6 +73,8 @@
     "load_order": 4,
     "show": false,
     "category": "MAJOR",
+    "level": 56,
+    "display_slot": "redmage-redmage:contre sixte",
     "debug_tags": [
       "dps"
     ]
@@ -79,6 +89,8 @@
     "load_order": 5,
     "show": false,
     "category": "MAJOR",
+    "level": 50,
+    "display_slot": "redmage-redmage:acceleration",
     "debug_tags": [
       "dps"
     ]
@@ -93,6 +105,8 @@
     "load_order": 6,
     "show": false,
     "category": "MAJOR",
+    "level": 18,
+    "display_slot": "redmage-redmage:swiftcast",
     "debug_tags": [
       "dps"
     ]
@@ -107,6 +121,8 @@
     "load_order": 7,
     "show": false,
     "category": "MAJOR",
+    "level": 76,
+    "display_slot": "redmage-redmage:enchanted reprise",
     "debug_tags": [
       "dps"
     ]
@@ -121,6 +137,8 @@
     "load_order": 8,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 54,
+    "display_slot": "redmage-redmage:vercure",
     "debug_tags": [
       "SINGLE_MIT"
     ]
@@ -135,6 +153,8 @@
     "load_order": 9,
     "show": true,
     "category": "RAID_MIT",
+    "level": 8,
+    "display_slot": "redmage-redmage:addle",
     "debug_tags": [
       "RAID_MIT"
     ]
@@ -149,8 +169,602 @@
     "load_order": 10,
     "show": false,
     "category": "RAID_MIT",
+    "level": 86,
+    "display_slot": "redmage-redmage:magick barrier",
     "debug_tags": [
       "RAID_MIT"
+    ]
+  },
+  {
+    "spell_id": 7504,
+    "name": "Riposte",
+    "icon": "Riposte.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 11,
+    "show": false,
+    "category": "OTHER",
+    "level": 1,
+    "display_slot": "redmage-redmage:riposte",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7503,
+    "name": "Jolt",
+    "icon": "Jolt.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 12,
+    "show": false,
+    "category": "OTHER",
+    "level": 2,
+    "display_slot": "redmage-redmage:jolt",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7505,
+    "name": "Verthunder",
+    "icon": "Verthunder.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 13,
+    "show": false,
+    "category": "OTHER",
+    "level": 4,
+    "display_slot": "redmage-redmage:verthunder",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7506,
+    "name": "Corps-a-corps",
+    "icon": "Corps-a-corps.png",
+    "cooldown": 35.0,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 14,
+    "show": false,
+    "category": "OTHER",
+    "level": 6,
+    "display_slot": "redmage-redmage:corps-a-corps",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7507,
+    "name": "Veraero",
+    "icon": "Veraero.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 15,
+    "show": false,
+    "category": "OTHER",
+    "level": 10,
+    "display_slot": "redmage-redmage:veraero",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7509,
+    "name": "Scatter",
+    "icon": "Scatter.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 16,
+    "show": false,
+    "category": "OTHER",
+    "level": 15,
+    "display_slot": "redmage-redmage:scatter",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16524,
+    "name": "Verthunder II",
+    "icon": "Verthunder_II.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 17,
+    "show": false,
+    "category": "OTHER",
+    "level": 18,
+    "display_slot": "redmage-redmage:verthunder ii",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16525,
+    "name": "Veraero II",
+    "icon": "Veraero_II.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 18,
+    "show": false,
+    "category": "OTHER",
+    "level": 22,
+    "display_slot": "redmage-redmage:veraero ii",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7510,
+    "name": "Verfire",
+    "icon": "Verfire.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 19,
+    "show": false,
+    "category": "OTHER",
+    "level": 26,
+    "display_slot": "redmage-redmage:verfire",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7511,
+    "name": "Verstone",
+    "icon": "Verstone.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 20,
+    "show": false,
+    "category": "OTHER",
+    "level": 30,
+    "display_slot": "redmage-redmage:verstone",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7512,
+    "name": "Zwerchhau",
+    "icon": "Zwerchhau.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 21,
+    "show": false,
+    "category": "OTHER",
+    "level": 35,
+    "display_slot": "redmage-redmage:zwerchhau",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7515,
+    "name": "Displacement",
+    "icon": "Displacement.png",
+    "cooldown": 35.0,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 22,
+    "show": false,
+    "category": "OTHER",
+    "level": 40,
+    "display_slot": "redmage-redmage:displacement",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16527,
+    "name": "Engagement",
+    "icon": "Engagement.png",
+    "cooldown": 35.0,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 23,
+    "show": false,
+    "category": "OTHER",
+    "level": 40,
+    "display_slot": "redmage-redmage:engagement",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7516,
+    "name": "Redoublement",
+    "icon": "Redoublement.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 24,
+    "show": false,
+    "category": "OTHER",
+    "level": 50,
+    "display_slot": "redmage-redmage:redoublement",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7513,
+    "name": "Moulinet",
+    "icon": "Moulinet.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 25,
+    "show": false,
+    "category": "OTHER",
+    "level": 52,
+    "display_slot": "redmage-redmage:moulinet",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7524,
+    "name": "Jolt II",
+    "icon": "Jolt_II.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 12,
+    "show": false,
+    "category": "OTHER",
+    "level": 62,
+    "display_slot": "redmage-redmage:jolt",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7523,
+    "name": "Verraise",
+    "icon": "Verraise.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 27,
+    "show": false,
+    "category": "OTHER",
+    "level": 64,
+    "display_slot": "redmage-redmage:verraise",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16526,
+    "name": "Impact",
+    "icon": "Impact.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 28,
+    "show": false,
+    "category": "OTHER",
+    "level": 66,
+    "display_slot": "redmage-redmage:impact",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7525,
+    "name": "Verflare",
+    "icon": "Verflare.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 29,
+    "show": false,
+    "category": "OTHER",
+    "level": 68,
+    "display_slot": "redmage-redmage:verflare",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7526,
+    "name": "Verholy",
+    "icon": "Verholy.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 30,
+    "show": false,
+    "category": "OTHER",
+    "level": 70,
+    "display_slot": "redmage-redmage:verholy",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16529,
+    "name": "Reprise",
+    "icon": "Reprise.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 31,
+    "show": false,
+    "category": "OTHER",
+    "level": 76,
+    "display_slot": "redmage-redmage:reprise",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16530,
+    "name": "Scorch",
+    "icon": "Scorch.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 32,
+    "show": false,
+    "category": "OTHER",
+    "level": 80,
+    "display_slot": "redmage-redmage:scorch",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25855,
+    "name": "Verthunder III",
+    "icon": "Verthunder_III.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 13,
+    "show": false,
+    "category": "OTHER",
+    "level": 82,
+    "display_slot": "redmage-redmage:verthunder",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25856,
+    "name": "Veraero III",
+    "icon": "Veraero_III.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 15,
+    "show": false,
+    "category": "OTHER",
+    "level": 82,
+    "display_slot": "redmage-redmage:veraero",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 37004,
+    "name": "Jolt III",
+    "icon": "Jolt_III.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 12,
+    "show": false,
+    "category": "OTHER",
+    "level": 84,
+    "display_slot": "redmage-redmage:jolt",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25858,
+    "name": "Resolution",
+    "icon": "Resolution.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 36,
+    "show": false,
+    "category": "OTHER",
+    "level": 90,
+    "display_slot": "redmage-redmage:resolution",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 37005,
+    "name": "Vice of Thorns",
+    "icon": "Vice_of_Thorns.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 3,
+    "show": false,
+    "category": "MAJOR",
+    "level": 92,
+    "display_slot": "redmage-redmage:fleche",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 37006,
+    "name": "Grand Impact",
+    "icon": "Grand_Impact.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 28,
+    "show": false,
+    "category": "OTHER",
+    "level": 96,
+    "display_slot": "redmage-redmage:impact",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 37007,
+    "name": "Prefulgence",
+    "icon": "Prefulgence.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 39,
+    "show": false,
+    "category": "OTHER",
+    "level": 100,
+    "display_slot": "redmage-redmage:prefulgence",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7528,
+    "name": "Enchanted Zwerchhau",
+    "icon": "Enchanted_Zwerchhau.png",
+    "cooldown": 1.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 40,
+    "show": false,
+    "category": "OTHER",
+    "level": 35,
+    "display_slot": "redmage-redmage:enchanted zwerchhau",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7529,
+    "name": "Enchanted Redoublement",
+    "icon": "Enchanted_Redoublement.png",
+    "cooldown": 2.2,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 41,
+    "show": false,
+    "category": "OTHER",
+    "level": 50,
+    "display_slot": "redmage-redmage:enchanted redoublement",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7530,
+    "name": "Enchanted Moulinet",
+    "icon": "Enchanted_Moulinet.png",
+    "cooldown": 1.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 42,
+    "show": false,
+    "category": "OTHER",
+    "level": 52,
+    "display_slot": "redmage-redmage:enchanted moulinet",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 37002,
+    "name": "Enchanted Moulinet Deux",
+    "icon": "Enchanted_Moulinet_Deux.png",
+    "cooldown": 1.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 43,
+    "show": false,
+    "category": "OTHER",
+    "level": 52,
+    "display_slot": "redmage-redmage:enchanted moulinet deux",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 37003,
+    "name": "Enchanted Moulinet Trois",
+    "icon": "Enchanted_Moulinet_Trois.png",
+    "cooldown": 1.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 44,
+    "show": false,
+    "category": "OTHER",
+    "level": 52,
+    "display_slot": "redmage-redmage:enchanted moulinet trois",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25880,
+    "name": "Sleep",
+    "icon": "Sleep.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 45,
+    "show": false,
+    "category": "OTHER",
+    "level": 10,
+    "display_slot": "redmage-redmage:sleep",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7562,
+    "name": "Lucid Dreaming",
+    "icon": "Lucid_Dreaming.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 46,
+    "show": false,
+    "category": "OTHER",
+    "level": 14,
+    "display_slot": "redmage-redmage:lucid dreaming",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7559,
+    "name": "Surecast",
+    "icon": "Surecast.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#E87B7B",
+    "load_order": 47,
+    "show": false,
+    "category": "OTHER",
+    "level": 44,
+    "display_slot": "redmage-redmage:surecast",
+    "debug_tags": [
+      "other"
     ]
   },
   {
@@ -160,9 +774,11 @@
     "cooldown": 270,
     "duration": 30.0,
     "color": "#b576e8",
-    "load_order": 11,
+    "load_order": 48,
     "show": true,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]
@@ -174,9 +790,11 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#666666",
-    "load_order": 12,
+    "load_order": 49,
     "show": null,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]

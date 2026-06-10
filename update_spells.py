@@ -54,6 +54,9 @@ def get_spell_category(spell):
     # --- 功能性 / 药水 ---
     if spell.spell_type == SpellType.POTION or SpellTag.UTILITY in tags:
         return "UTILITY"
+
+    if SpellTag.OTHER in tags:
+        return "OTHER"
         
     # --- 默认: 爆发/主要技能 (CD) ---
     # 包括 SpellTag.DAMAGE
@@ -83,12 +86,19 @@ def generate_player_spells():
     for spec in all_specs:
         spec_slug = spec.full_name_slug
         spells_data = []
+
+        slot_orders = {}
+        for i, spell in enumerate(spec.all_spells):
+            slot = getattr(spell, "display_slot", "") or str(spell.spell_id)
+            slot_orders[slot] = min(slot_orders.get(slot, i), i)
         
         # 遍历该职业的所有可用技能
         # enumerat提供索引 i，用作 load_order
         for i, spell in enumerate(spec.all_spells):
             
             cat = get_spell_category(spell)
+            display_slot = getattr(spell, "display_slot", "")
+            slot_order = slot_orders.get(display_slot or str(spell.spell_id), i)
             
             spell_obj = {
                 "spell_id": spell.spell_id,
@@ -99,9 +109,11 @@ def generate_player_spells():
                 "color": spell.color,
                 
                 # --- 核心修复 ---
-                "load_order": i,       # 1. 强制记录文件里的顺序 (0, 1, 2...)
+                "load_order": slot_order,       # 1. 同一上下位技能共用显示位置
                 "show": spell.show,    # 是否显示
                 "category": cat,       # 2. 使用增强后的分类逻辑
+                "level": getattr(spell, "level", 0),
+                "display_slot": display_slot,
                 
                 "debug_tags": [str(t) for t in (spell.tags or [])]
             }

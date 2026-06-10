@@ -9,6 +9,8 @@
     "load_order": 0,
     "show": true,
     "category": "MAJOR",
+    "level": 2,
+    "display_slot": "gunbreaker-gunbreaker:no mercy",
     "debug_tags": [
       "dps"
     ]
@@ -23,6 +25,8 @@
     "load_order": 1,
     "show": true,
     "category": "MAJOR",
+    "level": 76,
+    "display_slot": "gunbreaker-gunbreaker:bloodfest",
     "debug_tags": [
       "dps"
     ]
@@ -37,6 +41,8 @@
     "load_order": 2,
     "show": true,
     "category": "SINGLE_MIT",
+    "level": 92,
+    "display_slot": "gunbreaker-gunbreaker:nebula",
     "debug_tags": [
       "defensive"
     ]
@@ -51,6 +57,8 @@
     "load_order": 3,
     "show": true,
     "category": "SINGLE_MIT",
+    "level": 8,
+    "display_slot": "gunbreaker-gunbreaker:rampart",
     "debug_tags": [
       "defensive"
     ]
@@ -65,6 +73,8 @@
     "load_order": 4,
     "show": true,
     "category": "SINGLE_MIT",
+    "level": 6,
+    "display_slot": "gunbreaker-gunbreaker:camouflage",
     "debug_tags": [
       "defensive"
     ]
@@ -79,6 +89,8 @@
     "load_order": 5,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 82,
+    "display_slot": "gunbreaker-gunbreaker:heart-of-stone",
     "debug_tags": [
       "defensive"
     ]
@@ -93,6 +105,8 @@
     "load_order": 6,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 45,
+    "display_slot": "gunbreaker-gunbreaker:aurora",
     "debug_tags": [
       "defensive"
     ]
@@ -107,6 +121,8 @@
     "load_order": 7,
     "show": true,
     "category": "SINGLE_MIT",
+    "level": 50,
+    "display_slot": "gunbreaker-gunbreaker:superbolide",
     "debug_tags": [
       "defensive"
     ]
@@ -121,6 +137,8 @@
     "load_order": 8,
     "show": true,
     "category": "RAID_MIT",
+    "level": 64,
+    "display_slot": "gunbreaker-gunbreaker:heart of light",
     "debug_tags": [
       "raid_cd"
     ]
@@ -135,8 +153,570 @@
     "load_order": 9,
     "show": true,
     "category": "RAID_MIT",
+    "level": 22,
+    "display_slot": "gunbreaker-gunbreaker:reprisal",
     "debug_tags": [
       "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 16137,
+    "name": "Keen Edge",
+    "icon": "Keen_Edge.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 10,
+    "show": false,
+    "category": "OTHER",
+    "level": 1,
+    "display_slot": "gunbreaker-gunbreaker:keen edge",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16139,
+    "name": "Brutal Shell",
+    "icon": "Brutal_Shell.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 11,
+    "show": false,
+    "category": "OTHER",
+    "level": 4,
+    "display_slot": "gunbreaker-gunbreaker:brutal shell",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16141,
+    "name": "Demon Slice",
+    "icon": "Demon_Slice.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 12,
+    "show": false,
+    "category": "OTHER",
+    "level": 10,
+    "display_slot": "gunbreaker-gunbreaker:demon slice",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16142,
+    "name": "Royal Guard",
+    "icon": "Royal_Guard.png",
+    "cooldown": 2.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 13,
+    "show": false,
+    "category": "OTHER",
+    "level": 10,
+    "display_slot": "gunbreaker-gunbreaker:royal guard",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 32068,
+    "name": "Release Royal Guard",
+    "icon": "Release_Royal_Guard.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 14,
+    "show": false,
+    "category": "OTHER",
+    "level": 10,
+    "display_slot": "gunbreaker-gunbreaker:release royal guard",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16143,
+    "name": "Lightning Shot",
+    "icon": "Lightning_Shot.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 15,
+    "show": false,
+    "category": "OTHER",
+    "level": 15,
+    "display_slot": "gunbreaker-gunbreaker:lightning shot",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16144,
+    "name": "Danger Zone",
+    "icon": "Danger_Zone.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 16,
+    "show": false,
+    "category": "OTHER",
+    "level": 18,
+    "display_slot": "gunbreaker-gunbreaker:danger-zone",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16145,
+    "name": "Solid Barrel",
+    "icon": "Solid_Barrel.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 17,
+    "show": false,
+    "category": "OTHER",
+    "level": 26,
+    "display_slot": "gunbreaker-gunbreaker:solid barrel",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16162,
+    "name": "Burst Strike",
+    "icon": "Burst_Strike.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 18,
+    "show": false,
+    "category": "OTHER",
+    "level": 30,
+    "display_slot": "gunbreaker-gunbreaker:burst strike",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16148,
+    "name": "Nebula",
+    "icon": "Nebula.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 2,
+    "show": true,
+    "category": "SINGLE_MIT",
+    "level": 38,
+    "display_slot": "gunbreaker-gunbreaker:nebula",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 16149,
+    "name": "Demon Slaughter",
+    "icon": "Demon_Slaughter.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 20,
+    "show": false,
+    "category": "OTHER",
+    "level": 40,
+    "display_slot": "gunbreaker-gunbreaker:demon slaughter",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16153,
+    "name": "Sonic Break",
+    "icon": "Sonic_Break.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 21,
+    "show": false,
+    "category": "OTHER",
+    "level": 54,
+    "display_slot": "gunbreaker-gunbreaker:sonic break",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36934,
+    "name": "Trajectory",
+    "icon": "Trajectory.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 22,
+    "show": false,
+    "category": "OTHER",
+    "level": 56,
+    "display_slot": "gunbreaker-gunbreaker:trajectory",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16146,
+    "name": "Gnashing Fang",
+    "icon": "Gnashing_Fang.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 23,
+    "show": false,
+    "category": "OTHER",
+    "level": 60,
+    "display_slot": "gunbreaker-gunbreaker:gnashing fang",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16147,
+    "name": "Savage Claw",
+    "icon": "Savage_Claw.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 24,
+    "show": false,
+    "category": "OTHER",
+    "level": 60,
+    "display_slot": "gunbreaker-gunbreaker:savage claw",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16150,
+    "name": "Wicked Talon",
+    "icon": "Wicked_Talon.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 25,
+    "show": false,
+    "category": "OTHER",
+    "level": 60,
+    "display_slot": "gunbreaker-gunbreaker:wicked talon",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16159,
+    "name": "Bow Shock",
+    "icon": "Bow_Shock.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 26,
+    "show": false,
+    "category": "OTHER",
+    "level": 62,
+    "display_slot": "gunbreaker-gunbreaker:bow shock",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16161,
+    "name": "Heart of Stone",
+    "icon": "Heart_of_Stone.png",
+    "cooldown": 25.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 5,
+    "show": false,
+    "category": "SINGLE_MIT",
+    "level": 68,
+    "display_slot": "gunbreaker-gunbreaker:heart-of-stone",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 16155,
+    "name": "Continuation",
+    "icon": "Continuation.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 28,
+    "show": false,
+    "category": "OTHER",
+    "level": 70,
+    "display_slot": "gunbreaker-gunbreaker:continuation",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16156,
+    "name": "Jugular Rip",
+    "icon": "Jugular_Rip.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 29,
+    "show": false,
+    "category": "OTHER",
+    "level": 70,
+    "display_slot": "gunbreaker-gunbreaker:jugular rip",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16157,
+    "name": "Abdomen Tear",
+    "icon": "Abdomen_Tear.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 30,
+    "show": false,
+    "category": "OTHER",
+    "level": 70,
+    "display_slot": "gunbreaker-gunbreaker:abdomen tear",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16158,
+    "name": "Eye Gouge",
+    "icon": "Eye_Gouge.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 31,
+    "show": false,
+    "category": "OTHER",
+    "level": 70,
+    "display_slot": "gunbreaker-gunbreaker:eye gouge",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16163,
+    "name": "Fated Circle",
+    "icon": "Fated_Circle.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 32,
+    "show": false,
+    "category": "OTHER",
+    "level": 72,
+    "display_slot": "gunbreaker-gunbreaker:fated circle",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16165,
+    "name": "Blasting Zone",
+    "icon": "Blasting_Zone.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 16,
+    "show": false,
+    "category": "OTHER",
+    "level": 80,
+    "display_slot": "gunbreaker-gunbreaker:danger-zone",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25759,
+    "name": "Hypervelocity",
+    "icon": "Hypervelocity.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 34,
+    "show": false,
+    "category": "OTHER",
+    "level": 86,
+    "display_slot": "gunbreaker-gunbreaker:hypervelocity",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25760,
+    "name": "Double Down",
+    "icon": "Double_Down.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 35,
+    "show": false,
+    "category": "OTHER",
+    "level": 90,
+    "display_slot": "gunbreaker-gunbreaker:double down",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36936,
+    "name": "Fated Brand",
+    "icon": "Fated_Brand.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 36,
+    "show": false,
+    "category": "OTHER",
+    "level": 96,
+    "display_slot": "gunbreaker-gunbreaker:fated brand",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36937,
+    "name": "Reign of Beasts",
+    "icon": "Reign_of_Beasts.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 37,
+    "show": false,
+    "category": "OTHER",
+    "level": 100,
+    "display_slot": "gunbreaker-gunbreaker:reign of beasts",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36938,
+    "name": "Noble Blood",
+    "icon": "Noble_Blood.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 38,
+    "show": false,
+    "category": "OTHER",
+    "level": 100,
+    "display_slot": "gunbreaker-gunbreaker:noble blood",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36939,
+    "name": "Lion Heart",
+    "icon": "Lion_Heart.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 39,
+    "show": false,
+    "category": "OTHER",
+    "level": 100,
+    "display_slot": "gunbreaker-gunbreaker:lion heart",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7540,
+    "name": "Low Blow",
+    "icon": "Low_Blow.png",
+    "cooldown": 25.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 40,
+    "show": false,
+    "category": "OTHER",
+    "level": 12,
+    "display_slot": "gunbreaker-gunbreaker:low blow",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7533,
+    "name": "Provoke",
+    "icon": "Provoke.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 41,
+    "show": false,
+    "category": "OTHER",
+    "level": 15,
+    "display_slot": "gunbreaker-gunbreaker:provoke",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7538,
+    "name": "Interject",
+    "icon": "Interject.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 42,
+    "show": false,
+    "category": "OTHER",
+    "level": 18,
+    "display_slot": "gunbreaker-gunbreaker:interject",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7548,
+    "name": "Arm's Length",
+    "icon": "Arm's_Length.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 43,
+    "show": false,
+    "category": "OTHER",
+    "level": 32,
+    "display_slot": "gunbreaker-gunbreaker:arm's length",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7537,
+    "name": "Shirk",
+    "icon": "Shirk.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#796D30",
+    "load_order": 44,
+    "show": false,
+    "category": "OTHER",
+    "level": 48,
+    "display_slot": "gunbreaker-gunbreaker:shirk",
+    "debug_tags": [
+      "other"
     ]
   },
   {
@@ -146,9 +726,11 @@
     "cooldown": 270,
     "duration": 30.0,
     "color": "#b576e8",
-    "load_order": 10,
+    "load_order": 45,
     "show": true,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]
@@ -160,9 +742,11 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#666666",
-    "load_order": 11,
+    "load_order": 46,
     "show": null,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]

@@ -9,6 +9,8 @@
     "load_order": 0,
     "show": true,
     "category": "MAJOR",
+    "level": 80,
+    "display_slot": "machinist-machinist:automaton queen",
     "debug_tags": [
       "dps"
     ]
@@ -23,6 +25,8 @@
     "load_order": 1,
     "show": false,
     "category": "MAJOR",
+    "level": 10,
+    "display_slot": "machinist-machinist:reassemble",
     "debug_tags": [
       "dps"
     ]
@@ -37,6 +41,8 @@
     "load_order": 2,
     "show": true,
     "category": "MAJOR",
+    "level": 30,
+    "display_slot": "machinist-machinist:hypercharge",
     "debug_tags": [
       "dps"
     ]
@@ -51,6 +57,8 @@
     "load_order": 3,
     "show": true,
     "category": "MAJOR",
+    "level": 66,
+    "display_slot": "machinist-machinist:barrel stabilizer",
     "debug_tags": [
       "dps"
     ]
@@ -65,6 +73,8 @@
     "load_order": 4,
     "show": false,
     "category": "MAJOR",
+    "level": 45,
+    "display_slot": "machinist-machinist:wildfire",
     "debug_tags": [
       "dps"
     ]
@@ -79,6 +89,8 @@
     "load_order": 5,
     "show": false,
     "category": "MAJOR",
+    "level": 58,
+    "display_slot": "machinist-machinist:drill",
     "debug_tags": [
       "dps"
     ]
@@ -93,6 +105,8 @@
     "load_order": 6,
     "show": false,
     "category": "MAJOR",
+    "level": 76,
+    "display_slot": "machinist-machinist:hot-shot",
     "debug_tags": [
       "dps"
     ]
@@ -107,6 +121,8 @@
     "load_order": 7,
     "show": false,
     "category": "MAJOR",
+    "level": 90,
+    "display_slot": "machinist-machinist:chain saw",
     "debug_tags": [
       "dps"
     ]
@@ -121,6 +137,8 @@
     "load_order": 8,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 8,
+    "display_slot": "machinist-machinist:second wind",
     "debug_tags": [
       "defensive"
     ]
@@ -135,6 +153,8 @@
     "load_order": 9,
     "show": true,
     "category": "RAID_MIT",
+    "level": 56,
+    "display_slot": "machinist-machinist:tactician",
     "debug_tags": [
       "raid_cd"
     ]
@@ -149,8 +169,554 @@
     "load_order": 10,
     "show": true,
     "category": "RAID_MIT",
+    "level": 62,
+    "display_slot": "machinist-machinist:dismantle",
     "debug_tags": [
       "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 2866,
+    "name": "Split Shot",
+    "icon": "Split_Shot.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 11,
+    "show": false,
+    "category": "OTHER",
+    "level": 1,
+    "display_slot": "machinist-machinist:split-shot",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 2868,
+    "name": "Slug Shot",
+    "icon": "Slug_Shot.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 12,
+    "show": false,
+    "category": "OTHER",
+    "level": 2,
+    "display_slot": "machinist-machinist:slug-shot",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 2872,
+    "name": "Hot Shot",
+    "icon": "Hot_Shot.png",
+    "cooldown": 40.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 6,
+    "show": false,
+    "category": "MAJOR",
+    "level": 4,
+    "display_slot": "machinist-machinist:hot-shot",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 2874,
+    "name": "Gauss Round",
+    "icon": "Gauss_Round.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 14,
+    "show": false,
+    "category": "OTHER",
+    "level": 15,
+    "display_slot": "machinist-machinist:gauss-round",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 2870,
+    "name": "Spread Shot",
+    "icon": "Spread_Shot.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 15,
+    "show": false,
+    "category": "OTHER",
+    "level": 18,
+    "display_slot": "machinist-machinist:spread-shot",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 2873,
+    "name": "Clean Shot",
+    "icon": "Clean_Shot.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 16,
+    "show": false,
+    "category": "OTHER",
+    "level": 26,
+    "display_slot": "machinist-machinist:clean-shot",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7410,
+    "name": "Heat Blast",
+    "icon": "Heat_Blast.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 17,
+    "show": false,
+    "category": "OTHER",
+    "level": 35,
+    "display_slot": "machinist-machinist:heat blast",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 2864,
+    "name": "Rook Autoturret",
+    "icon": "Rook_Autoturret.png",
+    "cooldown": 6.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 18,
+    "show": false,
+    "category": "OTHER",
+    "level": 40,
+    "display_slot": "machinist-machinist:rook autoturret",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7415,
+    "name": "Rook Overdrive",
+    "icon": "Rook_Overdrive.png",
+    "cooldown": 15.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 19,
+    "show": false,
+    "category": "OTHER",
+    "level": 40,
+    "display_slot": "machinist-machinist:rook overdrive",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7416,
+    "name": "Rook Overload",
+    "icon": "Rook_Overload.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 20,
+    "show": false,
+    "category": "OTHER",
+    "level": 40,
+    "display_slot": "machinist-machinist:rook overload",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16766,
+    "name": "Detonator",
+    "icon": "Detonator.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 21,
+    "show": false,
+    "category": "OTHER",
+    "level": 45,
+    "display_slot": "machinist-machinist:detonator",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 2890,
+    "name": "Ricochet",
+    "icon": "Ricochet.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 22,
+    "show": false,
+    "category": "OTHER",
+    "level": 50,
+    "display_slot": "machinist-machinist:ricochet",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16497,
+    "name": "Auto Crossbow",
+    "icon": "Auto_Crossbow.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 23,
+    "show": false,
+    "category": "OTHER",
+    "level": 52,
+    "display_slot": "machinist-machinist:auto crossbow",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7411,
+    "name": "Heated Split Shot",
+    "icon": "Heated_Split_Shot.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 11,
+    "show": false,
+    "category": "OTHER",
+    "level": 54,
+    "display_slot": "machinist-machinist:split-shot",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7412,
+    "name": "Heated Slug Shot",
+    "icon": "Heated_Slug_Shot.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 12,
+    "show": false,
+    "category": "OTHER",
+    "level": 60,
+    "display_slot": "machinist-machinist:slug-shot",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7413,
+    "name": "Heated Clean Shot",
+    "icon": "Heated_Clean_Shot.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 16,
+    "show": false,
+    "category": "OTHER",
+    "level": 64,
+    "display_slot": "machinist-machinist:clean-shot",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36978,
+    "name": "Blazing Shot",
+    "icon": "Blazing_Shot.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 27,
+    "show": false,
+    "category": "OTHER",
+    "level": 68,
+    "display_slot": "machinist-machinist:blazing shot",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7418,
+    "name": "Flamethrower",
+    "icon": "Flamethrower.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 28,
+    "show": false,
+    "category": "OTHER",
+    "level": 70,
+    "display_slot": "machinist-machinist:flamethrower",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16499,
+    "name": "Bioblaster",
+    "icon": "Bioblaster.png",
+    "cooldown": 20.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 29,
+    "show": false,
+    "category": "OTHER",
+    "level": 72,
+    "display_slot": "machinist-machinist:bioblaster",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16502,
+    "name": "Queen Overdrive",
+    "icon": "Queen_Overdrive.png",
+    "cooldown": 15.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 30,
+    "show": false,
+    "category": "OTHER",
+    "level": 80,
+    "display_slot": "machinist-machinist:queen overdrive",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16504,
+    "name": "Arm Punch",
+    "icon": "Arm_Punch.png",
+    "cooldown": 1.5,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 31,
+    "show": false,
+    "category": "OTHER",
+    "level": 80,
+    "display_slot": "machinist-machinist:arm punch",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 17206,
+    "name": "Roller Dash",
+    "icon": "Roller_Dash.png",
+    "cooldown": 3.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 32,
+    "show": false,
+    "category": "OTHER",
+    "level": 80,
+    "display_slot": "machinist-machinist:roller dash",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16503,
+    "name": "Pile Bunker",
+    "icon": "Pile_Bunker.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 33,
+    "show": false,
+    "category": "OTHER",
+    "level": 80,
+    "display_slot": "machinist-machinist:pile bunker",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25786,
+    "name": "Scattergun",
+    "icon": "Scattergun.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 15,
+    "show": false,
+    "category": "OTHER",
+    "level": 82,
+    "display_slot": "machinist-machinist:spread-shot",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25787,
+    "name": "Crowned Collider",
+    "icon": "Crowned_Collider.png",
+    "cooldown": 0.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 35,
+    "show": false,
+    "category": "OTHER",
+    "level": 86,
+    "display_slot": "machinist-machinist:crowned collider",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36979,
+    "name": "Double Check",
+    "icon": "Double_Check.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 14,
+    "show": false,
+    "category": "OTHER",
+    "level": 92,
+    "display_slot": "machinist-machinist:gauss-round",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36980,
+    "name": "Checkmate",
+    "icon": "Checkmate.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 22,
+    "show": false,
+    "category": "OTHER",
+    "level": 92,
+    "display_slot": "machinist-machinist:ricochet",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36981,
+    "name": "Excavator",
+    "icon": "Excavator.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 38,
+    "show": false,
+    "category": "OTHER",
+    "level": 96,
+    "display_slot": "machinist-machinist:excavator",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36982,
+    "name": "Full Metal Field",
+    "icon": "Full_Metal_Field.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 39,
+    "show": false,
+    "category": "OTHER",
+    "level": 100,
+    "display_slot": "machinist-machinist:full metal field",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7554,
+    "name": "Leg Graze",
+    "icon": "Leg_Graze.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 40,
+    "show": false,
+    "category": "OTHER",
+    "level": 6,
+    "display_slot": "machinist-machinist:leg graze",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7553,
+    "name": "Foot Graze",
+    "icon": "Foot_Graze.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 41,
+    "show": false,
+    "category": "OTHER",
+    "level": 10,
+    "display_slot": "machinist-machinist:foot graze",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7557,
+    "name": "Peloton",
+    "icon": "Peloton.png",
+    "cooldown": 5.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 42,
+    "show": false,
+    "category": "OTHER",
+    "level": 20,
+    "display_slot": "machinist-machinist:peloton",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7551,
+    "name": "Head Graze",
+    "icon": "Head_Graze.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 43,
+    "show": false,
+    "category": "OTHER",
+    "level": 24,
+    "display_slot": "machinist-machinist:head graze",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7548,
+    "name": "Arm's Length",
+    "icon": "Arm's_Length.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#6EE1D6",
+    "load_order": 44,
+    "show": false,
+    "category": "OTHER",
+    "level": 32,
+    "display_slot": "machinist-machinist:arm's length",
+    "debug_tags": [
+      "other"
     ]
   },
   {
@@ -160,9 +726,11 @@
     "cooldown": 270,
     "duration": 30.0,
     "color": "#b576e8",
-    "load_order": 11,
+    "load_order": 45,
     "show": true,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]
@@ -174,9 +742,11 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#666666",
-    "load_order": 12,
+    "load_order": 46,
     "show": null,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]

@@ -186,6 +186,8 @@
                 language: 'Language',
                 loading: 'Loading...',
                 boss: 'Boss',
+                bossGroup_current: 'Current Content',
+                bossGroup_legacyUltimates: 'Legacy Ultimates',
                 spec: 'Spec',
                 region: 'Region',
                 with: 'Comp Filter',
@@ -211,6 +213,7 @@
                 category_single_mit: 'Single Mit',
                 category_group_mit: 'Group Mit',
                 category_utility: 'Utility',
+                category_others: 'Others',
                 limitBreak: 'Limit Break',
                 showLimitBreak: 'Show limit break casts',
                 party: 'Party',
@@ -282,6 +285,8 @@
                 language: '语言',
                 loading: '加载中...',
                 boss: 'Boss',
+                bossGroup_current: '当前副本',
+                bossGroup_legacyUltimates: '旧绝本',
                 spec: '职业',
                 region: '地区',
                 with: '阵容筛选',
@@ -307,6 +312,7 @@
                 category_single_mit: '单减',
                 category_group_mit: '团减',
                 category_utility: '功能',
+                category_others: '其他',
                 limitBreak: 'Limit Break',
                 showLimitBreak: '显示 LB',
                 party: '队伍',
@@ -378,6 +384,8 @@
                 language: '言語',
                 loading: '読み込み中...',
                 boss: 'Boss',
+                bossGroup_current: '現行コンテンツ',
+                bossGroup_legacyUltimates: '過去の絶',
                 spec: 'ジョブ',
                 region: '地域',
                 with: '構成フィルター',
@@ -403,6 +411,7 @@
                 category_single_mit: '単体軽減',
                 category_group_mit: '全体軽減',
                 category_utility: '補助',
+                category_others: 'その他',
                 limitBreak: 'Limit Break',
                 showLimitBreak: 'LB を表示',
                 party: 'パーティ',
@@ -474,6 +483,8 @@
                 language: '언어',
                 loading: '불러오는 중...',
                 boss: 'Boss',
+                bossGroup_current: '현재 콘텐츠',
+                bossGroup_legacyUltimates: '이전 절 레이드',
                 spec: '직업',
                 region: '지역',
                 with: '조합 필터',
@@ -499,6 +510,7 @@
                 category_single_mit: '단일 생존기',
                 category_group_mit: '파티 생존기',
                 category_utility: '유틸',
+                category_others: '기타',
                 limitBreak: 'Limit Break',
                 showLimitBreak: 'LB 표시',
                 party: '파티',
@@ -607,6 +619,7 @@
             'viper-viper': 'vpr-defaults-2026-06-08'
         };
         const getSpellSelectionStorageKey = (specSlug) => `m-spec:selected-spells:${specSlug}`;
+        const getSpellSelectionSlotStorageKey = (specSlug) => `m-spec:selected-spell-slots:${specSlug}`;
         const getSpellSelectionMigrationKey = (specSlug) => `m-spec:selected-spells-migration:${specSlug}`;
         const applySpellSelectionMigration = (specSlug) => {
             const migration = SPELL_SELECTION_MIGRATIONS[specSlug];
@@ -645,6 +658,47 @@
             url.searchParams.set('buddy', enabled ? '1' : '0');
             window.history.replaceState({}, '', url);
         };
+        const DEFAULT_CONTENT_LEVEL = 100;
+        const BOSS_CONTENT_LEVELS = {
+            'vamp-fatale': 100,
+            'red-hot-and-deep-blue': 100,
+            'the-tyrant': 100,
+            'lindwurm': 100,
+            'lindwurm-ii': 100,
+            'futures-rewritten': 100,
+            'dancing-mad': 100,
+            'the-unending-coil-of-bahamut': 70,
+            'the-weapons-refrain': 70,
+            'the-epic-of-alexander': 80,
+            'dragonsongs-reprise': 90,
+            'the-omega-protocol': 90
+        };
+        const getBossContentLevel = (bossSlug) => BOSS_CONTENT_LEVELS[bossSlug] || DEFAULT_CONTENT_LEVEL;
+        const getSpellDisplaySlot = (spell) => spell.display_slot || `spell:${spell.id || spell.spell_id || spell.name}`;
+        const filterSpellListForContentLevel = (spellList, contentLevel) => {
+            const bySlot = new Map();
+            (spellList || []).forEach((spell, index) => {
+                const level = Number(spell.level || 0);
+                if (level > contentLevel) return;
+
+                const slot = getSpellDisplaySlot(spell);
+                const current = bySlot.get(slot);
+                const currentLevel = Number(current?.level || 0);
+                const currentOrder = Number(current?.load_order ?? 999999);
+                const order = Number(spell.load_order ?? index);
+
+                if (!current || level > currentLevel || (level === currentLevel && order < currentOrder)) {
+                    bySlot.set(slot, spell);
+                }
+            });
+
+            return [...bySlot.values()].sort((a, b) => {
+                const orderA = Number(a.load_order ?? 999999);
+                const orderB = Number(b.load_order ?? 999999);
+                if (orderA !== orderB) return orderA - orderB;
+                return Number(a.id || a.spell_id || 0) - Number(b.id || b.spell_id || 0);
+            });
+        };
         const translate = (language, key) => I18N[language]?.[key] || I18N.en[key] || key;
         const translateWithValues = (language, key, values = {}) => (
             Object.entries(values).reduce(
@@ -675,10 +729,11 @@
             SINGLE_MIT: { label: 'Single Mit', color: '#4facfe', iconType: 'shield', defaultActive: false },
             RAID_MIT: { label: 'Group Mit', color: '#8657FF', iconType: 'shieldAlert', defaultActive: true },
             UTILITY: { label: 'Utility', color: '#E6B33D', iconType: 'zap', defaultActive: false },
+            OTHER: { label: 'Others', color: '#94A3B8', iconType: 'more', defaultActive: false },
         });
 
         // 1. fetchSpellData (API)
-        const fetchSpellData = async (specSlug = 'redmage-redmage') => {
+        const fetchSpellData = async (specSlug = 'redmage-redmage', bossSlug = '') => {
             try {
                 const url = `./data/spells_${specSlug}.json?t=${Date.now()}`;
                 console.log(`[M-Spec] 加载技能配置: ${url}`);
@@ -689,8 +744,10 @@
                 
                 const spellMap = {};
                 const list = Array.isArray(data) ? data : Object.values(data);
+                const contentLevel = getBossContentLevel(bossSlug);
+                const visibleList = filterSpellListForContentLevel(list, contentLevel);
 
-                list.forEach((spell) => {
+                visibleList.forEach((spell) => {
                     spellMap[spell.spell_id] = {
                         id: spell.spell_id,
                         name: spell.name,
@@ -700,7 +757,9 @@
                         color: spell.color || '#ffcc00',
                         category: spell.category || 'MAJOR', 
                         show: (spell.show !== undefined && spell.show !== null) ? spell.show : true,
-                        load_order: (spell.load_order !== undefined) ? spell.load_order : 9999
+                        load_order: (spell.load_order !== undefined) ? spell.load_order : 9999,
+                        level: Number(spell.level || 0),
+                        display_slot: spell.display_slot || ""
                     };
                 });
                 return spellMap;
@@ -760,15 +819,31 @@
             }
         };
 
-        const BOSS_OPTIONS = [
-            { id: 'vamp-fatale', label: 'M9S: Vamp Fatale' },
-            { id: 'red-hot-and-deep-blue', label: 'M10S: Red Hot and Deep Blue' },
-            { id: 'the-tyrant', label: 'M11S: The Tyrant' },
-            { id: 'lindwurm', label: 'M12S P1: Lindwurm' },
-            { id: 'lindwurm-ii', label: 'M12S P2: Lindwurm' },
-            { id: 'futures-rewritten', label: 'Futures Rewritten' },
-            { id: 'dancing-mad', label: 'Dancing Mad' }
+        const BOSS_GROUPS = [
+            {
+                labelKey: 'bossGroup_current',
+                items: [
+                    { id: 'vamp-fatale', label: 'M9S: Vamp Fatale' },
+                    { id: 'red-hot-and-deep-blue', label: 'M10S: Red Hot and Deep Blue' },
+                    { id: 'the-tyrant', label: 'M11S: The Tyrant' },
+                    { id: 'lindwurm', label: 'M12S P1: Lindwurm' },
+                    { id: 'lindwurm-ii', label: 'M12S P2: Lindwurm' },
+                    { id: 'futures-rewritten', label: 'FRU: Futures Rewritten' },
+                    { id: 'dancing-mad', label: 'DMU: Dancing Mad' }
+                ]
+            },
+            {
+                labelKey: 'bossGroup_legacyUltimates',
+                items: [
+                    { id: 'the-unending-coil-of-bahamut', label: 'UCOB: The Unending Coil of Bahamut' },
+                    { id: 'the-weapons-refrain', label: "UWU: The Weapon's Refrain" },
+                    { id: 'the-epic-of-alexander', label: 'TEA: The Epic of Alexander' },
+                    { id: 'dragonsongs-reprise', label: "DSR: Dragonsong's Reprise" },
+                    { id: 'the-omega-protocol', label: 'TOP: The Omega Protocol' }
+                ]
+            }
         ];
+        const BOSS_OPTIONS = BOSS_GROUPS.flatMap(group => group.items);
 
         const SPEC_NAME_TRANSLATIONS = {
             zh: {
@@ -855,8 +930,13 @@
                 'the-tyrant': 'M11S：霸王',
                 'lindwurm': 'M12S P1：亡国大蛇 林德布鲁姆',
                 'lindwurm-ii': 'M12S P2：亡国大蛇 林德布鲁姆',
-                'futures-rewritten': '光暗未来绝境战',
-                'dancing-mad': '妖星乱舞绝境战'
+                'futures-rewritten': 'FRU：光暗未来绝境战',
+                'dancing-mad': 'DMU：妖星乱舞绝境战',
+                'the-unending-coil-of-bahamut': 'UCOB：巴哈姆特绝境战',
+                'the-weapons-refrain': 'UWU：究极神兵绝境战',
+                'the-epic-of-alexander': 'TEA：亚历山大绝境战',
+                'dragonsongs-reprise': 'DSR：幻想龙诗绝境战',
+                'the-omega-protocol': 'TOP：欧米茄绝境验证战'
             },
             ja: {
                 'vamp-fatale': 'M9S：ヴァンプ・ファタール',
@@ -864,8 +944,13 @@
                 'the-tyrant': 'M11S：ザ・タイラント',
                 'lindwurm': 'M12S P1：リンドブルム',
                 'lindwurm-ii': 'M12S P2：リンドブルム',
-                'futures-rewritten': '絶もうひとつの未来',
-                'dancing-mad': '絶妖星乱舞'
+                'futures-rewritten': 'FRU：絶もうひとつの未来',
+                'dancing-mad': 'DMU：絶妖星乱舞',
+                'the-unending-coil-of-bahamut': 'UCOB：絶バハムート討滅戦',
+                'the-weapons-refrain': 'UWU：絶アルテマウェポン破壊作戦',
+                'the-epic-of-alexander': 'TEA：絶アレキサンダー討滅戦',
+                'dragonsongs-reprise': 'DSR：絶竜詩戦争',
+                'the-omega-protocol': 'TOP：絶オメガ検証戦'
             },
             ko: {
                 'vamp-fatale': 'M9S: 뱀프 파탈',
@@ -873,8 +958,13 @@
                 'the-tyrant': 'M11S: 더 타이런트',
                 'lindwurm': 'M12S P1: 린드블룸',
                 'lindwurm-ii': 'M12S P2: 린드블룸',
-                'futures-rewritten': '절 또 하나의 미래',
-                'dancing-mad': '절 요성난무'
+                'futures-rewritten': 'FRU: 절 또 하나의 미래',
+                'dancing-mad': 'DMU: 절 요성난무',
+                'the-unending-coil-of-bahamut': 'UCOB: 절 바하무트 토벌전',
+                'the-weapons-refrain': 'UWU: 절 알테마 웨폰 파괴작전',
+                'the-epic-of-alexander': 'TEA: 절 알렉산더 토벌전',
+                'dragonsongs-reprise': 'DSR: 절 용시전쟁',
+                'the-omega-protocol': 'TOP: 절 오메가 검증전'
             }
         };
 
@@ -948,9 +1038,27 @@
                 .map(s => Number(s.id))
         );
 
+        const getSelectedSpellSlots = (spellMap, selectedIds) => {
+            const selectedIdSet = selectedIds instanceof Set ? selectedIds : new Set(selectedIds || []);
+            return [...new Set(
+                Object.values(spellMap || {})
+                    .filter(spell => selectedIdSet.has(Number(spell.id)))
+                    .map(getSpellDisplaySlot)
+            )];
+        };
+
         const readStoredSpellSelection = (specSlug, spellMap) => {
             try {
                 if (applySpellSelectionMigration(specSlug)) return null;
+                const rawSlots = localStorage.getItem(getSpellSelectionSlotStorageKey(specSlug));
+                if (rawSlots !== null) {
+                    const selectedSlots = new Set(JSON.parse(rawSlots).map(String));
+                    return new Set(
+                        Object.values(spellMap)
+                            .filter(spell => selectedSlots.has(getSpellDisplaySlot(spell)))
+                            .map(spell => Number(spell.id))
+                    );
+                }
                 const raw = localStorage.getItem(getSpellSelectionStorageKey(specSlug));
                 if (raw === null) return null;
                 const validIds = new Set(Object.values(spellMap).map(spell => Number(spell.id)));
@@ -961,9 +1069,13 @@
             }
         };
 
-        const writeStoredSpellSelection = (specSlug, selectedIds) => {
+        const writeStoredSpellSelection = (specSlug, selectedIds, spellMap = {}) => {
             try {
                 localStorage.setItem(getSpellSelectionStorageKey(specSlug), JSON.stringify([...selectedIds].map(Number)));
+                localStorage.setItem(
+                    getSpellSelectionSlotStorageKey(specSlug),
+                    JSON.stringify(getSelectedSpellSlots(spellMap, selectedIds))
+                );
             } catch (error) {
                 console.warn("[M-Spec] Could not store spell selection.", error);
             }
@@ -1140,7 +1252,9 @@
                     load_order: base.load_order !== undefined ? base.load_order : (spell.load_order !== undefined ? spell.load_order : 9999),
                     show: base.show !== undefined ? base.show : spell.show,
                     duration: base.duration !== undefined ? base.duration : (spell.duration || 0),
-                    cd: base.cd !== undefined ? base.cd : (spell.cd || 0)
+                    cd: base.cd !== undefined ? base.cd : (spell.cd || 0),
+                    level: base.level !== undefined ? base.level : (spell.level || 0),
+                    display_slot: base.display_slot || spell.display_slot || ""
                 };
             });
             return merged;
@@ -1942,11 +2056,13 @@
             const [buddySpellMaps, setBuddySpellMaps] = useState({});
             const [buddySpellSelections, setBuddySpellSelections] = useState({});
             const [buddySpellMenuSpec, setBuddySpellMenuSpec] = useState(null);
+            const [otherMenuOpen, setOtherMenuOpen] = useState(false);
 
             const [selectedSpells, setSelectedSpells] = useState(new Set());
             const scrollContainerRef = useRef(null);
             const suppressRowClickRef = useRef(false);
             const buddyMenuRef = useRef(null);
+            const otherMenuRef = useRef(null);
 
             useEffect(() => {
                 try {
@@ -2036,11 +2152,11 @@
                     setLoading(true);
                     const cats = await fetchSpellCategories();
                     const combinedConfig = getCombinedConfig(selectedSpec);
-                    const sps = combinedConfig ? {} : await fetchSpellData(selectedSpec);
+                    const sps = combinedConfig ? {} : await fetchSpellData(selectedSpec, selectedBoss);
                     const mechs = await fetchBossMechanics(selectedBoss);
                     const partySpecOptions = combinedConfig ? getCombinedSpecOptions(selectedSpec) : getBuddySpecOptions(selectedSpec);
                     const buddyEntries = await Promise.all(
-                        partySpecOptions.map(async spec => [spec.id, await fetchSpellData(spec.id)])
+                        partySpecOptions.map(async spec => [spec.id, await fetchSpellData(spec.id, selectedBoss)])
                     );
                     const nextBuddySpellMaps = Object.fromEntries(buddyEntries);
                     
@@ -2058,6 +2174,7 @@
                         ])
                     ));
                     setBuddySpellMenuSpec(null);
+                    setOtherMenuOpen(false);
                     if (!supportsBuddy(selectedSpec)) {
                         setBuddySpellMenuSpec(null);
                     }
@@ -2075,6 +2192,9 @@
                 const handleClickOutside = (event) => {
                     if (buddyMenuRef.current && !buddyMenuRef.current.contains(event.target)) {
                         setBuddySpellMenuSpec(null);
+                    }
+                    if (otherMenuRef.current && !otherMenuRef.current.contains(event.target)) {
+                        setOtherMenuOpen(false);
                     }
                 };
                 document.addEventListener('mousedown', handleClickOutside);
@@ -2143,7 +2263,7 @@
             const toggleSpell = (spellId) => {
                 const newSet = new Set(selectedSpells);
                 if (newSet.has(spellId)) newSet.delete(spellId); else newSet.add(spellId);
-                writeStoredSpellSelection(selectedSpec, newSet);
+                writeStoredSpellSelection(selectedSpec, newSet, spells);
                 setSelectedSpells(newSet);
             };
 
@@ -2154,7 +2274,7 @@
                 spellsInCat.forEach(s => {
                     if (allSelected) newSet.delete(s.id); else newSet.add(s.id);
                 });
-                writeStoredSpellSelection(selectedSpec, newSet);
+                writeStoredSpellSelection(selectedSpec, newSet, spells);
                 setSelectedSpells(newSet);
             };
 
@@ -2163,13 +2283,13 @@
                 if (selectedSpells.size > 0) {
                     // Hide All
                     const newSet = new Set();
-                    writeStoredSpellSelection(selectedSpec, newSet);
+                    writeStoredSpellSelection(selectedSpec, newSet, spells);
                     setSelectedSpells(newSet);
                 } else {
                     // Show All
                     const allIds = Object.values(spells).map(s => s.id);
                     const newSet = new Set(allIds);
-                    writeStoredSpellSelection(selectedSpec, newSet);
+                    writeStoredSpellSelection(selectedSpec, newSet, spells);
                     setSelectedSpells(newSet);
                 }
             };
@@ -2215,7 +2335,7 @@
                     const current = new Set(prev[specSlug] || []);
                     const id = Number(spellId);
                     if (current.has(id)) current.delete(id); else current.add(id);
-                    writeStoredSpellSelection(specSlug, current);
+                    writeStoredSpellSelection(specSlug, current, buddySpellMaps[specSlug] || {});
                     return { ...prev, [specSlug]: current };
                 });
             };
@@ -2230,7 +2350,7 @@
                         const id = Number(s.id);
                         if (allSelected) current.delete(id); else current.add(id);
                     });
-                    writeStoredSpellSelection(specSlug, current);
+                    writeStoredSpellSelection(specSlug, current, spellMap);
                     return { ...prev, [specSlug]: current };
                 });
             };
@@ -2241,7 +2361,7 @@
                     const current = new Set(prev[specSlug] || []);
                     const allIds = Object.values(spellMap).map(s => Number(s.id));
                     const next = current.size > 0 ? new Set() : new Set(allIds);
-                    writeStoredSpellSelection(specSlug, next);
+                    writeStoredSpellSelection(specSlug, next, spellMap);
                     return { ...prev, [specSlug]: next };
                 });
             };
@@ -2378,7 +2498,7 @@
                     }
                     const data = await postImportLog("casts", { url: importUrl, source_id: player.source_id });
                     const durationSeconds = (data.duration || 0) / 1000;
-                    const specSpellMap = await fetchSpellData(data.player.spec_slug);
+                    const specSpellMap = await fetchSpellData(data.player.spec_slug, selectedBoss);
                     const importedSpells = mergeSpellMaps(specSpellMap, data.spells || {});
                     const importedRow = {
                         id: getImportedLogRowId(data.report_id, data.fight_id, data.player.source_id),
@@ -2644,8 +2764,12 @@
                                     onChange={(e) => updateUrlAndReload('boss', e.target.value)} 
                                     className="nav-select h-8 min-w-[180px] appearance-none rounded-md border border-gray-700 bg-[#101010] px-3 pr-8 text-sm font-medium text-gray-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] outline-none transition-colors hover:border-[#00FF96]/70 hover:bg-[#151515] focus:border-[#00FF96] cursor-pointer"
                                 >
-                                    {BOSS_OPTIONS.map(boss => (
-                                        <option key={boss.id} value={boss.id}>{getLocalizedBossName(boss.id, uiLanguage)}</option>
+                                    {BOSS_GROUPS.map(group => (
+                                        <optgroup key={group.labelKey} label={t(group.labelKey)}>
+                                            {group.items.map(boss => (
+                                                <option key={boss.id} value={boss.id}>{getLocalizedBossName(boss.id, uiLanguage)}</option>
+                                            ))}
+                                        </optgroup>
                                     ))}
                                 </select>
                                 <ChevronDown size={14} className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500" />
@@ -2952,28 +3076,94 @@
                         </div>
                     </div>
                     <div className="flex items-center gap-6">
-                        {!isCombined && Object.entries(spellCategories).map(([catKey, category]) => (
-                            <div key={catKey} className="flex flex-col gap-1">
-                                <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-white" onClick={() => toggleCategory(catKey)}>
-                                    <CategoryIcon type={category.iconType} /> {getCategoryLabel(category, t)}
-                                </div>
-                                <div className="flex items-center gap-1.5">
-                                    {(spellsByCategory[catKey] || []).map(spell => {
-                                        const isSelected = selectedSpells.has(spell.id);
-                                        return (
-                                            <button
-                                                key={spell.id}
-                                                onClick={() => toggleSpell(spell.id)}
-                                                className={`relative w-8 h-8 rounded border transition-all duration-200 group overflow-hidden ${isSelected ? 'border-transparent opacity-100 shadow-[0_0_10px_rgba(255,255,255,0.1)] grayscale-0' : 'border-gray-800 opacity-30 grayscale hover:opacity-70 hover:border-gray-600'}`}
-                                                title={spell.name}
+                        {!isCombined && Object.entries(spellCategories).map(([catKey, category]) => {
+                            const categorySpells = spellsByCategory[catKey] || [];
+                            if (catKey === "OTHER") {
+                                const selectedOtherCount = categorySpells.filter(spell => selectedSpells.has(spell.id)).length;
+                                return (
+                                    <div key={catKey} className="relative flex flex-col gap-1" ref={otherMenuRef}>
+                                        <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                                            <CategoryIcon type={category.iconType} /> {getCategoryLabel(category, t)}
+                                        </div>
+                                        <button
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                                setOtherMenuOpen(prev => !prev);
+                                            }}
+                                            className={`h-8 min-w-[74px] px-3 flex items-center justify-center rounded border text-[11px] font-black tracking-wide transition-all ${
+                                                selectedOtherCount > 0
+                                                    ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96] shadow-[inset_0_0_0_1px_rgba(0,255,150,0.12)]'
+                                                    : 'bg-transparent border-gray-800 text-gray-500 hover:border-gray-600 hover:text-white'
+                                            }`}
+                                            title={getCategoryLabel(category, t)}
+                                        >
+                                            {selectedOtherCount}/{categorySpells.length}
+                                        </button>
+                                        {otherMenuOpen && (
+                                            <div
+                                                className="absolute top-full left-0 mt-2 z-[6500] w-[420px] max-w-[calc(100vw-2rem)] rounded-md border border-gray-700 bg-[#151515] p-3 shadow-2xl"
+                                                onClick={(event) => event.stopPropagation()}
                                             >
-                                                <RenderIcon spell={spell} />
-                                            </button>
-                                        );
-                                    })}
+                                                <div className="mb-2 flex items-center justify-between border-b border-gray-800 pb-2">
+                                                    <div>
+                                                        <div className="flex items-center gap-1 text-xs font-black uppercase tracking-wide text-white">
+                                                            <CategoryIcon type={category.iconType} /> {getCategoryLabel(category, t)}
+                                                        </div>
+                                                        <div className="text-[10px] font-mono text-gray-500">{selectedOtherCount} / {categorySpells.length} {t("shown")}</div>
+                                                    </div>
+                                                    <button
+                                                        onClick={() => toggleCategory(catKey)}
+                                                        className="rounded border border-gray-700 px-2 py-1 text-[10px] font-bold text-gray-400 hover:border-[#00FF96] hover:text-white"
+                                                    >
+                                                        {t("all")}
+                                                    </button>
+                                                </div>
+                                                <div className="max-h-[360px] overflow-y-auto pr-1 custom-scrollbar">
+                                                    <div className="grid grid-cols-8 gap-1.5">
+                                                        {categorySpells.map(spell => {
+                                                            const isSelected = selectedSpells.has(spell.id);
+                                                            return (
+                                                                <button
+                                                                    key={spell.id}
+                                                                    onClick={() => toggleSpell(spell.id)}
+                                                                    className={`relative h-8 w-8 rounded border transition-all duration-200 group overflow-hidden ${isSelected ? 'border-transparent opacity-100 shadow-[0_0_10px_rgba(255,255,255,0.1)] grayscale-0' : 'border-gray-800 opacity-30 grayscale hover:opacity-70 hover:border-gray-600'}`}
+                                                                    title={spell.name}
+                                                                >
+                                                                    <RenderIcon spell={spell} />
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            }
+
+                            return (
+                                <div key={catKey} className="flex flex-col gap-1">
+                                    <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-white" onClick={() => toggleCategory(catKey)}>
+                                        <CategoryIcon type={category.iconType} /> {getCategoryLabel(category, t)}
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        {categorySpells.map(spell => {
+                                            const isSelected = selectedSpells.has(spell.id);
+                                            return (
+                                                <button
+                                                    key={spell.id}
+                                                    onClick={() => toggleSpell(spell.id)}
+                                                    className={`relative w-8 h-8 rounded border transition-all duration-200 group overflow-hidden ${isSelected ? 'border-transparent opacity-100 shadow-[0_0_10px_rgba(255,255,255,0.1)] grayscale-0' : 'border-gray-800 opacity-30 grayscale hover:opacity-70 hover:border-gray-600'}`}
+                                                    title={spell.name}
+                                                >
+                                                    <RenderIcon spell={spell} />
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
 
                         <div className="flex flex-col gap-1">
                             <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">

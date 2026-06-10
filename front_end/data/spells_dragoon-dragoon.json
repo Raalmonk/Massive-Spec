@@ -9,6 +9,8 @@
     "load_order": 0,
     "show": true,
     "category": "MAJOR",
+    "level": 52,
+    "display_slot": "dragoon-dragoon:battle litany",
     "debug_tags": [
       "dps"
     ]
@@ -23,6 +25,8 @@
     "load_order": 1,
     "show": true,
     "category": "MAJOR",
+    "level": 60,
+    "display_slot": "dragoon-dragoon:geirskogul",
     "debug_tags": [
       "dps"
     ]
@@ -37,6 +41,8 @@
     "load_order": 2,
     "show": true,
     "category": "MAJOR",
+    "level": 74,
+    "display_slot": "dragoon-dragoon:jump",
     "debug_tags": [
       "dps"
     ]
@@ -51,6 +57,8 @@
     "load_order": 3,
     "show": false,
     "category": "MAJOR",
+    "level": 30,
+    "display_slot": "dragoon-dragoon:lance charge",
     "debug_tags": [
       "dps"
     ]
@@ -65,6 +73,8 @@
     "load_order": 4,
     "show": true,
     "category": "MAJOR",
+    "level": 50,
+    "display_slot": "dragoon-dragoon:true north",
     "debug_tags": [
       "dps"
     ]
@@ -79,6 +89,8 @@
     "load_order": 5,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 8,
+    "display_slot": "dragoon-dragoon:second wind",
     "debug_tags": [
       "defensive"
     ]
@@ -93,6 +105,8 @@
     "load_order": 6,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 12,
+    "display_slot": "dragoon-dragoon:bloodbath",
     "debug_tags": [
       "defensive"
     ]
@@ -107,8 +121,506 @@
     "load_order": 7,
     "show": true,
     "category": "RAID_MIT",
+    "level": 22,
+    "display_slot": "dragoon-dragoon:feint",
     "debug_tags": [
       "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 75,
+    "name": "True Thrust",
+    "icon": "True_Thrust.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 8,
+    "show": false,
+    "category": "OTHER",
+    "level": 1,
+    "display_slot": "dragoon-dragoon:true-thrust",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 78,
+    "name": "Vorpal Thrust",
+    "icon": "Vorpal_Thrust.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 9,
+    "show": false,
+    "category": "OTHER",
+    "level": 4,
+    "display_slot": "dragoon-dragoon:vorpal-thrust",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 83,
+    "name": "Life Surge",
+    "icon": "Life_Surge.png",
+    "cooldown": 40.0,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 10,
+    "show": false,
+    "category": "OTHER",
+    "level": 6,
+    "display_slot": "dragoon-dragoon:life surge",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 90,
+    "name": "Piercing Talon",
+    "icon": "Piercing_Talon.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 11,
+    "show": false,
+    "category": "OTHER",
+    "level": 15,
+    "display_slot": "dragoon-dragoon:piercing talon",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 87,
+    "name": "Disembowel",
+    "icon": "Disembowel.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 12,
+    "show": false,
+    "category": "OTHER",
+    "level": 18,
+    "display_slot": "dragoon-dragoon:disembowel",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 84,
+    "name": "Full Thrust",
+    "icon": "Full_Thrust.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 13,
+    "show": false,
+    "category": "OTHER",
+    "level": 26,
+    "display_slot": "dragoon-dragoon:full-thrust",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 92,
+    "name": "Jump",
+    "icon": "Jump.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 2,
+    "show": true,
+    "category": "MAJOR",
+    "level": 30,
+    "display_slot": "dragoon-dragoon:jump",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 94,
+    "name": "Elusive Jump",
+    "icon": "Elusive_Jump.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 15,
+    "show": false,
+    "category": "OTHER",
+    "level": 35,
+    "display_slot": "dragoon-dragoon:elusive jump",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 86,
+    "name": "Doom Spike",
+    "icon": "Doom_Spike.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 16,
+    "show": false,
+    "category": "OTHER",
+    "level": 40,
+    "display_slot": "dragoon-dragoon:doom spike",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36951,
+    "name": "Winged Glide",
+    "icon": "Winged_Glide.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 17,
+    "show": false,
+    "category": "OTHER",
+    "level": 45,
+    "display_slot": "dragoon-dragoon:winged glide",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 88,
+    "name": "Chaos Thrust",
+    "icon": "Chaos_Thrust.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 18,
+    "show": false,
+    "category": "OTHER",
+    "level": 50,
+    "display_slot": "dragoon-dragoon:chaos-thrust",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 96,
+    "name": "Dragonfire Dive",
+    "icon": "Dragonfire_Dive.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 19,
+    "show": false,
+    "category": "OTHER",
+    "level": 50,
+    "display_slot": "dragoon-dragoon:dragonfire dive",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 3554,
+    "name": "Fang and Claw",
+    "icon": "Fang_and_Claw.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 20,
+    "show": false,
+    "category": "OTHER",
+    "level": 56,
+    "display_slot": "dragoon-dragoon:fang and claw",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 3556,
+    "name": "Wheeling Thrust",
+    "icon": "Wheeling_Thrust.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 21,
+    "show": false,
+    "category": "OTHER",
+    "level": 58,
+    "display_slot": "dragoon-dragoon:wheeling thrust",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7397,
+    "name": "Sonic Thrust",
+    "icon": "Sonic_Thrust.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 22,
+    "show": false,
+    "category": "OTHER",
+    "level": 62,
+    "display_slot": "dragoon-dragoon:sonic thrust",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36952,
+    "name": "Drakesbane",
+    "icon": "Drakesbane.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 23,
+    "show": false,
+    "category": "OTHER",
+    "level": 64,
+    "display_slot": "dragoon-dragoon:drakesbane",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7399,
+    "name": "Mirage Dive",
+    "icon": "Mirage_Dive.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 24,
+    "show": false,
+    "category": "OTHER",
+    "level": 68,
+    "display_slot": "dragoon-dragoon:mirage dive",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7400,
+    "name": "Nastrond",
+    "icon": "Nastrond.png",
+    "cooldown": 2.0,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 25,
+    "show": false,
+    "category": "OTHER",
+    "level": 70,
+    "display_slot": "dragoon-dragoon:nastrond",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16477,
+    "name": "Coerthan Torment",
+    "icon": "Coerthan_Torment.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 26,
+    "show": false,
+    "category": "OTHER",
+    "level": 72,
+    "display_slot": "dragoon-dragoon:coerthan torment",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16479,
+    "name": "Raiden Thrust",
+    "icon": "Raiden_Thrust.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 8,
+    "show": false,
+    "category": "OTHER",
+    "level": 76,
+    "display_slot": "dragoon-dragoon:true-thrust",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16480,
+    "name": "Stardiver",
+    "icon": "Stardiver.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 28,
+    "show": false,
+    "category": "OTHER",
+    "level": 80,
+    "display_slot": "dragoon-dragoon:stardiver",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25770,
+    "name": "Draconian Fury",
+    "icon": "Draconian_Fury.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 29,
+    "show": false,
+    "category": "OTHER",
+    "level": 82,
+    "display_slot": "dragoon-dragoon:draconian fury",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25771,
+    "name": "Heavens' Thrust",
+    "icon": "Heavens'_Thrust.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 13,
+    "show": false,
+    "category": "OTHER",
+    "level": 86,
+    "display_slot": "dragoon-dragoon:full-thrust",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25772,
+    "name": "Chaotic Spring",
+    "icon": "Chaotic_Spring.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 18,
+    "show": false,
+    "category": "OTHER",
+    "level": 86,
+    "display_slot": "dragoon-dragoon:chaos-thrust",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25773,
+    "name": "Wyrmwind Thrust",
+    "icon": "Wyrmwind_Thrust.png",
+    "cooldown": 10.0,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 32,
+    "show": false,
+    "category": "OTHER",
+    "level": 90,
+    "display_slot": "dragoon-dragoon:wyrmwind thrust",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36953,
+    "name": "Rise of the Dragon",
+    "icon": "Rise_of_the_Dragon.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 33,
+    "show": false,
+    "category": "OTHER",
+    "level": 92,
+    "display_slot": "dragoon-dragoon:rise of the dragon",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36954,
+    "name": "Lance Barrage",
+    "icon": "Lance_Barrage.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 9,
+    "show": false,
+    "category": "OTHER",
+    "level": 96,
+    "display_slot": "dragoon-dragoon:vorpal-thrust",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36955,
+    "name": "Spiral Blow",
+    "icon": "Spiral_Blow.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 12,
+    "show": false,
+    "category": "OTHER",
+    "level": 96,
+    "display_slot": "dragoon-dragoon:disembowel",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36956,
+    "name": "Starcross",
+    "icon": "Starcross.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 36,
+    "show": false,
+    "category": "OTHER",
+    "level": 100,
+    "display_slot": "dragoon-dragoon:starcross",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7863,
+    "name": "Leg Sweep",
+    "icon": "Leg_Sweep.png",
+    "cooldown": 40.0,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 37,
+    "show": false,
+    "category": "OTHER",
+    "level": 10,
+    "display_slot": "dragoon-dragoon:leg sweep",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7548,
+    "name": "Arm's Length",
+    "icon": "Arm's_Length.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#4164CD",
+    "load_order": 38,
+    "show": false,
+    "category": "OTHER",
+    "level": 32,
+    "display_slot": "dragoon-dragoon:arm's length",
+    "debug_tags": [
+      "other"
     ]
   },
   {
@@ -118,9 +630,11 @@
     "cooldown": 270,
     "duration": 30.0,
     "color": "#b576e8",
-    "load_order": 8,
+    "load_order": 39,
     "show": true,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]
@@ -132,9 +646,11 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#666666",
-    "load_order": 9,
+    "load_order": 40,
     "show": null,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]

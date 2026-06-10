@@ -9,6 +9,8 @@
     "load_order": 0,
     "show": true,
     "category": "MAJOR",
+    "level": 2,
+    "display_slot": "paladin-paladin:fight or flight",
     "debug_tags": [
       "dps"
     ]
@@ -23,6 +25,8 @@
     "load_order": 1,
     "show": true,
     "category": "SINGLE_MIT",
+    "level": 92,
+    "display_slot": "paladin-paladin:sentinel",
     "debug_tags": [
       "defensive"
     ]
@@ -37,6 +41,8 @@
     "load_order": 2,
     "show": true,
     "category": "SINGLE_MIT",
+    "level": 8,
+    "display_slot": "paladin-paladin:rampart",
     "debug_tags": [
       "defensive"
     ]
@@ -51,6 +57,8 @@
     "load_order": 3,
     "show": true,
     "category": "SINGLE_MIT",
+    "level": 52,
+    "display_slot": "paladin-paladin:bulwark",
     "debug_tags": [
       "defensive"
     ]
@@ -65,6 +73,8 @@
     "load_order": 4,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 82,
+    "display_slot": "paladin-paladin:sheltron",
     "debug_tags": [
       "defensive"
     ]
@@ -79,6 +89,8 @@
     "load_order": 5,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 62,
+    "display_slot": "paladin-paladin:intervention",
     "debug_tags": [
       "defensive"
     ]
@@ -93,6 +105,8 @@
     "load_order": 6,
     "show": true,
     "category": "SINGLE_MIT",
+    "level": 50,
+    "display_slot": "paladin-paladin:hallowed ground",
     "debug_tags": [
       "defensive"
     ]
@@ -107,6 +121,8 @@
     "load_order": 7,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 45,
+    "display_slot": "paladin-paladin:cover",
     "debug_tags": [
       "defensive"
     ]
@@ -121,6 +137,8 @@
     "load_order": 8,
     "show": true,
     "category": "RAID_MIT",
+    "level": 22,
+    "display_slot": "paladin-paladin:reprisal",
     "debug_tags": [
       "raid_cd"
     ]
@@ -135,6 +153,8 @@
     "load_order": 9,
     "show": true,
     "category": "RAID_MIT",
+    "level": 56,
+    "display_slot": "paladin-paladin:divine veil",
     "debug_tags": [
       "raid_cd"
     ]
@@ -149,8 +169,570 @@
     "load_order": 10,
     "show": true,
     "category": "RAID_MIT",
+    "level": 70,
+    "display_slot": "paladin-paladin:passage of arms",
     "debug_tags": [
       "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 9,
+    "name": "Fast Blade",
+    "icon": "Fast_Blade.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 11,
+    "show": false,
+    "category": "OTHER",
+    "level": 1,
+    "display_slot": "paladin-paladin:fast blade",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 15,
+    "name": "Riot Blade",
+    "icon": "Riot_Blade.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 12,
+    "show": false,
+    "category": "OTHER",
+    "level": 4,
+    "display_slot": "paladin-paladin:riot blade",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7381,
+    "name": "Total Eclipse",
+    "icon": "Total_Eclipse.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 13,
+    "show": false,
+    "category": "OTHER",
+    "level": 6,
+    "display_slot": "paladin-paladin:total eclipse",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16,
+    "name": "Shield Bash",
+    "icon": "Shield_Bash.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 14,
+    "show": false,
+    "category": "OTHER",
+    "level": 10,
+    "display_slot": "paladin-paladin:shield bash",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 28,
+    "name": "Iron Will",
+    "icon": "Iron_Will.png",
+    "cooldown": 2.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 15,
+    "show": false,
+    "category": "OTHER",
+    "level": 10,
+    "display_slot": "paladin-paladin:iron will",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 32065,
+    "name": "Release Iron Will",
+    "icon": "Release_Iron_Will.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 16,
+    "show": false,
+    "category": "OTHER",
+    "level": 10,
+    "display_slot": "paladin-paladin:release iron will",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 24,
+    "name": "Shield Lob",
+    "icon": "Shield_Lob.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 17,
+    "show": false,
+    "category": "OTHER",
+    "level": 15,
+    "display_slot": "paladin-paladin:shield lob",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 21,
+    "name": "Rage of Halone",
+    "icon": "Rage_of_Halone.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 18,
+    "show": false,
+    "category": "OTHER",
+    "level": 26,
+    "display_slot": "paladin-paladin:royal-authority",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 29,
+    "name": "Spirits Within",
+    "icon": "Spirits_Within.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 19,
+    "show": false,
+    "category": "OTHER",
+    "level": 30,
+    "display_slot": "paladin-paladin:spirits-expiacion",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 3542,
+    "name": "Sheltron",
+    "icon": "Sheltron.png",
+    "cooldown": 5.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 4,
+    "show": false,
+    "category": "SINGLE_MIT",
+    "level": 35,
+    "display_slot": "paladin-paladin:sheltron",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 17,
+    "name": "Sentinel",
+    "icon": "Sentinel.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 1,
+    "show": true,
+    "category": "SINGLE_MIT",
+    "level": 38,
+    "display_slot": "paladin-paladin:sentinel",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 16457,
+    "name": "Prominence",
+    "icon": "Prominence.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 22,
+    "show": false,
+    "category": "OTHER",
+    "level": 40,
+    "display_slot": "paladin-paladin:prominence",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 23,
+    "name": "Circle of Scorn",
+    "icon": "Circle_of_Scorn.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 23,
+    "show": false,
+    "category": "OTHER",
+    "level": 50,
+    "display_slot": "paladin-paladin:circle of scorn",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 3538,
+    "name": "Goring Blade",
+    "icon": "Goring_Blade.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 24,
+    "show": false,
+    "category": "OTHER",
+    "level": 54,
+    "display_slot": "paladin-paladin:goring blade",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 3541,
+    "name": "Clemency",
+    "icon": "Clemency.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 25,
+    "show": false,
+    "category": "OTHER",
+    "level": 58,
+    "display_slot": "paladin-paladin:clemency",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 3539,
+    "name": "Royal Authority",
+    "icon": "Royal_Authority.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 18,
+    "show": false,
+    "category": "OTHER",
+    "level": 60,
+    "display_slot": "paladin-paladin:royal-authority",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7384,
+    "name": "Holy Spirit",
+    "icon": "Holy_Spirit.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 27,
+    "show": false,
+    "category": "OTHER",
+    "level": 64,
+    "display_slot": "paladin-paladin:holy spirit",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16461,
+    "name": "Intervene",
+    "icon": "Intervene.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 28,
+    "show": false,
+    "category": "OTHER",
+    "level": 66,
+    "display_slot": "paladin-paladin:intervene",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7383,
+    "name": "Requiescat",
+    "icon": "Requiescat.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 29,
+    "show": false,
+    "category": "OTHER",
+    "level": 68,
+    "display_slot": "paladin-paladin:requiescat",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16458,
+    "name": "Holy Circle",
+    "icon": "Holy_Circle.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 30,
+    "show": false,
+    "category": "OTHER",
+    "level": 72,
+    "display_slot": "paladin-paladin:holy circle",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16460,
+    "name": "Atonement",
+    "icon": "Atonement.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 31,
+    "show": false,
+    "category": "OTHER",
+    "level": 76,
+    "display_slot": "paladin-paladin:atonement",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36918,
+    "name": "Supplication",
+    "icon": "Supplication.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 32,
+    "show": false,
+    "category": "OTHER",
+    "level": 76,
+    "display_slot": "paladin-paladin:supplication",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36919,
+    "name": "Sepulchre",
+    "icon": "Sepulchre.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 33,
+    "show": false,
+    "category": "OTHER",
+    "level": 76,
+    "display_slot": "paladin-paladin:sepulchre",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16459,
+    "name": "Confiteor",
+    "icon": "Confiteor.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 34,
+    "show": false,
+    "category": "OTHER",
+    "level": 80,
+    "display_slot": "paladin-paladin:confiteor",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25747,
+    "name": "Expiacion",
+    "icon": "Expiacion.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 19,
+    "show": false,
+    "category": "OTHER",
+    "level": 86,
+    "display_slot": "paladin-paladin:spirits-expiacion",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25748,
+    "name": "Blade of Faith",
+    "icon": "Blade_of_Faith.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 36,
+    "show": false,
+    "category": "OTHER",
+    "level": 90,
+    "display_slot": "paladin-paladin:blade of faith",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25749,
+    "name": "Blade of Truth",
+    "icon": "Blade_of_Truth.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 37,
+    "show": false,
+    "category": "OTHER",
+    "level": 90,
+    "display_slot": "paladin-paladin:blade of truth",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25750,
+    "name": "Blade of Valor",
+    "icon": "Blade_of_Valor.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 38,
+    "show": false,
+    "category": "OTHER",
+    "level": 90,
+    "display_slot": "paladin-paladin:blade of valor",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36921,
+    "name": "Imperator",
+    "icon": "Imperator.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 39,
+    "show": false,
+    "category": "OTHER",
+    "level": 96,
+    "display_slot": "paladin-paladin:imperator",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36922,
+    "name": "Blade of Honor",
+    "icon": "Blade_of_Honor.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 40,
+    "show": false,
+    "category": "OTHER",
+    "level": 100,
+    "display_slot": "paladin-paladin:blade of honor",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7540,
+    "name": "Low Blow",
+    "icon": "Low_Blow.png",
+    "cooldown": 25.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 41,
+    "show": false,
+    "category": "OTHER",
+    "level": 12,
+    "display_slot": "paladin-paladin:low blow",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7533,
+    "name": "Provoke",
+    "icon": "Provoke.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 42,
+    "show": false,
+    "category": "OTHER",
+    "level": 15,
+    "display_slot": "paladin-paladin:provoke",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7538,
+    "name": "Interject",
+    "icon": "Interject.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 43,
+    "show": false,
+    "category": "OTHER",
+    "level": 18,
+    "display_slot": "paladin-paladin:interject",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7548,
+    "name": "Arm's Length",
+    "icon": "Arm's_Length.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 44,
+    "show": false,
+    "category": "OTHER",
+    "level": 32,
+    "display_slot": "paladin-paladin:arm's length",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7537,
+    "name": "Shirk",
+    "icon": "Shirk.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#A8D2E6",
+    "load_order": 45,
+    "show": false,
+    "category": "OTHER",
+    "level": 48,
+    "display_slot": "paladin-paladin:shirk",
+    "debug_tags": [
+      "other"
     ]
   },
   {
@@ -160,9 +742,11 @@
     "cooldown": 270,
     "duration": 30.0,
     "color": "#b576e8",
-    "load_order": 11,
+    "load_order": 46,
     "show": true,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]
@@ -174,9 +758,11 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#666666",
-    "load_order": 12,
+    "load_order": 47,
     "show": null,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]

@@ -9,6 +9,8 @@
     "load_order": 0,
     "show": true,
     "category": "MAJOR",
+    "level": 30,
+    "display_slot": "blackmage-blackmage:manafont",
     "debug_tags": [
       "dps"
     ]
@@ -23,6 +25,8 @@
     "load_order": 1,
     "show": true,
     "category": "MAJOR",
+    "level": 52,
+    "display_slot": "blackmage-blackmage:ley lines",
     "debug_tags": [
       "dps"
     ]
@@ -37,6 +41,8 @@
     "load_order": 2,
     "show": true,
     "category": "MAJOR",
+    "level": 66,
+    "display_slot": "blackmage-blackmage:triplecast",
     "debug_tags": [
       "dps"
     ]
@@ -51,6 +57,8 @@
     "load_order": 3,
     "show": false,
     "category": "MAJOR",
+    "level": 18,
+    "display_slot": "blackmage-blackmage:swiftcast",
     "debug_tags": [
       "dps"
     ]
@@ -65,6 +73,8 @@
     "load_order": 4,
     "show": true,
     "category": "MAJOR",
+    "level": 80,
+    "display_slot": "blackmage-blackmage:xenoglossy",
     "debug_tags": [
       "dps"
     ]
@@ -79,6 +89,8 @@
     "load_order": 5,
     "show": false,
     "category": "MAJOR",
+    "level": 70,
+    "display_slot": "blackmage-blackmage:foul",
     "debug_tags": [
       "dps"
     ]
@@ -93,6 +105,8 @@
     "load_order": 6,
     "show": false,
     "category": "MAJOR",
+    "level": 50,
+    "display_slot": "blackmage-blackmage:flare",
     "debug_tags": [
       "dps"
     ]
@@ -107,6 +121,8 @@
     "load_order": 7,
     "show": false,
     "category": "MAJOR",
+    "level": 100,
+    "display_slot": "blackmage-blackmage:flare star",
     "debug_tags": [
       "dps"
     ]
@@ -121,6 +137,8 @@
     "load_order": 8,
     "show": false,
     "category": "MAJOR",
+    "level": 4,
+    "display_slot": "blackmage-blackmage:transpose",
     "debug_tags": [
       "dps"
     ]
@@ -135,6 +153,8 @@
     "load_order": 9,
     "show": false,
     "category": "MAJOR",
+    "level": 90,
+    "display_slot": "blackmage-blackmage:paradox",
     "debug_tags": [
       "dps"
     ]
@@ -149,6 +169,8 @@
     "load_order": 10,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 30,
+    "display_slot": "blackmage-blackmage:manaward",
     "debug_tags": [
       "defensive"
     ]
@@ -163,8 +185,442 @@
     "load_order": 11,
     "show": true,
     "category": "RAID_MIT",
+    "level": 8,
+    "display_slot": "blackmage-blackmage:addle",
     "debug_tags": [
       "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 142,
+    "name": "Blizzard",
+    "icon": "Blizzard.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 12,
+    "show": false,
+    "category": "OTHER",
+    "level": 1,
+    "display_slot": "blackmage-blackmage:blizzard",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 141,
+    "name": "Fire",
+    "icon": "Fire.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 13,
+    "show": false,
+    "category": "OTHER",
+    "level": 2,
+    "display_slot": "blackmage-blackmage:fire",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 144,
+    "name": "Thunder",
+    "icon": "Thunder.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 14,
+    "show": false,
+    "category": "OTHER",
+    "level": 6,
+    "display_slot": "blackmage-blackmage:thunder-single",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25793,
+    "name": "Blizzard II",
+    "icon": "Blizzard_II.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 15,
+    "show": false,
+    "category": "OTHER",
+    "level": 12,
+    "display_slot": "blackmage-blackmage:blizzard-ii",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 156,
+    "name": "Scathe",
+    "icon": "Scathe.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 16,
+    "show": false,
+    "category": "OTHER",
+    "level": 15,
+    "display_slot": "blackmage-blackmage:scathe",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 147,
+    "name": "Fire II",
+    "icon": "Fire_II.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 17,
+    "show": false,
+    "category": "OTHER",
+    "level": 18,
+    "display_slot": "blackmage-blackmage:fire-ii",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7447,
+    "name": "Thunder II",
+    "icon": "Thunder_II.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 18,
+    "show": false,
+    "category": "OTHER",
+    "level": 26,
+    "display_slot": "blackmage-blackmage:thunder-aoe",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 152,
+    "name": "Fire III",
+    "icon": "Fire_III.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 19,
+    "show": false,
+    "category": "OTHER",
+    "level": 35,
+    "display_slot": "blackmage-blackmage:fire iii",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 154,
+    "name": "Blizzard III",
+    "icon": "Blizzard_III.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 20,
+    "show": false,
+    "category": "OTHER",
+    "level": 35,
+    "display_slot": "blackmage-blackmage:blizzard iii",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16506,
+    "name": "Umbral Soul",
+    "icon": "Umbral_Soul.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 21,
+    "show": false,
+    "category": "OTHER",
+    "level": 35,
+    "display_slot": "blackmage-blackmage:umbral soul",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 159,
+    "name": "Freeze",
+    "icon": "Freeze.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 22,
+    "show": false,
+    "category": "OTHER",
+    "level": 40,
+    "display_slot": "blackmage-blackmage:freeze",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 153,
+    "name": "Thunder III",
+    "icon": "Thunder_III.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 14,
+    "show": false,
+    "category": "OTHER",
+    "level": 45,
+    "display_slot": "blackmage-blackmage:thunder-single",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 155,
+    "name": "Aetherial Manipulation",
+    "icon": "Aetherial_Manipulation.png",
+    "cooldown": 10.0,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 24,
+    "show": false,
+    "category": "OTHER",
+    "level": 50,
+    "display_slot": "blackmage-blackmage:aetherial manipulation",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 3576,
+    "name": "Blizzard IV",
+    "icon": "Blizzard_IV.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 25,
+    "show": false,
+    "category": "OTHER",
+    "level": 58,
+    "display_slot": "blackmage-blackmage:blizzard iv",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 3577,
+    "name": "Fire IV",
+    "icon": "Fire_IV.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 26,
+    "show": false,
+    "category": "OTHER",
+    "level": 60,
+    "display_slot": "blackmage-blackmage:fire iv",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7419,
+    "name": "Between the Lines",
+    "icon": "Between_the_Lines.png",
+    "cooldown": 3.0,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 27,
+    "show": false,
+    "category": "OTHER",
+    "level": 62,
+    "display_slot": "blackmage-blackmage:between the lines",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7420,
+    "name": "Thunder IV",
+    "icon": "Thunder_IV.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 18,
+    "show": false,
+    "category": "OTHER",
+    "level": 64,
+    "display_slot": "blackmage-blackmage:thunder-aoe",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16505,
+    "name": "Despair",
+    "icon": "Despair.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 29,
+    "show": false,
+    "category": "OTHER",
+    "level": 72,
+    "display_slot": "blackmage-blackmage:despair",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25794,
+    "name": "High Fire II",
+    "icon": "High_Fire_II.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 17,
+    "show": false,
+    "category": "OTHER",
+    "level": 82,
+    "display_slot": "blackmage-blackmage:fire-ii",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25795,
+    "name": "High Blizzard II",
+    "icon": "High_Blizzard_II.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 15,
+    "show": false,
+    "category": "OTHER",
+    "level": 82,
+    "display_slot": "blackmage-blackmage:blizzard-ii",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25796,
+    "name": "Amplifier",
+    "icon": "Amplifier.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 32,
+    "show": false,
+    "category": "OTHER",
+    "level": 86,
+    "display_slot": "blackmage-blackmage:amplifier",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36986,
+    "name": "High Thunder",
+    "icon": "High_Thunder.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 14,
+    "show": false,
+    "category": "OTHER",
+    "level": 92,
+    "display_slot": "blackmage-blackmage:thunder-single",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36987,
+    "name": "High Thunder II",
+    "icon": "High_Thunder_II.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 18,
+    "show": false,
+    "category": "OTHER",
+    "level": 92,
+    "display_slot": "blackmage-blackmage:thunder-aoe",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36988,
+    "name": "Retrace",
+    "icon": "Retrace.png",
+    "cooldown": 40.0,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 35,
+    "show": false,
+    "category": "OTHER",
+    "level": 96,
+    "display_slot": "blackmage-blackmage:retrace",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25880,
+    "name": "Sleep",
+    "icon": "Sleep.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 36,
+    "show": false,
+    "category": "OTHER",
+    "level": 10,
+    "display_slot": "blackmage-blackmage:sleep",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7562,
+    "name": "Lucid Dreaming",
+    "icon": "Lucid_Dreaming.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 37,
+    "show": false,
+    "category": "OTHER",
+    "level": 14,
+    "display_slot": "blackmage-blackmage:lucid dreaming",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7559,
+    "name": "Surecast",
+    "icon": "Surecast.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#A579D6",
+    "load_order": 38,
+    "show": false,
+    "category": "OTHER",
+    "level": 44,
+    "display_slot": "blackmage-blackmage:surecast",
+    "debug_tags": [
+      "other"
     ]
   },
   {
@@ -174,9 +630,11 @@
     "cooldown": 270,
     "duration": 30.0,
     "color": "#b576e8",
-    "load_order": 12,
+    "load_order": 39,
     "show": true,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]
@@ -188,9 +646,11 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#666666",
-    "load_order": 13,
+    "load_order": 40,
     "show": null,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]

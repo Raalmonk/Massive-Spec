@@ -9,6 +9,8 @@
     "load_order": 0,
     "show": true,
     "category": "MAJOR",
+    "level": 30,
+    "display_slot": "whitemage-whitemage:presence of mind",
     "debug_tags": [
       "dps"
     ]
@@ -23,6 +25,8 @@
     "load_order": 1,
     "show": true,
     "category": "MAJOR",
+    "level": 74,
+    "display_slot": "whitemage-whitemage:afflatus misery",
     "debug_tags": [
       "dps"
     ]
@@ -37,6 +41,8 @@
     "load_order": 2,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 60,
+    "display_slot": "whitemage-whitemage:tetragrammaton",
     "debug_tags": [
       "defensive"
     ]
@@ -51,6 +57,8 @@
     "load_order": 3,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 86,
+    "display_slot": "whitemage-whitemage:aquaveil",
     "debug_tags": [
       "defensive"
     ]
@@ -65,6 +73,8 @@
     "load_order": 4,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 66,
+    "display_slot": "whitemage-whitemage:divine benison",
     "debug_tags": [
       "defensive"
     ]
@@ -79,6 +89,8 @@
     "load_order": 5,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 52,
+    "display_slot": "whitemage-whitemage:afflatus solace",
     "debug_tags": [
       "defensive"
     ]
@@ -93,6 +105,8 @@
     "load_order": 6,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 30,
+    "display_slot": "whitemage-whitemage:cure ii",
     "debug_tags": [
       "defensive"
     ]
@@ -107,6 +121,8 @@
     "load_order": 7,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 35,
+    "display_slot": "whitemage-whitemage:regen",
     "debug_tags": [
       "defensive"
     ]
@@ -121,6 +137,8 @@
     "load_order": 8,
     "show": true,
     "category": "RAID_MIT",
+    "level": 90,
+    "display_slot": "whitemage-whitemage:liturgy of the bell",
     "debug_tags": [
       "raid_cd"
     ]
@@ -135,6 +153,8 @@
     "load_order": 9,
     "show": true,
     "category": "RAID_MIT",
+    "level": 80,
+    "display_slot": "whitemage-whitemage:temperance",
     "debug_tags": [
       "raid_cd"
     ]
@@ -149,6 +169,8 @@
     "load_order": 10,
     "show": true,
     "category": "RAID_MIT",
+    "level": 70,
+    "display_slot": "whitemage-whitemage:plenary indulgence",
     "debug_tags": [
       "raid_cd"
     ]
@@ -163,6 +185,8 @@
     "load_order": 11,
     "show": false,
     "category": "RAID_MIT",
+    "level": 100,
+    "display_slot": "whitemage-whitemage:divine caress",
     "debug_tags": [
       "raid_cd"
     ]
@@ -177,6 +201,8 @@
     "load_order": 12,
     "show": false,
     "category": "RAID_MIT",
+    "level": 56,
+    "display_slot": "whitemage-whitemage:assize",
     "debug_tags": [
       "raid_cd"
     ]
@@ -191,6 +217,8 @@
     "load_order": 13,
     "show": false,
     "category": "RAID_MIT",
+    "level": 76,
+    "display_slot": "whitemage-whitemage:afflatus rapture",
     "debug_tags": [
       "raid_cd"
     ]
@@ -205,6 +233,8 @@
     "load_order": 14,
     "show": false,
     "category": "RAID_MIT",
+    "level": 40,
+    "display_slot": "whitemage-whitemage:cure iii",
     "debug_tags": [
       "raid_cd"
     ]
@@ -219,6 +249,8 @@
     "load_order": 15,
     "show": false,
     "category": "RAID_MIT",
+    "level": 96,
+    "display_slot": "whitemage-whitemage:medica-ii",
     "debug_tags": [
       "raid_cd"
     ]
@@ -233,8 +265,410 @@
     "load_order": 16,
     "show": false,
     "category": "RAID_MIT",
+    "level": 10,
+    "display_slot": "whitemage-whitemage:medica",
     "debug_tags": [
       "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 119,
+    "name": "Stone",
+    "icon": "Stone.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 17,
+    "show": false,
+    "category": "OTHER",
+    "level": 1,
+    "display_slot": "whitemage-whitemage:stone-glare",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 8895,
+    "name": "Cure",
+    "icon": "Cure.png",
+    "cooldown": 2.4,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 18,
+    "show": false,
+    "category": "OTHER",
+    "level": 0,
+    "display_slot": "whitemage-whitemage:cure",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 121,
+    "name": "Aero",
+    "icon": "Aero.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 19,
+    "show": false,
+    "category": "OTHER",
+    "level": 4,
+    "display_slot": "whitemage-whitemage:aero-dia",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 125,
+    "name": "Raise",
+    "icon": "Raise.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 20,
+    "show": false,
+    "category": "OTHER",
+    "level": 12,
+    "display_slot": "whitemage-whitemage:raise",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 127,
+    "name": "Stone II",
+    "icon": "Stone_II.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 17,
+    "show": false,
+    "category": "OTHER",
+    "level": 18,
+    "display_slot": "whitemage-whitemage:stone-glare",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 37008,
+    "name": "Aetherial Shift",
+    "icon": "Aetherial_Shift.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 22,
+    "show": false,
+    "category": "OTHER",
+    "level": 40,
+    "display_slot": "whitemage-whitemage:aetherial shift",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 139,
+    "name": "Holy",
+    "icon": "Holy.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 23,
+    "show": false,
+    "category": "OTHER",
+    "level": 45,
+    "display_slot": "whitemage-whitemage:holy",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 132,
+    "name": "Aero II",
+    "icon": "Aero_II.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 19,
+    "show": false,
+    "category": "OTHER",
+    "level": 46,
+    "display_slot": "whitemage-whitemage:aero-dia",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 133,
+    "name": "Medica II",
+    "icon": "Medica_II.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 15,
+    "show": false,
+    "category": "RAID_MIT",
+    "level": 50,
+    "display_slot": "whitemage-whitemage:medica-ii",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 140,
+    "name": "Benediction",
+    "icon": "Benediction.png",
+    "cooldown": 180.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 26,
+    "show": false,
+    "category": "OTHER",
+    "level": 50,
+    "display_slot": "whitemage-whitemage:benediction",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 3569,
+    "name": "Asylum",
+    "icon": "Asylum.png",
+    "cooldown": 90.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 27,
+    "show": false,
+    "category": "OTHER",
+    "level": 52,
+    "display_slot": "whitemage-whitemage:asylum",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 3568,
+    "name": "Stone III",
+    "icon": "Stone_III.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 17,
+    "show": false,
+    "category": "OTHER",
+    "level": 54,
+    "display_slot": "whitemage-whitemage:stone-glare",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7430,
+    "name": "Thin Air",
+    "icon": "Thin_Air.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 29,
+    "show": false,
+    "category": "OTHER",
+    "level": 58,
+    "display_slot": "whitemage-whitemage:thin air",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7431,
+    "name": "Stone IV",
+    "icon": "Stone_IV.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 17,
+    "show": false,
+    "category": "OTHER",
+    "level": 64,
+    "display_slot": "whitemage-whitemage:stone-glare",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16532,
+    "name": "Dia",
+    "icon": "Dia.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 19,
+    "show": false,
+    "category": "OTHER",
+    "level": 72,
+    "display_slot": "whitemage-whitemage:aero-dia",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16533,
+    "name": "Glare",
+    "icon": "Glare.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 17,
+    "show": false,
+    "category": "OTHER",
+    "level": 72,
+    "display_slot": "whitemage-whitemage:stone-glare",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25859,
+    "name": "Glare III",
+    "icon": "Glare_III.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 17,
+    "show": false,
+    "category": "OTHER",
+    "level": 82,
+    "display_slot": "whitemage-whitemage:stone-glare",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25860,
+    "name": "Holy III",
+    "icon": "Holy_III.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 23,
+    "show": false,
+    "category": "OTHER",
+    "level": 82,
+    "display_slot": "whitemage-whitemage:holy",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 37009,
+    "name": "Glare IV",
+    "icon": "Glare_IV.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 17,
+    "show": false,
+    "category": "OTHER",
+    "level": 92,
+    "display_slot": "whitemage-whitemage:stone-glare",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16560,
+    "name": "Repose",
+    "icon": "Repose.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 36,
+    "show": false,
+    "category": "OTHER",
+    "level": 8,
+    "display_slot": "whitemage-whitemage:repose",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7568,
+    "name": "Esuna",
+    "icon": "Esuna.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 37,
+    "show": false,
+    "category": "OTHER",
+    "level": 10,
+    "display_slot": "whitemage-whitemage:esuna",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7562,
+    "name": "Lucid Dreaming",
+    "icon": "Lucid_Dreaming.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 38,
+    "show": false,
+    "category": "OTHER",
+    "level": 14,
+    "display_slot": "whitemage-whitemage:lucid dreaming",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7561,
+    "name": "Swiftcast",
+    "icon": "Swiftcast.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 39,
+    "show": false,
+    "category": "OTHER",
+    "level": 18,
+    "display_slot": "whitemage-whitemage:swiftcast",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7559,
+    "name": "Surecast",
+    "icon": "Surecast.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 40,
+    "show": false,
+    "category": "OTHER",
+    "level": 44,
+    "display_slot": "whitemage-whitemage:surecast",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7571,
+    "name": "Rescue",
+    "icon": "Rescue.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#FFF0F5",
+    "load_order": 41,
+    "show": false,
+    "category": "OTHER",
+    "level": 48,
+    "display_slot": "whitemage-whitemage:rescue",
+    "debug_tags": [
+      "other"
     ]
   },
   {
@@ -244,9 +678,11 @@
     "cooldown": 270,
     "duration": 30.0,
     "color": "#b576e8",
-    "load_order": 17,
+    "load_order": 42,
     "show": true,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]
@@ -258,12 +694,14 @@
     "cooldown": 270.0,
     "duration": 0.0,
     "color": "#E6B33D",
+    "load_order": 43,
     "show": true,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
-    ],
-    "load_order": 18
+    ]
   },
   {
     "spell_id": 3,
@@ -272,9 +710,11 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#666666",
-    "load_order": 19,
+    "load_order": 44,
     "show": null,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]

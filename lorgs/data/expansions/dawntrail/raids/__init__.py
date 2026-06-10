@@ -1,6 +1,7 @@
 from .arcadion_heavyweight import ARCADION_HEAVYWEIGHT
 from .dancing_mad import *
 from .futures_rewritten import *
+from .legacy_ultimates import *
 from .m9s import *
 from .m10s import *
 from .m11s import *
@@ -18,4 +19,10 @@ __all__ = [
     "FUTURES_REWRITTEN",
     "DANCING_MAD_ZONE",
     "DANCING_MAD",
+    "LEGACY_ULTIMATES_ZONE",
+    "THE_UNENDING_COIL_OF_BAHAMUT",
+    "THE_WEAPONS_REFRAIN",
+    "THE_EPIC_OF_ALEXANDER",
+    "DRAGONSONGS_REPRISE",
+    "THE_OMEGA_PROTOCOL",
 ]

@@ -72,6 +72,9 @@ class SpellTag:
     UTILITY = "utility"
     """Tag for Utility Spells."""
 
+    OTHER = "other"
+    """Tag for additional job actions that are available for optional timeline monitoring."""
+
 
 class WowSpell(base.MemoryModel):
     """Container to define a spell."""
@@ -91,6 +94,10 @@ class WowSpell(base.MemoryModel):
     show: Optional[bool] = None
     """Whether the spell is shown on the timeline by default."""
     desc: str = ""
+    level: int = 0
+    """FF14 level where this action is available. 0 means always available/legacy unknown."""
+    display_slot: str = ""
+    """Stable UI slot used to collapse lower/upper action replacements at synced content levels."""
 
     variations: list[Union[int, str]] = []
     """Spell IDs for Variants of the same Spell. Eg.: Glyphs or Talents sometimes change the Spell ID."""
@@ -185,6 +192,8 @@ class WowSpell(base.MemoryModel):
             "time": self.time,
             "color": self.color,
             "show": self.show,
+            "level": self.level,
+            "display_slot": self.display_slot,
             "tooltip": self.tooltip,
             "tooltip_info": self.wowhead_data,
             "tags": self.tags,

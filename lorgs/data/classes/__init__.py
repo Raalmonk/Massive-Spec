@@ -32,6 +32,8 @@ from lorgs.data.classes.redmage import *
 from lorgs.data.classes.blackmage import *
 from lorgs.data.classes.pictomancer import *
 
+from lorgs.data.classes.all_actions import *
+
 
 
 # a few collections used to assign trinkets and consumables

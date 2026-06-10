@@ -111,10 +111,14 @@ check_python_files() {
     run "${PYTHON_BIN}" -m py_compile \
         main.py \
         updater.py \
+        update_spells.py \
+        scripts/update_all_job_actions.py \
+        scripts/verify_all_job_actions_fflogs.py \
         scripts/refresh_dancing_mad_all_specs.py \
         lorrgs_api/routes/api_import_log.py \
         lorgs/clients/wcl/client.py \
         lorgs/models/warcraftlogs_ranking.py \
+        lorgs/data/classes/all_actions.py \
         lorgs/data/classes/whitemage.py \
         lorgs/data/classes/astrologian.py
 }

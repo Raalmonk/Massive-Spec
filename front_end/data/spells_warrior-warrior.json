@@ -9,6 +9,8 @@
     "load_order": 0,
     "show": true,
     "category": "MAJOR",
+    "level": 70,
+    "display_slot": "warrior-warrior:inner-release",
     "debug_tags": [
       "dps"
     ]
@@ -23,6 +25,8 @@
     "load_order": 1,
     "show": true,
     "category": "SINGLE_MIT",
+    "level": 92,
+    "display_slot": "warrior-warrior:vengeance",
     "debug_tags": [
       "defensive"
     ]
@@ -37,6 +41,8 @@
     "load_order": 2,
     "show": true,
     "category": "SINGLE_MIT",
+    "level": 8,
+    "display_slot": "warrior-warrior:rampart",
     "debug_tags": [
       "defensive"
     ]
@@ -51,6 +57,8 @@
     "load_order": 3,
     "show": true,
     "category": "SINGLE_MIT",
+    "level": 30,
+    "display_slot": "warrior-warrior:thrill of battle",
     "debug_tags": [
       "defensive"
     ]
@@ -65,6 +73,8 @@
     "load_order": 4,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 82,
+    "display_slot": "warrior-warrior:raw-intuition",
     "debug_tags": [
       "defensive"
     ]
@@ -79,6 +89,8 @@
     "load_order": 5,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 76,
+    "display_slot": "warrior-warrior:nascent flash",
     "debug_tags": [
       "defensive"
     ]
@@ -93,6 +105,8 @@
     "load_order": 6,
     "show": true,
     "category": "SINGLE_MIT",
+    "level": 42,
+    "display_slot": "warrior-warrior:holmgang",
     "debug_tags": [
       "defensive"
     ]
@@ -107,6 +121,8 @@
     "load_order": 7,
     "show": true,
     "category": "RAID_MIT",
+    "level": 22,
+    "display_slot": "warrior-warrior:reprisal",
     "debug_tags": [
       "raid_cd"
     ]
@@ -121,8 +137,506 @@
     "load_order": 8,
     "show": true,
     "category": "RAID_MIT",
+    "level": 68,
+    "display_slot": "warrior-warrior:shake it off",
     "debug_tags": [
       "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 31,
+    "name": "Heavy Swing",
+    "icon": "Heavy_Swing.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 9,
+    "show": false,
+    "category": "OTHER",
+    "level": 1,
+    "display_slot": "warrior-warrior:heavy swing",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 37,
+    "name": "Maim",
+    "icon": "Maim.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 10,
+    "show": false,
+    "category": "OTHER",
+    "level": 4,
+    "display_slot": "warrior-warrior:maim",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 38,
+    "name": "Berserk",
+    "icon": "Berserk.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 0,
+    "show": true,
+    "category": "MAJOR",
+    "level": 6,
+    "display_slot": "warrior-warrior:inner-release",
+    "debug_tags": [
+      "dps"
+    ]
+  },
+  {
+    "spell_id": 41,
+    "name": "Overpower",
+    "icon": "Overpower.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 12,
+    "show": false,
+    "category": "OTHER",
+    "level": 10,
+    "display_slot": "warrior-warrior:overpower",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 48,
+    "name": "Defiance",
+    "icon": "Defiance.png",
+    "cooldown": 2.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 13,
+    "show": false,
+    "category": "OTHER",
+    "level": 10,
+    "display_slot": "warrior-warrior:defiance",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 32066,
+    "name": "Release Defiance",
+    "icon": "Release_Defiance.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 14,
+    "show": false,
+    "category": "OTHER",
+    "level": 10,
+    "display_slot": "warrior-warrior:release defiance",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 46,
+    "name": "Tomahawk",
+    "icon": "Tomahawk.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 15,
+    "show": false,
+    "category": "OTHER",
+    "level": 15,
+    "display_slot": "warrior-warrior:tomahawk",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 42,
+    "name": "Storm's Path",
+    "icon": "Storm's_Path.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 16,
+    "show": false,
+    "category": "OTHER",
+    "level": 26,
+    "display_slot": "warrior-warrior:storm's path",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 49,
+    "name": "Inner Beast",
+    "icon": "Inner_Beast.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 17,
+    "show": false,
+    "category": "OTHER",
+    "level": 35,
+    "display_slot": "warrior-warrior:inner-beast",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 44,
+    "name": "Vengeance",
+    "icon": "Vengeance.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 1,
+    "show": true,
+    "category": "SINGLE_MIT",
+    "level": 38,
+    "display_slot": "warrior-warrior:vengeance",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 16462,
+    "name": "Mythril Tempest",
+    "icon": "Mythril_Tempest.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 19,
+    "show": false,
+    "category": "OTHER",
+    "level": 40,
+    "display_slot": "warrior-warrior:mythril tempest",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 51,
+    "name": "Steel Cyclone",
+    "icon": "Steel_Cyclone.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 20,
+    "show": false,
+    "category": "OTHER",
+    "level": 45,
+    "display_slot": "warrior-warrior:steel-cyclone",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 45,
+    "name": "Storm's Eye",
+    "icon": "Storm's_Eye.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 21,
+    "show": false,
+    "category": "OTHER",
+    "level": 50,
+    "display_slot": "warrior-warrior:storm's eye",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 52,
+    "name": "Infuriate",
+    "icon": "Infuriate.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 22,
+    "show": false,
+    "category": "OTHER",
+    "level": 50,
+    "display_slot": "warrior-warrior:infuriate",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 3549,
+    "name": "Fell Cleave",
+    "icon": "Fell_Cleave.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 17,
+    "show": false,
+    "category": "OTHER",
+    "level": 54,
+    "display_slot": "warrior-warrior:inner-beast",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 3551,
+    "name": "Raw Intuition",
+    "icon": "Raw_Intuition.png",
+    "cooldown": 25.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 4,
+    "show": false,
+    "category": "SINGLE_MIT",
+    "level": 56,
+    "display_slot": "warrior-warrior:raw-intuition",
+    "debug_tags": [
+      "defensive"
+    ]
+  },
+  {
+    "spell_id": 3552,
+    "name": "Equilibrium",
+    "icon": "Equilibrium.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 25,
+    "show": false,
+    "category": "OTHER",
+    "level": 58,
+    "display_slot": "warrior-warrior:equilibrium",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 3550,
+    "name": "Decimate",
+    "icon": "Decimate.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 20,
+    "show": false,
+    "category": "OTHER",
+    "level": 60,
+    "display_slot": "warrior-warrior:steel-cyclone",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7386,
+    "name": "Onslaught",
+    "icon": "Onslaught.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 27,
+    "show": false,
+    "category": "OTHER",
+    "level": 62,
+    "display_slot": "warrior-warrior:onslaught",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7387,
+    "name": "Upheaval",
+    "icon": "Upheaval.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 28,
+    "show": false,
+    "category": "OTHER",
+    "level": 64,
+    "display_slot": "warrior-warrior:upheaval",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16463,
+    "name": "Chaotic Cyclone",
+    "icon": "Chaotic_Cyclone.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 29,
+    "show": false,
+    "category": "OTHER",
+    "level": 72,
+    "display_slot": "warrior-warrior:chaotic cyclone",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16465,
+    "name": "Inner Chaos",
+    "icon": "Inner_Chaos.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 30,
+    "show": false,
+    "category": "OTHER",
+    "level": 80,
+    "display_slot": "warrior-warrior:inner chaos",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25752,
+    "name": "Orogeny",
+    "icon": "Orogeny.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 31,
+    "show": false,
+    "category": "OTHER",
+    "level": 86,
+    "display_slot": "warrior-warrior:orogeny",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25753,
+    "name": "Primal Rend",
+    "icon": "Primal_Rend.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 32,
+    "show": false,
+    "category": "OTHER",
+    "level": 90,
+    "display_slot": "warrior-warrior:primal rend",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36924,
+    "name": "Primal Wrath",
+    "icon": "Primal_Wrath.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 33,
+    "show": false,
+    "category": "OTHER",
+    "level": 96,
+    "display_slot": "warrior-warrior:primal wrath",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 36925,
+    "name": "Primal Ruination",
+    "icon": "Primal_Ruination.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 34,
+    "show": false,
+    "category": "OTHER",
+    "level": 100,
+    "display_slot": "warrior-warrior:primal ruination",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7540,
+    "name": "Low Blow",
+    "icon": "Low_Blow.png",
+    "cooldown": 25.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 35,
+    "show": false,
+    "category": "OTHER",
+    "level": 12,
+    "display_slot": "warrior-warrior:low blow",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7533,
+    "name": "Provoke",
+    "icon": "Provoke.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 36,
+    "show": false,
+    "category": "OTHER",
+    "level": 15,
+    "display_slot": "warrior-warrior:provoke",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7538,
+    "name": "Interject",
+    "icon": "Interject.png",
+    "cooldown": 30.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 37,
+    "show": false,
+    "category": "OTHER",
+    "level": 18,
+    "display_slot": "warrior-warrior:interject",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7548,
+    "name": "Arm's Length",
+    "icon": "Arm's_Length.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 38,
+    "show": false,
+    "category": "OTHER",
+    "level": 32,
+    "display_slot": "warrior-warrior:arm's length",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7537,
+    "name": "Shirk",
+    "icon": "Shirk.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#CF2621",
+    "load_order": 39,
+    "show": false,
+    "category": "OTHER",
+    "level": 48,
+    "display_slot": "warrior-warrior:shirk",
+    "debug_tags": [
+      "other"
     ]
   },
   {
@@ -132,9 +646,11 @@
     "cooldown": 270,
     "duration": 30.0,
     "color": "#b576e8",
-    "load_order": 9,
+    "load_order": 40,
     "show": true,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]
@@ -146,9 +662,11 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#666666",
-    "load_order": 10,
+    "load_order": 41,
     "show": null,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]

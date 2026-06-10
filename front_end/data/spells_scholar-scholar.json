@@ -9,6 +9,8 @@
     "load_order": 0,
     "show": true,
     "category": "MAJOR",
+    "level": 45,
+    "display_slot": "scholar-scholar:aetherflow",
     "debug_tags": [
       "dps"
     ]
@@ -23,6 +25,8 @@
     "load_order": 1,
     "show": true,
     "category": "MAJOR",
+    "level": 66,
+    "display_slot": "scholar-scholar:chain stratagem",
     "debug_tags": [
       "dps"
     ]
@@ -37,6 +41,8 @@
     "load_order": 2,
     "show": true,
     "category": "MAJOR",
+    "level": 60,
+    "display_slot": "scholar-scholar:dissipation",
     "debug_tags": [
       "dps"
     ]
@@ -51,6 +57,8 @@
     "load_order": 3,
     "show": false,
     "category": "MAJOR",
+    "level": 74,
+    "display_slot": "scholar-scholar:recitation",
     "debug_tags": [
       "dps"
     ]
@@ -65,6 +73,8 @@
     "load_order": 4,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 45,
+    "display_slot": "scholar-scholar:lustrate",
     "debug_tags": [
       "defensive"
     ]
@@ -79,6 +89,8 @@
     "load_order": 5,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 62,
+    "display_slot": "scholar-scholar:excogitation",
     "debug_tags": [
       "defensive"
     ]
@@ -93,6 +105,8 @@
     "load_order": 6,
     "show": false,
     "category": "SINGLE_MIT",
+    "level": 70,
+    "display_slot": "scholar-scholar:aetherpact",
     "debug_tags": [
       "defensive"
     ]
@@ -107,6 +121,8 @@
     "load_order": 7,
     "show": true,
     "category": "RAID_MIT",
+    "level": 90,
+    "display_slot": "scholar-scholar:expedient",
     "debug_tags": [
       "raid_cd"
     ]
@@ -121,6 +137,8 @@
     "load_order": 8,
     "show": true,
     "category": "RAID_MIT",
+    "level": 80,
+    "display_slot": "scholar-scholar:summon seraph",
     "debug_tags": [
       "raid_cd"
     ]
@@ -135,6 +153,8 @@
     "load_order": 9,
     "show": false,
     "category": "RAID_MIT",
+    "level": 80,
+    "display_slot": "scholar-scholar:consolation",
     "debug_tags": [
       "raid_cd"
     ]
@@ -149,6 +169,8 @@
     "load_order": 10,
     "show": true,
     "category": "RAID_MIT",
+    "level": 56,
+    "display_slot": "scholar-scholar:deployment tactics",
     "debug_tags": [
       "raid_cd"
     ]
@@ -163,6 +185,8 @@
     "load_order": 11,
     "show": false,
     "category": "RAID_MIT",
+    "level": 50,
+    "display_slot": "scholar-scholar:sacred soil",
     "debug_tags": [
       "raid_cd"
     ]
@@ -177,6 +201,8 @@
     "load_order": 12,
     "show": true,
     "category": "RAID_MIT",
+    "level": 100,
+    "display_slot": "scholar-scholar:seraphism",
     "debug_tags": [
       "raid_cd"
     ]
@@ -191,6 +217,8 @@
     "load_order": 13,
     "show": false,
     "category": "RAID_MIT",
+    "level": 40,
+    "display_slot": "scholar-scholar:fey illumination",
     "debug_tags": [
       "raid_cd"
     ]
@@ -205,6 +233,8 @@
     "load_order": 14,
     "show": false,
     "category": "RAID_MIT",
+    "level": 52,
+    "display_slot": "scholar-scholar:indomitability",
     "debug_tags": [
       "raid_cd"
     ]
@@ -219,6 +249,8 @@
     "load_order": 15,
     "show": false,
     "category": "RAID_MIT",
+    "level": 76,
+    "display_slot": "scholar-scholar:fey blessing",
     "debug_tags": [
       "raid_cd"
     ]
@@ -233,6 +265,8 @@
     "load_order": 16,
     "show": false,
     "category": "RAID_MIT",
+    "level": 96,
+    "display_slot": "scholar-scholar:succor",
     "debug_tags": [
       "raid_cd"
     ]
@@ -247,8 +281,474 @@
     "load_order": 17,
     "show": false,
     "category": "RAID_MIT",
+    "level": 100,
+    "display_slot": "scholar-scholar:accession",
     "debug_tags": [
       "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 163,
+    "name": "Ruin",
+    "icon": "Ruin.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 18,
+    "show": false,
+    "category": "OTHER",
+    "level": 1,
+    "display_slot": "scholar-scholar:ruin-broil",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 17864,
+    "name": "Bio",
+    "icon": "Bio.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 19,
+    "show": false,
+    "category": "OTHER",
+    "level": 2,
+    "display_slot": "scholar-scholar:bio",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 190,
+    "name": "Physick",
+    "icon": "Physick.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 20,
+    "show": false,
+    "category": "OTHER",
+    "level": 4,
+    "display_slot": "scholar-scholar:physick",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 17215,
+    "name": "Summon Eos",
+    "icon": "Summon_Eos.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 21,
+    "show": false,
+    "category": "OTHER",
+    "level": 4,
+    "display_slot": "scholar-scholar:summon eos",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 173,
+    "name": "Resurrection",
+    "icon": "Resurrection.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 22,
+    "show": false,
+    "category": "OTHER",
+    "level": 12,
+    "display_slot": "scholar-scholar:resurrection",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16537,
+    "name": "Whispering Dawn",
+    "icon": "Whispering_Dawn.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 23,
+    "show": false,
+    "category": "OTHER",
+    "level": 20,
+    "display_slot": "scholar-scholar:whispering dawn",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 17865,
+    "name": "Bio II",
+    "icon": "Bio_II.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 19,
+    "show": false,
+    "category": "OTHER",
+    "level": 26,
+    "display_slot": "scholar-scholar:bio",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 185,
+    "name": "Adloquium",
+    "icon": "Adloquium.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 25,
+    "show": false,
+    "category": "OTHER",
+    "level": 30,
+    "display_slot": "scholar-scholar:adloquium",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 186,
+    "name": "Succor",
+    "icon": "Succor.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 16,
+    "show": false,
+    "category": "RAID_MIT",
+    "level": 35,
+    "display_slot": "scholar-scholar:succor",
+    "debug_tags": [
+      "raid_cd"
+    ]
+  },
+  {
+    "spell_id": 172,
+    "name": "Ruin II",
+    "icon": "Ruin_II.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 27,
+    "show": false,
+    "category": "OTHER",
+    "level": 30,
+    "display_slot": "scholar-scholar:ruin ii",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 167,
+    "name": "Energy Drain",
+    "icon": "Energy_Drain.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 28,
+    "show": false,
+    "category": "OTHER",
+    "level": 45,
+    "display_slot": "scholar-scholar:energy drain",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16539,
+    "name": "Art of War",
+    "icon": "Art_of_War.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 29,
+    "show": false,
+    "category": "OTHER",
+    "level": 46,
+    "display_slot": "scholar-scholar:art-of-war",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 3584,
+    "name": "Broil",
+    "icon": "Broil.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 18,
+    "show": false,
+    "category": "OTHER",
+    "level": 54,
+    "display_slot": "scholar-scholar:ruin-broil",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 3586,
+    "name": "Emergency Tactics",
+    "icon": "Emergency_Tactics.png",
+    "cooldown": 15.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 31,
+    "show": false,
+    "category": "OTHER",
+    "level": 58,
+    "display_slot": "scholar-scholar:emergency tactics",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7435,
+    "name": "Broil II",
+    "icon": "Broil_II.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 18,
+    "show": false,
+    "category": "OTHER",
+    "level": 64,
+    "display_slot": "scholar-scholar:ruin-broil",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7869,
+    "name": "Dissolve Union",
+    "icon": "Dissolve_Union.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 33,
+    "show": false,
+    "category": "OTHER",
+    "level": 70,
+    "display_slot": "scholar-scholar:dissolve union",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16540,
+    "name": "Biolysis",
+    "icon": "Biolysis.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 19,
+    "show": false,
+    "category": "OTHER",
+    "level": 72,
+    "display_slot": "scholar-scholar:bio",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16541,
+    "name": "Broil III",
+    "icon": "Broil_III.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 18,
+    "show": false,
+    "category": "OTHER",
+    "level": 72,
+    "display_slot": "scholar-scholar:ruin-broil",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25865,
+    "name": "Broil IV",
+    "icon": "Broil_IV.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 18,
+    "show": false,
+    "category": "OTHER",
+    "level": 82,
+    "display_slot": "scholar-scholar:ruin-broil",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25866,
+    "name": "Art of War II",
+    "icon": "Art_of_War_II.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 29,
+    "show": false,
+    "category": "OTHER",
+    "level": 82,
+    "display_slot": "scholar-scholar:art-of-war",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 25867,
+    "name": "Protraction",
+    "icon": "Protraction.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 38,
+    "show": false,
+    "category": "OTHER",
+    "level": 86,
+    "display_slot": "scholar-scholar:protraction",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 37012,
+    "name": "Baneful Impaction",
+    "icon": "Baneful_Impaction.png",
+    "cooldown": 1.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 39,
+    "show": false,
+    "category": "OTHER",
+    "level": 92,
+    "display_slot": "scholar-scholar:baneful impaction",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 37015,
+    "name": "Manifestation",
+    "icon": "Manifestation.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 25,
+    "show": false,
+    "category": "OTHER",
+    "level": 100,
+    "display_slot": "scholar-scholar:adloquium",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 16560,
+    "name": "Repose",
+    "icon": "Repose.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 41,
+    "show": false,
+    "category": "OTHER",
+    "level": 8,
+    "display_slot": "scholar-scholar:repose",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7568,
+    "name": "Esuna",
+    "icon": "Esuna.png",
+    "cooldown": 2.5,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 42,
+    "show": false,
+    "category": "OTHER",
+    "level": 10,
+    "display_slot": "scholar-scholar:esuna",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7562,
+    "name": "Lucid Dreaming",
+    "icon": "Lucid_Dreaming.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 43,
+    "show": false,
+    "category": "OTHER",
+    "level": 14,
+    "display_slot": "scholar-scholar:lucid dreaming",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7561,
+    "name": "Swiftcast",
+    "icon": "Swiftcast.png",
+    "cooldown": 60.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 44,
+    "show": false,
+    "category": "OTHER",
+    "level": 18,
+    "display_slot": "scholar-scholar:swiftcast",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7559,
+    "name": "Surecast",
+    "icon": "Surecast.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 45,
+    "show": false,
+    "category": "OTHER",
+    "level": 44,
+    "display_slot": "scholar-scholar:surecast",
+    "debug_tags": [
+      "other"
+    ]
+  },
+  {
+    "spell_id": 7571,
+    "name": "Rescue",
+    "icon": "Rescue.png",
+    "cooldown": 120.0,
+    "duration": 0.0,
+    "color": "#8657FF",
+    "load_order": 46,
+    "show": false,
+    "category": "OTHER",
+    "level": 48,
+    "display_slot": "scholar-scholar:rescue",
+    "debug_tags": [
+      "other"
     ]
   },
   {
@@ -258,9 +758,11 @@
     "cooldown": 270,
     "duration": 30.0,
     "color": "#b576e8",
-    "load_order": 18,
+    "load_order": 47,
     "show": true,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]
@@ -272,12 +774,14 @@
     "cooldown": 270.0,
     "duration": 0.0,
     "color": "#E6B33D",
+    "load_order": 48,
     "show": true,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
-    ],
-    "load_order": 19
+    ]
   },
   {
     "spell_id": 3,
@@ -286,9 +790,11 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#666666",
-    "load_order": 20,
+    "load_order": 49,
     "show": null,
     "category": "UTILITY",
+    "level": 0,
+    "display_slot": "",
     "debug_tags": [
       "utility"
     ]

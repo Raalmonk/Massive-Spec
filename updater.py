@@ -28,6 +28,7 @@ import aiohttp
 # --- 导入业务模块 ---
 from lorgs.logger import logger  
 from lorgs.clients.wcl.client import WarcraftlogsClient
+from lorgs import data  # noqa: F401  # load static boss/spec registrations
 
 # 日志设置
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -46,15 +47,28 @@ except ImportError as e:
 # --- 核心逻辑 ---
 
 # 修改函数签名，增加 timestamp_folder 参数
-BOSS_ROTATION = [
+BOSS_ROTATION_GROUP_A = [
     "futures-rewritten",
-    "dancing-mad",
     "vamp-fatale",
     "red-hot-and-deep-blue",
-    "dancing-mad",
+    "the-unending-coil-of-bahamut",
+    "the-weapons-refrain",
+    "the-epic-of-alexander",
+]
+
+BOSS_ROTATION_GROUP_B = [
     "the-tyrant",
     "lindwurm",
     "lindwurm-ii",
+    "dragonsongs-reprise",
+    "the-omega-protocol",
+]
+
+BOSS_ROTATION = [
+    "dancing-mad",
+    *BOSS_ROTATION_GROUP_A,
+    "dancing-mad",
+    *BOSS_ROTATION_GROUP_B,
 ]
 
 BOSS_CONFIG = {
@@ -63,6 +77,26 @@ BOSS_CONFIG = {
         "metric": "rdps",
     },
     "dancing-mad": {
+        "difficulty": "ultimate",
+        "metric": "rdps",
+    },
+    "the-unending-coil-of-bahamut": {
+        "difficulty": "ultimate",
+        "metric": "rdps",
+    },
+    "the-weapons-refrain": {
+        "difficulty": "ultimate",
+        "metric": "rdps",
+    },
+    "the-epic-of-alexander": {
+        "difficulty": "ultimate",
+        "metric": "rdps",
+    },
+    "dragonsongs-reprise": {
+        "difficulty": "ultimate",
+        "metric": "rdps",
+    },
+    "the-omega-protocol": {
         "difficulty": "ultimate",
         "metric": "rdps",
     },
