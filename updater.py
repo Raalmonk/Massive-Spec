@@ -169,7 +169,7 @@ async def update_spec_with_retry(spec, boss_slug, timestamp_folder):
                 logger.error(f"HTTP Error {e.status}: {e}")
                 return 
         except Exception as e:
-            logger.error(f"Error updating {spec.full_name_slug}: {e}")
+            logger.exception(f"Error updating {spec.full_name_slug}: {e}")
             return
 
 async def main():

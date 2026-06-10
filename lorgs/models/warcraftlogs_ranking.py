@@ -381,15 +381,20 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             )
             for report in reports
         ]
-        results = await asyncio.gather(*tasks)
+        results = await asyncio.gather(*tasks, return_exceptions=True)
 
         metric_totals: dict[tuple[str, int, str, str], float] = {}
         for report, result in zip(reports, results):
-            rankings_payload = (
-                result.get("reportData", {})
-                .get("report", {})
-                .get("rankings", {})
-            )
+            if isinstance(result, Exception):
+                logger.warning("[Metric Totals] Skipping %s: %s", report.report_id, result)
+                continue
+
+            report_payload = (result.get("reportData") or {}).get("report") if isinstance(result, dict) else None
+            if not report_payload:
+                logger.warning("[Metric Totals] Missing report payload for %s; skipping.", report.report_id)
+                continue
+
+            rankings_payload = report_payload.get("rankings") or {}
             for fight_id, name, spec_slug, amount in self._iter_report_ranking_characters(rankings_payload):
                 key = (report.report_id, fight_id, self._normalize_name(name), spec_slug)
                 metric_totals[key] = float(amount)
@@ -606,7 +611,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
 
         logger.info(f"load {len(unique_actors)} players/bosses")
         if unique_actors:
-            await self.load_many(unique_actors, raise_errors=False)
+            await self._load_actors_safely(unique_actors, "players/bosses")
 
             for duplicate, original in duplicate_actors:
                 duplicate.casts = list(original.casts)
@@ -644,10 +649,26 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
 
             logger.info(f"load {len(unique_partner_actors)} dancer dance partners")
             if unique_partner_actors:
-                await self.load_many(unique_partner_actors, raise_errors=False)
+                await self._load_actors_safely(unique_partner_actors, "dancer dance partners")
 
                 for duplicate, original in duplicate_partner_actors:
                     duplicate.casts = list(original.casts)
+
+    async def _load_actors_safely(self, actors: list[typing.Any], label: str) -> None:
+        """Load actor casts without letting one bad FF Logs response drop the whole ranking."""
+        results = await asyncio.gather(
+            *(actor.load(raise_errors=False) for actor in actors),
+            return_exceptions=True,
+        )
+        failed = 0
+        for actor, result in zip(actors, results):
+            if isinstance(result, Exception):
+                failed += 1
+                actor_name = getattr(actor, "name", None) or getattr(actor, "boss_slug", "unknown")
+                logger.warning("[load_actors] Skipping %s %s: %s", label, actor_name, result)
+
+        if failed:
+            logger.warning("[load_actors] Skipped %s/%s %s after load errors.", failed, len(actors), label)
 
     ############################################################################
     # Query: Both

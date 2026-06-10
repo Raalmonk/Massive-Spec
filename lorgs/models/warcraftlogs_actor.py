@@ -206,7 +206,7 @@ class BaseActor(warcraftlogs_base.BaseModel):
         casts_data = report_data.report.events
 
         if not casts_data:
-            logger.warning("casts_data is empty")
+            logger.debug("casts_data is empty")
             return
 
         ##############################
