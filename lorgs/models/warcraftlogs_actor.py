@@ -2,6 +2,7 @@ from __future__ import annotations
 
 # IMPORT STANDARD LIBRARIES
 import abc
+import os
 import textwrap
 import typing
 from typing import ClassVar, Optional
@@ -17,6 +18,8 @@ from lorgs.logger import logger
 from lorgs.models import warcraftlogs_base
 from lorgs.models.warcraftlogs_cast import Cast, process_auras, process_until_events, add_cast_counters
 from lorgs.models.wow_spell import SpellType, WowSpell, build_spell_query
+
+DEBUG_QUERIES = os.getenv("MSPEC_DEBUG_QUERIES") == "1"
 
 
 if typing.TYPE_CHECKING:
@@ -110,19 +113,23 @@ class BaseActor(warcraftlogs_base.BaseModel):
             return
         
         # 打印调试信息
-        print(f"\n[DEBUG] Querying Actor: {getattr(self, 'name', 'Unknown')}")
-        print(f"[DEBUG] Time: {self.fight.start_time_rel} - {self.fight.end_time_rel}")
+        if DEBUG_QUERIES:
+            logger.debug("Querying Actor: %s", getattr(self, "name", "Unknown"))
+            logger.debug("Time: %s - %s", self.fight.start_time_rel, self.fight.end_time_rel)
 
         metric_total = getattr(self, "total", "N/A")
-        print(f"[DEBUG] Actor Metric Total: {metric_total}")
+        if DEBUG_QUERIES:
+            logger.debug("Actor Metric Total: %s", metric_total)
         
         # --- 🟢 新增：打印阵容 Composition ---
         # 这样我们就能确认在查询具体技能时，Fight 对象里的阵容是不是空的
         comp_data = getattr(self.fight, 'composition', 'N/A')
-        print(f"[DEBUG] Fight Composition: {comp_data}")
+        if DEBUG_QUERIES:
+            logger.debug("Fight Composition: %s", comp_data)
         # ------------------------------------
 
-        print(f"[DEBUG] Filter: {sub_query}")
+        if DEBUG_QUERIES:
+            logger.debug("Filter: %s", sub_query)
 
         return textwrap.dedent(
             f"""\

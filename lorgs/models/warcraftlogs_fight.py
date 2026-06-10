@@ -2,6 +2,7 @@ from __future__ import annotations
 
 # IMPORT STANRD LIBRARIES
 import datetime
+import os
 import textwrap
 import typing
 from typing import Optional
@@ -17,6 +18,8 @@ from lorgs.models import warcraftlogs_base
 from lorgs.models.warcraftlogs_boss import Boss
 from lorgs.models.warcraftlogs_player import Player
 from lorgs.models.wow_spec import WowSpec
+
+DEBUG_QUERIES = os.getenv("MSPEC_DEBUG_QUERIES") == "1"
 
 
 if typing.TYPE_CHECKING:
@@ -148,7 +151,8 @@ class Fight(warcraftlogs_base.BaseModel):
         }
         name = name.format(**kwargs)
 
-        print("Name", name)
+        if DEBUG_QUERIES:
+            logger.debug("Phase Name: %s", name)
 
         phase = Phase(ts=ts, name=name, mrt=mrt)
         self.phases.append(phase)
@@ -196,7 +200,8 @@ class Fight(warcraftlogs_base.BaseModel):
             """,
         ]
         # --- DEBUG START ---
-        print(f"[DEBUG-0] Fight.get_query_parts | ID={self.fight_id} | QueryParts={parts}")
+        if DEBUG_QUERIES:
+            logger.debug("Fight.get_query_parts | ID=%s | QueryParts=%s", self.fight_id, parts)
         # --- DEBUG END ---
         return parts
 
@@ -224,7 +229,8 @@ class Fight(warcraftlogs_base.BaseModel):
 
         # --- DEBUG START ---
         comp_count = len(summary_data.composition) if summary_data.composition else 0
-        print(f"[DEBUG-2] Fight.process_players | Raw Composition Count from WCL: {comp_count}")
+        if DEBUG_QUERIES:
+            logger.debug("Fight.process_players | Raw Composition Count from WCL: %s", comp_count)
         # --- DEBUG END ---
 
         total_damage = summary_data.damageDone
@@ -259,7 +265,8 @@ class Fight(warcraftlogs_base.BaseModel):
             total_data = total_damage
             for data in total_data:
                 if data.id == composition_data.id:
-                    print(f"DEBUG DATA for {composition_data.name}: {data}")
+                    if DEBUG_QUERIES:
+                        logger.debug("DEBUG DATA for %s: %s", composition_data.name, data)
                     total = data.total / (self.duration / 1000)
                     break
             else:
@@ -279,8 +286,8 @@ class Fight(warcraftlogs_base.BaseModel):
             self.players.append(player)
 
             # --- DEBUG START (Optional: print first player) ---
-            if len(self.players) == 1:
-                print(f"[DEBUG-3] First Player Created: {player.name} - {player.spec_slug}")
+            if DEBUG_QUERIES and len(self.players) == 1:
+                logger.debug("First Player Created: %s - %s", player.name, player.spec_slug)
             # --- DEBUG END ---
 
         self.players.sort(key=lambda player: (player.spec.role, player.spec, player.name))
@@ -288,7 +295,8 @@ class Fight(warcraftlogs_base.BaseModel):
         self.composition = [p.spec_slug for p in self.players]
 
         # --- DEBUG START ---
-        print(f"[DEBUG-4] Final Player Count: {len(self.players)}")
+        if DEBUG_QUERIES:
+            logger.debug("Final Player Count: %s", len(self.players))
         # --- DEBUG END ---
 
     def process_query_result(self, **query_result: typing.Any):
@@ -298,9 +306,10 @@ class Fight(warcraftlogs_base.BaseModel):
         
         # --- DEBUG START ---
         has_summary = bool(report_data.report and report_data.report.summary)
-        print(f"[DEBUG-1] Fight.process_query_result | ID={self.fight_id} | Has Summary Data? {has_summary}")
+        if DEBUG_QUERIES:
+            logger.debug("Fight.process_query_result | ID=%s | Has Summary Data? %s", self.fight_id, has_summary)
         if not has_summary:
-            print(f"[DEBUG-1] WARNING: No summary data found in report_data. Keys: {query_result.keys()}")
+            logger.warning("No summary data found for fight %s. Keys: %s", self.fight_id, query_result.keys())
         # --- DEBUG END ---
 
         if not report_data.report.summary:

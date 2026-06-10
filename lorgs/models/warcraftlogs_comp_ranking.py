@@ -9,6 +9,7 @@ import textwrap
 import typing
 from collections import defaultdict
 import datetime
+import os
 from typing import Any, Callable, ClassVar, Optional
 import typing_extensions
 
@@ -25,6 +26,8 @@ from lorgs.models.warcraftlogs_fight import Fight
 from lorgs.models.warcraftlogs_player import Player
 from lorgs.models.warcraftlogs_report import Report
 from lorgs.models.wow_spell import SpellTag, WowSpell, build_spell_query
+
+DEBUG_QUERIES = os.getenv("MSPEC_DEBUG_QUERIES") == "1"
 
 
 class FilterExpression(pydantic.BaseModel):
@@ -114,14 +117,17 @@ class CompRankingFight(Fight):
     def process_query_result(self, **query_result: typing.Any):
         super().process_query_result(**query_result)
         # --- DEBUG START ---
-        print(f"[DEBUG] Processing Fight ID: {self.fight_id}")
-        print(f"[DEBUG] Player count: {len(self.players)}") # 检查这里是否为 0
+        if DEBUG_QUERIES:
+            logger.debug("Processing Fight ID: %s", self.fight_id)
+        if DEBUG_QUERIES:
+            logger.debug("Player count: %s", len(self.players)) # 检查这里是否为 0
         # --- DEBUG END ---
         self.composition = get_composition(self.players)
         # --- DEBUG START ---
-        import json
+        if DEBUG_QUERIES:
+            import json
         # 打印生成的 composition
-        print(f"[DEBUG] Composition: {json.dumps(self.composition, indent=2)}")
+            logger.debug("Composition: %s", json.dumps(self.composition, indent=2))
         # --- DEBUG END ---
 
 
