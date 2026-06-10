@@ -1,101 +1,200 @@
 [
   {
-    "id": "M12S1_THE_FIXER_1",
+    "id": "m12s1-fixer-1",
     "name": "The Fixer",
     "time": 10,
-    "duration": 5.0,
-    "color": "",
-    "icon": "The_Fixer.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "补天之手",
+      "ja": "フィクサー・オブ・アルカディア",
+      "ko": "아르카디아의 배후자"
+    },
+    "action_id": 46295,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S1_MORTAL_SLAYER",
+    "id": "m12s1-mortal-slayer",
     "name": "Mortal Slayer",
     "time": 29,
-    "duration": 12.0,
-    "color": "",
-    "icon": "Mortal_Slayer.png",
-    "type": "mechanic"
+    "duration": 12,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "致命灾变",
+      "ja": "リーサルスカージ",
+      "ko": "죽음의 재앙"
+    },
+    "action_id": 46230,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S1_VISCERAL_BURST",
+    "id": "m12s1-visceral-burst",
     "name": "Visceral Burst",
     "time": 97,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Visceral_Burst.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "脏腑爆裂",
+      "ja": "ヴィセラルバースト",
+      "ko": "내장 파열"
+    },
+    "action_id": 46294,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S1_CRUEL_COIL",
+    "id": "m12s1-cruel-coil",
     "name": "Cruel Coil",
     "time": 132,
-    "duration": 3.0,
-    "color": "",
-    "icon": "Cruel_Coil.png",
-    "type": "mechanic"
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "残暴拘束",
+      "ja": "クルエルコイル",
+      "ko": "잔혹한 똬리"
+    },
+    "action_id": 46264,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S1_SKINSPLITTER",
+    "id": "m12s1-skinsplitter",
     "name": "Skinsplitter",
     "time": 141,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Skinsplitter.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "蜕鳞",
+      "ja": "スキンスプリッター",
+      "ko": "뱀껍질 균열"
+    },
+    "action_id": 46268,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S1_SPLATTERSHED_1",
+    "id": "m12s1-splattershed-1",
     "name": "Splattershed",
     "time": 183,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Splattershed.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "溅血",
+      "ja": "スプラッターシェッド",
+      "ko": "유혈의 허물"
+    },
+    "action_id": 47556,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S1_BRING_DOWN_THE_HOUSE",
+    "id": "m12s1-bring-down-house",
     "name": "Bring Down the House",
     "time": 216,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Bring_Down_the_House.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "震场",
+      "ja": "ブリングダウン・ハウス",
+      "ko": "장내를 흔드는 갈채"
+    },
+    "action_id": 46244,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S1_SPLIT_SCOURGE",
+    "id": "m12s1-split-scourge",
     "name": "Split Scourge",
     "time": 229,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Split_Scourge.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "分裂灾变",
+      "ja": "スプリットスカージ",
+      "ko": "분열된 재앙"
+    },
+    "action_id": 46247,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S1_SPLATTERSHED_2",
+    "id": "m12s1-splattershed-2",
     "name": "Splattershed",
     "time": 284,
-    "duration": 6.0,
-    "color": "",
-    "icon": "Splattershed.png",
-    "type": "mechanic"
+    "duration": 6,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "溅血",
+      "ja": "スプラッターシェッド",
+      "ko": "유혈의 허물"
+    },
+    "action_id": 47556,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S1_SLAUGHTERSHED",
+    "id": "m12s1-slaughtershed",
     "name": "Slaughtershed",
     "time": 337,
-    "duration": 3.0,
-    "color": "",
-    "icon": "Slaughtershed.png",
-    "type": "mechanic"
+    "duration": 3,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "喋血",
+      "ja": "スローターシェッド",
+      "ko": "살육의 허물"
+    },
+    "action_id": 44489,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S1_REFRESHING_OVERKILL",
+    "id": "m12s1-refreshing-overkill",
     "name": "Refreshing Overkill",
     "time": 428,
-    "duration": 10.0,
-    "color": "",
-    "icon": "Refreshing_Overkill.png",
-    "type": "mechanic"
+    "duration": 10,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "过愈过伤",
+      "ja": "オーバーキュア・オーバーキル",
+      "ko": "과잉치료, 과잉치사"
+    },
+    "action_id": 46392,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   }
 ]

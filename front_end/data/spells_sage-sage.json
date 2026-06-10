@@ -234,7 +234,7 @@
     "show": false,
     "category": "RAID_MIT",
     "level": 60,
-    "display_slot": "sage-sage:physis ii",
+    "display_slot": "sage-sage:physis",
     "debug_tags": [
       "raid_cd"
     ]
@@ -342,13 +342,13 @@
     "cooldown": 60.0,
     "duration": 0.0,
     "color": "#80A0F0",
-    "load_order": 21,
+    "load_order": 14,
     "show": false,
-    "category": "OTHER",
+    "category": "RAID_MIT",
     "level": 20,
     "display_slot": "sage-sage:physis",
     "debug_tags": [
-      "other"
+      "raid_cd"
     ]
   },
   {

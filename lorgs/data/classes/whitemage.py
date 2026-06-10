@@ -32,6 +32,7 @@ WHITE_MAGE_MAIN = WowSpec(role=HEAL, wow_class=WHITE_MAGE, name="White Mage")
 # Burst / Cooldowns
 WHITE_MAGE_MAIN.add_spell(spell_id=136, cooldown=120, duration=15, name="Presence of Mind", show=True,icon="Presence_of_Mind.png", tags=[SpellTag.DAMAGE])
 WHITE_MAGE_MAIN.add_spell(spell_id=16535, cooldown=2.5, name="Afflatus Misery", show=True,icon="Afflatus_Misery.png", tags=[SpellTag.DAMAGE])
+WHITE_MAGE_MAIN.add_spell(spell_id=37009, cooldown=2.5, name="Glare IV", show=False,icon="Glare_IV.png", tags=[SpellTag.OTHER], level=92, display_slot="whitemage-whitemage:stone-glare")
 
 # Self Mitigation
 WHITE_MAGE_MAIN.add_spell(spell_id=3570, cooldown=60, name="Tetragrammaton", show=False,icon="Tetragrammaton.png", tags=[SpellTag.DEFENSIVE])

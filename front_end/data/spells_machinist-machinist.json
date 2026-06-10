@@ -10,7 +10,7 @@
     "show": true,
     "category": "MAJOR",
     "level": 80,
-    "display_slot": "machinist-machinist:automaton queen",
+    "display_slot": "machinist-machinist:rook",
     "debug_tags": [
       "dps"
     ]
@@ -282,7 +282,7 @@
     "show": false,
     "category": "OTHER",
     "level": 35,
-    "display_slot": "machinist-machinist:heat blast",
+    "display_slot": "machinist-machinist:heat-blast",
     "debug_tags": [
       "other"
     ]
@@ -294,13 +294,13 @@
     "cooldown": 6.0,
     "duration": 0.0,
     "color": "#6EE1D6",
-    "load_order": 18,
-    "show": false,
-    "category": "OTHER",
+    "load_order": 0,
+    "show": true,
+    "category": "MAJOR",
     "level": 40,
-    "display_slot": "machinist-machinist:rook autoturret",
+    "display_slot": "machinist-machinist:rook",
     "debug_tags": [
-      "other"
+      "dps"
     ]
   },
   {
@@ -314,7 +314,7 @@
     "show": false,
     "category": "OTHER",
     "level": 40,
-    "display_slot": "machinist-machinist:rook overdrive",
+    "display_slot": "machinist-machinist:rook-overdrive",
     "debug_tags": [
       "other"
     ]
@@ -438,11 +438,11 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#6EE1D6",
-    "load_order": 27,
+    "load_order": 17,
     "show": false,
     "category": "OTHER",
     "level": 68,
-    "display_slot": "machinist-machinist:blazing shot",
+    "display_slot": "machinist-machinist:heat-blast",
     "debug_tags": [
       "other"
     ]
@@ -486,11 +486,11 @@
     "cooldown": 15.0,
     "duration": 0.0,
     "color": "#6EE1D6",
-    "load_order": 30,
+    "load_order": 19,
     "show": false,
     "category": "OTHER",
     "level": 80,
-    "display_slot": "machinist-machinist:queen overdrive",
+    "display_slot": "machinist-machinist:rook-overdrive",
     "debug_tags": [
       "other"
     ]

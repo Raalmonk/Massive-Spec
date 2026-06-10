@@ -1,92 +1,182 @@
 [
   {
-    "id": "M12S2_ARCADIAN_AFLAME",
+    "id": "m12s2-arcadian-aflame",
     "name": "Arcadian Aflame",
     "time": 10,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Arcadian_Aflame.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "境中奇焰",
+      "ja": "アルカディアン・フレイム",
+      "ko": "아르카디아의 화염"
+    },
+    "action_id": 46376,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S2_REPLICATION",
+    "id": "m12s2-replication",
     "name": "Replication I",
     "time": 25,
-    "duration": 3.0,
-    "color": "",
-    "icon": "Replication.png",
-    "type": "mechanic"
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "自我复制",
+      "ja": "レプリケーション",
+      "ko": "자가 복제"
+    },
+    "action_id": 46296,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S2_DOUBLE_SOBAT",
-    "name": "Double Sabat",
+    "id": "m12s2-double-sobat-1",
+    "name": "Double Sobat",
     "time": 64,
-    "duration": 6.0,
-    "color": "",
-    "icon": "Double_Sobat.png",
-    "type": "mechanic"
+    "duration": 6,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "双重飞踢",
+      "ja": "ダブルソバット",
+      "ko": "연속 후려차기"
+    },
+    "action_id": 46368,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S2_ESOTERIC_FINISHER_1",
+    "id": "m12s2-esoteric-1",
     "name": "Esoteric Finisher",
     "time": 77,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Esoteric_Finisher.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "魔力连击",
+      "ja": "マナコンビネーション",
+      "ko": "마나 연격"
+    },
+    "action_id": 46374,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S2_FIREFALL_SPLASH",
+    "id": "m12s2-firefall",
     "name": "Firefall Splash",
     "time": 122,
-    "duration": 6.0,
-    "color": "",
-    "icon": "Firefall_Splash.png",
-    "type": "mechanic"
+    "duration": 6,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "落火飞溅",
+      "ja": "ファイアフォール・スプラッシュ",
+      "ko": "불꽃 하강"
+    },
+    "action_id": 46308,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S2_IDYLLIC_DREAM_1",
+    "id": "m12s2-idyllic-dream",
     "name": "Idyllic Dream",
     "time": 265,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Idyllic_Dream.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "境中奇梦",
+      "ja": "アルカディアン・ドリーム",
+      "ko": "아르카디아의 꿈"
+    },
+    "action_id": 46345,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S2_LINDWURMS_METEOR",
+    "id": "m12s2-lindwurm-meteor",
     "name": "Lindwurm's Meteor",
     "time": 344,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Lindwurms_Meteor.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "林德布鲁姆陨石",
+      "ja": "リンドブルム・メテオ",
+      "ko": "린드블룸 메테오"
+    },
+    "action_id": 46322,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S2_ARCADIAN_ARCANUM",
+    "id": "m12s2-arcadian-arcanum",
     "name": "Arcadian Arcanum",
     "time": 353,
-    "duration": 4.0,
-    "color": "",
-    "icon": "Arcadian_Arcanum.png",
-    "type": "mechanic"
+    "duration": 4,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "境中奇奥",
+      "ja": "アルカディアン・アルケイナム",
+      "ko": "아르카디아의 신비"
+    },
+    "action_id": 46377,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S2_ESOTERIC_FINISHER_2",
+    "id": "m12s2-esoteric-2",
     "name": "Esoteric Finisher",
     "time": 488,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Esoteric_Finisher.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "魔力连击",
+      "ja": "マナコンビネーション",
+      "ko": "마나 연격"
+    },
+    "action_id": 46374,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M12S2_ARCADIAN_HELL",
+    "id": "m12s2-arcadian-hell",
     "name": "Arcadian Hell",
     "time": 510,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Arcadian_Hell.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "境中奇狱",
+      "ja": "アルカディアン・ヘル",
+      "ko": "아르카디아의 지옥"
+    },
+    "action_id": 46387,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   }
 ]

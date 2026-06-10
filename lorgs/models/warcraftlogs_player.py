@@ -14,6 +14,11 @@ from lorgs.models.wow_spec import WowSpec
 from lorgs.models.wow_spell import WowSpell, build_spell_query
 
 
+DANCER_SPEC_SLUG = "dancer-dancer"
+DANCE_PARTNER_CAST_ID = 16006
+DANCE_PARTNER_AURA_IDS = {1824, 2027}
+
+
 class Player(BaseActor):
     """A PlayerCharater in a Fight (or report)."""
 
@@ -26,6 +31,7 @@ class Player(BaseActor):
 
     deaths: list = []
     resurrects: list = []
+    dance_partners: list = []
 
     def __str__(self) -> str:
         return f"Player(id={self.source_id} name={self.name} spec={self.spec})"
@@ -46,6 +52,7 @@ class Player(BaseActor):
             "casts": [cast.dict() for cast in self.casts],
             "deaths": self.deaths,
             "resurrects": self.resurrects,
+            "dance_partners": self.dance_partners,
         }
 
     ##########################
@@ -103,7 +110,18 @@ class Player(BaseActor):
         if self.resurrects and target_filter:
             resurrection_query = f"{target_filter} and type='resurrect'"
 
-        return self.combine_queries(casts_query, auras_query, events_query, resurrection_query)
+        dance_partner_query = ""
+        if self.spec_slug == DANCER_SPEC_SLUG and source_filter:
+            aura_ids = ",".join(str(spell_id) for spell_id in sorted(DANCE_PARTNER_AURA_IDS))
+            dance_partner_query = (
+                f"{source_filter} and ("
+                f"(type='cast' and ability.id = {DANCE_PARTNER_CAST_ID}) or "
+                f"(type='applybuff' and ability.id in ({aura_ids})) or "
+                f"(type='removebuff' and ability.id in ({aura_ids}))"
+                f")"
+            )
+
+        return self.combine_queries(casts_query, auras_query, events_query, resurrection_query, dance_partner_query)
 
     ############################################################################
     # Process
@@ -177,6 +195,40 @@ class Player(BaseActor):
             event.abilityGameID = -1
 
         return super().process_event(event)
+
+    def process_events(self, events: list[wcl.ReportEvent]) -> list[wcl.ReportEvent]:
+        if self.spec_slug != DANCER_SPEC_SLUG:
+            return super().process_events(events)
+
+        fight_start = self.fight.start_time_rel if self.fight else 0
+        partners_by_source_id: dict[int, dict[str, typing.Any]] = {}
+        for event in events:
+            spell_id = event.abilityGameID
+            is_closed_position = event.type == "cast" and spell_id == DANCE_PARTNER_CAST_ID
+            is_partner_aura = event.type in ("applybuff", "removebuff") and spell_id in DANCE_PARTNER_AURA_IDS
+            if not is_closed_position and not is_partner_aura:
+                continue
+
+            target_id = event.targetID
+            if target_id <= 0 or target_id == self.source_id:
+                continue
+
+            timestamp = max(0, event.timestamp - fight_start)
+            partner = partners_by_source_id.setdefault(
+                target_id,
+                {
+                    "source_id": target_id,
+                    "first_ts": timestamp,
+                    "last_ts": timestamp,
+                    "event_count": 0,
+                },
+            )
+            partner["first_ts"] = min(partner["first_ts"], timestamp)
+            partner["last_ts"] = max(partner["last_ts"], timestamp)
+            partner["event_count"] += 1
+
+        self.dance_partners = sorted(partners_by_source_id.values(), key=lambda partner: partner["first_ts"])
+        return super().process_events(events)
 
     def should_include_cast_event(self, event: "wcl.ReportEvent", cast_actor_id: int) -> bool:
         if event.type == "cast" and is_limit_break_spell_id(event.abilityGameID):

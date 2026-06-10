@@ -266,7 +266,7 @@
     "show": false,
     "category": "OTHER",
     "level": 15,
-    "display_slot": "monk-monk:steeled meditation",
+    "display_slot": "monk-monk:meditation",
     "debug_tags": [
       "other"
     ]
@@ -282,7 +282,7 @@
     "show": false,
     "category": "OTHER",
     "level": 15,
-    "display_slot": "monk-monk:steel peak",
+    "display_slot": "monk-monk:forbidden-chakra",
     "debug_tags": [
       "other"
     ]
@@ -314,7 +314,7 @@
     "show": false,
     "category": "OTHER",
     "level": 26,
-    "display_slot": "monk-monk:arm of the destroyer",
+    "display_slot": "monk-monk:destroyer",
     "debug_tags": [
       "other"
     ]
@@ -346,7 +346,7 @@
     "show": false,
     "category": "OTHER",
     "level": 30,
-    "display_slot": "monk-monk:rockbreaker",
+    "display_slot": "monk-monk:four-point-fury",
     "debug_tags": [
       "other"
     ]
@@ -374,11 +374,11 @@
     "cooldown": 1.0,
     "duration": 0.0,
     "color": "#D69C00",
-    "load_order": 23,
+    "load_order": 16,
     "show": false,
     "category": "OTHER",
     "level": 40,
-    "display_slot": "monk-monk:inspirited meditation",
+    "display_slot": "monk-monk:meditation",
     "debug_tags": [
       "other"
     ]
@@ -394,7 +394,7 @@
     "show": false,
     "category": "OTHER",
     "level": 40,
-    "display_slot": "monk-monk:howling fist",
+    "display_slot": "monk-monk:enlightenment",
     "debug_tags": [
       "other"
     ]
@@ -406,11 +406,11 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#D69C00",
-    "load_order": 25,
+    "load_order": 21,
     "show": false,
     "category": "OTHER",
     "level": 45,
-    "display_slot": "monk-monk:four-point fury",
+    "display_slot": "monk-monk:four-point-fury",
     "debug_tags": [
       "other"
     ]
@@ -454,11 +454,11 @@
     "cooldown": 1.0,
     "duration": 0.0,
     "color": "#D69C00",
-    "load_order": 28,
+    "load_order": 16,
     "show": false,
     "category": "OTHER",
     "level": 54,
-    "display_slot": "monk-monk:forbidden meditation",
+    "display_slot": "monk-monk:meditation",
     "debug_tags": [
       "other"
     ]
@@ -470,11 +470,11 @@
     "cooldown": 1.0,
     "duration": 0.0,
     "color": "#D69C00",
-    "load_order": 29,
+    "load_order": 17,
     "show": false,
     "category": "OTHER",
     "level": 54,
-    "display_slot": "monk-monk:the forbidden chakra",
+    "display_slot": "monk-monk:forbidden-chakra",
     "debug_tags": [
       "other"
     ]
@@ -582,11 +582,11 @@
     "cooldown": 1.0,
     "duration": 0.0,
     "color": "#D69C00",
-    "load_order": 36,
+    "load_order": 16,
     "show": false,
     "category": "OTHER",
     "level": 74,
-    "display_slot": "monk-monk:enlightened meditation",
+    "display_slot": "monk-monk:meditation",
     "debug_tags": [
       "other"
     ]
@@ -598,7 +598,7 @@
     "cooldown": 1.0,
     "duration": 0.0,
     "color": "#D69C00",
-    "load_order": 37,
+    "load_order": 24,
     "show": false,
     "category": "OTHER",
     "level": 74,
@@ -630,11 +630,11 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#D69C00",
-    "load_order": 39,
+    "load_order": 19,
     "show": false,
     "category": "OTHER",
     "level": 82,
-    "display_slot": "monk-monk:shadow of the destroyer",
+    "display_slot": "monk-monk:destroyer",
     "debug_tags": [
       "other"
     ]

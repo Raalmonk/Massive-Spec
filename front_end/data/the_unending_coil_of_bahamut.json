@@ -1,0 +1,236 @@
+[
+  {
+    "id": "ucob-twister-1",
+    "name": "Twister",
+    "time": 12.6,
+    "duration": 1,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "旋风",
+      "ja": "ツイスター",
+      "ko": "회오리"
+    },
+    "action_id": 9898,
+    "phase_index": 0,
+    "phase_time": 12.6,
+    "phase_name": ""
+  },
+  {
+    "id": "ucob-death-sentence-1",
+    "name": "Death Sentence",
+    "time": 23.9,
+    "duration": 3,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "死刑",
+      "ja": "デスセンテンス",
+      "ko": "사형 선고"
+    },
+    "action_id": 9897,
+    "phase_index": 0,
+    "phase_time": 23.9,
+    "phase_name": ""
+  },
+  {
+    "id": "ucob-liquid-hell",
+    "name": "Liquid Hell",
+    "time": 108.5,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "液体地狱",
+      "ja": "ヘルリキッド",
+      "ko": "지옥의 늪"
+    },
+    "action_id": 9901,
+    "phase_index": 0,
+    "phase_time": 108.5,
+    "phase_name": ""
+  },
+  {
+    "id": "ucob-death-sentence-2",
+    "name": "Death Sentence",
+    "time": 132.3,
+    "duration": 3,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "死刑",
+      "ja": "デスセンテンス",
+      "ko": "사형 선고"
+    },
+    "action_id": 9897,
+    "phase_index": 0,
+    "phase_time": 132.3,
+    "phase_name": ""
+  },
+  {
+    "id": "ucob-heavensfall",
+    "name": "Heavensfall",
+    "time": 407.5,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "天崩地裂",
+      "ja": "天地崩壊",
+      "ko": "천지붕괴"
+    },
+    "action_id": 9912,
+    "phase_index": 1,
+    "phase_time": 0,
+    "phase_name": ""
+  },
+  {
+    "id": "ucob-ravensbeak",
+    "name": "Ravensbeak",
+    "time": 532.4,
+    "duration": 4,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "凶鸟尖喙",
+      "ja": "レイヴェンズビーク",
+      "ko": "흉조의 부리"
+    },
+    "action_id": 9910,
+    "phase_index": 1,
+    "phase_time": 124.9,
+    "phase_name": ""
+  },
+  {
+    "id": "ucob-megaflare",
+    "name": "Megaflare",
+    "time": 1086.5,
+    "duration": 6,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "百万核爆",
+      "ja": "メガフレア",
+      "ko": "메가플레어"
+    },
+    "action_id": 9914,
+    "phase_index": 2,
+    "phase_time": 81.2,
+    "phase_name": ""
+  },
+  {
+    "id": "ucob-gigaflare-1",
+    "name": "Gigaflare",
+    "time": 1102.8,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "十亿核爆",
+      "ja": "ギガフレア",
+      "ko": "기가플레어"
+    },
+    "action_id": 9942,
+    "phase_index": 2,
+    "phase_time": 97.5,
+    "phase_name": ""
+  },
+  {
+    "id": "ucob-tenstrike",
+    "name": "Tenstrike Trio",
+    "time": 1242.3,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "连击的三重奏",
+      "ja": "連撃の三重奏",
+      "ko": "연격의 3중주"
+    },
+    "action_id": 9958,
+    "phase_index": 2,
+    "phase_time": 237.0,
+    "phase_name": ""
+  },
+  {
+    "id": "ucob-grand-octet",
+    "name": "Grand Octet",
+    "time": 1298.5,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "群龙的八重奏",
+      "ja": "群竜の八重奏",
+      "ko": "용들의 8중주"
+    },
+    "action_id": 9959,
+    "phase_index": 2,
+    "phase_time": 293.2,
+    "phase_name": ""
+  },
+  {
+    "id": "ucob-teraflare",
+    "name": "Teraflare",
+    "time": 2316.2,
+    "duration": 8,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "万亿核爆",
+      "ja": "テラフレア",
+      "ko": "테라플레어"
+    },
+    "action_id": 9961,
+    "phase_index": 4,
+    "phase_time": 0,
+    "phase_name": ""
+  },
+  {
+    "id": "ucob-morn-afah",
+    "name": "Morn Afah",
+    "time": 2367.2,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "无尽顿悟",
+      "ja": "モーン・アファー",
+      "ko": "몬 아파"
+    },
+    "action_id": 9964,
+    "phase_index": 4,
+    "phase_time": 51.0,
+    "phase_name": ""
+  },
+  {
+    "id": "ucob-akh-morn-1",
+    "name": "Akh Morn",
+    "time": 2373.3,
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "死亡轮回",
+      "ja": "アク・モーン",
+      "ko": "아크 몬"
+    },
+    "action_id": 9962,
+    "phase_index": 4,
+    "phase_time": 57.1,
+    "phase_name": ""
+  }
+]

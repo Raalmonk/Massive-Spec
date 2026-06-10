@@ -1,34 +1,326 @@
 [
   {
-    "id": "FRU_P1",
-    "name": "P1",
-    "time": 0,
-    "duration": 0,
-    "type": "phase",
-    "color": "#888888"
+    "id": "fru-cyclonic-break-1",
+    "name": "Cyclonic Break",
+    "time": 14.6,
+    "duration": 7,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "暴风破",
+      "ja": "サイクロニックブレイク",
+      "ko": "풍속 파괴"
+    },
+    "action_id": 40145,
+    "phase_index": 0,
+    "phase_time": 14.6,
+    "phase_name": ""
   },
   {
-    "id": "FRU_P2",
-    "name": "P2",
-    "time": 120,
-    "duration": 0,
-    "type": "phase",
-    "color": "#888888"
+    "id": "fru-powder-mark-1",
+    "name": "Powder Mark Trail",
+    "time": 24.4,
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "连锁爆印铭刻",
+      "ja": "連鎖爆印刻",
+      "ko": "연쇄 폭인각"
+    },
+    "action_id": 40168,
+    "phase_index": 0,
+    "phase_time": 24.4,
+    "phase_name": ""
   },
   {
-    "id": "FRU_P3",
-    "name": "P3",
-    "time": 300,
-    "duration": 0,
-    "type": "phase",
-    "color": "#888888"
+    "id": "fru-powder-mark-2",
+    "name": "Powder Mark Trail",
+    "time": 129.9,
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "连锁爆印铭刻",
+      "ja": "連鎖爆印刻",
+      "ko": "연쇄 폭인각"
+    },
+    "action_id": 40168,
+    "phase_index": 0,
+    "phase_time": 129.9,
+    "phase_name": ""
   },
   {
-    "id": "FRU_P4",
-    "name": "P4",
-    "time": 540,
-    "duration": 0,
-    "type": "phase",
-    "color": "#888888"
+    "id": "fru-diamond-dust",
+    "name": "Diamond Dust",
+    "time": 235.9,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "钻石星尘",
+      "ja": "ダイアモンドダスト",
+      "ko": "다이아몬드 더스트"
+    },
+    "action_id": 40197,
+    "phase_index": 1,
+    "phase_time": 35.9,
+    "phase_name": ""
+  },
+  {
+    "id": "fru-sinbound-holy",
+    "name": "Sinbound Holy",
+    "time": 254.6,
+    "duration": 6,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "罪神圣",
+      "ja": "シンホーリー",
+      "ko": "죄의 홀리"
+    },
+    "action_id": 40208,
+    "phase_index": 1,
+    "phase_time": 54.6,
+    "phase_name": ""
+  },
+  {
+    "id": "fru-light-rampant",
+    "name": "Light Rampant",
+    "time": 332.7,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "光之失控",
+      "ja": "光の暴走",
+      "ko": "빛의 폭주"
+    },
+    "action_id": 40212,
+    "phase_index": 1,
+    "phase_time": 132.7,
+    "phase_name": ""
+  },
+  {
+    "id": "fru-ultimate-relativity",
+    "name": "Ultimate Relativity",
+    "time": 532.4,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "时间压缩·绝",
+      "ja": "時間圧縮・絶",
+      "ko": "시간 압축: 절"
+    },
+    "action_id": 40266,
+    "phase_index": 2,
+    "phase_time": 32.4,
+    "phase_name": ""
+  },
+  {
+    "id": "fru-sinbound-meltdown",
+    "name": "Sinbound Meltdown",
+    "time": 549.4,
+    "duration": 30,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "罪熔毁",
+      "ja": "シンメルトン",
+      "ko": "죄의 멜튼"
+    },
+    "action_id": 40235,
+    "phase_index": 2,
+    "phase_time": 49.4,
+    "phase_name": ""
+  },
+  {
+    "id": "fru-darklit-dragonsong",
+    "name": "Darklit Dragonsong",
+    "time": 714.9,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "光与暗的龙诗",
+      "ja": "光と闇の竜詩",
+      "ko": "빛과 어둠의 용시"
+    },
+    "action_id": 40239,
+    "phase_index": 3,
+    "phase_time": 34.1,
+    "phase_name": ""
+  },
+  {
+    "id": "fru-akh-morn-1",
+    "name": "Akh Morn",
+    "time": 750.7,
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "死亡轮回",
+      "ja": "アク・モーン",
+      "ko": "아크 몬"
+    },
+    "action_id": 40302,
+    "phase_index": 3,
+    "phase_time": 69.9,
+    "phase_name": ""
+  },
+  {
+    "id": "fru-morn-afah-1",
+    "name": "Morn Afah",
+    "time": 760.8,
+    "duration": 4,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "无尽顿悟",
+      "ja": "モーン・アファー",
+      "ko": "몬 아파"
+    },
+    "action_id": 40304,
+    "phase_index": 3,
+    "phase_time": 80.0,
+    "phase_name": ""
+  },
+  {
+    "id": "fru-crystallize-time",
+    "name": "Crystallize Time",
+    "time": 776.3,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "时间结晶",
+      "ja": "時間結晶",
+      "ko": "시간의 결정체"
+    },
+    "action_id": 40240,
+    "phase_index": 3,
+    "phase_time": 95.5,
+    "phase_name": ""
+  },
+  {
+    "id": "fru-fulgent-blade-1",
+    "name": "Fulgent Blade",
+    "time": 1040.8,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "光尘之剑",
+      "ja": "光塵の剣",
+      "ko": "빛먼지 검"
+    },
+    "action_id": 40306,
+    "phase_index": 4,
+    "phase_time": 11.2,
+    "phase_name": ""
+  },
+  {
+    "id": "fru-akh-morn-2",
+    "name": "Akh Morn",
+    "time": 1067.8,
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "死亡轮回",
+      "ja": "アク・モーン",
+      "ko": "아크 몬"
+    },
+    "action_id": 40310,
+    "phase_index": 4,
+    "phase_time": 38.2,
+    "phase_name": ""
+  },
+  {
+    "id": "fru-paradise-regained-1",
+    "name": "Paradise Regained",
+    "time": 1076.0,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "复乐园",
+      "ja": "パラダイスリゲインド",
+      "ko": "복낙원"
+    },
+    "action_id": 40319,
+    "phase_index": 4,
+    "phase_time": 46.4,
+    "phase_name": ""
+  },
+  {
+    "id": "fru-pandoras-box",
+    "name": "Pandora's Box",
+    "time": 1141.7,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "潘多拉魔盒",
+      "ja": "パンドラの櫃",
+      "ko": "판도라의 상자"
+    },
+    "action_id": 40326,
+    "phase_index": 4,
+    "phase_time": 112.1,
+    "phase_name": ""
+  },
+  {
+    "id": "fru-fulgent-blade-2",
+    "name": "Fulgent Blade",
+    "time": 1153.8,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "光尘之剑",
+      "ja": "光塵の剣",
+      "ko": "빛먼지 검"
+    },
+    "action_id": 40306,
+    "phase_index": 4,
+    "phase_time": 124.2,
+    "phase_name": ""
+  },
+  {
+    "id": "fru-paradise-lost",
+    "name": "Paradise Lost",
+    "time": 1301.3,
+    "duration": 8,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "失乐园",
+      "ja": "パラダイスロスト",
+      "ko": "실낙원"
+    },
+    "action_id": 40328,
+    "phase_index": 4,
+    "phase_time": 271.7,
+    "phase_name": ""
   }
 ]

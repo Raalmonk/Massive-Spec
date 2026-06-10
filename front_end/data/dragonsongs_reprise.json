@@ -1,0 +1,236 @@
+[
+  {
+    "id": "dsr-holiest-1",
+    "name": "Holiest of Holy",
+    "time": 10.0,
+    "duration": 4,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "至圣",
+      "ja": "ホリエストホーリー",
+      "ko": "지고한 신성"
+    },
+    "action_id": 25300,
+    "phase_index": 0,
+    "phase_time": 10.0,
+    "phase_name": ""
+  },
+  {
+    "id": "dsr-holy-bladedance",
+    "name": "Holy Bladedance",
+    "time": 25.3,
+    "duration": 3,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "圣光剑舞",
+      "ja": "ホーリーブレードダンス",
+      "ko": "신성한 검무"
+    },
+    "action_id": 25298,
+    "phase_index": 0,
+    "phase_time": 25.3,
+    "phase_name": ""
+  },
+  {
+    "id": "dsr-heavensflame",
+    "name": "Heavensflame",
+    "time": 88.2,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "天火",
+      "ja": "ヘヴンフレイム",
+      "ko": "천상의 불꽃"
+    },
+    "action_id": 25310,
+    "phase_index": 0,
+    "phase_time": 88.2,
+    "phase_name": ""
+  },
+  {
+    "id": "dsr-strength",
+    "name": "Strength of the Ward",
+    "time": 570.4,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "苍穹之阵：雷枪",
+      "ja": "蒼天の陣：雷槍",
+      "ko": "창천의 진: 번개창"
+    },
+    "action_id": 25555,
+    "phase_index": 1,
+    "phase_time": 17.4,
+    "phase_name": ""
+  },
+  {
+    "id": "dsr-sanctity",
+    "name": "Sanctity of the Ward",
+    "time": 638.7,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "苍穹之阵：圣杖",
+      "ja": "蒼天の陣：聖杖",
+      "ko": "창천의 진: 지팡이"
+    },
+    "action_id": 25569,
+    "phase_index": 1,
+    "phase_time": 85.7,
+    "phase_name": ""
+  },
+  {
+    "id": "dsr-ultimate-end",
+    "name": "Ultimate End",
+    "time": 706.1,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "万物终结",
+      "ja": "アルティメットエンド",
+      "ko": "궁극의 종말"
+    },
+    "action_id": 25534,
+    "phase_index": 1,
+    "phase_time": 153.1,
+    "phase_name": ""
+  },
+  {
+    "id": "dsr-dive-from-grace",
+    "name": "Dive from Grace",
+    "time": 1020.5,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "堕天龙炎冲",
+      "ja": "堕天のドラゴンダイブ",
+      "ko": "타락한 천룡 강타"
+    },
+    "action_id": 26381,
+    "phase_index": 2,
+    "phase_time": 20.5,
+    "phase_name": ""
+  },
+  {
+    "id": "dsr-death-heavens",
+    "name": "Death of the Heavens",
+    "time": 3085.2,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "至天之阵：死刻",
+      "ja": "至天の陣：死刻",
+      "ko": "지천의 진: 죽음"
+    },
+    "action_id": 27538,
+    "phase_index": 5,
+    "phase_time": 85.2,
+    "phase_name": ""
+  },
+  {
+    "id": "dsr-wroth-flames",
+    "name": "Wroth Flames",
+    "time": 3582.4,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "邪念之炎",
+      "ja": "邪念の炎",
+      "ko": "사념의 불꽃"
+    },
+    "action_id": 27973,
+    "phase_index": 6,
+    "phase_time": 82.4,
+    "phase_name": ""
+  },
+  {
+    "id": "dsr-akh-morn",
+    "name": "Akh Morn",
+    "time": 3593.2,
+    "duration": 8,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "死亡轮回",
+      "ja": "アク・モーン",
+      "ko": "아크 몬"
+    },
+    "action_id": 27974,
+    "phase_index": 6,
+    "phase_time": 93.2,
+    "phase_name": ""
+  },
+  {
+    "id": "dsr-exaflares",
+    "name": "Exaflare's Edge",
+    "time": 4036.0,
+    "duration": 9,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "百京核爆剑",
+      "ja": "騎竜剣エクサフレア",
+      "ko": "기룡검 엑사플레어"
+    },
+    "action_id": 28060,
+    "phase_index": 7,
+    "phase_time": 36.0,
+    "phase_name": ""
+  },
+  {
+    "id": "dsr-gigaflare",
+    "name": "Gigaflare's Edge",
+    "time": 4083.9,
+    "duration": 8,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "十亿核爆剑",
+      "ja": "騎竜剣ギガフレア",
+      "ko": "기룡검 기가플레어"
+    },
+    "action_id": 28058,
+    "phase_index": 7,
+    "phase_time": 83.9,
+    "phase_name": ""
+  },
+  {
+    "id": "dsr-morn-afah",
+    "name": "Morn Afah's Edge",
+    "time": 4249.5,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "无尽顿悟剑",
+      "ja": "騎竜剣モーン・アファー",
+      "ko": "기룡검 몬 아파"
+    },
+    "action_id": 28208,
+    "phase_index": 7,
+    "phase_time": 249.5,
+    "phase_name": ""
+  }
+]

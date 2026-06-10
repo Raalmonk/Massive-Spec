@@ -266,7 +266,7 @@
     "show": false,
     "category": "RAID_MIT",
     "level": 96,
-    "display_slot": "astrologian-astrologian:helios",
+    "display_slot": "astrologian-astrologian:aspected-helios",
     "debug_tags": [
       "raid_cd"
     ]
@@ -294,7 +294,7 @@
     "cooldown": 0.0,
     "duration": 0.0,
     "color": "#FFE74A",
-    "load_order": 16,
+    "load_order": 18,
     "show": false,
     "category": "RAID_MIT",
     "level": 10,
@@ -454,13 +454,13 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#FFE74A",
-    "load_order": 28,
+    "load_order": 16,
     "show": false,
-    "category": "OTHER",
+    "category": "RAID_MIT",
     "level": 40,
-    "display_slot": "astrologian-astrologian:aspected helios",
+    "display_slot": "astrologian-astrologian:aspected-helios",
     "debug_tags": [
-      "other"
+      "raid_cd"
     ]
   },
   {

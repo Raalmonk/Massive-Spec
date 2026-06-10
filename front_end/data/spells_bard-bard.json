@@ -282,7 +282,7 @@
     "show": false,
     "category": "OTHER",
     "level": 25,
-    "display_slot": "bard-bard:wide volley",
+    "display_slot": "bard-bard:wide-volley",
     "debug_tags": [
       "other"
     ]
@@ -454,11 +454,11 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#91BA5E",
-    "load_order": 28,
+    "load_order": 17,
     "show": false,
     "category": "OTHER",
     "level": 72,
-    "display_slot": "bard-bard:shadowbite",
+    "display_slot": "bard-bard:wide-volley",
     "debug_tags": [
       "other"
     ]

@@ -26,7 +26,7 @@
     "show": true,
     "category": "MAJOR",
     "level": 100,
-    "display_slot": "summoner-summoner:summon solar bahamut",
+    "display_slot": "summoner-summoner:summon-bahamut",
     "debug_tags": [
       "dps"
     ]
@@ -38,11 +38,11 @@
     "cooldown": 60.0,
     "duration": 15.0,
     "color": "#2D9B78",
-    "load_order": 2,
+    "load_order": 1,
     "show": true,
     "category": "MAJOR",
     "level": 80,
-    "display_slot": "summoner-summoner:summon phoenix",
+    "display_slot": "summoner-summoner:summon-bahamut",
     "debug_tags": [
       "dps"
     ]
@@ -54,11 +54,11 @@
     "cooldown": 60.0,
     "duration": 15.0,
     "color": "#2D9B78",
-    "load_order": 3,
+    "load_order": 1,
     "show": true,
     "category": "MAJOR",
     "level": 70,
-    "display_slot": "summoner-summoner:summon bahamut",
+    "display_slot": "summoner-summoner:summon-bahamut",
     "debug_tags": [
       "dps"
     ]
@@ -74,7 +74,7 @@
     "show": true,
     "category": "MAJOR",
     "level": 90,
-    "display_slot": "summoner-summoner:summon ifrit ii",
+    "display_slot": "summoner-summoner:summon-ifrit",
     "debug_tags": [
       "dps"
     ]
@@ -90,7 +90,7 @@
     "show": true,
     "category": "MAJOR",
     "level": 90,
-    "display_slot": "summoner-summoner:summon titan ii",
+    "display_slot": "summoner-summoner:summon-titan",
     "debug_tags": [
       "dps"
     ]
@@ -106,7 +106,7 @@
     "show": true,
     "category": "MAJOR",
     "level": 90,
-    "display_slot": "summoner-summoner:summon garuda ii",
+    "display_slot": "summoner-summoner:summon-garuda",
     "debug_tags": [
       "dps"
     ]
@@ -246,13 +246,13 @@
     "cooldown": 60.0,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 15,
-    "show": false,
-    "category": "OTHER",
+    "load_order": 1,
+    "show": true,
+    "category": "MAJOR",
     "level": 6,
-    "display_slot": "summoner-summoner:aethercharge",
+    "display_slot": "summoner-summoner:summon-bahamut",
     "debug_tags": [
-      "other"
+      "dps"
     ]
   },
   {
@@ -262,13 +262,13 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 16,
-    "show": false,
-    "category": "OTHER",
+    "load_order": 4,
+    "show": true,
+    "category": "MAJOR",
     "level": 6,
-    "display_slot": "summoner-summoner:summon ruby",
+    "display_slot": "summoner-summoner:summon-ifrit",
     "debug_tags": [
-      "other"
+      "dps"
     ]
   },
   {
@@ -298,7 +298,7 @@
     "show": false,
     "category": "OTHER",
     "level": 6,
-    "display_slot": "summoner-summoner:ruby ruin",
+    "display_slot": "summoner-summoner:ruby-ruin",
     "debug_tags": [
       "other"
     ]
@@ -358,13 +358,13 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 22,
-    "show": false,
-    "category": "OTHER",
+    "load_order": 5,
+    "show": true,
+    "category": "MAJOR",
     "level": 15,
-    "display_slot": "summoner-summoner:summon topaz",
+    "display_slot": "summoner-summoner:summon-titan",
     "debug_tags": [
-      "other"
+      "dps"
     ]
   },
   {
@@ -378,7 +378,7 @@
     "show": false,
     "category": "OTHER",
     "level": 15,
-    "display_slot": "summoner-summoner:topaz ruin",
+    "display_slot": "summoner-summoner:topaz-ruin",
     "debug_tags": [
       "other"
     ]
@@ -390,13 +390,13 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 24,
-    "show": false,
-    "category": "OTHER",
+    "load_order": 6,
+    "show": true,
+    "category": "MAJOR",
     "level": 22,
-    "display_slot": "summoner-summoner:summon emerald",
+    "display_slot": "summoner-summoner:summon-garuda",
     "debug_tags": [
-      "other"
+      "dps"
     ]
   },
   {
@@ -410,7 +410,7 @@
     "show": false,
     "category": "OTHER",
     "level": 22,
-    "display_slot": "summoner-summoner:emerald ruin",
+    "display_slot": "summoner-summoner:emerald-ruin",
     "debug_tags": [
       "other"
     ]
@@ -458,7 +458,7 @@
     "show": false,
     "category": "OTHER",
     "level": 26,
-    "display_slot": "summoner-summoner:ruby outburst",
+    "display_slot": "summoner-summoner:ruby-outburst",
     "debug_tags": [
       "other"
     ]
@@ -474,7 +474,7 @@
     "show": false,
     "category": "OTHER",
     "level": 26,
-    "display_slot": "summoner-summoner:topaz outburst",
+    "display_slot": "summoner-summoner:topaz-outburst",
     "debug_tags": [
       "other"
     ]
@@ -490,7 +490,7 @@
     "show": false,
     "category": "OTHER",
     "level": 26,
-    "display_slot": "summoner-summoner:emerald outburst",
+    "display_slot": "summoner-summoner:emerald-outburst",
     "debug_tags": [
       "other"
     ]
@@ -502,11 +502,11 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 31,
+    "load_order": 12,
     "show": false,
     "category": "OTHER",
     "level": 30,
-    "display_slot": "summoner-summoner:ruin ii",
+    "display_slot": "summoner-summoner:ruin",
     "debug_tags": [
       "other"
     ]
@@ -518,13 +518,13 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 32,
-    "show": false,
-    "category": "OTHER",
+    "load_order": 4,
+    "show": true,
+    "category": "MAJOR",
     "level": 30,
-    "display_slot": "summoner-summoner:summon ifrit",
+    "display_slot": "summoner-summoner:summon-ifrit",
     "debug_tags": [
-      "other"
+      "dps"
     ]
   },
   {
@@ -534,11 +534,11 @@
     "cooldown": 3.0,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 33,
+    "load_order": 18,
     "show": false,
     "category": "OTHER",
     "level": 30,
-    "display_slot": "summoner-summoner:ruby ruin ii",
+    "display_slot": "summoner-summoner:ruby-ruin",
     "debug_tags": [
       "other"
     ]
@@ -550,11 +550,11 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 34,
+    "load_order": 23,
     "show": false,
     "category": "OTHER",
     "level": 30,
-    "display_slot": "summoner-summoner:topaz ruin ii",
+    "display_slot": "summoner-summoner:topaz-ruin",
     "debug_tags": [
       "other"
     ]
@@ -566,11 +566,11 @@
     "cooldown": 1.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 35,
+    "load_order": 25,
     "show": false,
     "category": "OTHER",
     "level": 30,
-    "display_slot": "summoner-summoner:emerald ruin ii",
+    "display_slot": "summoner-summoner:emerald-ruin",
     "debug_tags": [
       "other"
     ]
@@ -582,13 +582,13 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 36,
-    "show": false,
-    "category": "OTHER",
+    "load_order": 5,
+    "show": true,
+    "category": "MAJOR",
     "level": 35,
-    "display_slot": "summoner-summoner:summon titan",
+    "display_slot": "summoner-summoner:summon-titan",
     "debug_tags": [
-      "other"
+      "dps"
     ]
   },
   {
@@ -598,13 +598,13 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 37,
-    "show": false,
-    "category": "OTHER",
+    "load_order": 6,
+    "show": true,
+    "category": "MAJOR",
     "level": 45,
-    "display_slot": "summoner-summoner:summon garuda",
+    "display_slot": "summoner-summoner:summon-garuda",
     "debug_tags": [
-      "other"
+      "dps"
     ]
   },
   {
@@ -646,11 +646,11 @@
     "cooldown": 3.0,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 40,
+    "load_order": 18,
     "show": false,
     "category": "OTHER",
     "level": 54,
-    "display_slot": "summoner-summoner:ruby ruin iii",
+    "display_slot": "summoner-summoner:ruby-ruin",
     "debug_tags": [
       "other"
     ]
@@ -662,11 +662,11 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 41,
+    "load_order": 23,
     "show": false,
     "category": "OTHER",
     "level": 54,
-    "display_slot": "summoner-summoner:topaz ruin iii",
+    "display_slot": "summoner-summoner:topaz-ruin",
     "debug_tags": [
       "other"
     ]
@@ -678,11 +678,11 @@
     "cooldown": 1.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 42,
+    "load_order": 25,
     "show": false,
     "category": "OTHER",
     "level": 54,
-    "display_slot": "summoner-summoner:emerald ruin iii",
+    "display_slot": "summoner-summoner:emerald-ruin",
     "debug_tags": [
       "other"
     ]
@@ -694,13 +694,13 @@
     "cooldown": 60.0,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 43,
-    "show": false,
-    "category": "OTHER",
+    "load_order": 1,
+    "show": true,
+    "category": "MAJOR",
     "level": 58,
-    "display_slot": "summoner-summoner:dreadwyrm trance",
+    "display_slot": "summoner-summoner:summon-bahamut",
     "debug_tags": [
-      "other"
+      "dps"
     ]
   },
   {
@@ -810,7 +810,7 @@
     "show": false,
     "category": "OTHER",
     "level": 70,
-    "display_slot": "summoner-summoner:enkindle bahamut",
+    "display_slot": "summoner-summoner:enkindle",
     "debug_tags": [
       "other"
     ]
@@ -838,11 +838,11 @@
     "cooldown": 3.0,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 52,
+    "load_order": 18,
     "show": false,
     "category": "OTHER",
     "level": 72,
-    "display_slot": "summoner-summoner:ruby rite",
+    "display_slot": "summoner-summoner:ruby-ruin",
     "debug_tags": [
       "other"
     ]
@@ -854,11 +854,11 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 53,
+    "load_order": 23,
     "show": false,
     "category": "OTHER",
     "level": 72,
-    "display_slot": "summoner-summoner:topaz rite",
+    "display_slot": "summoner-summoner:topaz-ruin",
     "debug_tags": [
       "other"
     ]
@@ -870,11 +870,11 @@
     "cooldown": 1.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 54,
+    "load_order": 25,
     "show": false,
     "category": "OTHER",
     "level": 72,
-    "display_slot": "summoner-summoner:emerald rite",
+    "display_slot": "summoner-summoner:emerald-ruin",
     "debug_tags": [
       "other"
     ]
@@ -902,11 +902,11 @@
     "cooldown": 3.0,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 56,
+    "load_order": 28,
     "show": false,
     "category": "OTHER",
     "level": 74,
-    "display_slot": "summoner-summoner:ruby disaster",
+    "display_slot": "summoner-summoner:ruby-outburst",
     "debug_tags": [
       "other"
     ]
@@ -918,11 +918,11 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 57,
+    "load_order": 29,
     "show": false,
     "category": "OTHER",
     "level": 74,
-    "display_slot": "summoner-summoner:topaz disaster",
+    "display_slot": "summoner-summoner:topaz-outburst",
     "debug_tags": [
       "other"
     ]
@@ -934,11 +934,11 @@
     "cooldown": 1.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 58,
+    "load_order": 30,
     "show": false,
     "category": "OTHER",
     "level": 74,
-    "display_slot": "summoner-summoner:emerald disaster",
+    "display_slot": "summoner-summoner:emerald-outburst",
     "debug_tags": [
       "other"
     ]
@@ -982,11 +982,11 @@
     "cooldown": 20.0,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 61,
+    "load_order": 50,
     "show": false,
     "category": "OTHER",
     "level": 80,
-    "display_slot": "summoner-summoner:enkindle phoenix",
+    "display_slot": "summoner-summoner:enkindle",
     "debug_tags": [
       "other"
     ]
@@ -1046,11 +1046,11 @@
     "cooldown": 3.0,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 65,
+    "load_order": 28,
     "show": false,
     "category": "OTHER",
     "level": 82,
-    "display_slot": "summoner-summoner:ruby catastrophe",
+    "display_slot": "summoner-summoner:ruby-outburst",
     "debug_tags": [
       "other"
     ]
@@ -1062,11 +1062,11 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 66,
+    "load_order": 29,
     "show": false,
     "category": "OTHER",
     "level": 82,
-    "display_slot": "summoner-summoner:topaz catastrophe",
+    "display_slot": "summoner-summoner:topaz-outburst",
     "debug_tags": [
       "other"
     ]
@@ -1078,11 +1078,11 @@
     "cooldown": 1.5,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 67,
+    "load_order": 30,
     "show": false,
     "category": "OTHER",
     "level": 82,
-    "display_slot": "summoner-summoner:emerald catastrophe",
+    "display_slot": "summoner-summoner:emerald-outburst",
     "debug_tags": [
       "other"
     ]
@@ -1238,11 +1238,11 @@
     "cooldown": 20.0,
     "duration": 0.0,
     "color": "#2D9B78",
-    "load_order": 77,
+    "load_order": 50,
     "show": false,
     "category": "OTHER",
     "level": 100,
-    "display_slot": "summoner-summoner:enkindle solar bahamut",
+    "display_slot": "summoner-summoner:enkindle",
     "debug_tags": [
       "other"
     ]

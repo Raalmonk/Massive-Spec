@@ -106,7 +106,7 @@
     "show": false,
     "category": "SINGLE_MIT",
     "level": 82,
-    "display_slot": "samurai-samurai:tengentsu",
+    "display_slot": "samurai-samurai:third-eye",
     "debug_tags": [
       "defensive"
     ]
@@ -166,13 +166,13 @@
     "cooldown": 15.0,
     "duration": 0.0,
     "color": "#E46D04",
-    "load_order": 10,
+    "load_order": 6,
     "show": false,
-    "category": "OTHER",
+    "category": "SINGLE_MIT",
     "level": 6,
-    "display_slot": "samurai-samurai:third eye",
+    "display_slot": "samurai-samurai:third-eye",
     "debug_tags": [
-      "other"
+      "defensive"
     ]
   },
   {

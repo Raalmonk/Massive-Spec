@@ -266,7 +266,7 @@
     "show": false,
     "category": "OTHER",
     "level": 40,
-    "display_slot": "dragoon-dragoon:doom spike",
+    "display_slot": "dragoon-dragoon:doom-spike",
     "debug_tags": [
       "other"
     ]
@@ -470,11 +470,11 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#4164CD",
-    "load_order": 29,
+    "load_order": 16,
     "show": false,
     "category": "OTHER",
     "level": 82,
-    "display_slot": "dragoon-dragoon:draconian fury",
+    "display_slot": "dragoon-dragoon:doom-spike",
     "debug_tags": [
       "other"
     ]

@@ -266,7 +266,7 @@
     "show": false,
     "category": "OTHER",
     "level": 15,
-    "display_slot": "redmage-redmage:scatter",
+    "display_slot": "redmage-redmage:impact",
     "debug_tags": [
       "other"
     ]
@@ -454,7 +454,7 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#E87B7B",
-    "load_order": 28,
+    "load_order": 16,
     "show": false,
     "category": "OTHER",
     "level": 66,
@@ -614,7 +614,7 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#E87B7B",
-    "load_order": 28,
+    "load_order": 16,
     "show": false,
     "category": "OTHER",
     "level": 96,

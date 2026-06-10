@@ -470,11 +470,11 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#CF2621",
-    "load_order": 29,
+    "load_order": 20,
     "show": false,
     "category": "OTHER",
     "level": 72,
-    "display_slot": "warrior-warrior:chaotic cyclone",
+    "display_slot": "warrior-warrior:steel-cyclone",
     "debug_tags": [
       "other"
     ]
@@ -486,11 +486,11 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#CF2621",
-    "load_order": 30,
+    "load_order": 17,
     "show": false,
     "category": "OTHER",
     "level": 80,
-    "display_slot": "warrior-warrior:inner chaos",
+    "display_slot": "warrior-warrior:inner-beast",
     "debug_tags": [
       "other"
     ]

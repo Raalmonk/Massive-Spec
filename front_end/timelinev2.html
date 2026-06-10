@@ -98,9 +98,10 @@
         const JOB_COLOR_RDM = '#E87B7B';
         const FIGHT_DURATION = 1200; // Increased to 10 minutes (600s) to fix the "7 minute" overflow issue
         const API_BASE = '';
-        const LEFT_PANEL_WIDTH = 260; 
+        const LEFT_PANEL_WIDTH = 260;
+        const LEFT_PANEL_COLLAPSED_WIDTH = 46;
         const DRAG_THRESHOLD = 6;
-        const MIN_VISIBLE_MINUTES = 1;
+        const MIN_VISIBLE_MINUTES = 0.25;
         const MAX_VISIBLE_MINUTES = 21;
         const DEFAULT_VISIBLE_MINUTES = 6;
         const LIMIT_BREAK_ICON = './images/spells/Limit_Break.png';
@@ -207,7 +208,12 @@
                 hideAllSpells: 'Hide all spells',
                 duration: 'Duration',
                 cooldown: 'Cooldown',
+                skillTimeLabels: 'Skill time labels',
                 phases: 'Phases',
+                alignPhase: 'Align rows to this phase',
+                clearPhaseAlignment: 'Clear phase alignment',
+                collapseLeftPanel: 'Collapse left panel',
+                expandLeftPanel: 'Expand left panel',
                 showBossRow: 'Toggle Boss Row',
                 category_cd: 'CD',
                 category_single_mit: 'Single Mit',
@@ -306,7 +312,12 @@
                 hideAllSpells: '隐藏所有技能',
                 duration: '持续时间',
                 cooldown: 'CD',
+                skillTimeLabels: '技能时间',
                 phases: '阶段',
+                alignPhase: '按此阶段对齐',
+                clearPhaseAlignment: '取消阶段对齐',
+                collapseLeftPanel: '折叠左栏',
+                expandLeftPanel: '展开左栏',
                 showBossRow: '切换 Boss 行',
                 category_cd: 'CD',
                 category_single_mit: '单减',
@@ -405,7 +416,12 @@
                 hideAllSpells: '全スキル非表示',
                 duration: '持続',
                 cooldown: 'CD',
+                skillTimeLabels: 'スキル時刻',
                 phases: 'フェーズ',
+                alignPhase: 'このフェーズで揃える',
+                clearPhaseAlignment: 'フェーズ揃えを解除',
+                collapseLeftPanel: '左パネルを折りたたむ',
+                expandLeftPanel: '左パネルを展開',
                 showBossRow: 'Boss 行を切替',
                 category_cd: 'CD',
                 category_single_mit: '単体軽減',
@@ -504,7 +520,12 @@
                 hideAllSpells: '모든 스킬 숨김',
                 duration: '지속',
                 cooldown: 'CD',
+                skillTimeLabels: '스킬 시간',
                 phases: '페이즈',
+                alignPhase: '이 페이즈로 정렬',
+                clearPhaseAlignment: '페이즈 정렬 해제',
+                collapseLeftPanel: '왼쪽 패널 접기',
+                expandLeftPanel: '왼쪽 패널 펼치기',
                 showBossRow: 'Boss 행 전환',
                 category_cd: 'CD',
                 category_single_mit: '단일 생존기',
@@ -699,6 +720,15 @@
                 return Number(a.id || a.spell_id || 0) - Number(b.id || b.spell_id || 0);
             });
         };
+        const markSpellRepresentativesForContentLevel = (spellList, contentLevel) => {
+            const representatives = new Set(filterSpellListForContentLevel(spellList, contentLevel).map(spell => Number(spell.id || spell.spell_id)));
+            return (spellList || [])
+                .filter(spell => Number(spell.level || 0) <= contentLevel)
+                .map(spell => ({
+                    ...spell,
+                    is_display_representative: representatives.has(Number(spell.id || spell.spell_id))
+                }));
+        };
         const translate = (language, key) => I18N[language]?.[key] || I18N.en[key] || key;
         const translateWithValues = (language, key, values = {}) => (
             Object.entries(values).reduce(
@@ -745,7 +775,7 @@
                 const spellMap = {};
                 const list = Array.isArray(data) ? data : Object.values(data);
                 const contentLevel = getBossContentLevel(bossSlug);
-                const visibleList = filterSpellListForContentLevel(list, contentLevel);
+                const visibleList = markSpellRepresentativesForContentLevel(list, contentLevel);
 
                 visibleList.forEach((spell) => {
                     spellMap[spell.spell_id] = {
@@ -759,7 +789,8 @@
                         show: (spell.show !== undefined && spell.show !== null) ? spell.show : true,
                         load_order: (spell.load_order !== undefined) ? spell.load_order : 9999,
                         level: Number(spell.level || 0),
-                        display_slot: spell.display_slot || ""
+                        display_slot: spell.display_slot || "",
+                        is_display_representative: spell.is_display_representative !== false
                     };
                 });
                 return spellMap;
@@ -954,7 +985,7 @@
             },
             ko: {
                 'vamp-fatale': 'M9S: 뱀프 파탈',
-                'red-hot-and-deep-blue': 'M10S: 레드 핫 / 딥 블루',
+                'red-hot-and-deep-blue': 'M10S: 레드 핫과 딥 블루',
                 'the-tyrant': 'M11S: 더 타이런트',
                 'lindwurm': 'M12S P1: 린드블룸',
                 'lindwurm-ii': 'M12S P2: 린드블룸',
@@ -1026,8 +1057,57 @@
             );
         };
 
-        const getDefaultSelectedSpellIds = (spellMap, categories) => (
-            Object.values(spellMap)
+        const getDisplaySpells = (spellMap) => (
+            Object.values(spellMap || {}).filter(spell => spell.is_display_representative !== false)
+        );
+
+        const getSpellSlotIds = (spellMap, spellOrSlot) => {
+            const slot = typeof spellOrSlot === "string" ? spellOrSlot : getSpellDisplaySlot(spellOrSlot);
+            return Object.values(spellMap || {})
+                .filter(spell => getSpellDisplaySlot(spell) === slot)
+                .map(spell => Number(spell.id));
+        };
+
+        const isSpellSlotSelected = (spellMap, selectedIds, spell) => {
+            const selectedIdSet = selectedIds instanceof Set ? selectedIds : new Set(selectedIds || []);
+            return getSpellSlotIds(spellMap, spell).some(id => selectedIdSet.has(Number(id)));
+        };
+
+        const getSelectedDisplaySpellCount = (spellMap, selectedIds, category = null) => (
+            getDisplaySpells(spellMap)
+                .filter(spell => (!category || spell.category === category) && isSpellSlotSelected(spellMap, selectedIds, spell))
+                .length
+        );
+
+        const setSpellSlotSelected = (currentIds, spellMap, spell, selected) => {
+            const next = new Set(currentIds || []);
+            getSpellSlotIds(spellMap, spell).forEach(id => {
+                if (selected) next.add(Number(id)); else next.delete(Number(id));
+            });
+            return next;
+        };
+
+        const toggleSpellSlot = (currentIds, spellMap, spell) => (
+            setSpellSlotSelected(currentIds, spellMap, spell, !isSpellSlotSelected(spellMap, currentIds, spell))
+        );
+
+        const expandSelectedSpellSlots = (selectedIds, spellMap) => {
+            let expanded = new Set();
+            const selectedIdSet = selectedIds instanceof Set ? selectedIds : new Set(selectedIds || []);
+            selectedIdSet.forEach(id => {
+                const spell = spellMap?.[id] || spellMap?.[String(id)];
+                if (spell) {
+                    expanded = setSpellSlotSelected(expanded, spellMap, spell, true);
+                } else {
+                    expanded.add(Number(id));
+                }
+            });
+            return expanded;
+        };
+
+        const getDefaultSelectedSpellIds = (spellMap, categories) => {
+            let selectedIds = new Set();
+            getDisplaySpells(spellMap)
                 .filter(s => {
                     if (s.show !== null && s.show !== undefined) {
                         return s.show;
@@ -1035,8 +1115,11 @@
                     const cat = categories[s.category];
                     return cat ? cat.defaultActive : true;
                 })
-                .map(s => Number(s.id))
-        );
+                .forEach(spell => {
+                    selectedIds = setSpellSlotSelected(selectedIds, spellMap, spell, true);
+                });
+            return [...selectedIds];
+        };
 
         const getSelectedSpellSlots = (spellMap, selectedIds) => {
             const selectedIdSet = selectedIds instanceof Set ? selectedIds : new Set(selectedIds || []);
@@ -1062,7 +1145,10 @@
                 const raw = localStorage.getItem(getSpellSelectionStorageKey(specSlug));
                 if (raw === null) return null;
                 const validIds = new Set(Object.values(spellMap).map(spell => Number(spell.id)));
-                return new Set(JSON.parse(raw).map(Number).filter(id => validIds.has(id)));
+                return expandSelectedSpellSlots(
+                    JSON.parse(raw).map(Number).filter(id => validIds.has(id)),
+                    spellMap
+                );
             } catch (error) {
                 console.warn("[M-Spec] Could not read stored spell selection.", error);
                 return null;
@@ -1254,10 +1340,28 @@
                     duration: base.duration !== undefined ? base.duration : (spell.duration || 0),
                     cd: base.cd !== undefined ? base.cd : (spell.cd || 0),
                     level: base.level !== undefined ? base.level : (spell.level || 0),
-                    display_slot: base.display_slot || spell.display_slot || ""
+                    display_slot: base.display_slot || spell.display_slot || "",
+                    is_display_representative: base.is_display_representative !== undefined
+                        ? base.is_display_representative
+                        : spell.is_display_representative !== false
                 };
             });
             return merged;
+        };
+
+        const markSpellMapRepresentativesForContentLevel = (spellMap, contentLevel) => {
+            const marked = markSpellRepresentativesForContentLevel(
+                Object.values(spellMap || {}).map(spell => ({
+                    ...spell,
+                    id: Number(spell.id || spell.spell_id),
+                    spell_id: Number(spell.spell_id || spell.id)
+                })),
+                contentLevel
+            );
+            return Object.fromEntries(marked.map(spell => {
+                const id = Number(spell.id || spell.spell_id);
+                return [id, { ...spell, id, spell_id: id }];
+            }));
         };
 
         const hexToRgba = (hex, alpha) => {
@@ -1294,8 +1398,10 @@
 
         const supportsBuddy = (specSlug) => {
             const role = getRole(specSlug);
-            return role === 'tank' || role === 'healer';
+            return role === 'tank' || role === 'healer' || specSlug === 'dancer-dancer';
         };
+
+        const getAllPlayableSpecs = () => SPECS.flatMap(group => group.items).filter(spec => !spec.combined);
 
         const getSpecsForDetailedRole = (role) => {
             const groupLabel = role === 'tank' ? 'Tanks' : role === 'healer' ? 'Healers' : '';
@@ -1306,6 +1412,7 @@
         const getBuddySpecOptions = (specSlug) => {
             const role = getRole(specSlug);
             if (!supportsBuddy(specSlug)) return [];
+            if (specSlug === 'dancer-dancer') return [];
             return getSpecsForDetailedRole(role).filter(spec => spec.id !== specSlug);
         };
 
@@ -1317,6 +1424,7 @@
 
         const findBuddyPlayer = (player, fightPlayers, specSlug) => {
             if (!supportsBuddy(specSlug)) return null;
+            if (specSlug === 'dancer-dancer') return null;
             const role = getRole(specSlug);
             const playerSourceId = Number(player.source_id || 0);
             const candidates = (fightPlayers || []).filter(candidate => (
@@ -1494,8 +1602,34 @@
                         const myDetailedRole = getDetailedRole(specSlug);
                         const fightPlayers = playersByFight.get(player.fightKey) || [];
                         const buddyPlayer = findBuddyPlayer(player, fightPlayers, specSlug);
+                        const makeBuddy = (buddySource, buddyMeta = {}) => ({
+                            sourceId: buddySource.source_id,
+                            name: buddySource.name,
+                            classSlug: buddySource.class_slug,
+                            specSlug: buddySource.spec_slug,
+                            icon: getIconForSpec(buddySource.spec_slug),
+                            dps: buddySource.total || 0,
+                            region: player.region || '??',
+                            casts: normalizeCasts(buddySource.casts, {}, buddySource.spec_slug, buddySource.name),
+                            deaths: buddySource.deaths || [],
+                            dancePartner: buddyMeta
+                        });
+                        const dancePartnerBuddies = specSlug === 'dancer-dancer'
+                            ? (player.dance_partners || [])
+                                .map(partnerInfo => {
+                                    const sourceId = Number(partnerInfo.source_id || 0);
+                                    const partner = fightPlayers.find(candidate => Number(candidate.source_id || 0) === sourceId);
+                                    return partner ? makeBuddy(partner, partnerInfo) : null;
+                                })
+                                .filter(Boolean)
+                            : [];
 
-                        if (buddyPlayer) {
+                        if (dancePartnerBuddies.length) {
+                            const iconName = getIconForSpec(dancePartnerBuddies[0].specSlug);
+                            if (iconName) {
+                                partnerIcon = `./images/classes/${iconName}`;
+                            }
+                        } else if (buddyPlayer) {
                             const iconName = getIconForSpec(buddyPlayer.spec_slug);
                             if (iconName) {
                                 partnerIcon = `./images/classes/${iconName}`;
@@ -1541,17 +1675,8 @@
                             mrt: p.mrt || ""
                         })),
                         casts: normalizeCasts(player.casts, spellMap),
-                        buddy: buddyPlayer ? {
-                            sourceId: buddyPlayer.source_id,
-                            name: buddyPlayer.name,
-                            classSlug: buddyPlayer.class_slug,
-                            specSlug: buddyPlayer.spec_slug,
-                            icon: getIconForSpec(buddyPlayer.spec_slug),
-                            dps: buddyPlayer.total || 0,
-                            region: player.region || '??',
-                            casts: normalizeCasts(buddyPlayer.casts),
-                            deaths: buddyPlayer.deaths || []
-                        } : null,
+                        buddy: dancePartnerBuddies[0] || (buddyPlayer ? makeBuddy(buddyPlayer) : null),
+                        buddies: dancePartnerBuddies.length ? dancePartnerBuddies : (buddyPlayer ? [makeBuddy(buddyPlayer)] : []),
                         deaths: player.deaths || [] 
                     };
                 });
@@ -1582,7 +1707,12 @@
                 'lindwurm': 'm12s_p1',
                 'lindwurm-ii': 'm12s_p2',
                 'futures-rewritten': 'futures_rewritten',
-                'dancing-mad': 'dancing_mad'
+                'dancing-mad': 'dancing_mad',
+                'the-unending-coil-of-bahamut': 'the_unending_coil_of_bahamut',
+                'the-weapons-refrain': 'the_weapons_refrain',
+                'the-epic-of-alexander': 'the_epic_of_alexander',
+                'dragonsongs-reprise': 'dragonsongs_reprise',
+                'the-omega-protocol': 'the_omega_protocol'
             };
 
             const fileName = fileMapping[bossSlug] || bossSlug;
@@ -1609,6 +1739,10 @@
                         color: getBossTimelineColor(type, spell.color),
                         icon: spell.icon ? `./images/spells/${spell.icon}` : null,
                         name_i18n: spell.name_i18n || {},
+                        actionId: spell.action_id || spell.actionId || null,
+                        phaseIndex: spell.phase_index === null || spell.phase_index === undefined ? null : Number(spell.phase_index),
+                        phaseTime: spell.phase_time === null || spell.phase_time === undefined ? null : Number(spell.phase_time),
+                        phaseName: spell.phase_name || spell.phaseName || "",
                         type
                     };
                 }).sort((a, b) => a.time - b.time);
@@ -2002,6 +2136,8 @@
 
             const [zoom, setZoom] = useState(getInitialZoom);
             const [isCollapsed, setIsCollapsed] = useState(true); 
+            const [leftPanelCollapsed, setLeftPanelCollapsed] = useState(() => (window.innerWidth || 1280) < 720);
+            const leftPanelWidth = leftPanelCollapsed ? LEFT_PANEL_COLLAPSED_WIDTH : LEFT_PANEL_WIDTH;
             
             // NEW: Highlighted Row State (MULTI-SELECT)
             const [selectedRowIds, setSelectedRowIds] = useState(new Set());
@@ -2043,8 +2179,10 @@
 
             const [showDuration, setShowDuration] = useState(true);
             const [showCooldown, setShowCooldown] = useState(false);
+            const [showSkillTimes, setShowSkillTimes] = useState(true);
             
             const [showPhases, setShowPhases] = useState(true);
+            const [phaseAlignIndex, setPhaseAlignIndex] = useState(null);
             const [showBossRow, setShowBossRow] = useState(true);
             const [showLimitBreak, setShowLimitBreak] = useState(true);
             const [bossTimelineTypeVisibility, setBossTimelineTypeVisibility] = useState({
@@ -2103,7 +2241,7 @@
 
             const spellsByCategory = useMemo(() => {
                 const grouped = {};
-                Object.values(spells)
+                getDisplaySpells(spells)
                     .sort((a, b) => a.load_order - b.load_order)
                     .forEach(spell => {
                         const category = spell.category || "MAJOR";
@@ -2114,9 +2252,25 @@
             }, [spells]);
 
             const isCombined = isCombinedSpec(selectedSpec);
+            const dancerBuddySpecOptions = useMemo(() => {
+                if (selectedSpec !== 'dancer-dancer') return [];
+                const seen = new Set();
+                rankData.forEach(row => {
+                    (row.buddies || (row.buddy ? [row.buddy] : [])).forEach(buddy => {
+                        if (buddy?.specSlug && buddy.specSlug !== selectedSpec) {
+                            seen.add(buddy.specSlug);
+                        }
+                    });
+                });
+                return [...seen].map(getSpecInfo).filter(Boolean);
+            }, [selectedSpec, rankData]);
             const buddySpecOptions = useMemo(
-                () => isCombinedSpec(selectedSpec) ? getCombinedSpecOptions(selectedSpec) : getBuddySpecOptions(selectedSpec),
-                [selectedSpec]
+                () => {
+                    if (isCombinedSpec(selectedSpec)) return getCombinedSpecOptions(selectedSpec);
+                    if (selectedSpec === 'dancer-dancer') return dancerBuddySpecOptions;
+                    return getBuddySpecOptions(selectedSpec);
+                },
+                [selectedSpec, dancerBuddySpecOptions]
             );
             const isBuddySupported = supportsBuddy(selectedSpec);
             const buddySpellColorMaps = useMemo(() => {
@@ -2154,7 +2308,11 @@
                     const combinedConfig = getCombinedConfig(selectedSpec);
                     const sps = combinedConfig ? {} : await fetchSpellData(selectedSpec, selectedBoss);
                     const mechs = await fetchBossMechanics(selectedBoss);
-                    const partySpecOptions = combinedConfig ? getCombinedSpecOptions(selectedSpec) : getBuddySpecOptions(selectedSpec);
+                    const partySpecOptions = combinedConfig
+                        ? getCombinedSpecOptions(selectedSpec)
+                        : (selectedSpec === 'dancer-dancer'
+                            ? getAllPlayableSpecs().filter(spec => spec.id !== selectedSpec)
+                            : getBuddySpecOptions(selectedSpec));
                     const buddyEntries = await Promise.all(
                         partySpecOptions.map(async spec => [spec.id, await fetchSpellData(spec.id, selectedBoss)])
                     );
@@ -2261,18 +2419,21 @@
             }, [toggleFocusedSpell]);
 
             const toggleSpell = (spellId) => {
-                const newSet = new Set(selectedSpells);
-                if (newSet.has(spellId)) newSet.delete(spellId); else newSet.add(spellId);
+                const spell = spells[spellId];
+                if (!spell) return;
+                const newSet = toggleSpellSlot(selectedSpells, spells, spell);
                 writeStoredSpellSelection(selectedSpec, newSet, spells);
                 setSelectedSpells(newSet);
             };
 
             const toggleCategory = (catKey) => {
-                const spellsInCat = Object.values(spells).filter(s => s.category === catKey);
-                const allSelected = spellsInCat.every(s => selectedSpells.has(s.id));
+                const spellsInCat = getDisplaySpells(spells).filter(s => s.category === catKey);
+                const allSelected = spellsInCat.every(s => isSpellSlotSelected(spells, selectedSpells, s));
                 const newSet = new Set(selectedSpells);
                 spellsInCat.forEach(s => {
-                    if (allSelected) newSet.delete(s.id); else newSet.add(s.id);
+                    getSpellSlotIds(spells, s).forEach(id => {
+                        if (allSelected) newSet.delete(id); else newSet.add(id);
+                    });
                 });
                 writeStoredSpellSelection(selectedSpec, newSet, spells);
                 setSelectedSpells(newSet);
@@ -2287,32 +2448,35 @@
                     setSelectedSpells(newSet);
                 } else {
                     // Show All
-                    const allIds = Object.values(spells).map(s => s.id);
+                    const allIds = Object.values(spells).map(s => Number(s.id));
                     const newSet = new Set(allIds);
                     writeStoredSpellSelection(selectedSpec, newSet, spells);
                     setSelectedSpells(newSet);
                 }
             };
 
-            const toggleImportedSpell = (rowId, spellId) => {
+            const toggleImportedSpell = (rowId, spellMap, spellId) => {
                 setImportedSpellSelections(prev => {
                     const current = new Set(prev[rowId] || []);
-                    const id = Number(spellId);
-                    if (current.has(id)) current.delete(id); else current.add(id);
+                    const spell = spellMap?.[spellId] || spellMap?.[String(spellId)];
+                    if (!spell) return prev;
+                    const nextSelection = toggleSpellSlot(current, spellMap, spell);
                     const next = { ...prev, [rowId]: current };
+                    next[rowId] = nextSelection;
                     writeStoredImportedLogs(selectedBoss, importedRows, next);
                     return next;
                 });
             };
 
             const toggleImportedCategory = (rowId, spellMap, catKey) => {
-                const spellsInCat = Object.values(spellMap).filter(s => s.category === catKey);
+                const spellsInCat = getDisplaySpells(spellMap).filter(s => s.category === catKey);
                 setImportedSpellSelections(prev => {
                     const current = new Set(prev[rowId] || []);
-                    const allSelected = spellsInCat.every(s => current.has(Number(s.id)));
+                    const allSelected = spellsInCat.every(s => isSpellSlotSelected(spellMap, current, s));
                     spellsInCat.forEach(s => {
-                        const id = Number(s.id);
-                        if (allSelected) current.delete(id); else current.add(id);
+                        getSpellSlotIds(spellMap, s).forEach(id => {
+                            if (allSelected) current.delete(id); else current.add(id);
+                        });
                     });
                     const next = { ...prev, [rowId]: current };
                     writeStoredImportedLogs(selectedBoss, importedRows, next);
@@ -2333,22 +2497,25 @@
             const toggleBuddySpell = (specSlug, spellId) => {
                 setBuddySpellSelections(prev => {
                     const current = new Set(prev[specSlug] || []);
-                    const id = Number(spellId);
-                    if (current.has(id)) current.delete(id); else current.add(id);
-                    writeStoredSpellSelection(specSlug, current, buddySpellMaps[specSlug] || {});
-                    return { ...prev, [specSlug]: current };
+                    const spellMap = buddySpellMaps[specSlug] || {};
+                    const spell = spellMap[spellId];
+                    if (!spell) return prev;
+                    const next = toggleSpellSlot(current, spellMap, spell);
+                    writeStoredSpellSelection(specSlug, next, spellMap);
+                    return { ...prev, [specSlug]: next };
                 });
             };
 
             const toggleBuddyCategory = (specSlug, catKey) => {
                 const spellMap = buddySpellMaps[specSlug] || {};
-                const spellsInCat = Object.values(spellMap).filter(s => s.category === catKey);
+                const spellsInCat = getDisplaySpells(spellMap).filter(s => s.category === catKey);
                 setBuddySpellSelections(prev => {
                     const current = new Set(prev[specSlug] || []);
-                    const allSelected = spellsInCat.every(s => current.has(Number(s.id)));
+                    const allSelected = spellsInCat.every(s => isSpellSlotSelected(spellMap, current, s));
                     spellsInCat.forEach(s => {
-                        const id = Number(s.id);
-                        if (allSelected) current.delete(id); else current.add(id);
+                        getSpellSlotIds(spellMap, s).forEach(id => {
+                            if (allSelected) current.delete(id); else current.add(id);
+                        });
                     });
                     writeStoredSpellSelection(specSlug, current, spellMap);
                     return { ...prev, [specSlug]: current };
@@ -2555,7 +2722,7 @@
             };
 
             const getVisibleTimelineWidth = () => (
-                Math.max(320, (scrollContainerRef.current?.clientWidth || window.innerWidth) - LEFT_PANEL_WIDTH - 12)
+                Math.max(240, (scrollContainerRef.current?.clientWidth || window.innerWidth) - leftPanelWidth - 12)
             );
             const clampVisibleMinutes = (minutes) => Math.max(
                 MIN_VISIBLE_MINUTES,
@@ -2570,7 +2737,7 @@
             };
             const adjustVisibleMinutes = (direction) => setZoom(prev => {
                 const current = getVisibleMinutesForZoom(prev);
-                const step = current < 5 ? 0.25 : 1;
+                const step = current <= 1 ? 0.05 : (current < 5 ? 0.25 : 1);
                 return clampZoom(getZoomForVisibleMinutes(current + direction * step));
             });
             const handleZoomIn = () => adjustVisibleMinutes(-1);
@@ -2582,6 +2749,9 @@
                 } catch (e) {}
             }, [sliderVisibleMinutes]);
             const formatTime = (s) => `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
+            const formatVisibleRange = (minutes) => minutes < 1
+                ? `${Math.round(minutes * 60)}s visible`
+                : `${minutes.toFixed(1)} min visible`;
             const displayToggleClass = (active) =>
                 `h-6 min-w-10 px-2 flex items-center justify-center rounded-sm border text-[10px] font-black font-mono uppercase transition-colors ${
                     active
@@ -2599,18 +2769,42 @@
             };
 
             const tickSettings = useMemo(() => getTickSettings(zoom), [zoom]);
+            const timelinePhases = useMemo(() => {
+                const nativePhaseRow = rankData.find(row => row.phases && row.phases.length)
+                    || importedRows.find(row => row.phases && row.phases.length);
+                if (nativePhaseRow) return nativePhaseRow.phases;
+
+                return bossMechanics
+                    .filter(m => m.type === "phase" || m.type === "window")
+                    .map(m => ({
+                        name: m.name,
+                        timestamp: m.time,
+                        color: m.color
+                    }));
+            }, [rankData, importedRows, bossMechanics]);
+            const resolveBossTimelineTimestamp = useCallback((mechanic, phases = timelinePhases) => {
+                const phaseIndex = Number.isInteger(mechanic.phaseIndex) ? mechanic.phaseIndex : null;
+                const phaseTime = Number.isFinite(mechanic.phaseTime) ? mechanic.phaseTime : null;
+                const phase = phaseIndex === null ? null : (phases || [])[phaseIndex];
+                if (phase && phaseTime !== null) {
+                    return Number(phase.timestamp || 0) + phaseTime;
+                }
+                return Number(mechanic.time || 0);
+            }, [timelinePhases]);
             const timelineDuration = useMemo(() => {
                 const killTimes = rankData.map(row => row.killTimeSeconds || 0);
                 const importedKillTimes = importedRows.map(row => row.killTimeSeconds || 0);
-                const mechanicEnds = bossMechanics.map(m => (m.time || 0) + (m.duration || 0));
+                const mechanicEnds = bossMechanics.map(m => resolveBossTimelineTimestamp(m) + (m.duration || 0));
                 const importedCastEnds = importedRows.flatMap(row => row.casts.map(cast => (cast.timestamp || 0) + (cast.duration || 0)));
-                const buddyCastEnds = (showBuddy || isCombined) ? rankData.flatMap(row => (row.buddy?.casts || []).map(cast => {
-                    const buddySpellMap = buddySpellMaps[row.buddy.specSlug] || {};
+                const buddyCastEnds = (showBuddy || isCombined) ? rankData.flatMap(row => (
+                    row.buddies || (row.buddy ? [row.buddy] : [])
+                ).flatMap(buddy => (buddy.casts || []).map(cast => {
+                    const buddySpellMap = buddySpellMaps[buddy.specSlug] || {};
                     const spell = buddySpellMap[cast.spellId] || {};
                     return (cast.timestamp || 0) + (cast.duration || spell.duration || 0);
-                })) : [];
+                }))) : [];
                 return Math.max(FIGHT_DURATION, ...killTimes, ...importedKillTimes, ...mechanicEnds, ...importedCastEnds, ...buddyCastEnds) + 30;
-            }, [rankData, bossMechanics, importedRows, buddySpellMaps, showBuddy, isCombined]);
+            }, [rankData, bossMechanics, importedRows, buddySpellMaps, showBuddy, isCombined, resolveBossTimelineTimestamp]);
             const timelineWidth = timelineDuration * zoom;
             const rowGridStyle = useMemo(() => ({
                 backgroundImage: "linear-gradient(to right, rgba(31,41,55,0.2) 1px, transparent 1px)",
@@ -2622,21 +2816,30 @@
                     m.type !== "phase"
                     && m.type !== "window"
                     && bossTimelineTypeVisibility[normalizeBossTimelineType(m.type)]
-                )),
-                [bossMechanics, bossTimelineTypeVisibility]
+                )).map(m => ({
+                    ...m,
+                    displayTime: resolveBossTimelineTimestamp(m)
+                })).sort((a, b) => a.displayTime - b.displayTime),
+                [bossMechanics, bossTimelineTypeVisibility, resolveBossTimelineTimestamp]
             );
-            const timelinePhases = useMemo(() => {
-                const nativePhaseRow = rankData.find(row => row.phases && row.phases.length);
-                if (nativePhaseRow) return nativePhaseRow.phases;
-
-                return bossMechanics
-                    .filter(m => m.type === "phase" || m.type === "window")
-                    .map(m => ({
-                        name: m.name,
-                        timestamp: m.time,
-                        color: m.color
-                    }));
-            }, [rankData, bossMechanics]);
+            const getPhaseAnchorTimestamp = useCallback((phases, phaseIndex) => {
+                if (phaseIndex === null || phaseIndex === undefined) return 0;
+                const phase = (phases || [])[phaseIndex];
+                return Number(phase?.timestamp || 0);
+            }, []);
+            const getPhaseOffset = useCallback((phases) => {
+                if (phaseAlignIndex === null) return 0;
+                const rowAnchor = getPhaseAnchorTimestamp(phases, phaseAlignIndex);
+                const rulerAnchor = getPhaseAnchorTimestamp(timelinePhases, phaseAlignIndex);
+                if (!rowAnchor && phaseAlignIndex > 0) return 0;
+                return rowAnchor - rulerAnchor;
+            }, [phaseAlignIndex, timelinePhases, getPhaseAnchorTimestamp]);
+            const getAlignedLeft = useCallback((timestamp, phases) => (
+                `${(Number(timestamp || 0) - getPhaseOffset(phases)) * zoom}px`
+            ), [getPhaseOffset, zoom]);
+            const togglePhaseAlignment = useCallback((phaseIndex) => {
+                setPhaseAlignIndex(prev => prev === phaseIndex ? null : phaseIndex);
+            }, []);
 
             const onMouseDown = useCallback((e) => {
                 if (e.button !== 0 || !scrollContainerRef.current) return;
@@ -3063,6 +3266,7 @@
                             </button>
                             <button title={t("duration")} onClick={() => setShowDuration(!showDuration)} className={displayToggleClass(showDuration)}>{t("duration")}</button>
                             <button title={t("cooldown")} onClick={() => setShowCooldown(!showCooldown)} className={displayToggleClass(showCooldown)}>CD</button>
+                            <button title={t("skillTimeLabels")} onClick={() => setShowSkillTimes(!showSkillTimes)} className={displayToggleClass(showSkillTimes)}>TM</button>
                         
                             <button title={t("phases")} onClick={() => setShowPhases(!showPhases)} className={displayToggleClass(showPhases)}>{t("phases")}</button>
                         </div>
@@ -3079,7 +3283,7 @@
                         {!isCombined && Object.entries(spellCategories).map(([catKey, category]) => {
                             const categorySpells = spellsByCategory[catKey] || [];
                             if (catKey === "OTHER") {
-                                const selectedOtherCount = categorySpells.filter(spell => selectedSpells.has(spell.id)).length;
+                                const selectedOtherCount = getSelectedDisplaySpellCount(spells, selectedSpells, catKey);
                                 return (
                                     <div key={catKey} className="relative flex flex-col gap-1" ref={otherMenuRef}>
                                         <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
@@ -3121,7 +3325,7 @@
                                                 <div className="max-h-[360px] overflow-y-auto pr-1 custom-scrollbar">
                                                     <div className="grid grid-cols-8 gap-1.5">
                                                         {categorySpells.map(spell => {
-                                                            const isSelected = selectedSpells.has(spell.id);
+                                                            const isSelected = isSpellSlotSelected(spells, selectedSpells, spell);
                                                             return (
                                                                 <button
                                                                     key={spell.id}
@@ -3148,7 +3352,7 @@
                                     </div>
                                     <div className="flex items-center gap-1.5">
                                         {categorySpells.map(spell => {
-                                            const isSelected = selectedSpells.has(spell.id);
+                                            const isSelected = isSpellSlotSelected(spells, selectedSpells, spell);
                                             return (
                                                 <button
                                                     key={spell.id}
@@ -3201,6 +3405,7 @@
                                         const spellMap = buddySpellMaps[specInfo.id] || {};
                                         const selectedIds = buddySpellSelections[specInfo.id] || new Set();
                                         const specName = getLocalizedSpecName(specInfo.id, uiLanguage);
+                                        const selectedBuddyDisplayCount = getSelectedDisplaySpellCount(spellMap, selectedIds);
                                         return (
                                             <div key={`buddy-filter-${specInfo.id}`} className="relative">
                                                 <button
@@ -3208,7 +3413,7 @@
                                                         e.stopPropagation();
                                                         setBuddySpellMenuSpec(prev => prev === specInfo.id ? null : specInfo.id);
                                                     }}
-                                                    className={`h-8 min-w-[30px] border-0 bg-transparent p-0 overflow-visible rounded-sm transition flex items-center justify-center ${selectedIds.size > 0 ? 'opacity-100' : 'opacity-35 grayscale hover:opacity-70'}`}
+                                                    className={`h-8 min-w-[30px] border-0 bg-transparent p-0 overflow-visible rounded-sm transition flex items-center justify-center ${selectedBuddyDisplayCount > 0 ? 'opacity-100' : 'opacity-35 grayscale hover:opacity-70'}`}
                                                     title={`${specName} buddy spells`}
                                                 >
                                                     <img src={`./images/classes/${specInfo.icon}`} alt={specName} draggable={false} className="h-7 w-7 rounded-sm object-cover shadow-sm" />
@@ -3223,7 +3428,7 @@
                                                                 <img src={`./images/classes/${specInfo.icon}`} alt="" draggable={false} className="h-6 w-6 rounded-sm object-cover" />
                                                                 <div className="min-w-0">
                                                                     <div className="truncate text-xs font-bold text-white">{specName}</div>
-                                                                    <div className="text-[10px] font-mono text-gray-500">{selectedIds.size} {t("shown")}</div>
+                                                                    <div className="text-[10px] font-mono text-gray-500">{selectedBuddyDisplayCount} {t("shown")}</div>
                                                                 </div>
                                                             </div>
                                                             <button
@@ -3235,7 +3440,7 @@
                                                         </div>
                                                         <div className="space-y-3">
                                                             {Object.entries(spellCategories).map(([catKey, category]) => {
-                                                                const categorySpells = Object.values(spellMap)
+                                                                const categorySpells = getDisplaySpells(spellMap)
                                                                     .filter(spell => spell.category === catKey)
                                                                     .sort((a, b) => a.load_order - b.load_order);
                                                                 if (!categorySpells.length) return null;
@@ -3249,7 +3454,7 @@
                                                                         </button>
                                                                         <div className="flex flex-wrap gap-1.5">
                                                                             {categorySpells.map(spell => {
-                                                                                const isSelected = selectedIds.has(Number(spell.id));
+                                                                                const isSelected = isSpellSlotSelected(spellMap, selectedIds, spell);
                                                                                 return (
                                                                                     <button
                                                                                         key={`buddy-spell-${specInfo.id}-${spell.id}`}
@@ -3339,11 +3544,11 @@
                             type="range"
                             min={MIN_VISIBLE_MINUTES}
                             max={MAX_VISIBLE_MINUTES}
-                            step="0.25"
+                            step="0.05"
                             value={Number(sliderVisibleMinutes.toFixed(2))}
                             onChange={(e) => setZoom(clampZoom(getZoomForVisibleMinutes(e.target.value)))}
                             className="h-2 w-28 cursor-pointer accent-[#00FF96]"
-                            title={`${sliderVisibleMinutes.toFixed(1)} min visible`}
+                            title={formatVisibleRange(sliderVisibleMinutes)}
                         />
                         <button onClick={handleZoomOut} className="p-1.5 hover:bg-gray-700 rounded text-gray-400 hover:text-[#00FF96] transition"><ZoomOut size={16} /></button>
                     </div>
@@ -3361,12 +3566,23 @@
 
                             {/* Sticky Header: Time Ruler */}
                             <div className="sticky top-0 z-[3000] flex h-8 bg-[#202020] border-b border-gray-700/80 shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
-                                <div className="sticky left-0 bg-[#202020] border-r border-gray-700/90 shrink-0 flex items-center px-4 text-[11px] font-bold text-gray-500 uppercase z-[3100] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
-                                    <div className="w-8 text-center mr-2 text-[#00FF96]">{t("rank")}</div>
-                                    <div className="flex-1 text-left">{t("rdps")}</div>
-                                    <div className="w-8 text-center text-gray-600">{t("reg")}</div>
-                                    <div className="w-8 text-center text-gray-600">{isCombined ? t("spec") : t("pair")}</div>
-                                    <div className="w-8 text-center text-gray-600 ml-1">{t("buffs")}</div>
+                                <div className="sticky left-0 bg-[#202020] border-r border-gray-700/90 shrink-0 flex items-center px-3 text-[11px] font-bold text-gray-500 uppercase z-[3100] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${leftPanelWidth}px` }}>
+                                    <button
+                                        onClick={() => setLeftPanelCollapsed(prev => !prev)}
+                                        className="mr-2 flex h-6 w-6 shrink-0 items-center justify-center rounded border border-gray-700 text-gray-400 hover:border-[#00FF96] hover:text-[#00FF96]"
+                                        title={leftPanelCollapsed ? t("expandLeftPanel") : t("collapseLeftPanel")}
+                                    >
+                                        {leftPanelCollapsed ? <Maximize2 size={13} /> : <Minimize2 size={13} />}
+                                    </button>
+                                    {!leftPanelCollapsed && (
+                                        <>
+                                            <div className="w-8 text-center mr-2 text-[#00FF96]">{t("rank")}</div>
+                                            <div className="flex-1 text-left">{t("rdps")}</div>
+                                            <div className="w-8 text-center text-gray-600">{t("reg")}</div>
+                                            <div className="w-8 text-center text-gray-600">{isCombined ? t("spec") : t("pair")}</div>
+                                            <div className="w-8 text-center text-gray-600 ml-1">{t("buffs")}</div>
+                                        </>
+                                    )}
                                 </div>
                                 <div className="relative h-full" style={{ width: `${timelineWidth}px` }}>
                                     {/* UPDATED: Dynamic Ticks (Feature 1) */}
@@ -3394,20 +3610,29 @@
                                     {showPhases && timelinePhases.map((phase, i) => (
                                         <div
                                             key={`ruler-phase-${i}`}
-                                            className="absolute inset-y-0 z-20 pointer-events-none"
+                                            className="absolute inset-y-0 z-20"
                                             style={{ left: `${phase.timestamp * zoom}px` }}
-                                            title={`${phase.name} (${formatTime(phase.timestamp)})`}
+                                            title={`${phase.name} (${formatTime(phase.timestamp)}) - ${phaseAlignIndex === i ? t("clearPhaseAlignment") : t("alignPhase")}`}
                                         >
                                             <div
-                                                className="absolute top-0 bottom-0 border-l-2"
+                                                className="absolute top-0 bottom-0 border-l-2 pointer-events-none"
                                                 style={{ borderColor: phase.color || "rgba(0,255,150,0.9)" }}
                                             />
-                                            <span
-                                                className="absolute left-1 top-0.5 rounded-sm border px-1 text-[10px] font-black leading-tight text-[#d6fff0] bg-black/85 shadow-sm whitespace-nowrap"
-                                                style={{ borderColor: phase.color || "rgba(0,255,150,0.65)" }}
+                                            <button
+                                                type="button"
+                                                onClick={(event) => {
+                                                    event.stopPropagation();
+                                                    togglePhaseAlignment(i);
+                                                }}
+                                                className={`absolute left-1 top-0.5 rounded-sm border px-1 text-[10px] font-black leading-tight shadow-sm whitespace-nowrap transition ${
+                                                    phaseAlignIndex === i
+                                                        ? 'bg-[#00FF96] text-black border-[#00FF96]'
+                                                        : 'text-[#d6fff0] bg-black/85 hover:bg-[#00FF96]/20'
+                                                }`}
+                                                style={{ borderColor: phaseAlignIndex === i ? "#00FF96" : (phase.color || "rgba(0,255,150,0.65)") }}
                                             >
                                                 P{i + 1}
-                                            </span>
+                                            </button>
                                         </div>
                                     ))}
                                 </div>
@@ -3416,12 +3641,12 @@
                             {/* Timeline Grid */}
                             <div
                                 className="absolute top-8 bottom-0 pointer-events-none z-[1]"
-                                style={{ left: `${LEFT_PANEL_WIDTH}px`, width: `${timelineWidth}px`, ...rowGridStyle }}
+                                style={{ left: `${leftPanelWidth}px`, width: `${timelineWidth}px`, ...rowGridStyle }}
                             />
 
                             {/* Phase Lines */}
                             {showPhases && timelinePhases.length > 0 && (
-                                <div className="absolute top-8 bottom-0 right-0 pointer-events-none z-[260]" style={{ left: `${LEFT_PANEL_WIDTH}px` }}>
+                                <div className="absolute top-8 bottom-0 right-0 pointer-events-none z-[260]" style={{ left: `${leftPanelWidth}px` }}>
                                     {timelinePhases.map((phase, i) => (
                                         <div
                                             key={i}
@@ -3438,19 +3663,22 @@
                             {/* Boss Timeline - Explicitly placed above players */}
                             {showBossRow && (
                                 <div className="flex h-10 border-b border-gray-800/60 bg-[#151515] hover:bg-[#1a1a1a] transition-colors group relative sticky top-8 z-40">
-                                    <div className="sticky left-0 bg-[#181818] border-r border-gray-700/90 shrink-0 flex items-center px-4 z-[1000] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
-                                        <div className="flex-1 font-bold text-gray-300">{t("bossTimeline")}</div>
+                                    <div className="sticky left-0 bg-[#181818] border-r border-gray-700/90 shrink-0 flex items-center px-3 z-[1000] shadow-[4px_0_10px_rgba(0,0,0,0.5)]" style={{ width: `${leftPanelWidth}px` }}>
+                                        <div className={`font-bold text-gray-300 ${leftPanelCollapsed ? 'w-full text-center text-[10px]' : 'flex-1'}`}>
+                                            {leftPanelCollapsed ? 'B' : t("bossTimeline")}
+                                        </div>
                                     </div>
                                     <div className="relative h-full z-10 overflow-hidden" style={{ width: `${timelineWidth}px` }}>
                                         {bossTimelineMechanics.map((mech, i) => {
                                             const mechName = getLocalizedBossTimelineName(mech, uiLanguage);
+                                            const displayTime = Number(mech.displayTime ?? mech.time ?? 0);
                                             return mech.duration > 0 ? (
                                                 /* Standard Boss Bar for duration mechanics */
                                                 <div 
                                                     key={i} 
                                                     className="absolute top-1/2 -translate-y-1/2 h-7 rounded-sm border border-white/15 flex items-center justify-center text-[13px] font-bold text-white/95 overflow-hidden shadow-sm" 
-                                                    style={{ left: `${mech.time * zoom}px`, width: `${Math.max(mech.duration * zoom, 48)}px`, backgroundColor: getBossTimelineColor(mech.type, mech.color) }} 
-                                                    title={`${getBossTimelineTypeLabel(mech.type, t) || t("boss")}: ${mechName} (${formatTime(mech.time)}) - ${mech.duration}s`}
+                                                    style={{ left: `${displayTime * zoom}px`, width: `${Math.max(mech.duration * zoom, 48)}px`, backgroundColor: getBossTimelineColor(mech.type, mech.color) }} 
+                                                    title={`${getBossTimelineTypeLabel(mech.type, t) || t("boss")}: ${mechName} (${formatTime(displayTime)}) - ${mech.duration}s`}
                                                 >
                                                     <span className="block max-w-full overflow-hidden whitespace-nowrap px-2 leading-none drop-shadow-[0_1px_1px_rgba(0,0,0,0.75)]">{mechName}</span>
                                                 </div>
@@ -3459,8 +3687,8 @@
                                                 <div 
                                                     key={i} 
                                                     className="absolute top-1/2 -translate-y-1/2 h-6 w-6 rounded border border-white/20 flex items-center justify-center shadow-sm overflow-hidden" 
-                                                    style={{ left: `${mech.time * zoom}px`, backgroundColor: getBossTimelineColor(mech.type, mech.color) }}
-                                                    title={`${getBossTimelineTypeLabel(mech.type, t) || t("boss")}: ${mechName} (${formatTime(mech.time)})`}
+                                                    style={{ left: `${displayTime * zoom}px`, backgroundColor: getBossTimelineColor(mech.type, mech.color) }}
+                                                    title={`${getBossTimelineTypeLabel(mech.type, t) || t("boss")}: ${mechName} (${formatTime(displayTime)})`}
                                                 >
                                                     <RenderIcon spell={{ ...mech, name: mechName }} />
                                                 </div>
@@ -3478,11 +3706,18 @@
                                     ? importedRow.phases
                                     : timelinePhases;
                                 const sameSpecAsTimeline = importedRow.specSlug === selectedSpec;
+                                const importedSpellMap = markSpellMapRepresentativesForContentLevel(
+                                    sameSpecAsTimeline ? { ...importedRow.spells, ...spells } : importedRow.spells,
+                                    getBossContentLevel(selectedBoss)
+                                );
                                 const storedImportedSpellSelection = importedSpellSelections[importedRow.id];
                                 const importedVisibleSpellIds = sameSpecAsTimeline
                                     ? selectedSpells
-                                    : (storedImportedSpellSelection || new Set(getDefaultSelectedSpellIds(importedRow.spells || {}, spellCategories)));
-                                const importedSpellMap = sameSpecAsTimeline ? { ...importedRow.spells, ...spells } : importedRow.spells;
+                                    : expandSelectedSpellSlots(
+                                        storedImportedSpellSelection || new Set(getDefaultSelectedSpellIds(importedSpellMap || {}, spellCategories)),
+                                        importedSpellMap || {}
+                                    );
+                                const importedVisibleDisplaySpellCount = getSelectedDisplaySpellCount(importedSpellMap, importedVisibleSpellIds);
                                 const visibleImportedCasts = importedRow.casts.filter(cast => (
                                     isLimitBreakSpellId(cast.spellId)
                                         ? showLimitBreak
@@ -3504,12 +3739,16 @@
                                         className={`flex border-b border-[#00FF96]/20 bg-[#07130f] hover:bg-[#0a1a14] transition-colors group/import relative ${importSpellMenuRowId === importedRow.id ? 'z-[7900]' : 'z-[20]'}`}
                                         style={{ height: `${totalHeight}px` }}
                                     >
-                                        <div className={`sticky left-0 bg-[#0b1713] border-r border-gray-700/90 shrink-0 flex items-center px-4 transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.25)] ${importSpellMenuRowId === importedRow.id ? 'z-[8000]' : 'z-[1000]'}`} style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
-                                            <div className="flex min-w-0 flex-1 flex-col">
-                                                <span className="text-[9px] font-black uppercase leading-none text-[#00FF96]">{t("importedLog")}</span>
-                                                <span className="truncate text-[13px] font-bold leading-tight text-white">{importedRow.name}</span>
-                                            </div>
-                                            {!sameSpecAsTimeline && (
+                                        <div className={`sticky left-0 bg-[#0b1713] border-r border-gray-700/90 shrink-0 flex items-center px-3 transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.25)] ${importSpellMenuRowId === importedRow.id ? 'z-[8000]' : 'z-[1000]'}`} style={{ width: `${leftPanelWidth}px` }}>
+                                            {leftPanelCollapsed ? (
+                                                <div className="w-full text-center text-[9px] font-black uppercase text-[#00FF96]">LOG</div>
+                                            ) : (
+                                                <div className="flex min-w-0 flex-1 flex-col">
+                                                    <span className="text-[9px] font-black uppercase leading-none text-[#00FF96]">{t("importedLog")}</span>
+                                                    <span className="truncate text-[13px] font-bold leading-tight text-white">{importedRow.name}</span>
+                                                </div>
+                                            )}
+                                            {!leftPanelCollapsed && !sameSpecAsTimeline && (
                                                 <div className="relative ml-2">
                                                     <button
                                                         onClick={(e) => {
@@ -3520,7 +3759,7 @@
                                                         title={`${specName} spell filters`}
                                                     >
                                                         <SlidersHorizontal size={13} />
-                                                        {importedVisibleSpellIds.size}
+                                                        {importedVisibleDisplaySpellCount}
                                                     </button>
                                                     {importSpellMenuRowId === importedRow.id && (
                                                         <div
@@ -3531,7 +3770,7 @@
                                                                 <div className="flex min-w-0 items-center gap-2">
                                                                     <div className="min-w-0">
                                                                         <div className="truncate text-xs font-bold text-white">{specName}</div>
-                                                                        <div className="text-[10px] font-mono text-gray-500">{importedVisibleSpellIds.size} {t("shown")}</div>
+                                                                        <div className="text-[10px] font-mono text-gray-500">{importedVisibleDisplaySpellCount} {t("shown")}</div>
                                                                     </div>
                                                                 </div>
                                                                 <button
@@ -3543,7 +3782,7 @@
                                                             </div>
                                                             <div className="space-y-3">
                                                                 {Object.entries(spellCategories).map(([catKey, category]) => {
-                                                                    const categorySpells = Object.values(importedSpellMap)
+                                                                    const categorySpells = getDisplaySpells(importedSpellMap)
                                                                         .filter(spell => spell.category === catKey)
                                                                         .sort((a, b) => a.load_order - b.load_order);
                                                                     if (!categorySpells.length) return null;
@@ -3557,11 +3796,11 @@
                                                                             </button>
                                                                             <div className="flex flex-wrap gap-1.5">
                                                                                 {categorySpells.map(spell => {
-                                                                                    const isSelected = importedVisibleSpellIds.has(Number(spell.id));
+                                                                                    const isSelected = isSpellSlotSelected(importedSpellMap, importedVisibleSpellIds, spell);
                                                                                     return (
                                                                                         <button
                                                                                             key={`import-spell-${spell.id}`}
-                                                                                            onClick={() => toggleImportedSpell(importedRow.id, spell.id)}
+                                                                                            onClick={() => toggleImportedSpell(importedRow.id, importedSpellMap, spell.id)}
                                                                                             className={`h-8 w-8 overflow-hidden rounded border transition ${isSelected ? 'border-transparent opacity-100 grayscale-0' : 'border-gray-800 opacity-30 grayscale hover:opacity-70 hover:border-gray-600'}`}
                                                                                             title={spell.name}
                                                                                         >
@@ -3578,7 +3817,7 @@
                                                     )}
                                                 </div>
                                             )}
-                                            <button
+                                            {!leftPanelCollapsed && <button
                                                 onClick={() => {
                                                     const nextImportedRows = importedRows.filter(row => row.id !== importedRow.id);
                                                     const nextImportedSelections = { ...importedSpellSelections };
@@ -3594,7 +3833,7 @@
                                                 title={t("removeImportedLog")}
                                             >
                                                 <XCircle size={15} />
-                                            </button>
+                                            </button>}
                                         </div>
                                         <div className="relative h-full z-10 overflow-hidden" style={{ width: `${timelineWidth}px` }}>
                                             {showPhases && rowPhases.map((phase, pIdx) => (
@@ -3602,7 +3841,7 @@
                                                     key={`import-phase-${pIdx}`}
                                                     className="absolute top-0 bottom-0 border-l-2 pointer-events-none z-[260]"
                                                     style={{
-                                                        left: `${phase.timestamp * zoom}px`,
+                                                        left: getAlignedLeft(phase.timestamp, rowPhases),
                                                         width: "36px",
                                                         borderColor: phase.color || "rgba(0,255,150,0.76)",
                                                         background: "linear-gradient(90deg, rgba(0,255,150,0.12), rgba(0,255,150,0))"
@@ -3618,7 +3857,7 @@
                                             {importedRow.killTimeSeconds > 0 && (
                                                 <div
                                                     className="absolute top-0 bottom-0 z-50 flex items-center pointer-events-none"
-                                                    style={{ left: `${importedRow.killTimeSeconds * zoom}px` }}
+                                                    style={{ left: getAlignedLeft(importedRow.killTimeSeconds, rowPhases) }}
                                                 >
                                                     <div className={`h-full w-[3px] ${importedRow.kill ? 'bg-[#00FF96]/80 shadow-[0_0_8px_rgba(0,255,150,0.6)]' : 'bg-red-500/80 shadow-[0_0_8px_rgba(239,68,68,0.7)]'}`}></div>
                                                     <div className={`ml-1 flex items-center gap-1 rounded border px-1.5 py-0.5 text-[11px] font-black uppercase tracking-wide text-white ${importedRow.kill ? 'border-[#00FF96]/50 bg-[#064a31]/90' : 'border-red-500/50 bg-red-950/90'}`}>
@@ -3656,7 +3895,7 @@
                                                         key={cIdx}
                                                         className={`absolute flex items-center group/icon select-none transition-opacity duration-150 ${focusedSpellId && !isFocusedSpell ? 'opacity-25' : 'opacity-100'}`}
                                                         style={{
-                                                            left: `${cast.timestamp * zoom}px`,
+                                                            left: getAlignedLeft(cast.timestamp, rowPhases),
                                                             top: `${topPos}px`,
                                                             height: `${currentTrackHeight}px`,
                                                             zIndex: isFocusedSpell ? 220 + cIdx : 10 + cIdx
@@ -3705,12 +3944,14 @@
                                                                 <RenderIcon spell={spell} className="opacity-100" />
                                                             </div>
 
-                                                            <span
-                                                                className="ml-1 font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] z-30 pointer-events-none"
-                                                                style={{ fontSize: `${iconHeight * 0.62}px`, lineHeight: 1 }}
-                                                            >
-                                                                {formatTime(cast.timestamp)}
-                                                            </span>
+                                                            {showSkillTimes && (
+                                                                <span
+                                                                    className="ml-1 font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] z-30 pointer-events-none"
+                                                                    style={{ fontSize: `${iconHeight * 0.62}px`, lineHeight: 1 }}
+                                                                >
+                                                                    {formatTime(cast.timestamp)}
+                                                                </span>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 );
@@ -3752,7 +3993,10 @@
                                     .filter(cast => {
                                         if (isLimitBreakSpellId(cast.spellId)) return showLimitBreak;
                                         const selectedIds = row.isCombined ? (buddySpellSelections[cast.specSlug] || new Set()) : selectedSpells;
-                                        return selectedIds.has(Number(cast.spellId));
+                                        const castSpellMap = row.isCombined ? (buddySpellMaps[cast.specSlug] || {}) : spells;
+                                        const spell = castSpellMap[cast.spellId] || castSpellMap[String(cast.spellId)];
+                                        return selectedIds.has(Number(cast.spellId))
+                                            || (spell && isSpellSlotSelected(castSpellMap, selectedIds, spell));
                                     });
                                 const { processedCasts, maxTracks } = isCollapsed
                                     ? { processedCasts: visibleCasts.map(c => ({ ...c, trackIndex: 0 })), maxTracks: 1 }
@@ -3762,37 +4006,51 @@
                                 const rowHeight = 32;
                                 const trackHeight = 30; // Height per sub-row when expanded
                                 const totalHeight = isCollapsed ? rowHeight : Math.max(rowHeight, maxTracks * trackHeight);
-                                const buddy = row.isCombined
-                                    ? row.buddy
-                                    : (showBuddy && isBuddySupported ? row.buddy : null);
-                                const buddySpecSlug = buddy?.specSlug || "";
-                                const buddySpellMap = buddySpecSlug === selectedSpec ? spells : (buddySpellMaps[buddySpecSlug] || {});
-                                const buddySelectedSpellIds = buddySpecSlug === selectedSpec
-                                    ? selectedSpells
-                                    : (buddySpellSelections[buddySpecSlug] || new Set());
-                                const buddyColorMap = buddySpecSlug === selectedSpec
-                                    ? spellColorMap
-                                    : (buddySpellColorMaps[buddySpecSlug] || {});
-                                const buddyCasts = buddy
-                                    ? (buddy.casts || []).map(cast => ({
+                                const buddyRowHeight = rowHeight;
+                                const buddyTrackHeight = trackHeight;
+                                const rowBuddies = row.isCombined
+                                    ? (row.buddy ? [row.buddy] : [])
+                                    : (showBuddy && isBuddySupported ? (row.buddies || (row.buddy ? [row.buddy] : [])) : []);
+                                const buddyRows = rowBuddies.map((buddy, buddyIdx) => {
+                                    const buddySpecSlug = buddy?.specSlug || "";
+                                    const buddySpellMap = buddySpecSlug === selectedSpec ? spells : (buddySpellMaps[buddySpecSlug] || {});
+                                    const buddySelectedSpellIds = buddySpecSlug === selectedSpec
+                                        ? selectedSpells
+                                        : (buddySpellSelections[buddySpecSlug] || new Set());
+                                    const buddyColorMap = buddySpecSlug === selectedSpec
+                                        ? spellColorMap
+                                        : (buddySpellColorMaps[buddySpecSlug] || {});
+                                    const buddyCasts = (buddy.casts || []).map(cast => ({
                                         ...cast,
                                         duration: cast.duration || (isLimitBreakSpellId(cast.spellId)
                                             ? getLimitBreakSpell(cast.spellId).duration
                                             : (buddySpellMap[cast.spellId] ? buddySpellMap[cast.spellId].duration : 0))
-                                    }))
-                                    : [];
-                                const visibleBuddyCasts = buddyCasts.filter(cast => (
-                                    isLimitBreakSpellId(cast.spellId)
-                                        ? showLimitBreak
-                                        : buddySelectedSpellIds.has(Number(cast.spellId))
-                                ));
-                                const buddyRowHeight = rowHeight;
-                                const buddyTrackHeight = trackHeight;
-                                const { processedCasts: processedBuddyCasts, maxTracks: buddyMaxTracks } = isCollapsed
-                                    ? { processedCasts: visibleBuddyCasts.map(c => ({ ...c, trackIndex: 0 })), maxTracks: 1 }
-                                    : calculateCastTracks(visibleBuddyCasts);
-                                const buddyTotalHeight = isCollapsed ? buddyRowHeight : Math.max(buddyRowHeight, buddyMaxTracks * buddyTrackHeight);
-                                const showBuddyRow = Boolean(buddy);
+                                    }));
+                                    const visibleBuddyCasts = buddyCasts.filter(cast => (
+                                        isLimitBreakSpellId(cast.spellId)
+                                            ? showLimitBreak
+                                            : (
+                                                buddySelectedSpellIds.has(Number(cast.spellId))
+                                                || (
+                                                    buddySpellMap[cast.spellId]
+                                                    && isSpellSlotSelected(buddySpellMap, buddySelectedSpellIds, buddySpellMap[cast.spellId])
+                                                )
+                                            )
+                                    ));
+                                    const { processedCasts: processedBuddyCasts, maxTracks: buddyMaxTracks } = isCollapsed
+                                        ? { processedCasts: visibleBuddyCasts.map(c => ({ ...c, trackIndex: 0 })), maxTracks: 1 }
+                                        : calculateCastTracks(visibleBuddyCasts);
+                                    const buddyTotalHeight = isCollapsed ? buddyRowHeight : Math.max(buddyRowHeight, buddyMaxTracks * buddyTrackHeight);
+                                    return {
+                                        buddy,
+                                        buddyIdx,
+                                        buddySpellMap,
+                                        buddyColorMap,
+                                        processedBuddyCasts,
+                                        buddyTotalHeight
+                                    };
+                                });
+                                const showBuddyRow = buddyRows.length > 0;
                                 
                                 // FEATURE 2: Check if this row is selected (MULTI-SELECT SUPPORT)
                                 const isSelected = selectedRowIds.has(row.id);
@@ -3845,41 +4103,47 @@
                                         )}
 
                                         {/* Sticky Left Panel - Adjusted for Compact Height */}
-                                        <div className="sticky left-0 bg-[#161616] group-hover:bg-[#1e1e1e] border-r border-gray-700/90 shrink-0 flex items-center px-4 z-[1000] transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.2)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
-                                            <div className="w-8 text-center mr-2 font-mono text-gray-400 text-sm font-semibold">#{row.rank}</div>
-                                            
-                                            {/* MODIFIED: Use PlayerNameCell for Name/DPS toggle and pass report args */}
-                                            <PlayerNameCell 
-                                                name={row.name} 
-                                                dps={row.dps} 
-                                                reportId={row.reportId} 
-                                                fightId={row.fightId} 
-                                                region={row.region} 
-                                            />
-                                            
-                                            <div className="w-8 text-center text-xs font-mono font-bold text-gray-400 bg-[#222] rounded px-1 py-0.5">{row.region}</div>
-                                            
-                                            {/* Partner Column - Only shows for Tank/Healer */}
-                                            <div className="w-8 text-center flex justify-center items-center ml-1">
-                                                {row.isCombined ? (
-                                                    row.combinedPlayers?.[0]?.specSlug && getIconForSpec(row.combinedPlayers[0].specSlug) && (
-                                                        <img
-                                                            src={`./images/classes/${getIconForSpec(row.combinedPlayers[0].specSlug)}`}
-                                                            alt={row.combinedPlayers[0].specSlug}
-                                                            draggable={false}
-                                                            className="w-6 h-6 object-contain"
-                                                            title={getLocalizedSpecName(row.combinedPlayers[0].specSlug, uiLanguage)}
-                                                        />
-                                                    )
-                                                ) : (
-                                                    row.partner && <img src={row.partner} alt="P" draggable={false} className="w-6 h-6 object-contain" />
-                                                )}
-                                            </div>
+                                        <div className="sticky left-0 bg-[#161616] group-hover:bg-[#1e1e1e] border-r border-gray-700/90 shrink-0 flex items-center px-3 z-[1000] transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.2)]" style={{ width: `${leftPanelWidth}px` }}>
+                                            {leftPanelCollapsed ? (
+                                                <div className="w-full text-center font-mono text-[11px] font-bold text-gray-400">#{row.rank}</div>
+                                            ) : (
+                                                <>
+                                                    <div className="w-8 text-center mr-2 font-mono text-gray-400 text-sm font-semibold">#{row.rank}</div>
+                                                    
+                                                    {/* MODIFIED: Use PlayerNameCell for Name/DPS toggle and pass report args */}
+                                                    <PlayerNameCell 
+                                                        name={row.name} 
+                                                        dps={row.dps} 
+                                                        reportId={row.reportId} 
+                                                        fightId={row.fightId} 
+                                                        region={row.region} 
+                                                    />
+                                                    
+                                                    <div className="w-8 text-center text-xs font-mono font-bold text-gray-400 bg-[#222] rounded px-1 py-0.5">{row.region}</div>
+                                                    
+                                                    {/* Partner Column - Only shows for Tank/Healer */}
+                                                    <div className="w-8 text-center flex justify-center items-center ml-1">
+                                                        {row.isCombined ? (
+                                                            row.combinedPlayers?.[0]?.specSlug && getIconForSpec(row.combinedPlayers[0].specSlug) && (
+                                                                <img
+                                                                    src={`./images/classes/${getIconForSpec(row.combinedPlayers[0].specSlug)}`}
+                                                                    alt={row.combinedPlayers[0].specSlug}
+                                                                    draggable={false}
+                                                                    className="w-6 h-6 object-contain"
+                                                                    title={getLocalizedSpecName(row.combinedPlayers[0].specSlug, uiLanguage)}
+                                                                />
+                                                            )
+                                                        ) : (
+                                                            row.partner && <img src={row.partner} alt="P" draggable={false} className="w-6 h-6 object-contain" />
+                                                        )}
+                                                    </div>
 
-                                            {/* NEW: Buffs Count Column */}
-                                            <div className="w-8 text-center flex justify-center items-center ml-1 font-mono text-sm text-gray-300 font-bold">
-                                                {row.buffCount}
-                                            </div>
+                                                    {/* NEW: Buffs Count Column */}
+                                                    <div className="w-8 text-center flex justify-center items-center ml-1 font-mono text-sm text-gray-300 font-bold">
+                                                        {row.buffCount}
+                                                    </div>
+                                                </>
+                                            )}
                                         </div>
 
                                         {/* Right Panel: Casts */}
@@ -3889,7 +4153,7 @@
                                                     key={`phase-${pIdx}`}
                                                     className="absolute top-0 bottom-0 border-l-2 pointer-events-none z-[260]"
                                                     style={{
-                                                        left: `${phase.timestamp * zoom}px`,
+                                                        left: getAlignedLeft(phase.timestamp, rowPhases),
                                                         width: "36px",
                                                         borderColor: phase.color || "rgba(0,255,150,0.76)",
                                                         background: "linear-gradient(90deg, rgba(0,255,150,0.12), rgba(0,255,150,0))"
@@ -3908,7 +4172,7 @@
                                             {row.killTimeSeconds && (
                                                 <div 
                                                     className="absolute top-0 bottom-0 z-50 flex flex-col items-center pointer-events-none"
-                                                    style={{ left: `${row.killTimeSeconds * zoom}px` }}
+                                                    style={{ left: getAlignedLeft(row.killTimeSeconds, rowPhases) }}
                                                 >
                                                     {/* Vertical Line */}
                                                     <div className="h-full w-[2px] bg-red-500/60 shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
@@ -3982,7 +4246,7 @@
                                                         key={cIdx}
                                                         className={`absolute flex items-center group/icon select-none transition-opacity duration-150 ${focusedSpellId && !isFocusedSpell ? 'opacity-25' : 'opacity-100'}`}
                                                         style={{
-                                                            left: `${cast.timestamp * zoom}px`,
+                                                            left: getAlignedLeft(cast.timestamp, rowPhases),
                                                             top: `${topPos}px`,
                                                             height: `${currentTrackHeight}px`,
                                                             zIndex: isFocusedSpell ? 220 + cIdx : 10 + cIdx // Right skills cover left skills
@@ -4036,12 +4300,14 @@
                                                             </div>
 
                                                             {/* 4. Timestamp Text */}
-                                                            <span 
-                                                                className="ml-1 font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] z-30 pointer-events-none"
-                                                                style={{ fontSize: `${iconHeight * 0.7}px`, lineHeight: 1 }}
-                                                            >
-                                                                {formatTime(cast.timestamp)}
-                                                            </span>
+                                                            {showSkillTimes && (
+                                                                <span 
+                                                                    className="ml-1 font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] z-30 pointer-events-none"
+                                                                    style={{ fontSize: `${iconHeight * 0.7}px`, lineHeight: 1 }}
+                                                                >
+                                                                    {formatTime(cast.timestamp)}
+                                                                </span>
+                                                            )}
 
                                                         </div>
                                                     </div>
@@ -4049,40 +4315,56 @@
                                             })}
                                         </div>
                                     </div>
-                                    {showBuddyRow && (
+                                    {showBuddyRow && buddyRows.map(({
+                                        buddy,
+                                        buddyIdx,
+                                        buddySpellMap,
+                                        buddyColorMap,
+                                        processedBuddyCasts,
+                                        buddyTotalHeight
+                                    }) => (
                                         <div
+                                            key={`buddy-row-${row.id}-${buddy.sourceId || buddyIdx}-${buddy.specSlug || ""}`}
                                             className="flex bg-[#101614] hover:bg-[#13201b] transition-colors group/buddy relative border-t border-gray-800/40"
                                             style={{ height: `${buddyTotalHeight}px` }}
                                         >
-                                            <div className="sticky left-0 bg-[#101614] group-hover/buddy:bg-[#13201b] border-r border-gray-700/90 shrink-0 flex items-center px-4 z-[1000] transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.2)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
-                                                <div className="w-8 text-center mr-2 text-[10px] font-black uppercase tracking-wide text-gray-600">
-                                                    {row.isCombined ? t("pair") : t("buddy")}
-                                                </div>
-                                                <div className="flex h-full min-w-0 flex-1 items-center">
-                                                    {row.isCombined ? (
-                                                        <div className="min-w-0 truncate text-xs font-bold text-gray-600">
-                                                            {buddy.name}
+                                            <div className="sticky left-0 bg-[#101614] group-hover/buddy:bg-[#13201b] border-r border-gray-700/90 shrink-0 flex items-center px-3 z-[1000] transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.2)]" style={{ width: `${leftPanelWidth}px` }}>
+                                                {leftPanelCollapsed ? (
+                                                    <div className="w-full text-center text-[10px] font-black uppercase tracking-wide text-gray-600">
+                                                        {row.isCombined ? 'P' : 'B'}
+                                                    </div>
+                                                ) : (
+                                                    <>
+                                                        <div className="w-8 text-center mr-2 text-[10px] font-black uppercase tracking-wide text-gray-600">
+                                                            {row.isCombined ? t("pair") : t("buddy")}
                                                         </div>
-                                                    ) : (
-                                                        <BuddyNameCell
-                                                            name={buddy.name}
-                                                            dps={buddy.dps || 0}
-                                                        />
-                                                    )}
-                                                </div>
-                                                <div className="w-8 ml-1"></div>
-                                                <div className="w-8 ml-1 flex justify-center items-center">
-                                                    {row.isCombined && buddy.specSlug && getIconForSpec(buddy.specSlug) && (
-                                                        <img
-                                                            src={`./images/classes/${getIconForSpec(buddy.specSlug)}`}
-                                                            alt={buddy.specSlug}
-                                                            draggable={false}
-                                                            className="w-6 h-6 object-contain"
-                                                            title={getLocalizedSpecName(buddy.specSlug, uiLanguage)}
-                                                        />
-                                                    )}
-                                                </div>
-                                                <div className="w-8 ml-1"></div>
+                                                        <div className="flex h-full min-w-0 flex-1 items-center">
+                                                            {row.isCombined ? (
+                                                                <div className="min-w-0 truncate text-xs font-bold text-gray-600">
+                                                                    {buddy.name}
+                                                                </div>
+                                                            ) : (
+                                                                <BuddyNameCell
+                                                                    name={buddy.name}
+                                                                    dps={buddy.dps || 0}
+                                                                />
+                                                            )}
+                                                        </div>
+                                                        <div className="w-8 ml-1"></div>
+                                                        <div className="w-8 ml-1 flex justify-center items-center">
+                                                            {row.isCombined && buddy.specSlug && getIconForSpec(buddy.specSlug) && (
+                                                                <img
+                                                                    src={`./images/classes/${getIconForSpec(buddy.specSlug)}`}
+                                                                    alt={buddy.specSlug}
+                                                                    draggable={false}
+                                                                    className="w-6 h-6 object-contain"
+                                                                    title={getLocalizedSpecName(buddy.specSlug, uiLanguage)}
+                                                                />
+                                                            )}
+                                                        </div>
+                                                        <div className="w-8 ml-1"></div>
+                                                    </>
+                                                )}
                                             </div>
                                             <div className="relative h-full z-10 overflow-hidden" style={{ width: `${timelineWidth}px` }}>
                                                 {processedBuddyCasts.map((cast, cIdx) => {
@@ -4108,10 +4390,10 @@
 
                                                     return (
                                                         <div
-                                                            key={`buddy-cast-${row.id}-${cIdx}`}
+                                                            key={`buddy-cast-${row.id}-${buddyIdx}-${cIdx}`}
                                                             className={`absolute flex items-center group/icon select-none transition-opacity duration-150 ${focusedSpellId && !isFocusedSpell ? 'opacity-25' : 'opacity-100'}`}
                                                             style={{
-                                                                left: `${cast.timestamp * zoom}px`,
+                                                                left: getAlignedLeft(cast.timestamp, rowPhases),
                                                                 top: `${topPos}px`,
                                                                 height: `${currentTrackHeight}px`,
                                                                 zIndex: isFocusedSpell ? 220 + cIdx : 10 + cIdx
@@ -4157,19 +4439,21 @@
                                                                 >
                                                                     <RenderIcon spell={spell} className="opacity-100" />
                                                                 </div>
-                                                                <span
-                                                                    className="ml-1 font-bold text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] z-30 pointer-events-none"
-                                                                    style={{ fontSize: `${iconHeight * 0.58}px`, lineHeight: 1 }}
-                                                                >
-                                                                    {formatTime(cast.timestamp)}
-                                                                </span>
+                                                                {showSkillTimes && (
+                                                                    <span
+                                                                        className="ml-1 font-bold text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] z-30 pointer-events-none"
+                                                                        style={{ fontSize: `${iconHeight * 0.58}px`, lineHeight: 1 }}
+                                                                    >
+                                                                        {formatTime(cast.timestamp)}
+                                                                    </span>
+                                                                )}
                                                             </div>
                                                         </div>
                                                     );
                                                 })}
                                             </div>
                                         </div>
-                                    )}
+                                    ))}
                                     </React.Fragment>
                                 );
                             })}

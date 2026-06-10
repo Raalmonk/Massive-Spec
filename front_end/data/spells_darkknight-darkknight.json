@@ -26,7 +26,7 @@
     "show": true,
     "category": "MAJOR",
     "level": 68,
-    "display_slot": "darkknight-darkknight:delirium",
+    "display_slot": "darkknight-darkknight:blood-weapon",
     "debug_tags": [
       "dps"
     ]
@@ -326,13 +326,13 @@
     "cooldown": 60.0,
     "duration": 0.0,
     "color": "#D126CC",
-    "load_order": 20,
-    "show": false,
-    "category": "OTHER",
+    "load_order": 1,
+    "show": true,
+    "category": "MAJOR",
     "level": 35,
-    "display_slot": "darkknight-darkknight:blood weapon",
+    "display_slot": "darkknight-darkknight:blood-weapon",
     "debug_tags": [
-      "other"
+      "dps"
     ]
   },
   {
@@ -518,11 +518,11 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#D126CC",
-    "load_order": 32,
+    "load_order": 27,
     "show": false,
     "category": "OTHER",
     "level": 96,
-    "display_slot": "darkknight-darkknight:scarlet delirium",
+    "display_slot": "darkknight-darkknight:bloodspiller",
     "debug_tags": [
       "other"
     ]
@@ -566,11 +566,11 @@
     "cooldown": 2.5,
     "duration": 0.0,
     "color": "#D126CC",
-    "load_order": 35,
+    "load_order": 28,
     "show": false,
     "category": "OTHER",
     "level": 96,
-    "display_slot": "darkknight-darkknight:impalement",
+    "display_slot": "darkknight-darkknight:quietus",
     "debug_tags": [
       "other"
     ]

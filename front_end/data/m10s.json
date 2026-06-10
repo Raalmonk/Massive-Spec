@@ -1,110 +1,214 @@
 [
   {
-    "id": "M10S_HOT_IMPACT",
+    "id": "m10s-hot-impact-1",
     "name": "Hot Impact",
     "time": 9,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Hot_Impact.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "炽焰冲击",
+      "ja": "ホットインパクト",
+      "ko": "핫 임팩트"
+    },
+    "action_id": 46518,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M10S_PYROTATION",
+    "id": "m10s-pyrotation-1",
     "name": "Pyrotation",
     "time": 64,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Pyrotation.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "旋绕巨火",
+      "ja": "パイロローテーション",
+      "ko": "화염 회전"
+    },
+    "action_id": 46530,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M10S_DIVERS_DARE_1",
+    "id": "m10s-divers-dare-1",
     "name": "Divers' Dare",
     "time": 78,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Divers_Dare.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "斗志昂扬",
+      "ja": "ファイティングスピリット",
+      "ko": "끓어오르는 투지"
+    },
+    "action_id": 46520,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M10S_DEEP_IMPACT",
+    "id": "m10s-deep-impact-1",
     "name": "Deep Impact",
     "time": 132,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Deep_Impact.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "深海冲击",
+      "ja": "ディープインパクト",
+      "ko": "딥 임팩트"
+    },
+    "action_id": 46519,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M10S_XTREME_SPECTACULAR",
+    "id": "m10s-xtreme-spectacular",
     "name": "Xtreme Spectacular",
     "time": 157,
-    "duration": 17.0,
-    "color": "",
-    "icon": "Xtreme_Spectacular.png",
-    "type": "mechanic"
+    "duration": 17,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "极限炫技",
+      "ja": "エクストリーム・スペクタクル",
+      "ko": "익스트림 스펙터클"
+    },
+    "action_id": 46553,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M10S_EPIC_BROTHERHOOD",
+    "id": "m10s-epic-brotherhood-1",
     "name": "Epic Brotherhood",
     "time": 179,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Epic_Brotherhood.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "兄弟同心",
+      "ja": "ブラザーフッド",
+      "ko": "형제애"
+    },
+    "action_id": 46458,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M10S_INSANE_AIR",
+    "id": "m10s-insane-air-1",
     "name": "Insane Air",
     "time": 189,
-    "duration": 31.0,
-    "color": "",
-    "icon": "Insane_Air.png",
-    "type": "mechanic"
+    "duration": 31,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "狂浪腾空",
+      "ja": "インセインエアー",
+      "ko": "광란의 공중 기술"
+    },
+    "action_id": 47255,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M10S_DEEP_VARIAL",
+    "id": "m10s-deep-varial",
     "name": "Deep Varial",
     "time": 270,
-    "duration": 7.0,
-    "color": "",
-    "icon": "Deep_Varial.png",
-    "type": "mechanic"
+    "duration": 7,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "浪尖转体",
+      "ja": "ハイドロバリエル",
+      "ko": "물결 보드 꺾기"
+    },
+    "action_id": 47249,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M10S_HOT_AERIAL",
+    "id": "m10s-hot-aerial",
     "name": "Hot Aerial",
     "time": 284,
-    "duration": 7.0,
-    "color": "",
-    "icon": "Hot_Aerial.png",
-    "type": "mechanic"
+    "duration": 7,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "腾火踏浪",
+      "ja": "フレイムエアリアル",
+      "ko": "불꽃 공중회전"
+    },
+    "action_id": 46532,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M10S_WATERY_GRAVE",
+    "id": "m10s-watery-grave",
     "name": "Watery Grave",
     "time": 338,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Watery_Grave.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {},
+    "action_id": null,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M10S_SICKEST_TAKE_OFF",
+    "id": "m10s-sickest-takeoff",
     "name": "Sickest Take-off",
     "time": 434,
-    "duration": 4.0,
-    "color": "",
-    "icon": "Sickest_Take-off.png",
-    "type": "mechanic"
+    "duration": 4,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "破势乘浪",
+      "ja": "シック・テイクオフ",
+      "ko": "끝내주는 파도오름"
+    },
+    "action_id": 46541,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M10S_DIVERS_DARE_2",
+    "id": "m10s-divers-dare-2",
     "name": "Divers' Dare",
     "time": 524,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Divers_Dare.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "斗志昂扬",
+      "ja": "ファイティングスピリット",
+      "ko": "끓어오르는 투지"
+    },
+    "action_id": 46520,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   }
 ]

@@ -422,8 +422,14 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
     # Query: Fights
     #
     def _should_load_buddies(self) -> bool:
-        """Buddy rows are only useful for FF14 tank/healer comparisons."""
-        return bool(self.spec and self.spec.role and self.spec.role.code in ("tank", "heal"))
+        """Buddy rows need ranking-metric totals for tanks, healers, and Dancer dance partners."""
+        return bool(
+            self.spec
+            and (
+                (self.spec.role and self.spec.role.code in ("tank", "heal"))
+                or self.spec_slug == "dancer-dancer"
+            )
+        )
 
     @staticmethod
     def _actor_load_key(actor: typing.Any) -> tuple[typing.Any, ...]:
@@ -449,12 +455,111 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
 
         return (actor.__class__.__name__, report_id, fight_id, getattr(actor, "source_id", 0))
 
+    async def _load_dance_partner_tables(self) -> None:
+        """Populate Dancer dance partners from FF Logs Buffs tables.
+
+        Closed Position is usually pressed before pull, so the regular fight
+        event stream often does not contain the cast. The Buffs table still
+        exposes the Dance Partner target for the fight.
+        """
+        report_queries: list[tuple[Report, dict[str, tuple[Fight, Player]], str]] = []
+        for report in self.reports:
+            alias_contexts: dict[str, tuple[Fight, Player]] = {}
+            alias_queries = []
+            alias_idx = 0
+            for fight in report.fights:
+                rankers = [
+                    p
+                    for p in fight.players
+                    if p.spec_slug == self.spec_slug and p.total > 0 and p.source_id > 0
+                ]
+                for ranker in rankers:
+                    alias = f"dancePartner_{alias_idx}"
+                    alias_idx += 1
+                    alias_contexts[alias] = (fight, ranker)
+                    alias_queries.append(
+                        f"{alias}: table("
+                        f"fightIDs: {fight.fight_id}, "
+                        f"dataType: Buffs, "
+                        f"abilityID: 1001824, "
+                        f"sourceID: {ranker.source_id}"
+                        f")"
+                    )
+
+            if alias_queries:
+                query = textwrap.dedent(
+                    f"""\
+                    reportData
+                    {{
+                        report(code: "{report.report_id}")
+                        {{
+                            {' '.join(alias_queries)}
+                        }}
+                    }}
+                    """
+                )
+                report_queries.append((report, alias_contexts, query))
+
+        if not report_queries:
+            return
+
+        results = await asyncio.gather(
+            *[
+                self.client.query(query, raise_errors=False, region=report.region)
+                for report, _alias_contexts, query in report_queries
+            ]
+        )
+
+        applied = 0
+        for (report, alias_contexts, _query), result in zip(report_queries, results):
+            report_data = result.get("reportData", {}).get("report", {})
+            for alias, (fight, ranker) in alias_contexts.items():
+                table = report_data.get(alias) or {}
+                auras = (table.get("data") or {}).get("auras") or []
+                partners_by_source_id = {
+                    partner.get("source_id"): dict(partner)
+                    for partner in (getattr(ranker, "dance_partners", []) or [])
+                    if partner.get("source_id")
+                }
+
+                for aura in auras:
+                    source_id = int(aura.get("id") or 0)
+                    if source_id <= 0 or source_id == ranker.source_id:
+                        continue
+
+                    bands = aura.get("bands") or []
+                    start_times = [int(band.get("startTime") or 0) for band in bands]
+                    end_times = [int(band.get("endTime") or 0) for band in bands]
+                    first_ts = max(0, (min(start_times) if start_times else fight.start_time_rel) - fight.start_time_rel)
+                    last_ts = max(0, (max(end_times) if end_times else fight.end_time_rel) - fight.start_time_rel)
+                    existing = partners_by_source_id.get(source_id)
+                    if existing:
+                        existing["first_ts"] = min(existing.get("first_ts", first_ts), first_ts)
+                        existing["last_ts"] = max(existing.get("last_ts", last_ts), last_ts)
+                        existing["event_count"] = max(existing.get("event_count", 0), int(aura.get("totalUses") or 0))
+                    else:
+                        partners_by_source_id[source_id] = {
+                            "source_id": source_id,
+                            "first_ts": first_ts,
+                            "last_ts": last_ts,
+                            "event_count": int(aura.get("totalUses") or 0),
+                        }
+
+                next_partners = sorted(partners_by_source_id.values(), key=lambda partner: partner.get("first_ts", 0))
+                if next_partners != getattr(ranker, "dance_partners", []):
+                    ranker.dance_partners = next_partners
+                    applied += len(next_partners)
+
+        if applied:
+            logger.info(f"[Dance Partner] Applied {applied} dance partner rows from Buffs tables.")
+
     async def load_actors(self) -> None:
         """Load the Casts for all missing fights."""
         # [优化] 只加载主角 (DPS > 0 的那个) 的技能数据
         actors_to_load = [p for p in self.players if p.spec_slug == self.spec_slug and p.total > 0]
-        load_buddies = self._should_load_buddies()
-        buddy_role_code = self.spec.role.code if load_buddies else ""
+        load_role_buddies = bool(self.spec and self.spec.role and self.spec.role.code in ("tank", "heal"))
+        load_dance_partners = self.spec_slug == "dancer-dancer"
+        buddy_role_code = self.spec.role.code if load_role_buddies else ""
 
         for i, fight in enumerate(self.fights):
             if not fight.boss:
@@ -466,7 +571,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             else:
                 fight.boss.query_mode = fight.boss.QueryModes.PHASES
 
-            if load_buddies:
+            if load_role_buddies:
                 ranker_source_ids = {
                     p.source_id
                     for p in fight.players
@@ -500,13 +605,49 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             unique_actors.append(actor)
 
         logger.info(f"load {len(unique_actors)} players/bosses")
-        if not unique_actors:
-            return
+        if unique_actors:
+            await self.load_many(unique_actors, raise_errors=False)
 
-        await self.load_many(unique_actors, raise_errors=False)
+            for duplicate, original in duplicate_actors:
+                duplicate.casts = list(original.casts)
 
-        for duplicate, original in duplicate_actors:
-            duplicate.casts = list(original.casts)
+        if load_dance_partners:
+            await self._load_dance_partner_tables()
+
+            partner_actors: list[Player] = []
+            for fight in self.fights:
+                players_by_source_id = {p.source_id: p for p in fight.players if p.source_id > 0}
+                rankers = [
+                    p
+                    for p in fight.players
+                    if p.spec_slug == self.spec_slug and p.total > 0
+                ]
+                for ranker in rankers:
+                    for partner_info in getattr(ranker, "dance_partners", []) or []:
+                        partner = players_by_source_id.get(partner_info.get("source_id"))
+                        if partner and not partner.casts:
+                            partner_actors.append(partner)
+
+            partner_actors = [actor for actor in partner_actors if actor and not actor.casts]
+            unique_partner_actors = []
+            seen_partner_actors = {}
+            duplicate_partner_actors = []
+            for actor in partner_actors:
+                key = self._actor_load_key(actor)
+                original = seen_partner_actors.get(key)
+                if original:
+                    duplicate_partner_actors.append((actor, original))
+                    continue
+
+                seen_partner_actors[key] = actor
+                unique_partner_actors.append(actor)
+
+            logger.info(f"load {len(unique_partner_actors)} dancer dance partners")
+            if unique_partner_actors:
+                await self.load_many(unique_partner_actors, raise_errors=False)
+
+                for duplicate, original in duplicate_partner_actors:
+                    duplicate.casts = list(original.casts)
 
     ############################################################################
     # Query: Both

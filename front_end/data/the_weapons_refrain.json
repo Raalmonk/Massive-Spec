@@ -1,0 +1,182 @@
+[
+  {
+    "id": "uwu-mistral-song",
+    "name": "Mistral Song",
+    "time": 11.4,
+    "duration": 3,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "寒风之歌",
+      "ja": "ミストラルソング",
+      "ko": "삭풍의 노래"
+    },
+    "action_id": 11074,
+    "phase_index": 0,
+    "phase_time": 11.4,
+    "phase_name": ""
+  },
+  {
+    "id": "uwu-mistral-shriek",
+    "name": "Mistral Shriek",
+    "time": 42.2,
+    "duration": 4,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "寒风之啸",
+      "ja": "ミストラルシュリーク",
+      "ko": "삭풍의 비명"
+    },
+    "action_id": 11092,
+    "phase_index": 0,
+    "phase_time": 42.2,
+    "phase_name": ""
+  },
+  {
+    "id": "uwu-crimson-cyclone",
+    "name": "Crimson Cyclone",
+    "time": 303.0,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "深红旋风",
+      "ja": "クリムゾンサイクロン",
+      "ko": "진홍 회오리"
+    },
+    "action_id": 11103,
+    "phase_index": 1,
+    "phase_time": 3.0,
+    "phase_name": ""
+  },
+  {
+    "id": "uwu-vulcan-burst",
+    "name": "Vulcan Burst",
+    "time": 318.3,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "火神爆裂",
+      "ja": "バルカンバースト",
+      "ko": "폭렬 난사"
+    },
+    "action_id": 11095,
+    "phase_index": 1,
+    "phase_time": 18.3,
+    "phase_name": ""
+  },
+  {
+    "id": "uwu-geocrush-1",
+    "name": "Geocrush",
+    "time": 603.0,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "大地粉碎",
+      "ja": "ジオクラッシュ",
+      "ko": "대지 붕괴"
+    },
+    "action_id": 11517,
+    "phase_index": 2,
+    "phase_time": 3.0,
+    "phase_name": ""
+  },
+  {
+    "id": "uwu-tumult",
+    "name": "Tumult",
+    "time": 654.2,
+    "duration": 8,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "怒震",
+      "ja": "激震",
+      "ko": "격진"
+    },
+    "action_id": 11288,
+    "phase_index": 2,
+    "phase_time": 54.2,
+    "phase_name": ""
+  },
+  {
+    "id": "uwu-ultimate-predation",
+    "name": "Ultimate Predation",
+    "time": 1023.5,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "追击之究极幻想",
+      "ja": "追撃の究極幻想",
+      "ko": "궁극의 추격 환상"
+    },
+    "action_id": 11126,
+    "phase_index": 4,
+    "phase_time": 63.2,
+    "phase_name": ""
+  },
+  {
+    "id": "uwu-ultimate-annihilation",
+    "name": "Ultimate Annihilation",
+    "time": 1101.8,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "爆击之究极幻想",
+      "ja": "爆撃の究極幻想",
+      "ko": "궁극의 폭격 환상"
+    },
+    "action_id": 11596,
+    "phase_index": 4,
+    "phase_time": 141.5,
+    "phase_name": ""
+  },
+  {
+    "id": "uwu-ultimate-suppression",
+    "name": "Ultimate Suppression",
+    "time": 1195.0,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "乱击之究极幻想",
+      "ja": "乱撃の究極幻想",
+      "ko": "궁극의 난격 환상"
+    },
+    "action_id": 11597,
+    "phase_index": 4,
+    "phase_time": 234.7,
+    "phase_name": ""
+  },
+  {
+    "id": "uwu-aetheric-boom",
+    "name": "Aetheric Boom",
+    "time": 1254.7,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "以太波动",
+      "ja": "エーテル波動",
+      "ko": "에테르 파동"
+    },
+    "action_id": 11144,
+    "phase_index": 4,
+    "phase_time": 294.4,
+    "phase_name": ""
+  }
+]

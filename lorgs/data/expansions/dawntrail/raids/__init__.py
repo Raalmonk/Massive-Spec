@@ -7,6 +7,7 @@ from .m10s import *
 from .m11s import *
 from .m12s_p1 import *
 from .m12s_p2 import *
+from .timeline_markers import *
 
 __all__ = [
     "ARCADION_HEAVYWEIGHT",

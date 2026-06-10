@@ -630,11 +630,11 @@
     "cooldown": 60.0,
     "duration": 0.0,
     "color": "#A8D2E6",
-    "load_order": 39,
+    "load_order": 29,
     "show": false,
     "category": "OTHER",
     "level": 96,
-    "display_slot": "paladin-paladin:imperator",
+    "display_slot": "paladin-paladin:requiescat",
     "debug_tags": [
       "other"
     ]

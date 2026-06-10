@@ -1,209 +1,362 @@
 [
   {
-    "id": "M9S_KILLER_VOICE",
+    "id": "m9s-killer-voice-1",
     "name": "Killer Voice",
     "time": 5,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Killer_Voice.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "魅亡之音",
+      "ja": "キラーボイス",
+      "ko": "뇌쇄적인 목소리"
+    },
+    "action_id": 45956,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_HARDCORE",
+    "id": "m9s-hardcore-1",
     "name": "Hardcore",
     "time": 15,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Hardcore.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "硬核之声",
+      "ja": "ハードコア",
+      "ko": "과격성"
+    },
+    "action_id": 45951,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_VAMP_STOMP_1",
+    "id": "m9s-vamp-stomp-1",
     "name": "Vamp Stomp",
     "time": 25,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Vamp_Stomp.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "血魅的靴踏音",
+      "ja": "ヴァンプストンプ",
+      "ko": "요염한 짓밟기"
+    },
+    "action_id": 45940,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_BLAST_BEAT_1",
+    "id": "m9s-blast-beat-1",
     "name": "Blast Beat",
     "time": 34,
-    "duration": 8.0,
-    "color": "",
-    "icon": "Blast_Beat.png",
-    "type": "mechanic"
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "共振波",
+      "ja": "共振波",
+      "ko": "공진파"
+    },
+    "action_id": 45941,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_BRUTAL_RAIN_1",
+    "id": "m9s-brutal-rain-1",
     "name": "Brutal Rain",
     "time": 42,
-    "duration": 4.0,
-    "color": "",
-    "icon": "Brutal_Rain.png",
-    "type": "mechanic"
+    "duration": 4,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "粗暴之雨",
+      "ja": "ブルータルレイン",
+      "ko": "잔혹한 비"
+    },
+    "action_id": 45955,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_CROWD_KILL_1",
+    "id": "m9s-crowd-kill-1",
     "name": "Crowd Kill",
     "time": 147,
-    "duration": 6.0,
-    "color": "",
-    "icon": "Crowd_Kill.png",
-    "type": "mechanic"
+    "duration": 6,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "全场杀伤",
+      "ja": "クラウドキリング",
+      "ko": "생명력 갈취"
+    },
+    "action_id": 45933,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_FINALE_FATALE_1",
+    "id": "m9s-finale-fatale-1",
     "name": "Finale Fatale",
     "time": 166,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Finale_Fatale.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "致命的闭幕曲",
+      "ja": "フィナーレ・ファターレ",
+      "ko": "파멸적 최후"
+    },
+    "action_id": 45936,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_PULPING_PULSE",
+    "id": "m9s-pulping-pulse-1",
     "name": "Pulping Pulse",
     "time": 177,
-    "duration": 3.0,
-    "color": "",
-    "icon": "Pulping_Pulse.png",
-    "type": "mechanic"
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "碎烂脉冲",
+      "ja": "パルピングパルス",
+      "ko": "분쇄 파동"
+    },
+    "action_id": 45939,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_AETHERLETTING",
-    "name": "Aetherletting Cones",
+    "id": "m9s-aetherletting-1",
+    "name": "Aetherletting",
     "time": 178,
-    "duration": 12.0,
-    "color": "",
-    "icon": "Aetherletting_Cones.png",
-    "type": "mechanic"
+    "duration": 12,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "以太流失",
+      "ja": "エーテルレッティング",
+      "ko": "에테르 해방"
+    },
+    "action_id": 45969,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_BRUTAL_RAIN_2",
+    "id": "m9s-brutal-rain-2",
     "name": "Brutal Rain",
     "time": 252,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Brutal_Rain.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "粗暴之雨",
+      "ja": "ブルータルレイン",
+      "ko": "잔혹한 비"
+    },
+    "action_id": 45955,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_INSATIABLE_THIRST",
+    "id": "m9s-insatiable-thirst",
     "name": "Insatiable Thirst",
     "time": 265,
-    "duration": 6.0,
-    "color": "",
-    "icon": "Insatiable_Thirst.png",
-    "type": "mechanic"
+    "duration": 6,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "贪欲无厌",
+      "ja": "インセーシャブル・サースト",
+      "ko": "채워지지 않는 갈증"
+    },
+    "action_id": 45938,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_SADISTIC_SCREECH",
+    "id": "m9s-sadistic-screech",
     "name": "Sadistic Screech",
     "time": 278,
-    "duration": 6.0,
-    "color": "",
-    "icon": "Sadistic_Screech.png",
-    "type": "mechanic"
+    "duration": 6,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "施虐的尖啸",
+      "ja": "サディスティック・スクリーチ",
+      "ko": "가학적인 웃음"
+    },
+    "action_id": 45926,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_PLUMMET",
-    "name": "Plummet x2 + Deadly Doornail",
+    "id": "m9s-plummet",
+    "name": "Plummet",
     "time": 296,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Plummet.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "掉落",
+      "ja": "落下",
+      "ko": "낙하"
+    },
+    "action_id": 45963,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_KILLER_VOICE_2",
+    "id": "m9s-killer-voice-2",
     "name": "Killer Voice",
     "time": 300,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Killer_Voice.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "魅亡之音",
+      "ja": "キラーボイス",
+      "ko": "뇌쇄적인 목소리"
+    },
+    "action_id": 45956,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_CROWD_KILL_2",
+    "id": "m9s-crowd-kill-2",
     "name": "Crowd Kill",
     "time": 365,
-    "duration": 6.0,
-    "color": "",
-    "icon": "Crowd_Kill.png",
-    "type": "mechanic"
+    "duration": 6,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "全场杀伤",
+      "ja": "クラウドキリング",
+      "ko": "생명력 갈취"
+    },
+    "action_id": 45933,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_FINALE_FATALE_2",
+    "id": "m9s-finale-fatale-2",
     "name": "Finale Fatale",
     "time": 384,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Finale_Fatale.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "致命的闭幕曲",
+      "ja": "フィナーレ・ファターレ",
+      "ko": "파멸적 최후"
+    },
+    "action_id": 45936,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_HELL_IN_A_CELL",
+    "id": "m9s-hell-in-a-cell",
     "name": "Hell in a Cell",
     "time": 396,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Hell_in_a_Cell.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "笼中地狱",
+      "ja": "ヘル・イン・ア・セル",
+      "ko": "헬 인 어 셀"
+    },
+    "action_id": 45973,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_ULTRASONIC",
-    "name": "Ultrasonic Spread/Amp",
+    "id": "m9s-ultrasonic",
+    "name": "Ultrasonic",
     "time": 403,
-    "duration": 6.0,
-    "color": "",
-    "icon": "Ultrasonic_Spread.png",
-    "type": "mechanic"
+    "duration": 6,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "音速流散",
+      "ja": "スプレッドソニック",
+      "ko": "확산 음파"
+    },
+    "action_id": 45982,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_BRUTAL_RAIN_3",
+    "id": "m9s-brutal-rain-3",
     "name": "Brutal Rain",
     "time": 494,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Brutal_Rain.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "粗暴之雨",
+      "ja": "ブルータルレイン",
+      "ko": "잔혹한 비"
+    },
+    "action_id": 45955,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   },
   {
-    "id": "M9S_VAMP_STOMP_2",
-    "name": "Vamp Stomp",
-    "time": 507,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Vamp_Stomp.png",
-    "type": "mechanic"
-  },
-  {
-    "id": "M9S_BLAST_BEAT_2",
-    "name": "Blast Beat",
-    "time": 514,
-    "duration": 9.0,
-    "color": "",
-    "icon": "Blast_Beat.png",
-    "type": "mechanic"
-  },
-  {
-    "id": "M9S_HALF_MOON",
-    "name": "Half Moon",
-    "time": 523,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Half_Moon.png",
-    "type": "mechanic"
-  },
-  {
-    "id": "M9S_HARDCORE_2",
+    "id": "m9s-hardcore-2",
     "name": "Hardcore",
     "time": 533,
-    "duration": 5.0,
-    "color": "",
-    "icon": "Hardcore.png",
-    "type": "mechanic"
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "硬核之声",
+      "ja": "ハードコア",
+      "ko": "과격성"
+    },
+    "action_id": 45951,
+    "phase_index": null,
+    "phase_time": null,
+    "phase_name": ""
   }
 ]

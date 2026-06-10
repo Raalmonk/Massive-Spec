@@ -29,11 +29,32 @@ logger = logging.getLogger(__name__)
 # 导入数据
 try:
     from lorgs.data.classes import ALL_SPECS
-    from lorgs.data.expansions.dawntrail.raids.arcadion_heavyweight import ARCADION_HEAVYWEIGHT
+    from lorgs.data.expansions.dawntrail.raids import ARCADION_HEAVYWEIGHT, FUTURES_REWRITTEN, LEGACY_ULTIMATES_ZONE
     import lorgs.data.items.potions # 确保药水和冲刺被加载
 except ImportError as e:
     logger.error(f"Failed to import lorgs modules: {e}")
     sys.exit(1)
+
+
+BOSS_TIMELINE_COLORS = {
+    "mech": "#facc15",
+    "tb": "#60a5fa",
+    "aoe": "#fb923c",
+}
+
+BOSS_TIMELINE_FILENAME_MAP = {
+    "vamp-fatale": "m9s",
+    "red-hot-and-deep-blue": "m10s",
+    "the-tyrant": "m11s",
+    "lindwurm": "m12s_p1",
+    "lindwurm-ii": "m12s_p2",
+    "futures-rewritten": "futures_rewritten",
+    "the-unending-coil-of-bahamut": "the_unending_coil_of_bahamut",
+    "the-weapons-refrain": "the_weapons_refrain",
+    "the-epic-of-alexander": "the_epic_of_alexander",
+    "dragonsongs-reprise": "dragonsongs_reprise",
+    "the-omega-protocol": "the_omega_protocol",
+}
 
 
 # --- 3. 辅助函数 ---
@@ -72,6 +93,44 @@ def parse_time(time_str):
         return int(time_str)
     except:
         return 0
+
+
+def get_boss_timeline_type_from_tags(tags):
+    tags = tags or []
+    if SpellTag.TANK_MIT in tags or SpellTag.SINGLE_MIT in tags:
+        return "tb"
+    if SpellTag.RAID_MIT in tags or SpellTag.RAID_CD in tags:
+        return "aoe"
+    return "mech"
+
+
+def serialize_boss_timeline_event(event):
+    item = event.as_dict()
+    item["type"] = item.get("type") or "mech"
+    item["color"] = item.get("color") or BOSS_TIMELINE_COLORS.get(item["type"], BOSS_TIMELINE_COLORS["mech"])
+    return item
+
+
+def serialize_boss_cast(cast):
+    event_type = get_boss_timeline_type_from_tags(getattr(cast, "tags", []))
+    return {
+        "id": cast.spell_id,
+        "name": cast.name,
+        "time": parse_time(getattr(cast, "time", 0)),
+        "duration": getattr(cast, "duration", 0),
+        "color": getattr(cast, "color", "") or BOSS_TIMELINE_COLORS.get(event_type, BOSS_TIMELINE_COLORS["mech"]),
+        "icon": getattr(cast, "icon", ""),
+        "type": event_type,
+        "name_i18n": getattr(cast, "name_i18n", {}),
+    }
+
+
+def get_bosses_for_timeline_generation():
+    return [
+        *ARCADION_HEAVYWEIGHT.bosses,
+        FUTURES_REWRITTEN,
+        *LEGACY_ULTIMATES_ZONE.bosses,
+    ]
 
 # --- 4. 核心生成逻辑 ---
 
@@ -122,8 +181,8 @@ def generate_player_spells():
         filename = f"front_end/data/spells_{spec_slug}.json"
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         
-        with open(filename, "w") as f:
-            json.dump(spells_data, f, indent=2)
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump(spells_data, f, indent=2, ensure_ascii=False)
             
         logger.info(f"  [OK] {spec.name:<15} -> {filename} ({len(spells_data)} spells)")
         count += 1
@@ -136,34 +195,21 @@ def generate_boss_spells():
     if not ARCADION_HEAVYWEIGHT: return
 
     logger.info(">>> 开始生成 Boss 时间轴数据...")
-    
-    filename_map = {
-        "vamp-fatale": "m9s",
-        "red-hot-and-deep-blue": "m10s",
-        "the-tyrant": "m11s",
-        "lindwurm": "m12s_p1",
-        "lindwurm-ii": "m12s_p2"
-    }
 
-    for boss in ARCADION_HEAVYWEIGHT.bosses:
-        short_name = filename_map.get(boss.full_name_slug, boss.full_name_slug)
-        filename = f"front_end/data/boss_{short_name}.json" 
+    for boss in get_bosses_for_timeline_generation():
+        short_name = BOSS_TIMELINE_FILENAME_MAP.get(boss.full_name_slug, boss.full_name_slug.replace("-", "_"))
+        filename = f"front_end/data/{short_name}.json"
 
-        mechanics_data = []
-        for cast in boss.spells:
-            mechanics_data.append({
-                "id": cast.spell_id,
-                "name": cast.name,
-                "time": parse_time(getattr(cast, "time", 0)),
-                "duration": getattr(cast, "duration", 0),
-                "color": getattr(cast, "color", ""),
-                "icon": getattr(cast, "icon", ""),
-                "type": "mechanic"
-            })
+        boss_timeline = getattr(boss, "boss_timeline", None)
+        mechanics_data = (
+            [serialize_boss_timeline_event(event) for event in boss_timeline]
+            if boss_timeline is not None
+            else [serialize_boss_cast(cast) for cast in boss.spells]
+        )
         
         os.makedirs(os.path.dirname(filename), exist_ok=True)
-        with open(filename, "w") as f:
-            json.dump(mechanics_data, f, indent=2)
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump(mechanics_data, f, indent=2, ensure_ascii=False)
         logger.info(f"  [OK] {boss.name:<20} -> {filename}")
 
     logger.info(">>> Boss 数据完成。\n")

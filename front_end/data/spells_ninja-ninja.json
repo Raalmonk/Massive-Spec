@@ -250,7 +250,7 @@
     "show": false,
     "category": "OTHER",
     "level": 18,
-    "display_slot": "ninja-ninja:trick attack",
+    "display_slot": "ninja-ninja:trick-attack",
     "debug_tags": [
       "other"
     ]
@@ -422,11 +422,11 @@
     "cooldown": 60.0,
     "duration": 0.0,
     "color": "#AF1964",
-    "load_order": 26,
+    "load_order": 21,
     "show": false,
     "category": "OTHER",
     "level": 56,
-    "display_slot": "ninja-ninja:dream within a dream",
+    "display_slot": "ninja-ninja:assassinate",
     "debug_tags": [
       "other"
     ]
@@ -550,11 +550,11 @@
     "cooldown": 60.0,
     "duration": 0.0,
     "color": "#AF1964",
-    "load_order": 34,
+    "load_order": 15,
     "show": false,
     "category": "OTHER",
     "level": 92,
-    "display_slot": "ninja-ninja:kunai's bane",
+    "display_slot": "ninja-ninja:trick-attack",
     "debug_tags": [
       "other"
     ]

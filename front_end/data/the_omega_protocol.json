@@ -1,0 +1,290 @@
+[
+  {
+    "id": "top-program-loop",
+    "name": "Program Loop",
+    "time": 15.0,
+    "duration": 6,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "循环程序",
+      "ja": "サークルプログラム",
+      "ko": "순환 프로그램"
+    },
+    "action_id": 31491,
+    "phase_index": 0,
+    "phase_time": 15.0,
+    "phase_name": ""
+  },
+  {
+    "id": "top-pantokrator",
+    "name": "Pantokrator",
+    "time": 69.2,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "全能之主",
+      "ja": "パントクラトル",
+      "ko": "전지전능"
+    },
+    "action_id": 31499,
+    "phase_index": 0,
+    "phase_time": 69.2,
+    "phase_name": ""
+  },
+  {
+    "id": "top-solar-ray-1",
+    "name": "Solar Ray",
+    "time": 214.5,
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "太阳射线",
+      "ja": "ソーラレイ",
+      "ko": "태양 광선"
+    },
+    "action_id": 32362,
+    "phase_index": 1,
+    "phase_time": 14.5,
+    "phase_name": ""
+  },
+  {
+    "id": "top-party-synergy",
+    "name": "Party Synergy",
+    "time": 230.9,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "协作程序PT",
+      "ja": "連携プログラムPT",
+      "ko": "연계 프로그램[파티]"
+    },
+    "action_id": 31550,
+    "phase_index": 1,
+    "phase_time": 30.9,
+    "phase_name": ""
+  },
+  {
+    "id": "top-limitless-synergy",
+    "name": "Limitless Synergy",
+    "time": 282.4,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "协作程序LB",
+      "ja": "連携プログラムLB",
+      "ko": "연계 프로그램[리미트]"
+    },
+    "action_id": 31544,
+    "phase_index": 1,
+    "phase_time": 82.4,
+    "phase_name": ""
+  },
+  {
+    "id": "top-cosmo-memory-1",
+    "name": "Cosmo Memory",
+    "time": 318.8,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "宇宙记忆",
+      "ja": "コスモメモリー",
+      "ko": "세계의 기억"
+    },
+    "action_id": 31522,
+    "phase_index": 1,
+    "phase_time": 118.8,
+    "phase_name": ""
+  },
+  {
+    "id": "top-hello-world",
+    "name": "Hello, World",
+    "time": 441.3,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "你好，世界",
+      "ja": "ハロー・ワールド",
+      "ko": "헬로 월드"
+    },
+    "action_id": 31573,
+    "phase_index": 2,
+    "phase_time": 41.3,
+    "phase_name": ""
+  },
+  {
+    "id": "top-critical-error",
+    "name": "Critical Error",
+    "time": 550.1,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "严重错误",
+      "ja": "クリティカルエラー",
+      "ko": "치명적인 오류"
+    },
+    "action_id": 31588,
+    "phase_index": 2,
+    "phase_time": 150.1,
+    "phase_name": ""
+  },
+  {
+    "id": "top-run-delta",
+    "name": "Run: ****mi* (Delta)",
+    "time": 740.0,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "代码：＊能＊（德尔塔）",
+      "ja": "コード：＊＊＊ミ＊【デルタ】",
+      "ko": "코드: ＊＊미＊[델타]"
+    },
+    "action_id": 31624,
+    "phase_index": 4,
+    "phase_time": 40.0,
+    "phase_name": ""
+  },
+  {
+    "id": "top-run-sigma",
+    "name": "Run: ****mi* (Sigma)",
+    "time": 821.7,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "代码：＊能＊（西格玛）",
+      "ja": "コード：＊＊＊ミ＊【シグマ】",
+      "ko": "코드: ＊＊미＊[시그마]"
+    },
+    "action_id": 32788,
+    "phase_index": 4,
+    "phase_time": 121.7,
+    "phase_name": ""
+  },
+  {
+    "id": "top-run-omega",
+    "name": "Run: ****mi* (Omega)",
+    "time": 910.7,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "代码：＊能＊（欧米茄）",
+      "ja": "コード：＊＊＊ミ＊【オメガ】",
+      "ko": "코드: ＊＊미＊[오메가]"
+    },
+    "action_id": 32789,
+    "phase_index": 4,
+    "phase_time": 210.7,
+    "phase_name": ""
+  },
+  {
+    "id": "top-solar-ray-2",
+    "name": "Solar Ray",
+    "time": 976.8,
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "太阳射线",
+      "ja": "ソーラレイ",
+      "ko": "태양 광선"
+    },
+    "action_id": 32362,
+    "phase_index": 4,
+    "phase_time": 276.8,
+    "phase_name": ""
+  },
+  {
+    "id": "top-cosmo-memory-2",
+    "name": "Cosmo Memory",
+    "time": 1167.8,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "宇宙记忆",
+      "ja": "コスモメモリー",
+      "ko": "세계의 기억"
+    },
+    "action_id": 31522,
+    "phase_index": 5,
+    "phase_time": 67.8,
+    "phase_name": ""
+  },
+  {
+    "id": "top-wave-cannon",
+    "name": "Unlimited Wave Cannon",
+    "time": 1215.4,
+    "duration": 8,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "波动炮：限制解除",
+      "ja": "波動砲：リミッターカット",
+      "ko": "파동포: 리미터 해제"
+    },
+    "action_id": 31660,
+    "phase_index": 5,
+    "phase_time": 115.4,
+    "phase_name": ""
+  },
+  {
+    "id": "top-cosmo-meteor",
+    "name": "Cosmo Meteor",
+    "time": 1331.6,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "宇宙流星",
+      "ja": "コスモメテオ",
+      "ko": "세계의 메테오"
+    },
+    "action_id": 31664,
+    "phase_index": 5,
+    "phase_time": 231.6,
+    "phase_name": ""
+  },
+  {
+    "id": "top-magic-number",
+    "name": "Magic Number",
+    "time": 1366.7,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "魔数",
+      "ja": "マジックナンバー",
+      "ko": "매직 넘버"
+    },
+    "action_id": 31670,
+    "phase_index": 5,
+    "phase_time": 266.7,
+    "phase_name": ""
+  }
+]
