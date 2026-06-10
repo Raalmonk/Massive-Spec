@@ -114,6 +114,7 @@ check_python_files() {
         update_spells.py \
         scripts/update_all_job_actions.py \
         scripts/verify_all_job_actions_fflogs.py \
+        scripts/refresh_boss_all_specs.py \
         scripts/refresh_dancing_mad_all_specs.py \
         lorrgs_api/routes/api_import_log.py \
         lorgs/clients/wcl/client.py \

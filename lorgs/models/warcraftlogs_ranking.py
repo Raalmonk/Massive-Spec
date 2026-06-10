@@ -571,10 +571,12 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                 fight.boss = Boss(boss_slug=self.boss_slug)
                 fight.boss.fight = fight
 
-            if i == 0:
-                fight.boss.query_mode = fight.boss.QueryModes.ALL
-            else:
-                fight.boss.query_mode = fight.boss.QueryModes.PHASES
+            should_load_boss = i == 0 or not fight.phases
+            if should_load_boss:
+                if i == 0:
+                    fight.boss.query_mode = fight.boss.QueryModes.ALL
+                else:
+                    fight.boss.query_mode = fight.boss.QueryModes.PHASES
 
             if load_role_buddies:
                 ranker_source_ids = {
@@ -592,7 +594,8 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                 ]
                 actors_to_load.extend(buddy_players)
 
-            actors_to_load.append(fight.boss)
+            if should_load_boss:
+                actors_to_load.append(fight.boss)
 
         actors_to_load = [actor for actor in actors_to_load if actor and not actor.casts]
         unique_actors = []

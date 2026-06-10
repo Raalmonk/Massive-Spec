@@ -71,6 +71,10 @@ BOSS_ROTATION = [
     *BOSS_ROTATION_GROUP_B,
 ]
 
+DEFAULT_METRIC = "rdps"
+DEFAULT_RANKING_REGIONS = ("", "CN", "KR")
+LEGACY_ULTIMATE_RANKING_REGIONS = ("", "CN")
+
 BOSS_CONFIG = {
     "futures-rewritten": {
         "difficulty": "ultimate",
@@ -83,27 +87,29 @@ BOSS_CONFIG = {
     "the-unending-coil-of-bahamut": {
         "difficulty": "ultimate",
         "metric": "rdps",
+        "ranking_regions": LEGACY_ULTIMATE_RANKING_REGIONS,
     },
     "the-weapons-refrain": {
         "difficulty": "ultimate",
         "metric": "rdps",
+        "ranking_regions": LEGACY_ULTIMATE_RANKING_REGIONS,
     },
     "the-epic-of-alexander": {
         "difficulty": "ultimate",
         "metric": "rdps",
+        "ranking_regions": LEGACY_ULTIMATE_RANKING_REGIONS,
     },
     "dragonsongs-reprise": {
         "difficulty": "ultimate",
         "metric": "rdps",
+        "ranking_regions": LEGACY_ULTIMATE_RANKING_REGIONS,
     },
     "the-omega-protocol": {
         "difficulty": "ultimate",
         "metric": "rdps",
+        "ranking_regions": LEGACY_ULTIMATE_RANKING_REGIONS,
     },
 }
-
-DEFAULT_METRIC = "rdps"
-DEFAULT_RANKING_REGIONS = ("", "CN", "KR")
 
 
 async def _do_update_spec(spec, boss_slug, timestamp_folder):
@@ -248,7 +254,7 @@ async def sleep_until_next_hour() -> None:
 async def hourly_main() -> None:
     """Continuously sweep one boss per hour using BOSS_ROTATION order."""
     WarcraftlogsClient._instance = None
-    cycle_index = 0
+    cycle_index = datetime.datetime.now(datetime.timezone.utc).hour % len(BOSS_ROTATION)
 
     try:
         while True:
