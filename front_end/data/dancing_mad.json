@@ -32,10 +32,34 @@
     "color": "#888888"
   },
   {
-    "id": "dm-kefka-graven-image-1",
+    "id": "dmu-001",
+    "name": "Revolting Ruin III",
+    "time": 15,
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "恶狠狠毁荡"
+    }
+  },
+  {
+    "id": "dmu-002",
+    "name": "Revolting Ruin III",
+    "time": 18,
+    "duration": 4,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "恶狠狠毁荡"
+    }
+  },
+  {
+    "id": "dmu-003",
     "name": "Graven Image",
-    "time": 29.2,
-    "duration": 2.7,
+    "time": 28,
+    "duration": 2,
     "type": "mech",
     "color": "#facc15",
     "icon": "",
@@ -44,118 +68,106 @@
     }
   },
   {
-    "id": "dm-kefka-graven-image-2",
-    "name": "Graven Image",
-    "time": 80.284,
-    "duration": 2.7,
+    "id": "dmu-004",
+    "name": "玄乎乎魔法",
+    "time": 37,
+    "duration": 5,
     "type": "mech",
     "color": "#facc15",
     "icon": "",
     "name_i18n": {
-      "zh": "众神之像"
+      "zh": "玄乎乎魔法"
     }
   },
   {
-    "id": "dm-kefka-graven-image-3",
-    "name": "Graven Image",
-    "time": 163.828,
-    "duration": 2.7,
+    "id": "dmu-005",
+    "name": "呼啦啦爆炎",
+    "time": 38,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "呼啦啦爆炎"
+    }
+  },
+  {
+    "id": "dmu-006",
+    "name": "波动炮",
+    "time": 42,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "波动炮"
+    }
+  },
+  {
+    "id": "dmu-007",
+    "name": "连环环陷阱",
+    "time": 44,
+    "duration": 3,
     "type": "mech",
     "color": "#facc15",
     "icon": "",
     "name_i18n": {
-      "zh": "众神之像"
+      "zh": "连环环陷阱"
     }
   },
   {
-    "id": "dm-kefka-forsaken-1",
-    "name": "Forsaken",
-    "time": 235.596,
-    "duration": 6.7,
+    "id": "dmu-008",
+    "name": "爆炸",
+    "time": 45,
+    "duration": 3,
     "type": "mech",
     "color": "#facc15",
     "icon": "",
     "name_i18n": {
-      "zh": "遗弃末世"
+      "zh": "爆炸"
     }
   },
   {
-    "id": "dm-kefka-light-of-judgment",
+    "id": "dmu-009",
+    "name": "连环环陷阱",
+    "time": 49,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "连环环陷阱"
+    }
+  },
+  {
+    "id": "dmu-010",
+    "name": "玄乎乎魔法",
+    "time": 53,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "玄乎乎魔法"
+    }
+  },
+  {
+    "id": "dmu-011",
     "name": "Light of Judgment",
-    "time": 341.888,
-    "duration": 4.7,
-    "type": "mech",
-    "color": "#facc15",
+    "time": 62,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
     "icon": "",
     "name_i18n": {
       "zh": "制裁之光"
     }
   },
   {
-    "id": "dm-kefka-decisive-battle-1",
-    "name": "the Decisive Battle",
-    "time": 430.947,
-    "duration": 2.7,
-    "type": "mech",
-    "color": "#facc15",
-    "icon": "",
-    "name_i18n": {
-      "zh": "决战"
-    }
-  },
-  {
-    "id": "dm-kefka-decisive-battle-2",
-    "name": "the Decisive Battle",
-    "time": 545.267,
-    "duration": 2.7,
-    "type": "mech",
-    "color": "#facc15",
-    "icon": "",
-    "name_i18n": {
-      "zh": "决战"
-    }
-  },
-  {
-    "id": "dm-kefka-celestriad",
-    "name": "Celestriad",
-    "time": 958.582,
-    "duration": 4.7,
-    "type": "mech",
-    "color": "#facc15",
-    "icon": "",
-    "name_i18n": {
-      "zh": "三星"
-    }
-  },
-  {
-    "id": "dm-kefka-forsaken-2",
-    "name": "Forsaken",
-    "time": 1058.663,
-    "duration": 9.7,
-    "type": "mech",
-    "color": "#facc15",
-    "icon": "",
-    "name_i18n": {
-      "zh": "遗弃末世"
-    }
-  },
-  {
-    "id": "dm-tb-revolting-ruin-iii-1",
-    "name": "Revolting Ruin III",
-    "time": 15.235,
-    "duration": 4.7,
-    "type": "tb",
-    "color": "#60a5fa",
-    "icon": "",
-    "name_i18n": {
-      "zh": "恶狠狠毁荡"
-    }
-  },
-  {
-    "id": "dm-tb-hyperdrive-1",
+    "id": "dmu-012",
     "name": "Hyperdrive",
-    "time": 65.9,
-    "duration": 1,
+    "time": 65,
+    "duration": 4,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
@@ -164,22 +176,10 @@
     }
   },
   {
-    "id": "dm-tb-revolting-ruin-iii-2",
-    "name": "Revolting Ruin III",
-    "time": 97.428,
-    "duration": 4.7,
-    "type": "tb",
-    "color": "#60a5fa",
-    "icon": "",
-    "name_i18n": {
-      "zh": "恶狠狠毁荡"
-    }
-  },
-  {
-    "id": "dm-tb-hyperdrive-2",
+    "id": "dmu-013",
     "name": "Hyperdrive",
-    "time": 135.67,
-    "duration": 1,
+    "time": 67,
+    "duration": 4,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
@@ -188,10 +188,310 @@
     }
   },
   {
-    "id": "dm-tb-ultimate-embrace-1",
+    "id": "dmu-014",
+    "name": "Hyperdrive",
+    "time": 69,
+    "duration": 4,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "超驱动"
+    }
+  },
+  {
+    "id": "dmu-015",
+    "name": "Graven Image",
+    "time": 80,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "众神之像"
+    }
+  },
+  {
+    "id": "dmu-016",
+    "name": "扩大大冰封",
+    "time": 87,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "扩大大冰封"
+    }
+  },
+  {
+    "id": "dmu-017",
+    "name": "重力弹",
+    "time": 87,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "重力弹"
+    }
+  },
+  {
+    "id": "dmu-018",
+    "name": "Revolting Ruin III",
+    "time": 97,
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "恶狠狠毁荡"
+    }
+  },
+  {
+    "id": "dmu-019",
+    "name": "Revolting Ruin III",
+    "time": 100,
+    "duration": 4,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "恶狠狠毁荡"
+    }
+  },
+  {
+    "id": "dmu-020",
+    "name": "重力弹",
+    "time": 105,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "重力弹"
+    }
+  },
+  {
+    "id": "dmu-021",
+    "name": "凶兆",
+    "time": 109,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "凶兆"
+    }
+  },
+  {
+    "id": "dmu-022",
+    "name": "连环环陷阱",
+    "time": 119,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "连环环陷阱"
+    }
+  },
+  {
+    "id": "dmu-023",
+    "name": "强重力",
+    "time": 120,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "强重力"
+    }
+  },
+  {
+    "id": "dmu-024",
+    "name": "强重力",
+    "time": 121,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "强重力"
+    }
+  },
+  {
+    "id": "dmu-025",
+    "name": "Light of Judgment",
+    "time": 132,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "制裁之光"
+    }
+  },
+  {
+    "id": "dmu-026",
+    "name": "Hyperdrive",
+    "time": 135,
+    "duration": 4,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "超驱动"
+    }
+  },
+  {
+    "id": "dmu-027",
+    "name": "Hyperdrive",
+    "time": 137,
+    "duration": 4,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "超驱动"
+    }
+  },
+  {
+    "id": "dmu-028",
+    "name": "Hyperdrive",
+    "time": 139,
+    "duration": 4,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "超驱动"
+    }
+  },
+  {
+    "id": "dmu-029",
+    "name": "啦啦传送",
+    "time": 151,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "啦啦传送"
+    }
+  },
+  {
+    "id": "dmu-030",
+    "name": "啦啦传送",
+    "time": 159,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "啦啦传送"
+    }
+  },
+  {
+    "id": "dmu-031",
+    "name": "啦啦传送",
+    "time": 162,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "啦啦传送"
+    }
+  },
+  {
+    "id": "dmu-032",
+    "name": "Graven Image",
+    "time": 163,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "众神之像"
+    }
+  },
+  {
+    "id": "dmu-033",
+    "name": "连环环陷阱",
+    "time": 168,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "连环环陷阱"
+    }
+  },
+  {
+    "id": "dmu-034",
+    "name": "圣母的神气",
+    "time": 173,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "圣母的神气"
+    }
+  },
+  {
+    "id": "dmu-035",
+    "name": "睡魔的神气",
+    "time": 173,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "睡魔的神气"
+    }
+  },
+  {
+    "id": "dmu-036",
+    "name": "圣母颂",
+    "time": 186,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "圣母颂"
+    }
+  },
+  {
+    "id": "dmu-037",
+    "name": "玄乎乎魔法",
+    "time": 186,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "玄乎乎魔法"
+    }
+  },
+  {
+    "id": "dmu-038",
+    "name": "呼啦啦爆炎",
+    "time": 187,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "呼啦啦爆炎"
+    }
+  },
+  {
+    "id": "dmu-039",
     "name": "Ultimate Embrace",
-    "time": 220.366,
-    "duration": 4.7,
+    "time": 219,
+    "duration": 5,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
@@ -200,10 +500,322 @@
     }
   },
   {
-    "id": "dm-tb-wings-of-destruction",
+    "id": "dmu-040",
+    "name": "Forsaken",
+    "time": 235,
+    "duration": 7,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "遗弃末世"
+    }
+  },
+  {
+    "id": "dmu-041",
+    "name": "光之波动-塔1",
+    "time": 248,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "光之波动-塔1"
+    }
+  },
+  {
+    "id": "dmu-042",
+    "name": "咏唱危机·xx",
+    "time": 248,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "咏唱危机·xx"
+    }
+  },
+  {
+    "id": "dmu-043",
+    "name": "未来/过去终结-塔2",
+    "time": 257,
+    "duration": 6,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "未来/过去终结-塔2"
+    }
+  },
+  {
+    "id": "dmu-044",
+    "name": "光之波动",
+    "time": 258,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "光之波动"
+    }
+  },
+  {
+    "id": "dmu-045",
+    "name": "咏唱危机·xx",
+    "time": 258,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "咏唱危机·xx"
+    }
+  },
+  {
+    "id": "dmu-046",
+    "name": "光之波动",
+    "time": 269,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "光之波动"
+    }
+  },
+  {
+    "id": "dmu-047",
+    "name": "咏唱危机·xx",
+    "time": 269,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "咏唱危机·xx"
+    }
+  },
+  {
+    "id": "dmu-048",
+    "name": "消灭之脚-塔3",
+    "time": 269,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "消灭之脚-塔3"
+    }
+  },
+  {
+    "id": "dmu-049",
+    "name": "未来/过去终结-塔4",
+    "time": 278,
+    "duration": 6,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "未来/过去终结-塔4"
+    }
+  },
+  {
+    "id": "dmu-050",
+    "name": "光之波动",
+    "time": 279,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "光之波动"
+    }
+  },
+  {
+    "id": "dmu-051",
+    "name": "咏唱危机·xx",
+    "time": 279,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "咏唱危机·xx"
+    }
+  },
+  {
+    "id": "dmu-052",
+    "name": "光之波动",
+    "time": 290,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "光之波动"
+    }
+  },
+  {
+    "id": "dmu-053",
+    "name": "咏唱危机·xx",
+    "time": 290,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "咏唱危机·xx"
+    }
+  },
+  {
+    "id": "dmu-054",
+    "name": "消灭之脚-塔5",
+    "time": 290,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "消灭之脚-塔5"
+    }
+  },
+  {
+    "id": "dmu-055",
+    "name": "未来/过去终结-塔6",
+    "time": 299,
+    "duration": 6,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "未来/过去终结-塔6"
+    }
+  },
+  {
+    "id": "dmu-056",
+    "name": "消灭之脚-塔7",
+    "time": 311,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "消灭之脚-塔7"
+    }
+  },
+  {
+    "id": "dmu-057",
+    "name": "光之波动",
+    "time": 312,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "光之波动"
+    }
+  },
+  {
+    "id": "dmu-058",
+    "name": "咏唱危机·xx",
+    "time": 312,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "咏唱危机·xx"
+    }
+  },
+  {
+    "id": "dmu-059",
+    "name": "未来/过去终结-塔8",
+    "time": 320,
+    "duration": 6,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "未来/过去终结-塔8"
+    }
+  },
+  {
+    "id": "dmu-060",
+    "name": "光之波动",
+    "time": 322,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "光之波动"
+    }
+  },
+  {
+    "id": "dmu-061",
+    "name": "咏唱危机·xx",
+    "time": 322,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "咏唱危机·xx"
+    }
+  },
+  {
+    "id": "dmu-062",
+    "name": "消灭之脚",
+    "time": 332,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "消灭之脚"
+    }
+  },
+  {
+    "id": "dmu-063",
+    "name": "Light of Judgment",
+    "time": 341,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "制裁之光"
+    }
+  },
+  {
+    "id": "dmu-064",
+    "name": "异三角",
+    "time": 352,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "异三角"
+    }
+  },
+  {
+    "id": "dmu-065",
     "name": "Wings of Destruction",
-    "time": 370.372,
-    "duration": 3.7,
+    "time": 359,
+    "duration": 4,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "破坏之翼"
+    }
+  },
+  {
+    "id": "dmu-066",
+    "name": "Wings of Destruction",
+    "time": 370,
+    "duration": 4,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
@@ -212,94 +824,1186 @@
     }
   },
   {
-    "id": "dm-tb-ultimate-embrace-2",
+    "id": "dmu-067",
     "name": "Ultimate Embrace",
-    "time": 377.671,
-    "duration": 4.7,
-    "type": "tb",
-    "color": "#60a5fa",
+    "time": 377,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
     "icon": "",
     "name_i18n": {
       "zh": "终末双腕"
     }
   },
   {
-    "id": "dm-tb-thunder-iii-1a",
-    "name": "Thunder III",
-    "time": 478.683,
-    "duration": 4.7,
+    "id": "dmu-068",
+    "name": "痛苦暴风",
+    "time": 386,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "痛苦暴风"
+    }
+  },
+  {
+    "id": "dmu-069",
+    "name": "深层痛楚",
+    "time": 450,
+    "duration": 6,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "深层痛楚"
+    }
+  },
+  {
+    "id": "dmu-070",
+    "name": "毁灭",
+    "time": 469,
+    "duration": 7,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "毁灭"
+    }
+  },
+  {
+    "id": "dmu-071",
+    "name": "混沌之炎",
+    "time": 469,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "混沌之炎"
+    }
+  },
+  {
+    "id": "dmu-072",
+    "name": "烈焰",
+    "time": 470,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "烈焰"
+    }
+  },
+  {
+    "id": "dmu-073",
+    "name": "龙卷风",
+    "time": 472,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "龙卷风"
+    }
+  },
+  {
+    "id": "dmu-074",
+    "name": "毁灭",
+    "time": 478,
+    "duration": 5,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
     "name_i18n": {
-      "zh": "暴雷"
+      "zh": "毁灭"
     }
   },
   {
-    "id": "dm-tb-thunder-iii-2a",
-    "name": "Thunder III",
-    "time": 537.307,
-    "duration": 4.7,
+    "id": "dmu-075",
+    "name": "毁灭",
+    "time": 481,
+    "duration": 4,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
     "name_i18n": {
-      "zh": "暴雷"
+      "zh": "毁灭"
     }
   },
   {
-    "id": "dm-tb-thunder-iii-3a",
-    "name": "Thunder III",
-    "time": 554.465,
-    "duration": 4.7,
+    "id": "dmu-076",
+    "name": "经纬度聚爆幻化",
+    "time": 491,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "经纬度聚爆幻化"
+    }
+  },
+  {
+    "id": "dmu-077",
+    "name": "龙卷风",
+    "time": 499,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "龙卷风"
+    }
+  },
+  {
+    "id": "dmu-078",
+    "name": "究极冲击波",
+    "time": 507,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "究极冲击波"
+    }
+  },
+  {
+    "id": "dmu-079",
+    "name": "究极冲击波",
+    "time": 509,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "究极冲击波"
+    }
+  },
+  {
+    "id": "dmu-080",
+    "name": "本影爆碎",
+    "time": 511,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "本影爆碎"
+    }
+  },
+  {
+    "id": "dmu-081",
+    "name": "究极冲击波",
+    "time": 511,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "究极冲击波"
+    }
+  },
+  {
+    "id": "dmu-082",
+    "name": "究极冲击波",
+    "time": 513,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "究极冲击波"
+    }
+  },
+  {
+    "id": "dmu-083",
+    "name": "真空波",
+    "time": 514,
+    "duration": 8,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "真空波"
+    }
+  },
+  {
+    "id": "dmu-084",
+    "name": "究极冲击波",
+    "time": 515,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "究极冲击波"
+    }
+  },
+  {
+    "id": "dmu-085",
+    "name": "龙卷风",
+    "time": 518,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "龙卷风"
+    }
+  },
+  {
+    "id": "dmu-086",
+    "name": "究极冲击波",
+    "time": 519,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "究极冲击波"
+    }
+  },
+  {
+    "id": "dmu-087",
+    "name": "究极冲击波",
+    "time": 521,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "究极冲击波"
+    }
+  },
+  {
+    "id": "dmu-088",
+    "name": "究极冲击波",
+    "time": 529,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "究极冲击波"
+    }
+  },
+  {
+    "id": "dmu-089",
+    "name": "毁灭",
+    "time": 537,
+    "duration": 5,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
     "name_i18n": {
-      "zh": "暴雷"
+      "zh": "毁灭"
     }
   },
   {
-    "id": "dm-tb-thunder-iii-4a",
-    "name": "Thunder III",
-    "time": 596.033,
-    "duration": 4.7,
+    "id": "dmu-090",
+    "name": "the Decisive Battle",
+    "time": 547,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "决战"
+    }
+  },
+  {
+    "id": "dmu-091",
+    "name": "毁灭",
+    "time": 557,
+    "duration": 4,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
     "name_i18n": {
-      "zh": "暴雷"
+      "zh": "毁灭"
     }
   },
   {
-    "id": "dm-tb-thunder-iii-5a",
-    "name": "Thunder III",
-    "time": 637.277,
-    "duration": 4.7,
+    "id": "dmu-092",
+    "name": "地震",
+    "time": 559,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "地震"
+    }
+  },
+  {
+    "id": "dmu-093",
+    "name": "地震",
+    "time": 566,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "地震"
+    }
+  },
+  {
+    "id": "dmu-094",
+    "name": "地震",
+    "time": 571,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "地震"
+    }
+  },
+  {
+    "id": "dmu-095",
+    "name": "响亮亮耳光",
+    "time": 573,
+    "duration": 4,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "响亮亮耳光"
+    }
+  },
+  {
+    "id": "dmu-096",
+    "name": "重冲击/冲击波",
+    "time": 577,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "重冲击/冲击波"
+    }
+  },
+  {
+    "id": "dmu-097",
+    "name": "黑洞",
+    "time": 578,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "黑洞"
+    }
+  },
+  {
+    "id": "dmu-098",
+    "name": "无之波动",
+    "time": 585,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "无之波动"
+    }
+  },
+  {
+    "id": "dmu-099",
+    "name": "无之波动",
+    "time": 592,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "无之波动"
+    }
+  },
+  {
+    "id": "dmu-100",
+    "name": "毁灭",
+    "time": 595,
+    "duration": 5,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
     "name_i18n": {
-      "zh": "暴雷"
+      "zh": "毁灭"
     }
   },
   {
-    "id": "dm-tb-fell-forces-1",
-    "name": "Fell Forces x3",
-    "time": 912.132,
-    "duration": 1,
+    "id": "dmu-101",
+    "name": "毁灭",
+    "time": 598,
+    "duration": 4,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
     "name_i18n": {
-      "zh": "分摊平A x3"
+      "zh": "毁灭"
     }
   },
   {
-    "id": "dm-tb-flare-1",
+    "id": "dmu-102",
+    "name": "诅咒敕令",
+    "time": 603,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "诅咒敕令"
+    }
+  },
+  {
+    "id": "dmu-103",
+    "name": "响亮亮耳光",
+    "time": 604,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "响亮亮耳光"
+    }
+  },
+  {
+    "id": "dmu-104",
+    "name": "重冲击/冲击波",
+    "time": 608,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "重冲击/冲击波"
+    }
+  },
+  {
+    "id": "dmu-105",
+    "name": "无之波动",
+    "time": 615,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "无之波动"
+    }
+  },
+  {
+    "id": "dmu-106",
+    "name": "地震",
+    "time": 617,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "地震"
+    }
+  },
+  {
+    "id": "dmu-107",
+    "name": "无之波动",
+    "time": 620,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "无之波动"
+    }
+  },
+  {
+    "id": "dmu-108",
+    "name": "地震",
+    "time": 622,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "地震"
+    }
+  },
+  {
+    "id": "dmu-109",
+    "name": "无之波动",
+    "time": 625,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "无之波动"
+    }
+  },
+  {
+    "id": "dmu-110",
+    "name": "地震",
+    "time": 627,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "地震"
+    }
+  },
+  {
+    "id": "dmu-111",
+    "name": "本色出演的我诅咒敕令",
+    "time": 630,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "本色出演的我诅咒敕令"
+    }
+  },
+  {
+    "id": "dmu-112",
+    "name": "毁灭",
+    "time": 636,
+    "duration": 5,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "毁灭"
+    }
+  },
+  {
+    "id": "dmu-113",
+    "name": "无之波动",
+    "time": 649,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "无之波动"
+    }
+  },
+  {
+    "id": "dmu-114",
+    "name": "地震",
+    "time": 651,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "地震"
+    }
+  },
+  {
+    "id": "dmu-115",
+    "name": "无之波动",
+    "time": 654,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "无之波动"
+    }
+  },
+  {
+    "id": "dmu-116",
+    "name": "地震",
+    "time": 656,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "地震"
+    }
+  },
+  {
+    "id": "dmu-117",
+    "name": "无之波动",
+    "time": 660,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "无之波动"
+    }
+  },
+  {
+    "id": "dmu-118",
+    "name": "地震",
+    "time": 661,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "地震"
+    }
+  },
+  {
+    "id": "dmu-119",
+    "name": "经/纬度聚爆白洞",
+    "time": 671,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "经/纬度聚爆白洞"
+    }
+  },
+  {
+    "id": "dmu-120",
+    "name": "响亮亮耳光",
+    "time": 672,
+    "duration": 4,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "响亮亮耳光"
+    }
+  },
+  {
+    "id": "dmu-121",
+    "name": "重冲击/冲击波",
+    "time": 676,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "重冲击/冲击波"
+    }
+  },
+  {
+    "id": "dmu-122",
+    "name": "无之波动",
+    "time": 683,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "无之波动"
+    }
+  },
+  {
+    "id": "dmu-123",
+    "name": "地震",
+    "time": 685,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "地震"
+    }
+  },
+  {
+    "id": "dmu-124",
+    "name": "本色出演的我",
+    "time": 689,
+    "duration": 4,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "本色出演的我"
+    }
+  },
+  {
+    "id": "dmu-125",
+    "name": "无之波动",
+    "time": 690,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "无之波动"
+    }
+  },
+  {
+    "id": "dmu-126",
+    "name": "地震",
+    "time": 692,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "地震"
+    }
+  },
+  {
+    "id": "dmu-127",
+    "name": "轰击",
+    "time": 705,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "轰击"
+    }
+  },
+  {
+    "id": "dmu-128",
+    "name": "轰隆隆哚脚",
+    "time": 705,
+    "duration": 7,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "轰隆隆哚脚"
+    }
+  },
+  {
+    "id": "dmu-129",
+    "name": "轰隆隆哚脚",
+    "time": 706,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "轰隆隆哚脚"
+    }
+  },
+  {
+    "id": "dmu-130",
+    "name": "轰隆隆哚脚",
+    "time": 707,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "轰隆隆哚脚"
+    }
+  },
+  {
+    "id": "dmu-131",
+    "name": "轰隆隆哚脚",
+    "time": 708,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "轰隆隆哚脚"
+    }
+  },
+  {
+    "id": "dmu-132",
+    "name": "陨石流星/深层痛楚",
+    "time": 734,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "陨石流星/深层痛楚"
+    }
+  },
+  {
+    "id": "dmu-133",
+    "name": "闹哄哄魂击",
+    "time": 752,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "闹哄哄魂击"
+    }
+  },
+  {
+    "id": "dmu-134",
+    "name": "玄乎乎魔法",
+    "time": 761,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "玄乎乎魔法"
+    }
+  },
+  {
+    "id": "dmu-135",
+    "name": "大十字",
+    "time": 766,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "大十字"
+    }
+  },
+  {
+    "id": "dmu-136",
+    "name": "烈焰",
+    "time": 771,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "烈焰"
+    }
+  },
+  {
+    "id": "dmu-137",
+    "name": "玄乎乎魔法",
+    "time": 776,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "玄乎乎魔法"
+    }
+  },
+  {
+    "id": "dmu-138",
+    "name": "大十字",
+    "time": 781,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "大十字"
+    }
+  },
+  {
+    "id": "dmu-139",
+    "name": "海啸",
+    "time": 786,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "海啸"
+    }
+  },
+  {
+    "id": "dmu-140",
+    "name": "玄乎乎魔法",
+    "time": 792,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "玄乎乎魔法"
+    }
+  },
+  {
+    "id": "dmu-141",
+    "name": "大十字",
+    "time": 796,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "大十字"
+    }
+  },
+  {
+    "id": "dmu-142",
+    "name": "/生者暗黑光死者暗黑光",
+    "time": 808,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "/生者暗黑光死者暗黑光"
+    }
+  },
+  {
+    "id": "dmu-143",
+    "name": "死亡波涛",
+    "time": 812,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "死亡波涛"
+    }
+  },
+  {
+    "id": "dmu-144",
+    "name": "/死亡落雷死亡波纹",
+    "time": 817,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "/死亡落雷死亡波纹"
+    }
+  },
+  {
+    "id": "dmu-145",
+    "name": "魔法储存",
+    "time": 817,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "魔法储存"
+    }
+  },
+  {
+    "id": "dmu-146",
+    "name": "死亡尖叫",
+    "time": 826,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "死亡尖叫"
+    }
+  },
+  {
+    "id": "dmu-147",
+    "name": "扑腾腾究极",
+    "time": 835,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "扑腾腾究极"
+    }
+  },
+  {
+    "id": "dmu-148",
+    "name": "/死亡落雷死亡波纹",
+    "time": 842,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "/死亡落雷死亡波纹"
+    }
+  },
+  {
+    "id": "dmu-149",
+    "name": "扩大大冰封",
+    "time": 843,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "扩大大冰封"
+    }
+  },
+  {
+    "id": "dmu-150",
+    "name": "死亡尖叫",
+    "time": 850,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "死亡尖叫"
+    }
+  },
+  {
+    "id": "dmu-151",
+    "name": "魔法放出",
+    "time": 855,
+    "duration": 6,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "魔法放出"
+    }
+  },
+  {
+    "id": "dmu-152",
+    "name": "扑腾腾究极",
+    "time": 874,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "扑腾腾究极"
+    }
+  },
+  {
+    "id": "dmu-153",
+    "name": "Ultima",
+    "time": 913,
+    "duration": 4,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "连续究极"
+    }
+  },
+  {
+    "id": "dmu-154",
+    "name": "Ultima",
+    "time": 914,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "连续究极"
+    }
+  },
+  {
+    "id": "dmu-155",
+    "name": "Ultima",
+    "time": 914,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "连续究极"
+    }
+  },
+  {
+    "id": "dmu-156",
+    "name": "Ultima",
+    "time": 915,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "连续究极"
+    }
+  },
+  {
+    "id": "dmu-157",
+    "name": "Fell Forces",
+    "time": 924,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "魔击"
+    }
+  },
+  {
+    "id": "dmu-158",
+    "name": "Fell Forces",
+    "time": 924,
+    "duration": 4,
+    "type": "tb",
+    "color": "#60a5fa",
+    "icon": "",
+    "name_i18n": {
+      "zh": "魔击"
+    }
+  },
+  {
+    "id": "dmu-159",
+    "name": "洪水",
+    "time": 930,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "洪水"
+    }
+  },
+  {
+    "id": "dmu-160",
+    "name": "混沌洪水",
+    "time": 931,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "混沌洪水"
+    }
+  },
+  {
+    "id": "dmu-161",
+    "name": "混沌洪水",
+    "time": 932,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "混沌洪水"
+    }
+  },
+  {
+    "id": "dmu-162",
+    "name": "混沌洪水",
+    "time": 933,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "混沌洪水"
+    }
+  },
+  {
+    "id": "dmu-163",
+    "name": "混沌洪水",
+    "time": 934,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "混沌洪水"
+    }
+  },
+  {
+    "id": "dmu-164",
+    "name": "癫狂交响曲",
+    "time": 943,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "癫狂交响曲"
+    }
+  },
+  {
+    "id": "dmu-165",
     "name": "Flare",
-    "time": 937.767,
-    "duration": 1,
+    "time": 944,
+    "duration": 4,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
@@ -308,10 +2012,22 @@
     }
   },
   {
-    "id": "dm-tb-chaotic-flare-1",
+    "id": "dmu-166",
+    "name": "Holy",
+    "time": 944,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "神圣"
+    }
+  },
+  {
+    "id": "dmu-167",
     "name": "Chaotic Flare",
-    "time": 940.941,
-    "duration": 1,
+    "time": 947,
+    "duration": 4,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
@@ -320,10 +2036,22 @@
     }
   },
   {
-    "id": "dm-tb-flare-diffusion-1",
+    "id": "dmu-168",
+    "name": "Holy",
+    "time": 947,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "神圣"
+    }
+  },
+  {
+    "id": "dmu-169",
     "name": "Flare Diffusion",
-    "time": 944.426,
-    "duration": 1,
+    "time": 950,
+    "duration": 4,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
@@ -332,10 +2060,10 @@
     }
   },
   {
-    "id": "dm-tb-chaotic-holy-1",
+    "id": "dmu-170",
     "name": "Chaotic Holy",
-    "time": 944.426,
-    "duration": 1,
+    "time": 950,
+    "duration": 4,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
@@ -344,34 +2072,178 @@
     }
   },
   {
-    "id": "dm-tb-fell-forces-2",
-    "name": "Fell Forces x2",
-    "time": 949.075,
-    "duration": 1,
+    "id": "dmu-171",
+    "name": "Fell Forces",
+    "time": 955,
+    "duration": 4,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
     "name_i18n": {
-      "zh": "分摊平A x2"
+      "zh": "魔击"
     }
   },
   {
-    "id": "dm-tb-fell-forces-3",
-    "name": "Fell Forces x2",
-    "time": 994.031,
-    "duration": 1,
+    "id": "dmu-172",
+    "name": "Celestriad",
+    "time": 964,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "三星"
+    }
+  },
+  {
+    "id": "dmu-173",
+    "name": "二选一的灾崇",
+    "time": 973,
+    "duration": 4,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "二选一的灾崇"
+    }
+  },
+  {
+    "id": "dmu-174",
+    "name": "Thunder III / Blizzard III / Fire III",
+    "time": 974,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "暴雷/冰封/爆炎"
+    }
+  },
+  {
+    "id": "dmu-175",
+    "name": "Thunder III / Blizzard III / Fire III",
+    "time": 980,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "暴雷/冰封/爆炎"
+    }
+  },
+  {
+    "id": "dmu-176",
+    "name": "二选一的灾崇",
+    "time": 985,
+    "duration": 4,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "二选一的灾崇"
+    }
+  },
+  {
+    "id": "dmu-177",
+    "name": "Thunder III / Blizzard III / Fire III",
+    "time": 986,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "暴雷/冰封/爆炎"
+    }
+  },
+  {
+    "id": "dmu-178",
+    "name": "Ultima",
+    "time": 995,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "连续究极"
+    }
+  },
+  {
+    "id": "dmu-179",
+    "name": "Ultima",
+    "time": 996,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "连续究极"
+    }
+  },
+  {
+    "id": "dmu-180",
+    "name": "Ultima",
+    "time": 997,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "连续究极"
+    }
+  },
+  {
+    "id": "dmu-181",
+    "name": "毕翼",
+    "time": 1003,
+    "duration": 4,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
     "name_i18n": {
-      "zh": "分摊平A x2"
+      "zh": "毕翼"
     }
   },
   {
-    "id": "dm-tb-flare-2",
+    "id": "dmu-182",
+    "name": "混沌末世",
+    "time": 1009,
+    "duration": 4,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "混沌末世"
+    }
+  },
+  {
+    "id": "dmu-183",
+    "name": "混沌涡旋",
+    "time": 1026,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "混沌涡旋"
+    }
+  },
+  {
+    "id": "dmu-184",
+    "name": "癫狂交响曲",
+    "time": 1035,
+    "duration": 5,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "癫狂交响曲"
+    }
+  },
+  {
+    "id": "dmu-185",
     "name": "Flare",
-    "time": 1029.82,
-    "duration": 1,
+    "time": 1036,
+    "duration": 4,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
@@ -380,22 +2252,46 @@
     }
   },
   {
-    "id": "dm-tb-chaotic-flare-2",
+    "id": "dmu-186",
+    "name": "Holy",
+    "time": 1036,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "神圣"
+    }
+  },
+  {
+    "id": "dmu-187",
     "name": "Chaotic Flare",
-    "time": 1032.989,
-    "duration": 1,
-    "type": "tb",
-    "color": "#60a5fa",
+    "time": 1039,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
     "icon": "",
     "name_i18n": {
       "zh": "混沌核爆"
     }
   },
   {
-    "id": "dm-tb-flare-diffusion-2",
+    "id": "dmu-188",
+    "name": "Holy",
+    "time": 1039,
+    "duration": 3,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "神圣"
+    }
+  },
+  {
+    "id": "dmu-189",
     "name": "Flare Diffusion",
-    "time": 1036.466,
-    "duration": 1,
+    "time": 1042,
+    "duration": 4,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
@@ -404,10 +2300,10 @@
     }
   },
   {
-    "id": "dm-tb-chaotic-holy-2",
+    "id": "dmu-190",
     "name": "Chaotic Holy",
-    "time": 1036.466,
-    "duration": 1,
+    "time": 1042,
+    "duration": 4,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
@@ -416,15 +2312,123 @@
     }
   },
   {
-    "id": "dm-tb-fell-forces-4",
-    "name": "Fell Forces x3",
-    "time": 1041.101,
-    "duration": 1,
+    "id": "dmu-191",
+    "name": "Fell Forces",
+    "time": 1053,
+    "duration": 4,
     "type": "tb",
     "color": "#60a5fa",
     "icon": "",
     "name_i18n": {
-      "zh": "分摊平A x3"
+      "zh": "魔击"
+    }
+  },
+  {
+    "id": "dmu-192",
+    "name": "Forsaken",
+    "time": 1064,
+    "duration": 9,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "遗弃末世"
+    }
+  },
+  {
+    "id": "dmu-193",
+    "name": "遗弃末狱",
+    "time": 1070,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "遗弃末狱"
+    }
+  },
+  {
+    "id": "dmu-194",
+    "name": "Forsaken",
+    "time": 1073,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "遗弃末世"
+    }
+  },
+  {
+    "id": "dmu-195",
+    "name": "遗弃末狱",
+    "time": 1078,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "遗弃末狱"
+    }
+  },
+  {
+    "id": "dmu-196",
+    "name": "Forsaken",
+    "time": 1081,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "遗弃末世"
+    }
+  },
+  {
+    "id": "dmu-197",
+    "name": "遗弃末狱",
+    "time": 1086,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "遗弃末狱"
+    }
+  },
+  {
+    "id": "dmu-198",
+    "name": "Forsaken",
+    "time": 1089,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "遗弃末世"
+    }
+  },
+  {
+    "id": "dmu-199",
+    "name": "遗弃末狱",
+    "time": 1094,
+    "duration": 5,
+    "type": "aoe",
+    "color": "#fb923c",
+    "icon": "",
+    "name_i18n": {
+      "zh": "遗弃末狱"
+    }
+  },
+  {
+    "id": "dmu-200",
+    "name": "Forsaken",
+    "time": 1130,
+    "duration": 30,
+    "type": "mech",
+    "color": "#facc15",
+    "icon": "",
+    "name_i18n": {
+      "zh": "遗弃末世"
     }
   }
 ]
