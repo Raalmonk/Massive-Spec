@@ -22,4 +22,4 @@ if __name__ == "__main__":
     # 3. 启动 uvicorn
     # 注意这里将 import string 改为了 "main:app"
     # "main" 指的是当前文件 (main.py)，"app" 指的是上面创建的全局变量
-    uvicorn.run("main:app", host="127.0.0.1", port=5000, reload=True)
+    uvicorn.run("main:app", host="127.0.0.1", port=5000, reload=False)

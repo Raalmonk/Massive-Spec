@@ -3,6 +3,7 @@ import datetime
 import json
 import logging
 import os
+import shutil
 import sys
 import time
 
@@ -73,6 +74,31 @@ BOSS_ROTATION = [
 
 DEFAULT_METRIC = "rdps"
 DEFAULT_RANKING_REGIONS = ("", "CN", "KR")
+ARCHIVE_RETENTION_DAYS = int(os.getenv("MSPEC_ARCHIVE_RETENTION_DAYS", "14"))
+
+
+def prune_old_archives(now=None):
+    """Remove generated archive folders older than the retention window."""
+    now = now or datetime.datetime.now(datetime.timezone.utc)
+    cutoff = now.date() - datetime.timedelta(days=ARCHIVE_RETENTION_DAYS)
+    archive_root = "archives"
+
+    if not os.path.isdir(archive_root):
+        return
+
+    for entry in os.scandir(archive_root):
+        if not entry.is_dir():
+            continue
+
+        try:
+            archive_date = datetime.datetime.strptime(entry.name, "%Y-%m-%d").date()
+        except ValueError:
+            logger.warning(f"Skipping archive with unexpected name: {entry.path}")
+            continue
+
+        if archive_date < cutoff:
+            logger.info(f"Pruning archive older than {ARCHIVE_RETENTION_DAYS} days: {entry.path}")
+            shutil.rmtree(entry.path)
 
 BOSS_CONFIG = {
     "futures-rewritten": {
@@ -222,6 +248,7 @@ async def main():
 async def run_cycle(target_boss: str, cycle_index: int) -> None:
     """Run one sweep for a single boss in the hourly rotation."""
     now = datetime.datetime.now(datetime.timezone.utc)
+    prune_old_archives(now)
     date_str = now.strftime("%Y-%m-%d")
     time_str = now.strftime("%Hh_%Mm")
     archive_batch_dir = os.path.join("archives", date_str, f"{time_str}_{target_boss}")
