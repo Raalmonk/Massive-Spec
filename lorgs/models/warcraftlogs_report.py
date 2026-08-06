@@ -242,3 +242,18 @@ class Report(warcraftlogs_base.BaseModel):
         # the client will make sure its throttled accordingly
         tasks = [self.load_fight(fight_id=fight_id, player_ids=player_ids) for fight_id in fight_ids]
         await asyncio.gather(*tasks)
+
+# Rebuild deferred models
+import sys
+# Resolve circular dependency for Fight (needs Report)
+if "lorgs.models.warcraftlogs_fight" in sys.modules:
+    sys.modules["lorgs.models.warcraftlogs_fight"].Report = Report
+
+# Resolve circular dependency for Player (needs Fight)
+if "lorgs.models.warcraftlogs_actor" in sys.modules:
+    sys.modules["lorgs.models.warcraftlogs_actor"].Fight = Fight
+if "lorgs.models.warcraftlogs_player" in sys.modules:
+    sys.modules["lorgs.models.warcraftlogs_player"].Fight = Fight
+
+Fight.model_rebuild()
+Player.model_rebuild()
