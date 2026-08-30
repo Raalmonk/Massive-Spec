@@ -6,11 +6,12 @@ async function loadRanking(bossSlug, specSlug) {
     // 1. 构建静态文件的路径
     // 路径结构: ./data/spec_ranking_<职业>_<BOSS>.json
     // 例如: ./data/spec_ranking_pictomancer-pictomancer_vamp-fatale.json
-    
-    // 添加时间戳参数 (?t=...) 以防止浏览器缓存旧数据
-    const timestamp = new Date().getTime();
+    //
+    // 注意: 不再拼 ?t=时间戳 强制绕过缓存。服务器对 /data 返回
+    // Cache-Control: no-cache + ETag，浏览器每次都会回源校验，
+    // 数据没变时直接拿 304（不重新下载），数据更新后立刻生效。
     const fileName = `spec_ranking_${specSlug}_${bossSlug}.json`;
-    const url = `./data/${fileName}?t=${timestamp}`;
+    const url = `./data/${fileName}`;
 
     console.log(`[M-Spec] Fetching static data from: ${url}`);
 
@@ -23,7 +24,6 @@ async function loadRanking(bossSlug, specSlug) {
         }
 
         const data = await response.json();
-        console.log("[M-Spec] Data received:", data);
         return data;
 
     } catch (error) {

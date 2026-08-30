@@ -65,6 +65,12 @@ backup_frontend_data() {
     run mkdir -p "${FRONTEND_DATA_BACKUP_DIR}"
     run cp -a front_end/data "${FRONTEND_DATA_BACKUP_DIR}/data"
     log "Backed up front_end/data to ${FRONTEND_DATA_BACKUP_DIR}/data"
+
+    # 只保留最近 2 份备份: 每份 ~122MB, 不清理的话磁盘会被吃光
+    log "Pruning old mspec-data-backup dirs (keeping 2 newest)..."
+    ls -dt "${HOME}"/mspec-data-backup-* 2>/dev/null | tail -n +3 | while IFS= read -r old_backup; do
+        rm -rf "${old_backup}"
+    done
 }
 
 restore_generated_rankings_from_backup() {

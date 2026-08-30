@@ -132,7 +132,7 @@ async def get_zone(zone_id: int):
     """Get a specific (raid-)Zone."""
     zone = RaidZone.get(id=zone_id)
     if not zone:
-        return "Invalid Zone.", 404
+        raise fastapi.HTTPException(status_code=404, detail="Invalid Zone.")
     return zone.as_dict()
 
 
@@ -141,7 +141,7 @@ async def get_zone_bosses(zone_id: int):
     """Get all Bosses in a given Raid Zone."""
     zone = RaidZone.get(id=zone_id)
     if not zone:
-        return "Invalid Zone.", 404
+        raise fastapi.HTTPException(status_code=404, detail="Invalid Zone.")
     return {boss.name_slug: boss.as_dict() for boss in zone.bosses}
 
 
@@ -172,7 +172,7 @@ async def get_boss(boss_slug: str):
     """
     boss = RaidBoss.get(full_name_slug=boss_slug)
     if not boss:
-        return "Invalid Boss.", 404
+        raise fastapi.HTTPException(status_code=404, detail="Invalid Boss.")
     return boss.as_dict()
 
 
@@ -186,7 +186,7 @@ async def get_boss_spells(boss_slug: str):
     """
     boss = RaidBoss.get(full_name_slug=boss_slug)
     if not boss:
-        return "Invalid Boss.", 404
+        raise fastapi.HTTPException(status_code=404, detail="Invalid Boss.")
 
     spells = boss.all_spells + boss.all_buffs + boss.all_debuffs + boss.all_events
     return {spell.spell_id: spell.as_dict() for spell in spells}

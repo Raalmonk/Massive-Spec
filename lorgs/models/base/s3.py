@@ -36,6 +36,11 @@ class S3Model(base.BaseModel):
 
     @classmethod
     def get_json(cls, **kwargs: Any) -> Any:
+        # 自托管部署用的是假凭据 (见 save() 里的同款检查):
+        # 不短路的话每次请求都会跑一趟注定 403 的 AWS 往返, 白加几百毫秒延迟
+        if os.getenv("AWS_ACCESS_KEY_ID") == "testing":
+            raise KeyError("S3 disabled (testing credentials)")
+
         key = cls.get_key(**kwargs)
         try:
             with Timer(f"s3.get_raw: {key}"):

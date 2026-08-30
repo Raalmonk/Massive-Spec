@@ -50,4 +50,4 @@ def error():
 @router.get("/")
 @router.get("/{path:path}")
 def page_not_found(path=""):
-    return "Invalid Route", 404
+    raise fastapi.HTTPException(status_code=404, detail="Invalid Route")

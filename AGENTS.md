@@ -126,7 +126,14 @@ PCT (Pictomancer): Starry Muse, Striking Muse, Retribution of the Madeen, Mog of
   `python scripts/debug_astrologian_dancing_mad.py`
 * `main.py` serves the frontend at `/`; the actual timeline file is `front_end/timelinev2.html`, and generated ranking data is served from `front_end/data`.
 
-## 8. Frontend Timeline Notes
+## 8. Frontend Build (IMPORTANT since 2026-08)
+* The timeline React app source lives in `front_end/src/app.jsx` (extracted from the old inline `<script type="text/babel">` block). **Do NOT add code back into `timelinev2.html`** — it is now a tiny static shell that loads precompiled assets.
+* After editing `front_end/src/app.jsx` (or Tailwind classes anywhere), run `python scripts/build_frontend.py`. It bundles `dist/app.js` (esbuild, production React) + `dist/app.css` (Tailwind CLI) and stamps `?v=<hash>` versions into the HTML files.
+* `front_end/dist/app.js` and `app.css` are **committed to git** so the server never needs a Node toolchain. Node itself comes from the `nodejs-wheel-binaries` pip package in the venv.
+* No CDN dependencies: Tailwind Play CDN, @babel/standalone, and esm.sh imports were removed for performance. Keep it that way.
+* Shared Tailwind theme (job colors, monk green) lives in `front_end/tailwind.config.js`.
+
+## 9. Frontend Timeline Notes
 * Avoid emoji in timeline controls. Prefer short, flat text labels such as `DU`, `CD`, and `PH`, or lucide icons when an icon is clearer.
 * Boss phase intervals should come from FF Logs native `phases` / `phaseTransitions` when available. Do not add hand-authored phase trigger IDs for fights whose official phases are available from FF Logs.
 * Boss timeline mechanics should not render static phase/window placeholders as mechanic icons.

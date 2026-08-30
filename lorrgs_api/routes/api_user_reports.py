@@ -47,7 +47,7 @@ async def get_fights(report_id: str, fight: str, player: str = ""):
     """
     user_report = UserReport.get(report_id=report_id, create=False)
     if not user_report:
-        return "Report not found.", 404
+        raise fastapi.HTTPException(status_code=404, detail="Report not found.")
 
     fight_ids = utils.str_int_list(fight)
     player_ids = utils.str_int_list(player)

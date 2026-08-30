@@ -1,5 +1,6 @@
 import asyncio
 import datetime
+import gzip
 import json
 import logging
 import os
@@ -170,12 +171,14 @@ async def _do_update_spec(spec, boss_slug, timestamp_folder):
     
     # 这里使用传入的 timestamp_folder，例如 "archives/2026-01-26/14_00"
     os.makedirs(timestamp_folder, exist_ok=True)
-    
-    archive_filename = os.path.join(timestamp_folder, f"spec_ranking_{spec_slug}_{boss_slug}.json")
-    
-    with open(archive_filename, "w", encoding='utf-8') as f:
+
+    # 归档写成 gzip: JSON 压缩率 ~85-90%, 14 天 x 每小时 ~21 个文件
+    # 不压缩的话会在 60GB 的盘上吃掉数 GB
+    archive_filename = os.path.join(timestamp_folder, f"spec_ranking_{spec_slug}_{boss_slug}.json.gz")
+
+    with gzip.open(archive_filename, "wt", encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, default=str)
-        
+
     # logger.info(f"Archived: {archive_filename}")
 
 async def update_spec_with_retry(spec, boss_slug, timestamp_folder):
@@ -264,11 +267,15 @@ async def run_cycle(target_boss: str, cycle_index: int) -> None:
         await asyncio.sleep(3)
 
 
+REFRESH_INTERVAL_HOURS = 4
+
+
 async def sleep_until_next_hour() -> None:
     now = datetime.datetime.now(datetime.timezone.utc)
-    next_hour = (now + datetime.timedelta(hours=1)).replace(minute=0, second=0, microsecond=0)
-    wait_seconds = max(1, int((next_hour - now).total_seconds()))
-    logger.info(f"Sleeping {wait_seconds}s until next hourly cycle...")
+    hours_ahead = REFRESH_INTERVAL_HOURS - (now.hour % REFRESH_INTERVAL_HOURS)
+    next_run = (now + datetime.timedelta(hours=hours_ahead)).replace(minute=0, second=0, microsecond=0)
+    wait_seconds = max(1, int((next_run - now).total_seconds()))
+    logger.info(f"Sleeping {wait_seconds}s until next {REFRESH_INTERVAL_HOURS}h cycle...")
     await asyncio.sleep(wait_seconds)
 
 
@@ -292,5 +299,31 @@ async def hourly_main() -> None:
         logger.info("Done.")
 
 
+async def once_main() -> None:
+    """One-shot mode for cron: run the current hour's cycle, then exit.
+
+    推荐在服务器上用 cron 每小时调一次 (配合 flock 防重叠):
+        0 * * * * cd /path/to/m-spec && flock -n /tmp/mspec-updater.lock \
+            .venv/bin/python updater.py --once >> updater.log 2>&1
+    相比常驻进程 (hourly_main), 一次性模式在两次抓取之间把 ~200MB
+    内存还给系统 —— 这台 1.9GB 的机器上这点内存很关键。
+    """
+    WarcraftlogsClient._instance = None
+    cycle_index = datetime.datetime.now(datetime.timezone.utc).hour % len(BOSS_ROTATION)
+    target_boss = BOSS_ROTATION[cycle_index]
+
+    try:
+        await run_cycle(target_boss, cycle_index)
+    finally:
+        logger.info("Closing HTTP Session...")
+        if WarcraftlogsClient._instance and WarcraftlogsClient._instance.session:
+            await WarcraftlogsClient._instance.session.close()
+            await asyncio.sleep(0.25)
+        logger.info("Done.")
+
+
 if __name__ == "__main__":
-    asyncio.run(hourly_main())
+    if "--once" in sys.argv:
+        asyncio.run(once_main())
+    else:
+        asyncio.run(hourly_main())

@@ -79,11 +79,15 @@ class BaseClient:
         """
         # print("X", self.session)
         # self.session = self.session or aiohttp.ClientSession()
-        # async with self._sem:
-        await self.ensure_auth()
-        async with self.session.get(url=url, json={"query": query}, headers=self.headers) as resp:
-            resp.raise_for_status()
-            return await resp.json()
+        # 重新启用并发信号量: multiquery 会一次 gather 所有请求, 只靠
+        # TCPConnector(limit_per_host) 的话, www/cn/ko 三个域加起来可以到
+        # 30 个并发下载+JSON解析 —— 在突发型实例上会造成 CPU/内存尖峰。
+        # 服务器上建议设 CONCURRENT_CONNECTIONS=4 左右。
+        async with self._sem:
+            await self.ensure_auth()
+            async with self.session.get(url=url, json={"query": query}, headers=self.headers) as resp:
+                resp.raise_for_status()
+                return await resp.json()
 
 
 class WarcraftlogsClient(BaseClient):

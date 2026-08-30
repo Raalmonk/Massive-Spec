@@ -4,6 +4,23 @@
 This fork serves the timeline from `front_end/timelinev2.html` through `main.py`.
 Generated ranking JSON files live in `front_end/data`.
 
+### Frontend build (required after editing frontend source)
+
+The timeline React app source is `front_end/src/app.jsx`; the pages load
+precompiled `front_end/dist/app.js` + `app.css` (no CDNs, no in-browser Babel).
+After changing `app.jsx`, any Tailwind classes, or `tailwind.config.js`, run:
+
+```bash
+python scripts/build_frontend.py
+```
+
+The built files are committed to git, so the server only needs `git pull`
+(no Node toolchain required there — locally Node comes from the
+`nodejs-wheel-binaries` pip package).
+
+Server tuning notes (Apache, cron updater, log rotation) live in
+[SERVER_OPS.md](SERVER_OPS.md).
+
 1. Install dependencies:
 
 ```bash

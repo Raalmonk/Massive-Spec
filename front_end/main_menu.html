@@ -4,46 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>M-Spec</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23121212'/%3E%3Ctext x='8' y='12' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='%2300FF96'%3EM%3C/text%3E%3C/svg%3E">
+    <!-- Precompiled Tailwind CSS (shared with the timeline; built by scripts/build_frontend.py,
+         theme colors now live in front_end/tailwind.config.js) -->
+    <link rel="stylesheet" href="dist/app.css?v=1e6dacbb56">
     <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        gray: {
-                            850: '#1f2937',
-                            900: '#111827',
-                            950: '#030712',
-                        },
-                        // Main Theme Color (Monk Green)
-                        monk: {
-                            DEFAULT: '#00FF96',
-                            dim: '#00cc78',
-                            dark: '#009e5f',
-                        },
-                        // Custom FF14 Job Colors
-                        job: {
-                            pld: '#A8D2E6', war: '#CF2621', drk: '#D126CC', gnb: '#796D30',
-                            whm: '#FFF0F5', sch: '#8657FF', ast: '#FFE74A', sge: '#80A0F0',
-                            mnk: '#D69C00', drg: '#4164CD', nin: '#AF1964', sam: '#E46D04', rpr: '#965A90', vpr: '#108221',
-                            brd: '#91BA5E', mch: '#6EE1D6', dnc: '#E2B0AF',
-                            blm: '#A579D6', smn: '#2D9B78', rdm: '#E87B7B', pct: '#FF66CC',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         body {
             background-color: #0f1115;
@@ -114,7 +82,7 @@
                 <div class="bg-green-900/10 border-l-4 border-monk p-5 rounded-r-lg">
                     <div class="flex items-start">
                         <div class="flex-shrink-0">
-                            <i class="fas fa-comment-dots text-monk mt-1"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-monk mt-1" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
                         </div>
                         <div class="ml-3 flex-1">
                             <div class="text-green-100/90 text-sm font-medium leading-relaxed italic mb-2" data-i18n="quote">
@@ -132,7 +100,7 @@
                 <div class="bg-yellow-900/10 border-l-4 border-yellow-600/80 p-5 rounded-r-lg">
                     <div class="flex items-start">
                         <div class="flex-shrink-0">
-                            <i class="fas fa-exclamation-triangle text-yellow-500 mt-1"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500 mt-1" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
                         </div>
                         <div class="ml-3">
                             <!-- Reverted header size to text-base and text size to text-xs -->
@@ -156,24 +124,24 @@
                     <!-- Row 1: Tanks -->
                     <div class="flex flex-col md:flex-row md:items-center bg-gray-900/40 rounded-lg border border-gray-800 p-4 gap-4">
                         <div class="w-32 flex-shrink-0 flex items-center text-gray-400 font-bold uppercase tracking-wider text-sm">
-                            <span class="w-8 flex justify-center mr-2"><i class="fas fa-shield-alt text-blue-400"></i></span>
+                            <span class="w-8 flex justify-center mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span>
                             Tank
                         </div>
                         <div class="flex flex-wrap gap-3 flex-1">
                             <a href="timelinev2.html?boss=dancing-mad&spec=paladin-paladin" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-pld rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/paladin.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/paladin.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Paladin</span>
                             </a>
                             <a href="timelinev2.html?boss=dancing-mad&spec=warrior-warrior" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-war rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/warrior.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/warrior.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Warrior</span>
                             </a>
                             <a href="timelinev2.html?boss=dancing-mad&spec=darkknight-darkknight" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-drk rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/darkknight.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Dark_Knight.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Dark Knight</span>
                             </a>
                             <a href="timelinev2.html?boss=dancing-mad&spec=gunbreaker-gunbreaker" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-gnb rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/gunbreaker.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Gunbreaker.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Gunbreaker</span>
                             </a>
                         </div>
@@ -182,24 +150,24 @@
                     <!-- Row 2: Healers -->
                     <div class="flex flex-col md:flex-row md:items-center bg-gray-900/40 rounded-lg border border-gray-800 p-4 gap-4">
                         <div class="w-32 flex-shrink-0 flex items-center text-gray-400 font-bold uppercase tracking-wider text-sm">
-                            <span class="w-8 flex justify-center mr-2"><i class="fas fa-plus text-green-400"></i></span>
+                            <span class="w-8 flex justify-center mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span>
                             Healer
                         </div>
                         <div class="flex flex-wrap gap-3 flex-1">
                             <a href="timelinev2.html?boss=dancing-mad&spec=whitemage-whitemage" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-whm rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/whitemage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/White_Mage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>White Mage</span>
                             </a>
                             <a href="timelinev2.html?boss=dancing-mad&spec=scholar-scholar" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-sch rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/scholar.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Scholar.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Scholar</span>
                             </a>
                             <a href="timelinev2.html?boss=dancing-mad&spec=astrologian-astrologian" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-ast rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/astrologian.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Astrologian.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Astrologian</span>
                             </a>
                             <a href="timelinev2.html?boss=dancing-mad&spec=sage-sage" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-sge rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/sage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Sage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Sage</span>
                             </a>
                         </div>
@@ -208,32 +176,32 @@
                     <!-- Row 3: Melee DPS -->
                     <div class="flex flex-col md:flex-row md:items-center bg-gray-900/40 rounded-lg border border-gray-800 p-4 gap-4">
                         <div class="w-32 flex-shrink-0 flex items-center text-gray-400 font-bold uppercase tracking-wider text-sm">
-                            <span class="w-8 flex justify-center mr-2"><i class="fas fa-gavel text-red-400"></i></span>
+                            <span class="w-8 flex justify-center mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-400" aria-hidden="true"><path d="m14.5 12.5-8 8a2.119 2.119 0 1 1-3-3l8-8"/><path d="m16 16 6-6"/><path d="m8 8 6-6"/><path d="m9 7 8 8"/><path d="m21 11-8-8"/></svg></span>
                             Melee
                         </div>
                         <div class="flex flex-wrap gap-3 flex-1">
                             <a href="timelinev2.html?boss=dancing-mad&spec=monk-monk" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-mnk rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/monk.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/monk.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Monk</span>
                             </a>
                             <a href="timelinev2.html?boss=dancing-mad&spec=dragoon-dragoon" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-drg rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/dragoon.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Dragoon.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Dragoon</span>
                             </a>
                             <a href="timelinev2.html?boss=dancing-mad&spec=ninja-ninja" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-nin rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/ninja.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Ninja.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Ninja</span>
                             </a>
                             <a href="timelinev2.html?boss=dancing-mad&spec=samurai-samurai" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-sam rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/samurai.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Samurai.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Samurai</span>
                             </a>
                             <a href="timelinev2.html?boss=dancing-mad&spec=reaper-reaper" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-rpr rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/reaper.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Reaper.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Reaper</span>
                             </a>
                             <a href="timelinev2.html?boss=dancing-mad&spec=viper-viper" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-vpr rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/viper.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Viper.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Viper</span>
                             </a>
                         </div>
@@ -242,20 +210,20 @@
                     <!-- Row 4: Phys Ranged DPS -->
                     <div class="flex flex-col md:flex-row md:items-center bg-gray-900/40 rounded-lg border border-gray-800 p-4 gap-4">
                         <div class="w-32 flex-shrink-0 flex items-center text-gray-400 font-bold uppercase tracking-wider text-sm">
-                            <span class="w-8 flex justify-center mr-2"><i class="fas fa-bullseye text-red-400"></i></span>
+                            <span class="w-8 flex justify-center mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-400" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
                             Phys Ranged
                         </div>
                         <div class="flex flex-wrap gap-3 flex-1">
                             <a href="timelinev2.html?boss=dancing-mad&spec=bard-bard" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-brd rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/bard.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Bard.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Bard</span>
                             </a>
                             <a href="timelinev2.html?boss=dancing-mad&spec=machinist-machinist" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-mch rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/machinist.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Machinist.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Machinist</span>
                             </a>
                             <a href="timelinev2.html?boss=dancing-mad&spec=dancer-dancer" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-dnc rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/dancer.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Dancer.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Dancer</span>
                             </a>
                         </div>
@@ -264,24 +232,24 @@
                     <!-- Row 5: Magical Ranged DPS -->
                     <div class="flex flex-col md:flex-row md:items-center bg-gray-900/40 rounded-lg border border-gray-800 p-4 gap-4">
                         <div class="w-32 flex-shrink-0 flex items-center text-gray-400 font-bold uppercase tracking-wider text-sm">
-                            <span class="w-8 flex justify-center mr-2"><i class="fas fa-meteor text-red-400"></i></span>
+                            <span class="w-8 flex justify-center mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-400" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span>
                             Magic Ranged
                         </div>
                         <div class="flex flex-wrap gap-3 flex-1">
                             <a href="timelinev2.html?boss=dancing-mad&spec=blackmage-blackmage" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-blm rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/blackmage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Black_Mage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Black Mage</span>
                             </a>
                             <a href="timelinev2.html?boss=dancing-mad&spec=summoner-summoner" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-smn rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/summoner.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Summoner.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Summoner</span>
                             </a>
                             <a href="timelinev2.html?boss=dancing-mad&spec=redmage-redmage" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-rdm rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/redmage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Red_Mage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Red Mage</span>
                             </a>
                             <a href="timelinev2.html?boss=dancing-mad&spec=pictomancer-pictomancer" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-pct rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="lorrgs_assets/images/classes/pictomancer.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
+                                <img src="images/classes/Pictomancer.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
                                 <span>Pictomancer</span>
                             </a>
                         </div>
@@ -305,7 +273,7 @@
                 
                 <div class="flex flex-wrap justify-center gap-6">
                     <a href="https://discord.gg/SZRX5fVUeG" target="_blank" class="text-gray-400 hover:text-white transition flex items-center gap-2 group">
-                        <i class="fab fa-discord group-hover:text-indigo-500"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" class="group-hover:text-indigo-500" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
                         <span>Discord</span>
                     </a>
                 </div>
