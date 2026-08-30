@@ -2287,6 +2287,18 @@
             // 所以窄屏下默认收起, 只留一行"控制 + 折叠 + 缩放", 把屏幕让给时间轴
             const [isMobile, setIsMobile] = useState(() => (window.innerWidth || 1280) < 768);
             const [controlsOpen, setControlsOpen] = useState(false);
+            const controlBarRef = useRef(null);
+            // 点面板外面就收起 (浮层不占布局, 用户会期望点别处关掉它)
+            useEffect(() => {
+                if (!isMobile || !controlsOpen) return;
+                const onDocDown = (e) => {
+                    if (controlBarRef.current && !controlBarRef.current.contains(e.target)) {
+                        setControlsOpen(false);
+                    }
+                };
+                document.addEventListener('mousedown', onDocDown);
+                return () => document.removeEventListener('mousedown', onDocDown);
+            }, [isMobile, controlsOpen]);
             useEffect(() => {
                 const mq = window.matchMedia('(max-width: 767px)');
                 const onChange = (e) => setIsMobile(e.matches);
@@ -4017,7 +4029,7 @@
                 {/* Control Bar — 按功能分区:
                     [技能选择: ALL 总开关 + 四类平铺 + OTHERS + LB] [BOSS TIMELINE: 行开关+类型+阶段] [伙伴] | [工具] [视图: 条/标签+折叠+缩放]
                     移动端: 整块收起, 只留一行紧凑控件 (点"控制"展开) */}
-                <div className="bg-[#181818] border-b border-gray-800 px-2 sm:px-4 py-2 shrink-0 flex flex-wrap items-start gap-x-4 gap-y-2 overflow-visible no-scrollbar shadow-md z-[5000]">
+                <div ref={controlBarRef} className="relative bg-[#181818] border-b border-gray-800 px-2 sm:px-4 py-2 shrink-0 flex flex-wrap items-start gap-x-4 gap-y-2 overflow-visible no-scrollbar shadow-md z-[5000]">
                     {isMobile && (
                         <div className="flex w-full items-center gap-1.5">
                             <button
@@ -4038,7 +4050,13 @@
                             </div>
                         </div>
                     )}
-                    {controlsVisible && (<>
+                    {controlsVisible && (
+                    // 移动端: 展开的控制面板做成浮层盖在时间轴上方 (绝对定位 + 内部滚动),
+                    // 而不是撑高控制栏把时间轴挤下去 —— 否则一打开就吃掉 40% 屏幕。
+                    // 桌面端用 display:contents, 让下面三块仍是控制栏的直接 flex 子元素。
+                    <div className={isMobile
+                        ? "absolute left-0 right-0 top-full z-[5500] flex max-h-[65vh] flex-wrap items-start gap-x-4 gap-y-3 overflow-y-auto overflow-x-hidden border-b border-gray-800 bg-[#181818] px-2 py-3 shadow-2xl"
+                        : "contents"}>
                     {/* 技能分类筛选: 核心四类 (CD/单减/团减/功能) 平铺展示 —— 这是页面的
                         主角; 只有条目多的 OTHERS 用"计数按钮 + 弹出面板"收纳。
                         ALL 是技能选择的总开关, 所以放在这个区的最前面 */}
@@ -4407,7 +4425,7 @@
                             </>
                         )}
                     </div>
-                    </>)}
+                    </div>)}
                 </div>
 
                 {/* Timeline Area */}
