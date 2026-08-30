@@ -738,10 +738,18 @@
             } catch (e) {}
             return null;
         };
+        // 窄屏默认少看几分钟: 375px 宽的屏幕上铺 6 分钟等于每秒不到 1 像素,
+        // 28px 的技能图标会叠成一团完全看不清; 2 分钟约 2.6px/秒, 密但可读。
+        const DEFAULT_VISIBLE_MINUTES_MOBILE = 2;
+
         const getInitialZoom = () => {
             const storedVisibleMinutes = getStoredVisibleMinutes();
-            const visibleMinutes = storedVisibleMinutes !== null ? storedVisibleMinutes : DEFAULT_VISIBLE_MINUTES;
-            const visibleWidth = Math.max(320, (window.innerWidth || 1280) - LEFT_PANEL_WIDTH - 12);
+            const narrow = (window.innerWidth || 1280) < 768;
+            const fallbackMinutes = narrow ? DEFAULT_VISIBLE_MINUTES_MOBILE : DEFAULT_VISIBLE_MINUTES;
+            const visibleMinutes = storedVisibleMinutes !== null ? storedVisibleMinutes : fallbackMinutes;
+            // 左面板在窄屏下是收起的, 用实际宽度算才不会低估可视区
+            const panelWidth = narrow ? LEFT_PANEL_COLLAPSED_WIDTH : LEFT_PANEL_WIDTH;
+            const visibleWidth = Math.max(280, (window.innerWidth || 1280) - panelWidth - 12);
             return visibleWidth / (visibleMinutes * 60);
         };
         const BUDDY_VISIBILITY_STORAGE_KEY = 'm-spec:show-buddy';
