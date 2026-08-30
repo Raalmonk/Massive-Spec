@@ -1,3 +1,19 @@
+/* 自托管 Inter 可变字体 (latin 子集, 48KB, 覆盖 100-900 全部字重)。
+   之前 Inter 只由 main_menu.html 通过 Google Fonts 加载, 而 tailwind 配置里
+   sans 又声明成 Inter —— 结果时间轴页拿不到 Inter, 回退到各系统默认字体,
+   两个页面字体不一致。放进共享的 app.css 后两边都用同一套, 也省掉一个外部请求。
+   路径相对于 dist/app.css。 */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('./fonts/inter-latin-var.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

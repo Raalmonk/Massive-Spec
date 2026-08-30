@@ -3794,7 +3794,7 @@
 
                 {/* Navbar: 只保留"看什么"的选择 (Boss/职业/区服), 工具类按钮全部
                     下放到时间轴上方的工具行 —— 让顶部尽量轻 */}
-                <nav className="h-11 bg-[#1a1a1a] border-b border-gray-800 flex items-center justify-between gap-2 px-2 sm:px-3 shrink-0 z-[7000]">
+                <nav className="min-h-[44px] nav-safe-top bg-[#1a1a1a] border-b border-gray-800 flex items-center justify-between gap-2 px-2 sm:px-3 shrink-0 z-[7000]">
                     <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
                         {/* 窄屏隐藏站名, 把宽度让给 Boss/职业/区服三个选择器 */}
                         <a href="main_menu.html#" className="hidden sm:flex text-lg font-bold tracking-tight text-white items-center select-none hover:opacity-80 transition-opacity shrink-0" style={{ textDecoration: 'none' }}>

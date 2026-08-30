@@ -7,11 +7,18 @@ router = APIRouter()
 
 @router.get("/")
 @router.head("/")
+@router.get("/timeline.html")
+@router.head("/timeline.html")
+def index():
+    """Serve the timeline HTML."""
+    # Since main.py runs from root, we look for front_end/timeline.html
+    return FileResponse(os.path.join("front_end", "timeline.html"))
+
+
 @router.get("/timelinev2.html")
 @router.head("/timelinev2.html")
-def index():
-    """Serve the Timeline V2 HTML."""
-    # Since main.py runs from root, we look for front_end/timelinev2.html
+def timeline_legacy():
+    """Old bookmarked address — serves a page that redirects to timeline.html."""
     return FileResponse(os.path.join("front_end", "timelinev2.html"))
 
 

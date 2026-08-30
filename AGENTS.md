@@ -124,10 +124,10 @@ PCT (Pictomancer): Starry Muse, Striking Muse, Retribution of the Madeen, Mog of
 * Use one-command scripts for focused frontend JSON generation:
   `python scripts/debug_darkknight_fru.py`
   `python scripts/debug_astrologian_dancing_mad.py`
-* `main.py` serves the frontend at `/`; the actual timeline file is `front_end/timelinev2.html`, and generated ranking data is served from `front_end/data`.
+* `main.py` serves the frontend at `/`; the actual timeline file is `front_end/timeline.html` (the old `timelinev2.html` is now just a redirect kept for bookmarked links), and generated ranking data is served from `front_end/data`.
 
 ## 8. Frontend Build (IMPORTANT since 2026-08)
-* The timeline React app source lives in `front_end/src/app.jsx` (extracted from the old inline `<script type="text/babel">` block). **Do NOT add code back into `timelinev2.html`** — it is now a tiny static shell that loads precompiled assets.
+* The timeline React app source lives in `front_end/src/app.jsx` (extracted from the old inline `<script type="text/babel">` block). **Do NOT add code back into `timeline.html`** — it is now a tiny static shell that loads precompiled assets.
 * After editing `front_end/src/app.jsx` (or Tailwind classes anywhere), run `python scripts/build_frontend.py`. It bundles `dist/app.js` (esbuild, production React) + `dist/app.css` (Tailwind CLI) and stamps `?v=<hash>` versions into the HTML files.
 * `front_end/dist/app.js` and `app.css` are **committed to git** so the server never needs a Node toolchain. Node itself comes from the `nodejs-wheel-binaries` pip package in the venv.
 * No CDN dependencies: Tailwind Play CDN, @babel/standalone, and esm.sh imports were removed for performance. Keep it that way.

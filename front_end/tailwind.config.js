@@ -4,14 +4,29 @@
 module.exports = {
   darkMode: "class",
   content: [
-    "./timelinev2.html",
+    "./timeline.html",
     "./main_menu.html",
     "./src/**/*.jsx",
   ],
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
+        // Inter 走自托管 (见 src/tailwind.css), 后面接各平台的系统中日韩字体,
+        // 因为 Inter 的 latin 子集不含 CJK, 站点却有中/日/韩 三种界面语言
+        sans: [
+          "Inter",
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "PingFang SC",
+          "Hiragino Sans",
+          "Yu Gothic UI",
+          "Microsoft YaHei",
+          "Malgun Gothic",
+          "Noto Sans CJK SC",
+          "sans-serif",
+        ],
+        mono: ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
       },
       colors: {
         gray: {

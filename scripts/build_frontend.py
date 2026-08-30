@@ -3,7 +3,7 @@
 
 Compiles the React app (front_end/src/app.jsx) and the Tailwind CSS into
 static, minified assets under front_end/dist/, then stamps the asset
-references in timelinev2.html with a content-hash version query so long
+references in timeline.html with a content-hash version query so long
 `Cache-Control: immutable` headers are safe.
 
 Usage:
@@ -27,7 +27,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 FRONT_END = ROOT / "front_end"
 DIST = FRONT_END / "dist"
-HTML_FILES = [FRONT_END / "timelinev2.html", FRONT_END / "main_menu.html"]
+HTML_FILES = [FRONT_END / "timeline.html", FRONT_END / "main_menu.html"]
 
 
 def find_node_dir() -> Path:

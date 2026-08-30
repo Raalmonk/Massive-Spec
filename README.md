@@ -1,7 +1,8 @@
 
 ## Local frontend
 
-This fork serves the timeline from `front_end/timelinev2.html` through `main.py`.
+This fork serves the timeline from `front_end/timeline.html` through `main.py`
+(`timelinev2.html` stays as a redirect for previously bookmarked links).
 Generated ranking JSON files live in `front_end/data`.
 
 ### Frontend build (required after editing frontend source)

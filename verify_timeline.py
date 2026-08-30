@@ -13,7 +13,7 @@ def test_timeline(page):
     # Check for presence of spell icons or text
     print("Checking for spells...")
     # "Fight or Flight" is a Paladin spell. Default spec is Red Mage though.
-    # Default spec in timelinev2.html is `const [selectedSpec, setSelectedSpec] = useState('redmage-redmage');`
+    # Default spec in timeline.html is `const [selectedSpec, setSelectedSpec] = useState('redmage-redmage');`
     # Red Mage spells: "Embolden", "Fleche", "Contre Sixte"
 
     expect(page.get_by_title("Embolden")).to_be_visible()

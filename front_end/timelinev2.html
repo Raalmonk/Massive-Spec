@@ -1,102 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M-Spec</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23121212'/%3E%3Ctext x='8' y='12' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='%2300FF96'%3EM%3C/text%3E%3C/svg%3E">
-
-    <!-- 1. Precompiled Tailwind CSS (built by scripts/build_frontend.py) -->
-    <link rel="stylesheet" href="dist/app.css?v=a547c7bc71">
-
-    <!-- 2. Precompiled React App (source: front_end/src/app.jsx, built by scripts/build_frontend.py) -->
-    <!-- 注: api.js 的 loadRanking 从未被时间轴引用 (fetchRankings 自带实现), 故不再加载 -->
-    <script defer src="dist/app.js?v=937fc7eeeb"></script>
-
-    <style>
-        /* Scrollbar Styling */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 12px;
-            height: 12px;
-            background: #121212;
-        }
-        .custom-scrollbar::-webkit-scrollbar-corner {
-            background: #121212;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #333;
-            border: 3px solid #121212;
-            border-radius: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #00FF96;
-        }
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        body { margin: 0; overflow: hidden; background-color: #121212; user-select: none; }
-
-        /* 应用外壳高度: 移动端浏览器的 100vh 包含地址栏占用的区域, 会把底部内容顶出屏幕;
-           dvh 是随地址栏收放变化的实际可视高度 (不支持的老浏览器回落到 vh) */
-        .app-shell { height: 100vh; height: 100dvh; }
-        img, svg {
-            -webkit-user-drag: none;
-            user-drag: none;
-            user-select: none;
-        }
-
-        /* Custom Drag Cursor */
-        .cursor-grab { cursor: grab; }
-        .cursor-grabbing { cursor: grabbing; }
-
-        /* Sticky 左面板的右侧阴影: 用线性渐变伪元素替代模糊 box-shadow。
-           拖动时 100+ 个 sticky 单元格每帧都要合成, 渐变比模糊便宜得多 */
-        .left-cell-shadow::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            right: -6px;
-            width: 6px;
-            background: linear-gradient(to right, rgba(0,0,0,0.4), rgba(0,0,0,0));
-            pointer-events: none;
-        }
-        .nav-select {
-            color-scheme: dark;
-        }
-        .nav-select option {
-            background-color: #111111;
-            color: #f3f4f6;
-        }
-        
-        /* Input Number Styling - Remove spinners */
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
-        }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-        
-        /* Animation for Selection Mode */
-        @keyframes pulse-border-blue {
-            0% { border-color: #3B82F6; }
-            50% { border-color: rgba(59, 130, 246, 0.2); }
-            100% { border-color: #3B82F6; }
-        }
-        .selection-active-blue {
-            animation: pulse-border-blue 2s infinite;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M-Spec</title>
+<meta name="robots" content="noindex">
+<!-- 旧地址 (很多用户收藏的是这个)。时间轴已改名为 timeline.html,
+     这里把查询参数原样带过去后跳转, 用 replace 避免在浏览器历史里留一条。 -->
+<script>
+    (function () {
+        var target = "timeline.html" + window.location.search + window.location.hash;
+        window.location.replace(target);
+    })();
+</script>
+<meta http-equiv="refresh" content="0; url=timeline.html">
+<style>html,body{height:100%;margin:0;background:#121212;color:#9ca3af;font-family:ui-sans-serif,system-ui,sans-serif}
+.wrap{height:100%;display:flex;align-items:center;justify-content:center;font-size:14px}
+a{color:#00FF96}</style>
 </head>
 <body>
-    <div id="root"></div>
-
+<div class="wrap"><p>Redirecting… <a href="timeline.html">M-Spec</a></p></div>
 </body>
 </html>
-

@@ -2,288 +2,216 @@
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- viewport-fit=cover + env(safe-area-inset-*): 刘海屏上铺满屏幕但内容避开刘海与圆角 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>M-Spec</title>
+    <meta name="description" content="M-Spec — FF14 encounter timelines built from the top 100 logs of every job.">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23121212'/%3E%3Ctext x='8' y='12' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='%2300FF96'%3EM%3C/text%3E%3C/svg%3E">
-    <!-- Precompiled Tailwind CSS (shared with the timeline; built by scripts/build_frontend.py,
-         theme colors now live in front_end/tailwind.config.js) -->
-    <link rel="stylesheet" href="dist/app.css?v=a547c7bc71">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- 与时间轴共用的预编译样式表 (含自托管 Inter, 见 scripts/build_frontend.py) -->
+    <link rel="stylesheet" href="dist/app.css?v=ef16c0b9c5">
+
     <style>
         body {
-            background-color: #0f1115;
+            background-color: #0d0d0d;
             color: #e5e7eb;
+            padding-left: env(safe-area-inset-left, 0px);
+            padding-right: env(safe-area-inset-right, 0px);
         }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #111827; }
-        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
-        
-        .job-btn {
-            transition: all 0.2s;
-        }
-        .job-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        .safe-top { padding-top: env(safe-area-inset-top, 0px); }
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #0d0d0d; }
+        ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3d3d3d; }
+
+        /* 顶部氛围光: 一层很淡的绿色径向渐变, 让首屏不至于是一块死黑 */
+        .hero-glow {
+            background:
+                radial-gradient(60rem 26rem at 50% -8rem, rgba(0, 255, 150, 0.10), transparent 70%),
+                radial-gradient(40rem 20rem at 85% 0%, rgba(0, 255, 150, 0.045), transparent 70%);
         }
 
-        /* Dropdown fade transition */
-        .dropdown-enter { opacity: 0; transform: translateY(-5px); }
-        .dropdown-enter-active { opacity: 1; transform: translateY(0); transition: opacity 0.15s, transform 0.15s; }
+        /* 职业按钮: 左侧一道职业色, 悬停时整块微微抬起并点亮该色 */
+        .job-card {
+            transition: transform .15s ease, border-color .15s ease, background-color .15s ease;
+        }
+        .job-card:hover {
+            transform: translateY(-2px);
+            background-color: #1c1c1c;
+        }
+        .job-card:focus-visible {
+            outline: 2px solid #00FF96;
+            outline-offset: 2px;
+        }
+
+        .boss-chip { transition: background-color .15s ease, border-color .15s ease, color .15s ease; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans relative" onclick="closeAllDropdowns(event)">
+<body class="min-h-screen flex flex-col font-sans antialiased">
 
-    <!-- Navigation -->
-    <nav class="border-b border-gray-800 bg-gray-900/80 backdrop-blur-md sticky top-0 z-50">
-        <!-- Changed to w-full and removed mx-auto to keep logo strictly on the left -->
-        <div class="w-full px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center">
-                    <a href="#" class="text-2xl font-bold text-white tracking-tight">
-                        <span class="text-monk">M-</span>Spec
-                    </a>
-                </div>
+    <!-- ============ 顶栏 ============ -->
+    <nav class="safe-top sticky top-0 z-50 border-b border-white/5 bg-[#0d0d0d]/85 backdrop-blur-md">
+        <div class="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
+            <a href="#" class="select-none text-xl font-bold tracking-tight text-white">
+                <span class="text-monk">M</span>-Spec
+            </a>
+            <div class="flex items-center gap-2">
                 <button
                     id="language-toggle"
                     type="button"
-                    class="rounded border border-gray-700 bg-gray-950/70 px-3 py-1.5 text-xs font-bold text-gray-300 hover:border-monk hover:text-white"
-                    aria-label="Language"
-                >
-                    EN
-                </button>
+                    class="h-8 min-w-[46px] rounded-md border border-white/10 bg-white/5 px-2.5 text-xs font-bold text-gray-300 transition-colors hover:border-monk/60 hover:text-white"
+                >EN</button>
+                <a href="https://discord.gg/SZRX5fVUeG" target="_blank" rel="noopener noreferrer"
+                   class="flex h-8 w-8 items-center justify-center rounded-md border border-white/10 bg-white/5 text-gray-400 transition-colors hover:border-[#5865F2] hover:text-[#5865F2]"
+                   title="Discord" aria-label="Discord">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+                </a>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="flex-grow max-w-[95rem] mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
-        
-        <!-- Top Section: Grid Layout -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
-            
-            <!-- Left Column: Intro & Disclaimer (Width: ~30%) -->
-            <div class="lg:col-span-4 xl:col-span-3 space-y-8 order-2 lg:order-1">
-                <!-- Intro Section -->
-                <div>
-                    <h1 class="text-3xl font-bold text-white mb-4" data-i18n="introTitle">What is this?</h1>
-                    <!-- Reverted font size to text-sm -->
-                    <div class="text-gray-400 space-y-2 text-sm leading-relaxed">
-                        <p data-i18n-html="introBody1">This website looks at the current <span class="text-monk font-semibold">top 100 logs for every job</span> and visualizes <span class="text-monk font-semibold">relevant</span> spells on an encounter timeline.</p>
-                        <p data-i18n="introBody2">This lets you compare high performing logs, buddy cooldowns, and imported pulls against each other.</p>
-                        <p class="font-medium text-gray-300" data-i18n="introBody3">No more sifting through individual FF Logs manually.</p>
-                    </div>
-                </div>
-
-                <!-- New Quote Section (Green Box) -->
-                <div class="bg-green-900/10 border-l-4 border-monk p-5 rounded-r-lg">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-monk mt-1" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
-                        </div>
-                        <div class="ml-3 flex-1">
-                            <div class="text-green-100/90 text-sm font-medium leading-relaxed italic mb-2" data-i18n="quote">
-                                "...我觉得你木桩打的已经没有问题了，不要再研究那一点点手法，把你的时间花到研究BOSS上"
-                            </div>
-                            <div class="text-right flex items-center justify-end">
-                                <span class="w-8 h-[1px] bg-monk/40 mr-2 inline-block"></span>
-                                <span class="text-monk font-bold text-xs tracking-wider">点子王</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Disclaimer Section -->
-                <div class="bg-yellow-900/10 border-l-4 border-yellow-600/80 p-5 rounded-r-lg">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500 mt-1" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
-                        </div>
-                        <div class="ml-3">
-                            <!-- Reverted header size to text-base and text size to text-xs -->
-                            <h3 class="text-base font-bold text-yellow-500 mb-2" data-i18n="disclaimerTitle">Disclaimer</h3>
-                            <div class="text-yellow-100/80 space-y-2 text-xs leading-relaxed">
-                                <p class="font-semibold" data-i18n="disclaimer1">Do not simply copy paste the timings you see here.</p>
-                                <p data-i18n-html="disclaimer2">You still need to <span class="text-white font-medium">adapt your cooldowns</span> based on your group's strategy and kill time.</p>
-                                <p data-i18n-html="disclaimer3">Seeing what worked for other groups helps most when you also understand <span class="underline decoration-yellow-500/50">why</span>.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!-- ============ 首屏 ============ -->
+    <header class="hero-glow border-b border-white/5">
+        <div class="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
+            <p class="mb-3 font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-monk/80" data-i18n="heroKicker">FFXIV Encounter Timelines</p>
+            <h1 class="max-w-3xl text-3xl font-bold leading-tight tracking-tight text-white sm:text-5xl" data-i18n="heroTitle">
+                See how the best players actually use their cooldowns.
+            </h1>
+            <p class="mt-5 max-w-2xl text-sm leading-relaxed text-gray-400 sm:text-base" data-i18n-html="heroBody">
+                M-Spec reads the current <span class="font-semibold text-monk">top 100 logs for every job</span> and lays their
+                relevant spells out on one encounter timeline — so you can compare pulls side by side instead of opening FF Logs one report at a time.
+            </p>
+            <div class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-gray-500">
+                <span class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-monk"></span><span data-i18n="heroPoint1">Top 100 logs per job</span></span>
+                <span class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-monk"></span><span data-i18n="heroPoint2">Party &amp; buddy cooldowns</span></span>
+                <span class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-monk"></span><span data-i18n="heroPoint3">Import your own pull</span></span>
             </div>
-
-            <!-- Right Column: Top Parses by Job (Width: ~70%) -->
-            <div class="lg:col-span-8 xl:col-span-9 order-1 lg:order-2">
-                <h2 class="text-2xl font-bold text-white mb-6 border-b border-gray-800 pb-2" data-i18n="jobSectionTitle">Dancing Mad Timelines</h2>
-                
-                <div class="space-y-4">
-                    
-                    <!-- Row 1: Tanks -->
-                    <div class="flex flex-col md:flex-row md:items-center bg-gray-900/40 rounded-lg border border-gray-800 p-4 gap-4">
-                        <div class="w-32 flex-shrink-0 flex items-center text-gray-400 font-bold uppercase tracking-wider text-sm">
-                            <span class="w-8 flex justify-center mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span>
-                            Tank
-                        </div>
-                        <div class="flex flex-wrap gap-3 flex-1">
-                            <a href="timelinev2.html?boss=dancing-mad&spec=paladin-paladin" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-pld rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/paladin.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Paladin</span>
-                            </a>
-                            <a href="timelinev2.html?boss=dancing-mad&spec=warrior-warrior" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-war rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/warrior.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Warrior</span>
-                            </a>
-                            <a href="timelinev2.html?boss=dancing-mad&spec=darkknight-darkknight" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-drk rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Dark_Knight.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Dark Knight</span>
-                            </a>
-                            <a href="timelinev2.html?boss=dancing-mad&spec=gunbreaker-gunbreaker" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-gnb rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Gunbreaker.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Gunbreaker</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Row 2: Healers -->
-                    <div class="flex flex-col md:flex-row md:items-center bg-gray-900/40 rounded-lg border border-gray-800 p-4 gap-4">
-                        <div class="w-32 flex-shrink-0 flex items-center text-gray-400 font-bold uppercase tracking-wider text-sm">
-                            <span class="w-8 flex justify-center mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span>
-                            Healer
-                        </div>
-                        <div class="flex flex-wrap gap-3 flex-1">
-                            <a href="timelinev2.html?boss=dancing-mad&spec=whitemage-whitemage" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-whm rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/White_Mage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>White Mage</span>
-                            </a>
-                            <a href="timelinev2.html?boss=dancing-mad&spec=scholar-scholar" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-sch rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Scholar.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Scholar</span>
-                            </a>
-                            <a href="timelinev2.html?boss=dancing-mad&spec=astrologian-astrologian" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-ast rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Astrologian.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Astrologian</span>
-                            </a>
-                            <a href="timelinev2.html?boss=dancing-mad&spec=sage-sage" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-sge rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Sage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Sage</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Row 3: Melee DPS -->
-                    <div class="flex flex-col md:flex-row md:items-center bg-gray-900/40 rounded-lg border border-gray-800 p-4 gap-4">
-                        <div class="w-32 flex-shrink-0 flex items-center text-gray-400 font-bold uppercase tracking-wider text-sm">
-                            <span class="w-8 flex justify-center mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-400" aria-hidden="true"><path d="m14.5 12.5-8 8a2.119 2.119 0 1 1-3-3l8-8"/><path d="m16 16 6-6"/><path d="m8 8 6-6"/><path d="m9 7 8 8"/><path d="m21 11-8-8"/></svg></span>
-                            Melee
-                        </div>
-                        <div class="flex flex-wrap gap-3 flex-1">
-                            <a href="timelinev2.html?boss=dancing-mad&spec=monk-monk" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-mnk rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/monk.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Monk</span>
-                            </a>
-                            <a href="timelinev2.html?boss=dancing-mad&spec=dragoon-dragoon" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-drg rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Dragoon.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Dragoon</span>
-                            </a>
-                            <a href="timelinev2.html?boss=dancing-mad&spec=ninja-ninja" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-nin rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Ninja.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Ninja</span>
-                            </a>
-                            <a href="timelinev2.html?boss=dancing-mad&spec=samurai-samurai" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-sam rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Samurai.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Samurai</span>
-                            </a>
-                            <a href="timelinev2.html?boss=dancing-mad&spec=reaper-reaper" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-rpr rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Reaper.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Reaper</span>
-                            </a>
-                            <a href="timelinev2.html?boss=dancing-mad&spec=viper-viper" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-vpr rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Viper.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Viper</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Row 4: Phys Ranged DPS -->
-                    <div class="flex flex-col md:flex-row md:items-center bg-gray-900/40 rounded-lg border border-gray-800 p-4 gap-4">
-                        <div class="w-32 flex-shrink-0 flex items-center text-gray-400 font-bold uppercase tracking-wider text-sm">
-                            <span class="w-8 flex justify-center mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-400" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
-                            Phys Ranged
-                        </div>
-                        <div class="flex flex-wrap gap-3 flex-1">
-                            <a href="timelinev2.html?boss=dancing-mad&spec=bard-bard" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-brd rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Bard.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Bard</span>
-                            </a>
-                            <a href="timelinev2.html?boss=dancing-mad&spec=machinist-machinist" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-mch rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Machinist.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Machinist</span>
-                            </a>
-                            <a href="timelinev2.html?boss=dancing-mad&spec=dancer-dancer" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-dnc rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Dancer.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Dancer</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Row 5: Magical Ranged DPS -->
-                    <div class="flex flex-col md:flex-row md:items-center bg-gray-900/40 rounded-lg border border-gray-800 p-4 gap-4">
-                        <div class="w-32 flex-shrink-0 flex items-center text-gray-400 font-bold uppercase tracking-wider text-sm">
-                            <span class="w-8 flex justify-center mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-400" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span>
-                            Magic Ranged
-                        </div>
-                        <div class="flex flex-wrap gap-3 flex-1">
-                            <a href="timelinev2.html?boss=dancing-mad&spec=blackmage-blackmage" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-blm rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Black_Mage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Black Mage</span>
-                            </a>
-                            <a href="timelinev2.html?boss=dancing-mad&spec=summoner-summoner" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-smn rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Summoner.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Summoner</span>
-                            </a>
-                            <a href="timelinev2.html?boss=dancing-mad&spec=redmage-redmage" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-rdm rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Red_Mage.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Red Mage</span>
-                            </a>
-                            <a href="timelinev2.html?boss=dancing-mad&spec=pictomancer-pictomancer" class="job-btn flex items-center bg-gray-800 border-l-4 border-job-pct rounded px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-700 min-w-[120px]">
-                                <img src="images/classes/Pictomancer.png" class="w-5 h-5 mr-2 object-contain" onerror="this.style.display='none'">
-                                <span>Pictomancer</span>
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
         </div>
+    </header>
 
+    <main class="mx-auto w-full max-w-6xl flex-grow px-4 py-10 sm:px-6 sm:py-14">
+
+        <!-- ============ 第一步: 选副本 ============ -->
+        <section class="mb-12">
+            <div class="mb-4 flex items-baseline gap-3">
+                <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-monk/15 font-mono text-[11px] font-bold text-monk">1</span>
+                <h2 class="text-lg font-bold tracking-tight text-white" data-i18n="stepBossTitle">Pick an encounter</h2>
+            </div>
+            <div id="boss-groups" class="space-y-4 pl-9"></div>
+        </section>
+
+        <!-- ============ 第二步: 选职业 ============ -->
+        <section>
+            <div class="mb-4 flex items-baseline gap-3">
+                <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-monk/15 font-mono text-[11px] font-bold text-monk">2</span>
+                <h2 class="text-lg font-bold tracking-tight text-white" data-i18n="stepJobTitle">Pick a job</h2>
+            </div>
+            <div id="role-rows" class="space-y-3 pl-0 sm:pl-9"></div>
+        </section>
+
+        <!-- ============ 免责声明 ============ -->
+        <section class="mt-14 rounded-lg border-l-2 border-yellow-500/60 bg-yellow-500/[0.04] px-5 py-4">
+            <h3 class="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-yellow-500/90">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                <span data-i18n="disclaimerTitle">Disclaimer</span>
+            </h3>
+            <div class="space-y-1.5 text-xs leading-relaxed text-gray-400">
+                <p class="font-medium text-gray-300" data-i18n="disclaimer1">Do not simply copy paste the timings you see here.</p>
+                <p data-i18n-html="disclaimer2">You still need to <span class="font-medium text-white">adapt your cooldowns</span> based on your group's strategy and kill time.</p>
+                <p data-i18n-html="disclaimer3">Seeing what worked for other groups helps most when you also understand <span class="underline decoration-yellow-500/40">why</span>.</p>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 border-t border-gray-800 py-10 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <span class="text-xl font-bold text-gray-500">M-Spec</span>
-                    <p class="text-gray-600 text-sm mt-1" data-i18n="copyright">© 2026 M-Spec. Not affiliated with Square Enix.</p>
-                </div>
-                
-                <div class="flex flex-wrap justify-center gap-6">
-                    <a href="https://discord.gg/SZRX5fVUeG" target="_blank" class="text-gray-400 hover:text-white transition flex items-center gap-2 group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" class="group-hover:text-indigo-500" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
-                        <span>Discord</span>
-                    </a>
-                </div>
+    <!-- ============ 页脚 ============ -->
+    <footer class="safe-bottom mt-auto border-t border-white/5 bg-[#0a0a0a]">
+        <div class="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-3 px-4 py-8 sm:flex-row sm:px-6">
+            <div class="text-center sm:text-left">
+                <div class="text-sm font-bold text-gray-400"><span class="text-monk">M</span>-Spec</div>
+                <p class="mt-0.5 text-xs text-gray-600" data-i18n="copyright">© 2026 M-Spec. Not affiliated with Square Enix.</p>
             </div>
+            <a href="https://discord.gg/SZRX5fVUeG" target="_blank" rel="noopener noreferrer"
+               class="group flex items-center gap-2 text-xs text-gray-500 transition-colors hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" class="transition-colors group-hover:text-[#5865F2]" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+                <span>Discord</span>
+            </a>
         </div>
     </footer>
 
-    <!-- Logic -->
     <script>
+        // ==================== 数据 ====================
+        // Boss 列表与时间轴 (src/app.jsx 的 BOSS_GROUPS) 保持一致
+        const BOSS_GROUPS = [
+            { key: 'current', items: [
+                { id: 'vamp-fatale',            code: 'M9S',     name: 'Vamp Fatale' },
+                { id: 'red-hot-and-deep-blue',  code: 'M10S',    name: 'Red Hot and Deep Blue' },
+                { id: 'the-tyrant',             code: 'M11S',    name: 'The Tyrant' },
+                { id: 'lindwurm',               code: 'M12S P1', name: 'Lindwurm' },
+                { id: 'lindwurm-ii',            code: 'M12S P2', name: 'Lindwurm' },
+                { id: 'futures-rewritten',      code: 'FRU',     name: 'Futures Rewritten' },
+                { id: 'dancing-mad',            code: 'DMU',     name: 'Dancing Mad' }
+            ]},
+            { key: 'legacy', items: [
+                { id: 'the-unending-coil-of-bahamut', code: 'UCOB', name: 'The Unending Coil of Bahamut' },
+                { id: 'the-weapons-refrain',          code: 'UWU',  name: "The Weapon's Refrain" },
+                { id: 'the-epic-of-alexander',        code: 'TEA',  name: 'The Epic of Alexander' },
+                { id: 'dragonsongs-reprise',          code: 'DSR',  name: "Dragonsong's Reprise" },
+                { id: 'the-omega-protocol',           code: 'TOP',  name: 'The Omega Protocol' }
+            ]}
+        ];
+
+        // 职业色直接写死成十六进制: 这些按钮是 JS 动态生成的,
+        // 用 `border-job-xxx` 这类拼接类名会被 Tailwind 的内容扫描漏掉
+        const ROLES = [
+            { key: 'tank', jobs: [
+                { id: 'paladin-paladin',       icon: 'paladin.png',      color: '#A8D2E6' },
+                { id: 'warrior-warrior',       icon: 'warrior.png',      color: '#CF2621' },
+                { id: 'darkknight-darkknight', icon: 'Dark_Knight.png',  color: '#D126CC' },
+                { id: 'gunbreaker-gunbreaker', icon: 'Gunbreaker.png',   color: '#796D30' }
+            ]},
+            { key: 'healer', jobs: [
+                { id: 'whitemage-whitemage',       icon: 'White_Mage.png',  color: '#FFF0F5' },
+                { id: 'scholar-scholar',           icon: 'Scholar.png',     color: '#8657FF' },
+                { id: 'astrologian-astrologian',   icon: 'Astrologian.png', color: '#FFE74A' },
+                { id: 'sage-sage',                 icon: 'Sage.png',        color: '#80A0F0' }
+            ]},
+            { key: 'melee', jobs: [
+                { id: 'monk-monk',       icon: 'monk.png',     color: '#D69C00' },
+                { id: 'dragoon-dragoon', icon: 'Dragoon.png',  color: '#4164CD' },
+                { id: 'ninja-ninja',     icon: 'Ninja.png',    color: '#AF1964' },
+                { id: 'samurai-samurai', icon: 'Samurai.png',  color: '#E46D04' },
+                { id: 'reaper-reaper',   icon: 'Reaper.png',   color: '#965A90' },
+                { id: 'viper-viper',     icon: 'Viper.png',    color: '#108221' }
+            ]},
+            { key: 'ranged', jobs: [
+                { id: 'bard-bard',           icon: 'Bard.png',      color: '#91BA5E' },
+                { id: 'machinist-machinist', icon: 'Machinist.png', color: '#6EE1D6' },
+                { id: 'dancer-dancer',       icon: 'Dancer.png',    color: '#E2B0AF' }
+            ]},
+            { key: 'caster', jobs: [
+                { id: 'blackmage-blackmage',     icon: 'Black_Mage.png',  color: '#A579D6' },
+                { id: 'summoner-summoner',       icon: 'Summoner.png',    color: '#2D9B78' },
+                { id: 'redmage-redmage',         icon: 'Red_Mage.png',    color: '#E87B7B' },
+                { id: 'pictomancer-pictomancer', icon: 'Pictomancer.png', color: '#FF66CC' }
+            ]}
+        ];
+
+        const JOB_NAMES_EN = {
+            'paladin-paladin': 'Paladin', 'warrior-warrior': 'Warrior',
+            'darkknight-darkknight': 'Dark Knight', 'gunbreaker-gunbreaker': 'Gunbreaker',
+            'whitemage-whitemage': 'White Mage', 'scholar-scholar': 'Scholar',
+            'astrologian-astrologian': 'Astrologian', 'sage-sage': 'Sage',
+            'monk-monk': 'Monk', 'dragoon-dragoon': 'Dragoon', 'ninja-ninja': 'Ninja',
+            'samurai-samurai': 'Samurai', 'reaper-reaper': 'Reaper', 'viper-viper': 'Viper',
+            'bard-bard': 'Bard', 'machinist-machinist': 'Machinist', 'dancer-dancer': 'Dancer',
+            'blackmage-blackmage': 'Black Mage', 'summoner-summoner': 'Summoner',
+            'redmage-redmage': 'Red Mage', 'pictomancer-pictomancer': 'Pictomancer'
+        };
+
         const UI_LANGUAGE_STORAGE_KEY = 'm-spec:ui-language';
+        const BOSS_STORAGE_KEY = 'm-spec:menu-boss';
         const UI_LANGUAGES = [
             { id: 'en', label: 'EN' },
             { id: 'zh', label: '中文' },
@@ -295,256 +223,252 @@
             en: {
                 pageTitle: 'M-Spec',
                 language: 'Language',
-                introTitle: 'What is this?',
-                introBody1: 'M-Spec compares the current <span class="text-monk font-semibold">top 100 logs for every job</span> and visualizes <span class="text-monk font-semibold">relevant</span> spells on an encounter timeline.',
-                introBody2: 'This lets you compare high performing logs, buddy cooldowns, and imported pulls against each other.',
-                introBody3: 'No more sifting through individual FF Logs manually.',
-                quote: '"...your dummy rotation is already fine. Stop polishing tiny rotation details and spend that time studying the boss."',
-                quoteBy: 'Dianziwang',
+                heroKicker: 'FFXIV Encounter Timelines',
+                heroTitle: 'See how the best players actually use their cooldowns.',
+                heroBody: 'M-Spec reads the current <span class="font-semibold text-monk">top 100 logs for every job</span> and lays their relevant spells out on one encounter timeline — so you can compare pulls side by side instead of opening FF Logs one report at a time.',
+                heroPoint1: 'Top 100 logs per job',
+                heroPoint2: 'Party & buddy cooldowns',
+                heroPoint3: 'Import your own pull',
+                stepBossTitle: 'Pick an encounter',
+                stepJobTitle: 'Pick a job',
+                bossGroupCurrent: 'Current',
+                bossGroupLegacy: 'Legacy Ultimates',
                 disclaimerTitle: 'Disclaimer',
                 disclaimer1: 'Do not simply copy paste the timings you see here.',
-                disclaimer2: 'You still need to <span class="text-white font-medium">adapt your cooldowns</span> based on your group\'s strategy and kill time.',
-                disclaimer3: 'Seeing what worked for other groups helps most when you also understand <span class="underline decoration-yellow-500/50">why</span>.',
-                jobSectionTitle: 'Dancing Mad Timelines',
+                disclaimer2: 'You still need to <span class="font-medium text-white">adapt your cooldowns</span> based on your group\'s strategy and kill time.',
+                disclaimer3: 'Seeing what worked for other groups helps most when you also understand <span class="underline decoration-yellow-500/40">why</span>.',
                 copyright: '© 2026 M-Spec. Not affiliated with Square Enix.',
-                roles: ['Tank', 'Healer', 'Melee', 'Phys Ranged', 'Magic Ranged'],
-                jobs: {
-                    'paladin-paladin': 'Paladin',
-                    'warrior-warrior': 'Warrior',
-                    'darkknight-darkknight': 'Dark Knight',
-                    'gunbreaker-gunbreaker': 'Gunbreaker',
-                    'whitemage-whitemage': 'White Mage',
-                    'scholar-scholar': 'Scholar',
-                    'astrologian-astrologian': 'Astrologian',
-                    'sage-sage': 'Sage',
-                    'monk-monk': 'Monk',
-                    'dragoon-dragoon': 'Dragoon',
-                    'ninja-ninja': 'Ninja',
-                    'samurai-samurai': 'Samurai',
-                    'reaper-reaper': 'Reaper',
-                    'viper-viper': 'Viper',
-                    'bard-bard': 'Bard',
-                    'machinist-machinist': 'Machinist',
-                    'dancer-dancer': 'Dancer',
-                    'blackmage-blackmage': 'Black Mage',
-                    'summoner-summoner': 'Summoner',
-                    'redmage-redmage': 'Red Mage',
-                    'pictomancer-pictomancer': 'Pictomancer'
-                }
+                roles: { tank: 'Tank', healer: 'Healer', melee: 'Melee', ranged: 'Phys Ranged', caster: 'Magic Ranged' },
+                jobs: JOB_NAMES_EN
             },
             zh: {
                 pageTitle: 'M-Spec',
                 language: '语言',
-                introTitle: '这是什么？',
-                introBody1: 'M-Spec 会整理每个职业当前的 <span class="text-monk font-semibold">前 100 个高分 Log</span>，并把 <span class="text-monk font-semibold">关键技能</span> 画在副本时间轴上。',
-                introBody2: '你可以把顶尖玩家、搭档减伤和自己导入的 pull 放在一起对照。',
-                introBody3: '不用再一个一个 FF Logs 手动翻了。',
-                quote: '"...我觉得你木桩打的已经没有问题了，不要再研究那一点点手法，把你的时间花到研究 BOSS 上。"',
-                quoteBy: '点子王',
-                disclaimerTitle: '提醒',
+                heroKicker: 'FF14 副本时间轴',
+                heroTitle: '看清高手的技能到底是怎么用的。',
+                heroBody: 'M-Spec 汇总<span class="font-semibold text-monk">每个职业当前排名前 100 的 log</span>，把关键技能铺在同一条副本时间轴上——不用再一份份翻 FF Logs，直接横向对比。',
+                heroPoint1: '每职业前 100 名 log',
+                heroPoint2: '小队与搭档的技能',
+                heroPoint3: '导入自己的记录',
+                stepBossTitle: '选择副本',
+                stepJobTitle: '选择职业',
+                bossGroupCurrent: '当前版本',
+                bossGroupLegacy: '旧版绝本',
+                disclaimerTitle: '免责声明',
                 disclaimer1: '不要直接照抄这里看到的时间点。',
-                disclaimer2: '你仍然需要根据自己队伍的打法和击杀时间 <span class="text-white font-medium">调整技能轴</span>。',
-                disclaimer3: '看别人怎么成功很有用，但前提是你也理解 <span class="underline decoration-yellow-500/50">为什么</span>。',
-                jobSectionTitle: '妖星乱舞绝境战时间轴',
-                copyright: '© 2026 M-Spec。与 Square Enix 无官方关联。',
-                roles: ['坦克', '治疗', '近战', '远敏', '法系'],
+                disclaimer2: '你仍需<span class="font-medium text-white">根据自己队伍的打法和击杀时间调整技能安排</span>。',
+                disclaimer3: '别人的做法只有在你也理解<span class="underline decoration-yellow-500/40">为什么</span>时才最有价值。',
+                copyright: '© 2026 M-Spec，与 Square Enix 无关。',
+                roles: { tank: '坦克', healer: '治疗', melee: '近战', ranged: '远敏', caster: '法系' },
                 jobs: {
-                    'paladin-paladin': '骑士',
-                    'warrior-warrior': '战士',
-                    'darkknight-darkknight': '暗黑骑士',
-                    'gunbreaker-gunbreaker': '绝枪战士',
-                    'whitemage-whitemage': '白魔法师',
-                    'scholar-scholar': '学者',
-                    'astrologian-astrologian': '占星术士',
-                    'sage-sage': '贤者',
-                    'monk-monk': '武僧',
-                    'dragoon-dragoon': '龙骑士',
-                    'ninja-ninja': '忍者',
-                    'samurai-samurai': '武士',
-                    'reaper-reaper': '钐镰客',
-                    'viper-viper': '蝰蛇剑士',
-                    'bard-bard': '吟游诗人',
-                    'machinist-machinist': '机工士',
-                    'dancer-dancer': '舞者',
-                    'blackmage-blackmage': '黑魔法师',
-                    'summoner-summoner': '召唤师',
-                    'redmage-redmage': '赤魔法师',
-                    'pictomancer-pictomancer': '绘灵法师'
+                    'paladin-paladin': '骑士', 'warrior-warrior': '战士',
+                    'darkknight-darkknight': '暗黑骑士', 'gunbreaker-gunbreaker': '绝枪战士',
+                    'whitemage-whitemage': '白魔法师', 'scholar-scholar': '学者',
+                    'astrologian-astrologian': '占星术士', 'sage-sage': '贤者',
+                    'monk-monk': '武僧', 'dragoon-dragoon': '龙骑士', 'ninja-ninja': '忍者',
+                    'samurai-samurai': '武士', 'reaper-reaper': '钐镰客', 'viper-viper': '蝰蛇剑士',
+                    'bard-bard': '吟游诗人', 'machinist-machinist': '机工士', 'dancer-dancer': '舞者',
+                    'blackmage-blackmage': '黑魔法师', 'summoner-summoner': '召唤师',
+                    'redmage-redmage': '赤魔法师', 'pictomancer-pictomancer': '绘灵法师'
                 }
             },
             ja: {
                 pageTitle: 'M-Spec',
                 language: '言語',
-                introTitle: 'これは何？',
-                introBody1: 'M-Spec は各ジョブの現在の <span class="text-monk font-semibold">上位 100 件のログ</span>を比較し、<span class="text-monk font-semibold">重要なスキル</span>をタイムライン上に表示します。',
-                introBody2: '上位ログ、相方の軽減、取り込んだ自分の pull を並べて確認できます。',
-                introBody3: 'FF Logs を一件ずつ開いて探す必要はありません。',
-                quote: '"...木人回しはもう十分です。細かい回しを詰め続けるより、その時間をボス研究に使いましょう。"',
-                quoteBy: 'Dianziwang',
+                heroKicker: 'FF14 バトルタイムライン',
+                heroTitle: '上位プレイヤーのスキル回しを、そのまま見る。',
+                heroBody: 'M-Spec は<span class="font-semibold text-monk">各ジョブ上位100件のログ</span>を集計し、重要なスキルを一本のタイムラインに並べます。FF Logs を1件ずつ開かなくても、そのまま見比べられます。',
+                heroPoint1: 'ジョブ別トップ100ログ',
+                heroPoint2: 'PT・相方のスキル',
+                heroPoint3: '自分のログを取込',
+                stepBossTitle: 'コンテンツを選ぶ',
+                stepJobTitle: 'ジョブを選ぶ',
+                bossGroupCurrent: '現行',
+                bossGroupLegacy: '旧絶',
                 disclaimerTitle: '注意',
-                disclaimer1: 'ここに表示されたタイミングをそのままコピーしないでください。',
-                disclaimer2: '固定の処理法や討伐時間に合わせて <span class="text-white font-medium">スキル回しを調整</span>する必要があります。',
-                disclaimer3: '他の攻略例は、<span class="underline decoration-yellow-500/50">なぜそうしているか</span>を理解してこそ役に立ちます。',
-                jobSectionTitle: '絶妖星乱舞 タイムライン',
-                copyright: '© 2026 M-Spec。Square Enix とは関係ありません。',
-                roles: ['タンク', 'ヒーラー', '近接', 'レンジ', 'キャスター'],
+                disclaimer1: 'ここで見たタイミングをそのまま真似しないでください。',
+                disclaimer2: '自分の<span class="font-medium text-white">PTの戦術と撃破時間に合わせて調整</span>する必要があります。',
+                disclaimer3: '他PTのやり方は、<span class="underline decoration-yellow-500/40">なぜそうするのか</span>を理解してこそ活きます。',
+                copyright: '© 2026 M-Spec. Square Enix とは無関係です。',
+                roles: { tank: 'タンク', healer: 'ヒーラー', melee: '近接', ranged: 'レンジ', caster: 'キャスター' },
                 jobs: {
-                    'paladin-paladin': 'ナイト',
-                    'warrior-warrior': '戦士',
-                    'darkknight-darkknight': '暗黒騎士',
-                    'gunbreaker-gunbreaker': 'ガンブレイカー',
-                    'whitemage-whitemage': '白魔道士',
-                    'scholar-scholar': '学者',
-                    'astrologian-astrologian': '占星術師',
-                    'sage-sage': '賢者',
-                    'monk-monk': 'モンク',
-                    'dragoon-dragoon': '竜騎士',
-                    'ninja-ninja': '忍者',
-                    'samurai-samurai': '侍',
-                    'reaper-reaper': 'リーパー',
-                    'viper-viper': 'ヴァイパー',
-                    'bard-bard': '吟遊詩人',
-                    'machinist-machinist': '機工士',
-                    'dancer-dancer': '踊り子',
-                    'blackmage-blackmage': '黒魔道士',
-                    'summoner-summoner': '召喚士',
-                    'redmage-redmage': '赤魔道士',
-                    'pictomancer-pictomancer': 'ピクトマンサー'
+                    'paladin-paladin': 'ナイト', 'warrior-warrior': '戦士',
+                    'darkknight-darkknight': '暗黒騎士', 'gunbreaker-gunbreaker': 'ガンブレイカー',
+                    'whitemage-whitemage': '白魔道士', 'scholar-scholar': '学者',
+                    'astrologian-astrologian': '占星術師', 'sage-sage': '賢者',
+                    'monk-monk': 'モンク', 'dragoon-dragoon': '竜騎士', 'ninja-ninja': '忍者',
+                    'samurai-samurai': '侍', 'reaper-reaper': 'リーパー', 'viper-viper': 'ヴァイパー',
+                    'bard-bard': '吟遊詩人', 'machinist-machinist': '機工士', 'dancer-dancer': '踊り子',
+                    'blackmage-blackmage': '黒魔道士', 'summoner-summoner': '召喚士',
+                    'redmage-redmage': '赤魔道士', 'pictomancer-pictomancer': 'ピクトマンサー'
                 }
             },
             ko: {
                 pageTitle: 'M-Spec',
                 language: '언어',
-                introTitle: '이 사이트는 무엇인가요?',
-                introBody1: 'M-Spec은 각 잡의 현재 <span class="text-monk font-semibold">상위 100개 로그</span>를 비교하고, <span class="text-monk font-semibold">중요 스킬</span>을 전투 타임라인에 표시합니다.',
-                introBody2: '상위 로그, 파트너 생존기, 직접 가져온 pull을 한 화면에서 비교할 수 있습니다.',
-                introBody3: 'FF Logs를 하나씩 열어 뒤질 필요가 없습니다.',
-                quote: '"...허수아비 딜 사이클은 이미 충분합니다. 아주 작은 운용 차이보다 보스 연구에 시간을 쓰세요."',
-                quoteBy: 'Dianziwang',
-                disclaimerTitle: '주의',
-                disclaimer1: '여기에 보이는 타이밍을 그대로 복사하지 마세요.',
-                disclaimer2: '파티의 공략 방식과 클리어 시간에 맞춰 <span class="text-white font-medium">스킬 타이밍을 조정</span>해야 합니다.',
-                disclaimer3: '다른 파티의 성공 사례는 <span class="underline decoration-yellow-500/50">왜 그렇게 했는지</span> 이해할 때 가장 도움이 됩니다.',
-                jobSectionTitle: '절 요성난무 타임라인',
-                copyright: '© 2026 M-Spec. Square Enix와 관련이 없습니다.',
-                roles: ['탱커', '힐러', '근접', '물리 원거리', '마법 원거리'],
+                heroKicker: 'FF14 전투 타임라인',
+                heroTitle: '상위 유저들이 쿨기를 어떻게 쓰는지 그대로 확인하세요.',
+                heroBody: 'M-Spec은 <span class="font-semibold text-monk">직업별 상위 100개 로그</span>를 모아 핵심 스킬을 하나의 타임라인에 배치합니다. FF Logs를 하나씩 열지 않고 바로 비교할 수 있습니다.',
+                heroPoint1: '직업별 상위 100 로그',
+                heroPoint2: '파티·짝 쿨기',
+                heroPoint3: '내 로그 불러오기',
+                stepBossTitle: '전투 선택',
+                stepJobTitle: '직업 선택',
+                bossGroupCurrent: '현재',
+                bossGroupLegacy: '구 절판',
+                disclaimerTitle: '유의사항',
+                disclaimer1: '여기 보이는 타이밍을 그대로 복사하지 마세요.',
+                disclaimer2: '자신의 <span class="font-medium text-white">공대 전략과 클리어 타임에 맞춰 조정</span>해야 합니다.',
+                disclaimer3: '다른 팀의 방식은 <span class="underline decoration-yellow-500/40">왜 그런지</span>를 이해할 때 가장 도움이 됩니다.',
+                copyright: '© 2026 M-Spec. Square Enix와 무관합니다.',
+                roles: { tank: '탱커', healer: '힐러', melee: '근접', ranged: '물리 원거리', caster: '마법 원거리' },
                 jobs: {
-                    'paladin-paladin': '나이트',
-                    'warrior-warrior': '전사',
-                    'darkknight-darkknight': '암흑기사',
-                    'gunbreaker-gunbreaker': '건브레이커',
-                    'whitemage-whitemage': '백마도사',
-                    'scholar-scholar': '학자',
-                    'astrologian-astrologian': '점성술사',
-                    'sage-sage': '현자',
-                    'monk-monk': '몽크',
-                    'dragoon-dragoon': '용기사',
-                    'ninja-ninja': '닌자',
-                    'samurai-samurai': '사무라이',
-                    'reaper-reaper': '리퍼',
-                    'viper-viper': '바이퍼',
-                    'bard-bard': '음유시인',
-                    'machinist-machinist': '기공사',
-                    'dancer-dancer': '무도가',
-                    'blackmage-blackmage': '흑마도사',
-                    'summoner-summoner': '소환사',
-                    'redmage-redmage': '적마도사',
-                    'pictomancer-pictomancer': '픽토맨서'
+                    'paladin-paladin': '나이트', 'warrior-warrior': '전사',
+                    'darkknight-darkknight': '암흑기사', 'gunbreaker-gunbreaker': '건브레이커',
+                    'whitemage-whitemage': '백마도사', 'scholar-scholar': '학자',
+                    'astrologian-astrologian': '점성술사', 'sage-sage': '현자',
+                    'monk-monk': '몽크', 'dragoon-dragoon': '용기사', 'ninja-ninja': '닌자',
+                    'samurai-samurai': '사무라이', 'reaper-reaper': '리퍼', 'viper-viper': '바이퍼',
+                    'bard-bard': '음유시인', 'machinist-machinist': '기공사', 'dancer-dancer': '무도가',
+                    'blackmage-blackmage': '흑마도사', 'summoner-summoner': '소환사',
+                    'redmage-redmage': '적마도사', 'pictomancer-pictomancer': '픽토맨서'
                 }
             }
         };
 
-        const normalizeUiLanguage = (language) => {
-            const normalized = String(language || '').toLowerCase();
-            if (normalized.startsWith('zh')) return 'zh';
-            if (normalized.startsWith('ja')) return 'ja';
-            if (normalized.startsWith('ko')) return 'ko';
+        // ==================== 状态 ====================
+        const readStored = (key) => { try { return localStorage.getItem(key); } catch (e) { return null; } };
+        const writeStored = (key, value) => { try { localStorage.setItem(key, value); } catch (e) {} };
+
+        const ALL_BOSS_IDS = BOSS_GROUPS.flatMap(g => g.items.map(b => b.id));
+        const normalizeLanguage = (value) => {
+            const lower = String(value || '').toLowerCase();
+            if (lower.startsWith('zh')) return 'zh';
+            if (lower.startsWith('ja')) return 'ja';
+            if (lower.startsWith('ko')) return 'ko';
             return 'en';
         };
 
-        const getInitialUiLanguage = () => {
-            try {
-                const stored = localStorage.getItem(UI_LANGUAGE_STORAGE_KEY);
-                if (I18N[stored]) return stored;
-            } catch (e) {}
-            return normalizeUiLanguage(navigator.language || navigator.userLanguage || 'en');
-        };
+        let language = normalizeLanguage(readStored(UI_LANGUAGE_STORAGE_KEY) || navigator.language || 'en');
+        let selectedBoss = ALL_BOSS_IDS.includes(readStored(BOSS_STORAGE_KEY)) ? readStored(BOSS_STORAGE_KEY) : 'dancing-mad';
 
-        const getSpecFromHref = (href) => {
-            try {
-                const url = new URL(href, window.location.href);
-                return url.searchParams.get('spec');
-            } catch (e) {
-                return null;
-            }
-        };
+        // ==================== 渲染 ====================
+        const strings = () => I18N[language] || I18N.en;
 
-        const applyLanguage = (language) => {
-            const lang = I18N[language] ? language : 'en';
-            const strings = I18N[lang];
-            document.documentElement.lang = lang;
-            document.title = strings.pageTitle;
+        function renderBosses() {
+            const host = document.getElementById('boss-groups');
+            const s = strings();
+            host.innerHTML = '';
+            BOSS_GROUPS.forEach(group => {
+                const wrap = document.createElement('div');
+                const label = document.createElement('div');
+                label.className = 'mb-2 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-gray-600';
+                label.textContent = group.key === 'current' ? s.bossGroupCurrent : s.bossGroupLegacy;
+                wrap.appendChild(label);
 
-            document.querySelectorAll('[data-i18n]').forEach((node) => {
+                const row = document.createElement('div');
+                row.className = 'flex flex-wrap gap-2';
+                group.items.forEach(boss => {
+                    const active = boss.id === selectedBoss;
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.dataset.boss = boss.id;
+                    btn.className = 'boss-chip flex items-baseline gap-2 rounded-md border px-3 py-2 text-left ' + (active
+                        ? 'border-monk bg-monk/10 text-white'
+                        : 'border-white/10 bg-white/[0.03] text-gray-400 hover:border-white/25 hover:text-gray-200');
+                    btn.innerHTML =
+                        '<span class="font-mono text-[11px] font-bold ' + (active ? 'text-monk' : 'text-gray-500') + '"></span>' +
+                        '<span class="text-sm font-medium"></span>';
+                    btn.children[0].textContent = boss.code;
+                    btn.children[1].textContent = boss.name;
+                    btn.addEventListener('click', () => {
+                        selectedBoss = boss.id;
+                        writeStored(BOSS_STORAGE_KEY, boss.id);
+                        renderBosses();
+                        renderRoles();
+                    });
+                    row.appendChild(btn);
+                });
+                wrap.appendChild(row);
+                host.appendChild(wrap);
+            });
+        }
+
+        function renderRoles() {
+            const host = document.getElementById('role-rows');
+            const s = strings();
+            host.innerHTML = '';
+            ROLES.forEach(role => {
+                const row = document.createElement('div');
+                row.className = 'flex flex-col gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-4 sm:flex-row sm:items-center';
+
+                const label = document.createElement('div');
+                label.className = 'w-28 shrink-0 font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-gray-500';
+                label.textContent = s.roles[role.key] || role.key;
+                row.appendChild(label);
+
+                const grid = document.createElement('div');
+                grid.className = 'grid flex-1 grid-cols-2 gap-2 sm:flex sm:flex-wrap';
+                role.jobs.forEach(job => {
+                    const a = document.createElement('a');
+                    a.href = 'timeline.html?boss=' + encodeURIComponent(selectedBoss) + '&spec=' + encodeURIComponent(job.id);
+                    a.className = 'job-card flex items-center gap-2.5 rounded-md border border-white/10 bg-white/[0.03] py-2 pl-2.5 pr-3 sm:min-w-[142px]';
+                    a.style.borderLeft = '3px solid ' + job.color;
+
+                    const img = document.createElement('img');
+                    img.src = 'images/classes/' + job.icon;
+                    img.alt = '';
+                    img.loading = 'lazy';
+                    img.decoding = 'async';
+                    img.width = 20; img.height = 20;
+                    img.className = 'h-5 w-5 shrink-0 object-contain';
+                    img.onerror = function () { this.style.display = 'none'; };
+
+                    const span = document.createElement('span');
+                    span.className = 'truncate text-sm text-gray-300';
+                    span.textContent = (s.jobs && s.jobs[job.id]) || JOB_NAMES_EN[job.id] || job.id;
+
+                    a.appendChild(img);
+                    a.appendChild(span);
+                    grid.appendChild(a);
+                });
+                row.appendChild(grid);
+                host.appendChild(row);
+            });
+        }
+
+        function applyLanguage() {
+            const s = strings();
+            document.documentElement.lang = language;
+            document.title = s.pageTitle;
+
+            document.querySelectorAll('[data-i18n]').forEach(node => {
                 const key = node.dataset.i18n;
-                if (strings[key]) node.textContent = strings[key];
+                if (s[key]) node.textContent = s[key];
             });
-            document.querySelectorAll('[data-i18n-html]').forEach((node) => {
+            document.querySelectorAll('[data-i18n-html]').forEach(node => {
                 const key = node.dataset.i18nHtml;
-                if (strings[key]) node.innerHTML = strings[key];
+                if (s[key]) node.innerHTML = s[key];
             });
 
-            const quoteBy = document.querySelector('.text-right .text-monk');
-            if (quoteBy) quoteBy.textContent = strings.quoteBy;
+            const toggle = document.getElementById('language-toggle');
+            const active = UI_LANGUAGES.find(l => l.id === language) || UI_LANGUAGES[0];
+            toggle.textContent = active.label;
+            toggle.title = s.language;
+            toggle.setAttribute('aria-label', s.language);
 
-            const rows = document.querySelectorAll('.space-y-4 > .flex.flex-col');
-            rows.forEach((row, index) => {
-                const label = row.querySelector('.w-32');
-                if (!label || !strings.roles[index]) return;
-                const icon = label.querySelector('span');
-                label.textContent = '';
-                if (icon) label.appendChild(icon);
-                label.appendChild(document.createTextNode(strings.roles[index]));
-            });
+            renderBosses();
+            renderRoles();
+        }
 
-            document.querySelectorAll('a[href*="spec="]').forEach((link) => {
-                const spec = getSpecFromHref(link.getAttribute('href'));
-                const label = link.querySelector('span:last-child');
-                if (spec && label && strings.jobs[spec]) label.textContent = strings.jobs[spec];
-            });
-
-            const languageToggle = document.getElementById('language-toggle');
-            const activeLanguage = UI_LANGUAGES.find(item => item.id === lang) || UI_LANGUAGES[0];
-            if (languageToggle) {
-                languageToggle.textContent = activeLanguage.label;
-                languageToggle.setAttribute('aria-label', strings.language);
-                languageToggle.title = strings.language;
-            }
-        };
-
-        const cycleLanguage = () => {
-            const current = getInitialUiLanguage();
-            const currentIndex = UI_LANGUAGES.findIndex(item => item.id === current);
-            const next = UI_LANGUAGES[(currentIndex + 1) % UI_LANGUAGES.length].id;
-            try {
-                localStorage.setItem(UI_LANGUAGE_STORAGE_KEY, next);
-            } catch (e) {}
-            applyLanguage(next);
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            applyLanguage(getInitialUiLanguage());
-            document.getElementById('language-toggle')?.addEventListener('click', (event) => {
-                event.stopPropagation();
-                cycleLanguage();
-            });
+        document.getElementById('language-toggle').addEventListener('click', () => {
+            const i = UI_LANGUAGES.findIndex(l => l.id === language);
+            language = UI_LANGUAGES[(i + 1) % UI_LANGUAGES.length].id;
+            writeStored(UI_LANGUAGE_STORAGE_KEY, language);
+            applyLanguage();
         });
 
-        // --- Interaction ---
-        function closeAllDropdowns() {
-            const dropdowns = document.querySelectorAll('[id^="dropdown-"]');
-            dropdowns.forEach(d => d.classList.add('hidden'));
-        }
+        applyLanguage();
     </script>
 </body>
 </html>
