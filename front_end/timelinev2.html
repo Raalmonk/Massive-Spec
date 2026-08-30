@@ -7,11 +7,11 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23121212'/%3E%3Ctext x='8' y='12' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='%2300FF96'%3EM%3C/text%3E%3C/svg%3E">
 
     <!-- 1. Precompiled Tailwind CSS (built by scripts/build_frontend.py) -->
-    <link rel="stylesheet" href="dist/app.css?v=1e6dacbb56">
+    <link rel="stylesheet" href="dist/app.css?v=a547c7bc71">
 
     <!-- 2. Precompiled React App (source: front_end/src/app.jsx, built by scripts/build_frontend.py) -->
     <!-- 注: api.js 的 loadRanking 从未被时间轴引用 (fetchRankings 自带实现), 故不再加载 -->
-    <script defer src="dist/app.js?v=d265eaf295"></script>
+    <script defer src="dist/app.js?v=1ac0aa42a1"></script>
 
     <style>
         /* Scrollbar Styling */
@@ -39,6 +39,10 @@
             scrollbar-width: none;
         }
         body { margin: 0; overflow: hidden; background-color: #121212; user-select: none; }
+
+        /* 应用外壳高度: 移动端浏览器的 100vh 包含地址栏占用的区域, 会把底部内容顶出屏幕;
+           dvh 是随地址栏收放变化的实际可视高度 (不支持的老浏览器回落到 vh) */
+        .app-shell { height: 100vh; height: 100dvh; }
         img, svg {
             -webkit-user-drag: none;
             user-drag: none;

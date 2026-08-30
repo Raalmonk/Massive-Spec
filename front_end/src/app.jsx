@@ -301,6 +301,7 @@
                 importPull: 'Import FF Logs Pull',
                 loadPlayers: 'Load Players',
                 display: 'Display',
+                controls: 'Controls',
                 all: 'ALL',
                 showAllSpells: 'Show all spells',
                 hideAllSpells: 'Hide all spells',
@@ -407,6 +408,7 @@
                 importPull: '导入 FF Logs Pull',
                 loadPlayers: '读取玩家',
                 display: '显示',
+                controls: '控制',
                 all: '全部',
                 showAllSpells: '显示所有技能',
                 hideAllSpells: '隐藏所有技能',
@@ -513,6 +515,7 @@
                 importPull: 'FF Logs Pull 取込',
                 loadPlayers: 'プレイヤー読込',
                 display: '表示',
+                controls: 'コントロール',
                 all: '全て',
                 showAllSpells: '全スキル表示',
                 hideAllSpells: '全スキル非表示',
@@ -619,6 +622,7 @@
                 importPull: 'FF Logs Pull 가져오기',
                 loadPlayers: '플레이어 로드',
                 display: '표시',
+                controls: '컨트롤',
                 all: '전체',
                 showAllSpells: '모든 스킬 표시',
                 hideAllSpells: '모든 스킬 숨김',
@@ -2271,6 +2275,22 @@
             }, []);
             const [isCollapsed, setIsCollapsed] = useState(true); 
             const [leftPanelCollapsed, setLeftPanelCollapsed] = useState(() => (window.innerWidth || 1280) < 720);
+            // 移动端: 控制栏在 375px 宽的屏幕上要吃掉 376px 高度 (近半个屏幕),
+            // 所以窄屏下默认收起, 只留一行"控制 + 折叠 + 缩放", 把屏幕让给时间轴
+            const [isMobile, setIsMobile] = useState(() => (window.innerWidth || 1280) < 768);
+            const [controlsOpen, setControlsOpen] = useState(false);
+            useEffect(() => {
+                const mq = window.matchMedia('(max-width: 767px)');
+                const onChange = (e) => setIsMobile(e.matches);
+                setIsMobile(mq.matches);
+                if (mq.addEventListener) {
+                    mq.addEventListener('change', onChange);
+                    return () => mq.removeEventListener('change', onChange);
+                }
+                mq.addListener(onChange); // Safari < 14
+                return () => mq.removeListener(onChange);
+            }, []);
+            const controlsVisible = !isMobile || controlsOpen;
             const leftPanelWidth = leftPanelCollapsed ? LEFT_PANEL_COLLAPSED_WIDTH : LEFT_PANEL_WIDTH;
             
             // NEW: Highlighted Row State (MULTI-SELECT)
@@ -3732,23 +3752,51 @@
             };
 
 
-            if (loading) return <div className="h-screen bg-[#121212] flex items-center justify-center text-[#00FF96]">{t("loading")}</div>;
+            // 行折叠与缩放控件: 桌面端放在控制栏右侧, 移动端放在收起后的紧凑行里
+            const rowCollapseButton = (
+                <button
+                    onClick={() => setIsCollapsed(!isCollapsed)}
+                    className={`h-7 w-7 flex shrink-0 items-center justify-center rounded border transition-colors ${!isCollapsed ? 'border-[#00FF96] bg-[#00FF96]/10 text-[#00FF96]' : 'border-gray-700/80 bg-[#111] text-gray-400 hover:border-gray-500 hover:text-gray-300'}`}
+                    title={isCollapsed ? t("expandRows") : t("collapseRows")}
+                >
+                    <Layers size={16} />
+                </button>
+            );
+            const zoomCluster = (
+                <>
+                    <button onClick={handleZoomIn} className="h-7 w-7 flex shrink-0 items-center justify-center rounded border border-gray-700/80 bg-[#111] text-gray-400 hover:border-gray-500 hover:text-[#00FF96] transition-colors"><ZoomIn size={15} /></button>
+                    <input
+                        type="range"
+                        min={MIN_VISIBLE_MINUTES}
+                        max={MAX_VISIBLE_MINUTES}
+                        step="0.05"
+                        value={Number(sliderVisibleMinutes.toFixed(2))}
+                        onChange={handleZoomSliderChange}
+                        className={`${isMobile ? 'h-4 w-24' : 'h-2 w-28'} cursor-pointer accent-[#00FF96]`}
+                        title={formatVisibleRange(sliderVisibleMinutes)}
+                    />
+                    <button onClick={handleZoomOut} className="h-7 w-7 flex shrink-0 items-center justify-center rounded border border-gray-700/80 bg-[#111] text-gray-400 hover:border-gray-500 hover:text-[#00FF96] transition-colors"><ZoomOut size={15} /></button>
+                </>
+            );
+
+            if (loading) return <div className="app-shell bg-[#121212] flex items-center justify-center text-[#00FF96]">{t("loading")}</div>;
 
             return (
-                <div className="flex flex-col h-screen bg-[#121212] text-gray-300 font-sans overflow-hidden">
+                <div className="flex flex-col app-shell bg-[#121212] text-gray-300 font-sans overflow-hidden">
 
                 {/* Navbar: 只保留"看什么"的选择 (Boss/职业/区服), 工具类按钮全部
                     下放到时间轴上方的工具行 —— 让顶部尽量轻 */}
-                <nav className="h-11 bg-[#1a1a1a] border-b border-gray-800 flex items-center justify-between px-3 shrink-0 z-[7000]">
-                    <div className="flex items-center gap-3 min-w-0">
-                        <a href="main_menu.html#" className="text-lg font-bold tracking-tight text-white flex items-center select-none hover:opacity-80 transition-opacity" style={{ textDecoration: 'none' }}>
+                <nav className="h-11 bg-[#1a1a1a] border-b border-gray-800 flex items-center justify-between gap-2 px-2 sm:px-3 shrink-0 z-[7000]">
+                    <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
+                        {/* 窄屏隐藏站名, 把宽度让给 Boss/职业/区服三个选择器 */}
+                        <a href="main_menu.html#" className="hidden sm:flex text-lg font-bold tracking-tight text-white items-center select-none hover:opacity-80 transition-opacity shrink-0" style={{ textDecoration: 'none' }}>
                             <span style={{ color: THEME_COLOR }} className="mr-0.5">M</span>-Spec
                         </a>
-                        <div className="relative">
+                        <div className="relative min-w-0 flex-1 sm:flex-none">
                             <select
                                 value={selectedBoss}
                                 onChange={(e) => updateUrlAndReload('boss', e.target.value)}
-                                className="nav-select h-7 min-w-[150px] appearance-none rounded border border-gray-700/80 bg-[#101010] px-2.5 pr-7 text-xs font-medium text-gray-100 outline-none transition-colors hover:border-[#00FF96]/70 focus:border-[#00FF96] cursor-pointer"
+                                className="nav-select h-7 w-full sm:w-auto sm:min-w-[150px] appearance-none rounded border border-gray-700/80 bg-[#101010] px-2 sm:px-2.5 pr-7 text-xs font-medium text-gray-100 outline-none transition-colors hover:border-[#00FF96]/70 focus:border-[#00FF96] cursor-pointer"
                             >
                                 {BOSS_GROUPS.map(group => (
                                     <optgroup key={group.labelKey} label={t(group.labelKey)}>
@@ -3766,11 +3814,11 @@
                             t={t}
                             uiLanguage={uiLanguage}
                         />
-                        <div className="relative">
+                        <div className="relative shrink-0">
                             <select
                                 value={selectedRegion}
                                 onChange={(e) => setSelectedRegion(e.target.value)}
-                                className="nav-select h-7 min-w-[58px] appearance-none rounded border border-gray-700/80 bg-[#101010] px-2.5 pr-7 text-xs font-medium text-gray-100 outline-none transition-colors hover:border-[#00FF96]/70 focus:border-[#00FF96] cursor-pointer"
+                                className="nav-select h-7 w-[58px] appearance-none rounded border border-gray-700/80 bg-[#101010] px-2 pr-6 text-xs font-medium text-gray-100 outline-none transition-colors hover:border-[#00FF96]/70 focus:border-[#00FF96] cursor-pointer"
                                 title={t("region")}
                             >
                                 <option value="All">{t("all")}</option>
@@ -3785,10 +3833,10 @@
                         </div>
                     </div>
                     {/* Right side with Discord Icon */}
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 shrink-0">
                         <button
                             onClick={cycleUiLanguage}
-                            className="h-7 min-w-[44px] rounded border border-gray-700/80 bg-black/30 px-2 text-[11px] font-black text-gray-400 transition-colors hover:border-[#00FF96] hover:text-white"
+                            className="h-7 min-w-[38px] sm:min-w-[44px] rounded border border-gray-700/80 bg-black/30 px-1.5 sm:px-2 text-[11px] font-black text-gray-400 transition-colors hover:border-[#00FF96] hover:text-white"
                             title={t("language")}
                         >
                             {currentLanguage.label}
@@ -3797,7 +3845,7 @@
                             href="https://discord.gg/SZRX5fVUeG"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-[#5865F2] hover:text-white transition-colors p-1.5"
+                            className="hidden sm:block text-[#5865F2] hover:text-white transition-colors p-1.5"
                             title="Join Discord"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 127.14 96.36" fill="currentColor">
@@ -3959,8 +4007,30 @@
                 )}
 
                 {/* Control Bar — 按功能分区:
-                    [技能选择: ALL 总开关 + 四类平铺 + OTHERS + LB] [BOSS TIMELINE: 行开关+类型+阶段] [伙伴] | [工具] [视图: 条/标签+折叠+缩放] */}
-                <div className="bg-[#181818] border-b border-gray-800 px-4 py-2 shrink-0 flex flex-wrap items-start gap-x-4 gap-y-2 overflow-visible no-scrollbar shadow-md z-[5000]">
+                    [技能选择: ALL 总开关 + 四类平铺 + OTHERS + LB] [BOSS TIMELINE: 行开关+类型+阶段] [伙伴] | [工具] [视图: 条/标签+折叠+缩放]
+                    移动端: 整块收起, 只留一行紧凑控件 (点"控制"展开) */}
+                <div className="bg-[#181818] border-b border-gray-800 px-2 sm:px-4 py-2 shrink-0 flex flex-wrap items-start gap-x-4 gap-y-2 overflow-visible no-scrollbar shadow-md z-[5000]">
+                    {isMobile && (
+                        <div className="flex w-full items-center gap-1.5">
+                            <button
+                                onClick={() => setControlsOpen(v => !v)}
+                                className={`flex h-7 items-center gap-1.5 px-2 rounded border text-[11px] font-bold uppercase tracking-wide transition-colors ${
+                                    controlsOpen
+                                        ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]'
+                                        : 'bg-[#111] border-gray-700/80 text-gray-400'
+                                }`}
+                            >
+                                <SlidersHorizontal size={13} />
+                                <span>{t("controls")}</span>
+                                <ChevronDown size={12} className={`transition-transform ${controlsOpen ? 'rotate-180' : ''}`} />
+                            </button>
+                            <div className="ml-auto flex items-center gap-1.5">
+                                {rowCollapseButton}
+                                {zoomCluster}
+                            </div>
+                        </div>
+                    )}
+                    {controlsVisible && (<>
                     {/* 技能分类筛选: 核心四类 (CD/单减/团减/功能) 平铺展示 —— 这是页面的
                         主角; 只有条目多的 OTHERS 用"计数按钮 + 弹出面板"收纳。
                         ALL 是技能选择的总开关, 所以放在这个区的最前面 */}
@@ -3989,7 +4059,7 @@
                                         <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-white" onClick={() => toggleCategory(catKey)}>
                                             <CategoryIcon type={category.iconType} /> {getCategoryLabel(category, t)}
                                         </div>
-                                        <div className="flex items-center gap-1.5">
+                                        <div className="flex flex-wrap items-center gap-1.5">
                                             {categorySpells.map(spell => {
                                                 const isSelected = isSpellSlotSelected(spells, selectedSpells, spell);
                                                 return (
@@ -4255,8 +4325,9 @@
 
                     </div>
                     <div className="hidden flex-1"></div>
-                    {/* 工具组: 从顶部导航下放, 紧凑样式, 不与主角 (技能分类) 抢戏 */}
-                    <div className="ml-auto flex items-center gap-1.5 shrink-0 self-center">
+                    {/* 工具组: 从顶部导航下放, 紧凑样式, 不与主角 (技能分类) 抢戏。
+                        窄屏允许换行, 否则 375px 下最后一个按钮会被裁掉 */}
+                    <div className="flex flex-wrap items-center gap-1.5 self-center sm:ml-auto sm:flex-nowrap sm:shrink-0">
                         <CompositionFilter activeFilterSpecs={activeFilterSpecs} onApply={setActiveFilterSpecs} t={t} uiLanguage={uiLanguage} />
                         <KillTimeFilter filterRange={killTimeRange} onApply={setKillTimeRange} t={t} />
                         <button
@@ -4314,33 +4385,21 @@
                             </button>
                         )}
                     </div>
-                    {/* 视图控制: cast 的绘制开关(持续条/CD条/时间标签) + 折叠 + 缩放 */}
+                    {/* 视图控制: 绘制开关(持续条/CD条/时间标签); 移动端移到紧凑行外的展开区 */}
                     <div className="flex items-center gap-1.5 shrink-0 self-center">
                         <button title={t("duration")} onClick={() => setShowDuration(!showDuration)} className={displayToggleClass(showDuration)}>{t("duration")}</button>
                         <button title={t("cooldown")} onClick={() => setShowCooldown(!showCooldown)} className={displayToggleClass(showCooldown)}>CD</button>
                         <button title={t("skillTimeLabels")} onClick={() => setShowSkillTimes(!showSkillTimes)} className={displayToggleClass(showSkillTimes)}>TM</button>
-                        <div className="w-px h-4 bg-gray-700 mx-0.5"></div>
-                        <button
-                            onClick={() => setIsCollapsed(!isCollapsed)}
-                            className={`h-7 w-7 flex items-center justify-center rounded border transition-colors ${!isCollapsed ? 'border-[#00FF96] bg-[#00FF96]/10 text-[#00FF96]' : 'border-gray-700/80 bg-[#111] text-gray-400 hover:border-gray-500 hover:text-gray-300'}`}
-                            title={isCollapsed ? t("expandRows") : t("collapseRows")}
-                        >
-                            <Layers size={16} />
-                        </button>
-                        <div className="w-px h-4 bg-gray-700 mx-1"></div>
-                        <button onClick={handleZoomIn} className="h-7 w-7 flex items-center justify-center rounded border border-gray-700/80 bg-[#111] text-gray-400 hover:border-gray-500 hover:text-[#00FF96] transition-colors"><ZoomIn size={15} /></button>
-                        <input
-                            type="range"
-                            min={MIN_VISIBLE_MINUTES}
-                            max={MAX_VISIBLE_MINUTES}
-                            step="0.05"
-                            value={Number(sliderVisibleMinutes.toFixed(2))}
-                            onChange={handleZoomSliderChange}
-                            className="h-2 w-28 cursor-pointer accent-[#00FF96]"
-                            title={formatVisibleRange(sliderVisibleMinutes)}
-                        />
-                        <button onClick={handleZoomOut} className="h-7 w-7 flex items-center justify-center rounded border border-gray-700/80 bg-[#111] text-gray-400 hover:border-gray-500 hover:text-[#00FF96] transition-colors"><ZoomOut size={15} /></button>
+                        {!isMobile && (
+                            <>
+                                <div className="w-px h-4 bg-gray-700 mx-0.5"></div>
+                                {rowCollapseButton}
+                                <div className="w-px h-4 bg-gray-700 mx-1"></div>
+                                {zoomCluster}
+                            </>
+                        )}
                     </div>
+                    </>)}
                 </div>
 
                 {/* Timeline Area */}
@@ -4359,8 +4418,10 @@
                         onMouseDown={onMouseDown}
                         onDragStart={onDragStart}
                         onScroll={handleTimelineScroll}
-                        onMouseMove={RENDER_MODE === 'canvas' ? handleCanvasTooltipMove : undefined}
-                        onMouseLeave={RENDER_MODE === 'canvas' ? hideCastTooltip : undefined}
+                        // 触摸设备没有 hover: tap 合成的 mousemove 会让提示弹出后一直卡着,
+                        // 所以移动端不挂悬浮提示 (改用点击图标聚焦)
+                        onMouseMove={RENDER_MODE === 'canvas' && !isMobile ? handleCanvasTooltipMove : undefined}
+                        onMouseLeave={RENDER_MODE === 'canvas' && !isMobile ? hideCastTooltip : undefined}
                     >
                         {/* Canvas 渲染层: 放在滚动内容内部, 随内容被合成器原生滚动,
                             与 DOM 刻度/相位线像素级同步; 位置/尺寸由 drawCastCanvas 按
