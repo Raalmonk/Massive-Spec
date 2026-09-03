@@ -1210,6 +1210,75 @@
             setSpellSlotSelected(currentIds, spellMap, spell, !isSpellSlotSelected(spellMap, currentIds, spell))
         );
 
+        // 文字宽度实测: Boss 时间轴要按标签实际占宽来排布, 中英混排下估算会严重失准。
+        // 复用一个离屏 canvas, measureText 很便宜。
+        let labelMeasureCtx = null;
+        const BOSS_LABEL_FONT = 'bold 13px Inter, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
+        const measureLabelWidth = (text) => {
+            if (!labelMeasureCtx) {
+                const c = document.createElement('canvas');
+                labelMeasureCtx = c.getContext('2d');
+                labelMeasureCtx.font = BOSS_LABEL_FONT;
+            }
+            return labelMeasureCtx.measureText(text || '').width;
+        };
+
+        // Boss 时间轴分轨排布: 全部机制挤在一行里按时间绝对定位, 间隔几秒的标签必然互相压。
+        // 这里按"像素足迹"贪心分轨 —— 足迹取 (条形宽度, 标签宽度) 的较大值, 同一轨内互不重叠。
+        // 轨道数封顶, 放不下的退化成不带文字的窄色块 (仍可悬停/点按查看名称)。
+        const BOSS_TRACK_HEIGHT = 26;
+        const BOSS_MAX_TRACKS = 4;
+        const BOSS_MIN_BAR_PX = 22;
+        const layoutBossTimeline = (mechanics, zoom, getName) => {
+            const trackEnds = [];
+            const items = mechanics.map((mech) => {
+                const time = Number(mech.displayTime ?? mech.time ?? 0);
+                const left = time * zoom;
+                const name = getName(mech);
+                const barWidth = mech.duration > 0
+                    ? Math.max(mech.duration * zoom, BOSS_MIN_BAR_PX)
+                    : 24;
+                const labelWidth = mech.duration > 0 ? measureLabelWidth(name) + 18 : 0;
+                const wanted = Math.max(barWidth, labelWidth);
+
+                // 先找一条放得下"含标签足迹"的轨
+                let track = -1;
+                for (let i = 0; i < trackEnds.length; i++) {
+                    if (trackEnds[i] <= left) { track = i; break; }
+                }
+                if (track === -1 && trackEnds.length < BOSS_MAX_TRACKS) {
+                    track = trackEnds.length;
+                    trackEnds.push(0);
+                }
+                if (track !== -1) {
+                    trackEnds[track] = left + wanted + 4;
+                    return { mech, name, time, left, width: barWidth, track, showLabel: mech.duration > 0 };
+                }
+
+                // 轨道用满: 塞进最早空出来的一轨, 并且不画文字 (只占条形宽度)
+                let best = 0;
+                for (let i = 1; i < trackEnds.length; i++) {
+                    if (trackEnds[i] < trackEnds[best]) best = i;
+                }
+                trackEnds[best] = left + barWidth + 2;
+                return { mech, name, time, left, width: barWidth, track: best, showLabel: false };
+            });
+            return { items, trackCount: Math.max(1, trackEnds.length) };
+        };
+
+        // 弹出面板的视口夹取: 面板用 right-0 / left-0 锚在按钮上, 按钮靠近屏幕边缘时
+        // 360-420px 宽的面板会整块跑到视口外 (点不到)。挂载后量一次, 横向推回可视范围。
+        const clampPopoverIntoView = (el) => {
+            if (!el) return;
+            el.style.transform = '';
+            const rect = el.getBoundingClientRect();
+            const margin = 8;
+            let dx = 0;
+            if (rect.left < margin) dx = margin - rect.left;
+            else if (rect.right > window.innerWidth - margin) dx = (window.innerWidth - margin) - rect.right;
+            if (dx) el.style.transform = `translateX(${Math.round(dx)}px)`;
+        };
+
         const EMPTY_SPELL_ID_SET = new Set();
 
         const expandSelectedSpellSlots = (selectedIds, spellMap) => {
@@ -2070,7 +2139,7 @@
                     </button>
 
                     {isOpen && (
-                        <div className="absolute top-full right-0 mt-2 w-64 rounded-md border border-gray-700 bg-[#151515] p-3 shadow-2xl z-[8000] flex flex-col gap-3">
+                        <div className="absolute top-full right-0 mt-2 w-64 rounded-md border border-gray-700 bg-[#151515] p-3 shadow-2xl z-[8000] flex flex-col gap-3" ref={clampPopoverIntoView}>
                             <h3 className="text-xs font-bold text-gray-500 uppercase">{t("filterKillTime")}</h3>
                             
                             <div className="flex items-center justify-between">
@@ -2140,7 +2209,7 @@
                     </button>
 
                     {isOpen && (
-                        <div className="absolute top-full right-0 mt-2 w-80 rounded-md border border-gray-700 bg-[#151515] p-3 shadow-2xl z-[8000] flex flex-col gap-3 max-h-[500px] overflow-y-auto custom-scrollbar">
+                        <div className="absolute top-full right-0 mt-2 w-80 rounded-md border border-gray-700 bg-[#151515] p-3 shadow-2xl z-[8000] flex flex-col gap-3 max-h-[500px] overflow-y-auto custom-scrollbar" ref={clampPopoverIntoView}>
                             <div className="flex flex-col gap-4">
                                 {SPECS.map((group, idx) => (
                                     <div key={idx} className="flex flex-col gap-2">
@@ -2215,7 +2284,7 @@
                     </button>
 
                     {isOpen && (
-                        <div className="absolute top-full left-0 mt-2 w-64 rounded-md border border-gray-700 bg-[#151515] p-2 shadow-2xl z-[8000] flex flex-col gap-2 max-h-[400px] overflow-y-auto custom-scrollbar">
+                        <div className="absolute top-full left-0 mt-2 w-64 rounded-md border border-gray-700 bg-[#151515] p-2 shadow-2xl z-[8000] flex flex-col gap-2 max-h-[400px] overflow-y-auto custom-scrollbar" ref={clampPopoverIntoView}>
                             {SPECS.map((group, idx) => (
                                 <div key={idx} className="flex flex-col gap-1">
                                     <span className="text-[10px] uppercase text-gray-500 font-bold px-1">{getSpecGroupLabel(group.label, t)}</span>
@@ -3164,6 +3233,17 @@
                     percentLabel
                 };
             }), [importedRows, timelinePhases, selectedSpec, spells, selectedBoss, importedSpellSelections, selectedSpells, spellCategories, showLimitBreak, isCollapsed, uiLanguage, spellColorMap]);
+
+            // Boss 时间轴的分轨排布 (随缩放/语言/可见类型变化重算)
+            const bossTimelineLayout = useMemo(
+                () => layoutBossTimeline(
+                    bossTimelineMechanics,
+                    zoom,
+                    (mech) => getLocalizedBossTimelineName(mech, uiLanguage)
+                ),
+                [bossTimelineMechanics, zoom, uiLanguage]
+            );
+            const bossRowHeight = Math.max(40, bossTimelineLayout.trackCount * BOSS_TRACK_HEIGHT + 8);
 
             const getDancerTangoWindows = useCallback((casts = []) => (
                 (casts || [])
@@ -4132,6 +4212,7 @@
                                     {isMenuOpen && (
                                         <div
                                             className="absolute top-full left-0 mt-2 z-[6500] w-[420px] max-w-[calc(100vw-2rem)] rounded-md border border-gray-700 bg-[#151515] p-3 shadow-2xl"
+                                            ref={clampPopoverIntoView}
                                             onClick={(event) => event.stopPropagation()}
                                         >
                                             <div className="mb-2 flex items-center justify-between border-b border-gray-800 pb-2">
@@ -4235,7 +4316,8 @@
                                                 </button>
                                                 {buddySpellMenuSpec === specInfo.id && (
                                                     <div
-                                                        className="absolute top-full right-0 mt-2 z-[6000] w-[360px] rounded-md border border-gray-700 bg-[#151515] p-3 shadow-2xl"
+                                                        className="absolute top-full right-0 mt-2 z-[6000] w-[360px] max-w-[calc(100vw-2rem)] rounded-md border border-gray-700 bg-[#151515] p-3 shadow-2xl"
+                                                        ref={clampPopoverIntoView}
                                                         onClick={(e) => e.stopPropagation()}
                                                     >
                                                         <div className="mb-2 flex items-center justify-between border-b border-gray-800 pb-2">
@@ -4571,33 +4653,40 @@
                             {/* Boss Timeline - Explicitly placed above players */}
                             {showBossRow && (
                                 // canvas 模式下 z 要高于画布(500), 否则滚动时下方行的技能会画穿这条 sticky 行
-                                <div className={`flex h-10 border-b border-gray-800/60 bg-[#151515] hover:bg-[#1a1a1a] transition-colors group relative sticky top-8 ${RENDER_MODE === 'canvas' ? 'z-[600]' : 'z-40'}`}>
+                                <div
+                                    className={`flex border-b border-gray-800/60 bg-[#151515] hover:bg-[#1a1a1a] transition-colors group relative sticky top-8 ${RENDER_MODE === 'canvas' ? 'z-[600]' : 'z-40'}`}
+                                    style={{ height: `${bossRowHeight}px` }}
+                                >
                                     <div className="sticky left-0 bg-[#181818] border-r border-gray-700/90 shrink-0 flex items-center px-3 z-[1000] left-cell-shadow" style={{ width: `${leftPanelWidth}px` }}>
                                         <div className={`font-bold text-gray-300 ${leftPanelCollapsed ? 'w-full text-center text-[10px]' : 'flex-1'}`}>
                                             {leftPanelCollapsed ? 'B' : t("bossTimeline")}
                                         </div>
                                     </div>
                                     <div className="relative h-full z-10 overflow-hidden" style={{ width: `${timelineWidth}px` }}>
-                                        {bossTimelineMechanics.map((mech, i) => {
-                                            const mechName = getLocalizedBossTimelineName(mech, uiLanguage);
-                                            const displayTime = Number(mech.displayTime ?? mech.time ?? 0);
+                                        {bossTimelineLayout.items.map((item, i) => {
+                                            const { mech, name: mechName, time: displayTime, left, width, track, showLabel } = item;
+                                            const top = 4 + track * BOSS_TRACK_HEIGHT;
+                                            const tip = `${getBossTimelineTypeLabel(mech.type, t) || t("boss")}: ${mechName} (${formatTime(displayTime)})${mech.duration > 0 ? ` - ${mech.duration}s` : ''}`;
                                             return mech.duration > 0 ? (
                                                 /* Standard Boss Bar for duration mechanics */
-                                                <div 
-                                                    key={i} 
-                                                    className="absolute top-1/2 -translate-y-1/2 h-7 rounded-sm border border-white/15 flex items-center justify-center text-[13px] font-bold text-white/95 overflow-hidden shadow-sm" 
-                                                    style={{ left: `${displayTime * zoom}px`, width: `${Math.max(mech.duration * zoom, 48)}px`, backgroundColor: getBossTimelineColor(mech.type, mech.color) }} 
-                                                    title={`${getBossTimelineTypeLabel(mech.type, t) || t("boss")}: ${mechName} (${formatTime(displayTime)}) - ${mech.duration}s`}
+                                                <div
+                                                    key={i}
+                                                    className="absolute h-[22px] rounded-sm border border-white/15 flex items-center justify-center text-[13px] font-bold text-white/95 overflow-hidden shadow-sm"
+                                                    style={{ left: `${left}px`, top: `${top}px`, width: `${width}px`, backgroundColor: getBossTimelineColor(mech.type, mech.color) }}
+                                                    title={tip}
                                                 >
-                                                    <span className="block max-w-full overflow-hidden whitespace-nowrap px-2 leading-none drop-shadow-[0_1px_1px_rgba(0,0,0,0.75)]">{mechName}</span>
+                                                    {/* 标签放不下时只留色块, 名称仍可悬停/点按查看 —— 好过把文字互相压成一团 */}
+                                                    {showLabel && (
+                                                        <span className="block max-w-full overflow-hidden whitespace-nowrap px-2 leading-none drop-shadow-[0_1px_1px_rgba(0,0,0,0.75)]">{mechName}</span>
+                                                    )}
                                                 </div>
                                             ) : (
                                                 /* Icon Box for instant mechanics */
-                                                <div 
-                                                    key={i} 
-                                                    className="absolute top-1/2 -translate-y-1/2 h-6 w-6 rounded border border-white/20 flex items-center justify-center shadow-sm overflow-hidden" 
-                                                    style={{ left: `${displayTime * zoom}px`, backgroundColor: getBossTimelineColor(mech.type, mech.color) }}
-                                                    title={`${getBossTimelineTypeLabel(mech.type, t) || t("boss")}: ${mechName} (${formatTime(displayTime)})`}
+                                                <div
+                                                    key={i}
+                                                    className="absolute h-[22px] w-[22px] rounded border border-white/20 flex items-center justify-center shadow-sm overflow-hidden"
+                                                    style={{ left: `${left}px`, top: `${top}px`, backgroundColor: getBossTimelineColor(mech.type, mech.color) }}
+                                                    title={tip}
                                                 >
                                                     <RenderIcon spell={{ ...mech, name: mechName }} />
                                                 </div>
@@ -4675,7 +4764,8 @@
                                                     </button>
                                                     {importSpellMenuRowId === importedRow.id && (
                                                         <div
-                                                            className="absolute left-0 top-8 z-[8100] w-[360px] rounded-md border border-gray-700 bg-[#151515] p-3 shadow-2xl"
+                                                            className="absolute left-0 top-8 z-[8100] w-[360px] max-w-[calc(100vw-2rem)] rounded-md border border-gray-700 bg-[#151515] p-3 shadow-2xl"
+                                                            ref={clampPopoverIntoView}
                                                             onClick={(e) => e.stopPropagation()}
                                                         >
                                                             <div className="mb-2 flex items-center justify-between border-b border-gray-800 pb-2">
