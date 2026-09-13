@@ -3085,11 +3085,13 @@
                     });
                 }
             };
-            // 开怒前的 cast 是负时间 (例: -0:03), 绝对值格式化后再补负号 ——
-            // 直接 Math.floor(-3/60) 会得到 "-1:-3"
+            // 一律向"前一秒"取整 (Math.floor): 2.9s -> 0:02, -0.4s -> -0:01。
+            // 负数必须先对整秒取整再拆分/补负号 —— 直接拿负数做 /60 和 %60
+            // 会得到 "-1:-3" 这种东西。
             const formatTime = (s) => {
-                const v = Math.abs(s);
-                return `${s < 0 ? '-' : ''}${Math.floor(v / 60)}:${Math.floor(v % 60).toString().padStart(2, '0')}`;
+                const whole = Math.floor(s);
+                const v = Math.abs(whole);
+                return `${whole < 0 ? '-' : ''}${Math.floor(v / 60)}:${(v % 60).toString().padStart(2, '0')}`;
             };
             const formatVisibleRange = (minutes) => minutes < 1
                 ? `${Math.round(minutes * 60)}s visible`
