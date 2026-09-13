@@ -21,14 +21,10 @@ from lorgs.models.wow_spec import WowSpec
 
 DEBUG_QUERIES = os.getenv("MSPEC_DEBUG_QUERIES") == "1"
 
-# Pre-pull window for cast queries (milliseconds).
-#
-# Tinctures and hard-cast openers happen *before* the pull, so an events query that
-# starts exactly at the fight start can never return them. We widen only the cast
-# window (not the summary/table/phase queries, which must stay aligned to the fight
-# itself); those casts come out with negative timestamps and the frontend timeline
-# draws from a negative origin to show them.
-PRE_PULL_WINDOW_MS = 5_000
+# Sanity bound on the pre-pull window (milliseconds). Real pre-pull openers run a
+# few seconds at most; anything longer means the numbers we derived it from do not
+# mean what we think they do, so we fall back to zeroing on the fight start.
+MAX_PRE_PULL_MS = 30_000
 
 
 if typing.TYPE_CHECKING:
@@ -56,7 +52,16 @@ class Fight(warcraftlogs_base.BaseModel):
     """Encounter Start."""
 
     duration: int = 0
-    """fight duration in milliseconds."""
+    """fight duration in milliseconds (measured from the first pre-pull action)."""
+
+    pre_pull: int = 0
+    """Length of the pre-pull window in milliseconds.
+
+    FF Logs' `combatTime` is the fight duration *excluding* pre-pull events, so
+    `duration - combatTime` is how long players were acting before the boss was
+    engaged. Everything is zeroed on combat start, which puts those casts at
+    negative timestamps.
+    """
 
     players: list[Player] = []
     boss: Optional[Boss] = None
@@ -127,13 +132,15 @@ class Fight(warcraftlogs_base.BaseModel):
         return int(1000 * (self.start_time.timestamp() - t))
 
     @property
-    def cast_query_start_time_rel(self) -> int:
-        """Start of the cast-events query window, including the pre-pull window.
+    def zero_time_rel(self) -> int:
+        """Report-relative timestamp of t=0 on the timeline: combat start.
 
-        Clamped at 0 because report-relative timestamps cannot be negative (a fight
-        may start less than PRE_PULL_WINDOW_MS into its report).
+        FF Logs starts an FFXIV fight at the first *pre-pull* action (tincture, a
+        hard-cast opener), not at the moment the boss is engaged. Everything the
+        frontend shows is measured from combat start, so pre-pull casts land on
+        negative timestamps. See `pre_pull`.
         """
-        return max(0, self.start_time_rel - PRE_PULL_WINDOW_MS)
+        return self.start_time_rel + self.pre_pull
 
     @property
     def end_time_rel(self) -> int:
@@ -210,6 +217,9 @@ class Fight(warcraftlogs_base.BaseModel):
             nativeFights: fights(fightIDs: {self.fight_id}) {{
                 id
                 encounterID
+                startTime
+                endTime
+                combatTime
                 phaseTransitions {{
                     id
                     startTime
@@ -339,6 +349,28 @@ class Fight(warcraftlogs_base.BaseModel):
         for player in self.players:
             player.process_query_result(**query_result)
 
+    def process_pre_pull(self, fight_data: typing.Optional[dict[str, typing.Any]]) -> None:
+        """Work out how long the pre-pull window was, from FF Logs' `combatTime`.
+
+        `combatTime` is documented as the fight duration excluding pre-pull events,
+        so the difference against the fight's own span is the pre-pull window. It is
+        not set for older reports; those simply keep pre_pull = 0.
+        """
+        if not fight_data:
+            return
+
+        combat_time = fight_data.get("combatTime")
+        start_time = fight_data.get("startTime")
+        end_time = fight_data.get("endTime")
+        if not combat_time or start_time is None or end_time is None:
+            return
+
+        pre_pull = int(end_time) - int(start_time) - int(combat_time)
+        # a negative or absurd value means the field does not mean what we think it
+        # does for this report; leaving it at 0 just keeps the old behaviour
+        if 0 < pre_pull <= MAX_PRE_PULL_MS:
+            self.pre_pull = pre_pull
+
     def process_native_phases(self, query_result: dict[str, typing.Any]) -> None:
         """Load FF Logs built-in phase transitions for this fight."""
         report = (query_result.get("reportData") or {}).get("report") or query_result.get("report") or {}
@@ -346,6 +378,8 @@ class Fight(warcraftlogs_base.BaseModel):
         native_fights = report.get("nativeFights") or []
 
         fight_data = next((fight for fight in native_fights if fight.get("id") == self.fight_id), None)
+        self.process_pre_pull(fight_data)
+
         transitions = (fight_data or {}).get("phaseTransitions") or []
         if not transitions:
             return
@@ -359,7 +393,9 @@ class Fight(warcraftlogs_base.BaseModel):
 
         self.phases = [
             Phase(
-                ts=max(int(transition.get("startTime", 0) - self.start_time_rel), 0),
+                # clamped at 0: FF Logs puts the P1 transition on the fight start,
+                # i.e. one pre-pull window before combat actually starts
+                ts=max(int(transition.get("startTime", 0) - self.zero_time_rel), 0),
                 name=phase_names.get(transition.get("id")) or f"P{transition.get('id')}",
             )
             for transition in transitions

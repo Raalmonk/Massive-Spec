@@ -1689,7 +1689,7 @@
                                     const fightKey = `${report.report_id}-${fight.fight_id}`;
                                     const fightPlayers = (fight.players || []).map(player => ({
                                         ...player,
-                                        fightDuration: fight.duration,
+                                        fightDuration: (fight.duration || 0) - (fight.pre_pull || 0),
                                         fightId: fight.fight_id,
                                         reportId: report.report_id,
                                         region: report.region,

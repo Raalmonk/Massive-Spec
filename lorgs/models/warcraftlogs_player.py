@@ -160,7 +160,7 @@ class Player(BaseActor):
             self.deaths.append(death_data)
 
     def process_event_resurrect(self, event: "wcl.ReportEvent"):
-        fight_start = self.fight.start_time_rel if self.fight else 0
+        fight_start = self.fight.zero_time_rel if self.fight else 0
 
         data: dict[str, typing.Any] = {}
         data["ts"] = event.timestamp - fight_start
@@ -200,7 +200,7 @@ class Player(BaseActor):
         if self.spec_slug != DANCER_SPEC_SLUG:
             return super().process_events(events)
 
-        fight_start = self.fight.start_time_rel if self.fight else 0
+        fight_start = self.fight.zero_time_rel if self.fight else 0
         partners_by_source_id: dict[int, dict[str, typing.Any]] = {}
         for event in events:
             spell_id = event.abilityGameID

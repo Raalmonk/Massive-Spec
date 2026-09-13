@@ -108,7 +108,7 @@ class Boss(warcraftlogs_actor.BaseActor):
                 continue
 
             cast = Cast.from_report_event(event)
-            cast.timestamp -= self.fight.start_time_rel
+            cast.timestamp -= self.fight.zero_time_rel
             cast.counter = count
 
             self.fight.add_phase(

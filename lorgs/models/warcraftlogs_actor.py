@@ -138,7 +138,7 @@ class BaseActor(warcraftlogs_base.BaseModel):
                 report(code: "{self.fight.report.report_id}")
                 {{
                     events(
-                        startTime: {self.fight.cast_query_start_time_rel},
+                        startTime: {self.fight.start_time_rel},
                         endTime: {self.fight.end_time_rel},
                         filterExpression: "{sub_query}"
                     )
@@ -232,7 +232,8 @@ class BaseActor(warcraftlogs_base.BaseModel):
 
             # create the cast object
             cast = Cast.from_report_event(cast_data)
-            cast.timestamp -= self.fight.start_time_rel if self.fight else 0
+            # zeroed on combat start, so pre-pull casts come out negative
+            cast.timestamp -= self.fight.zero_time_rel if self.fight else 0
             self.casts.append(cast)
 
         ##############################
