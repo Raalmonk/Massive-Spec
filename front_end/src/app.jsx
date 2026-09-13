@@ -18,10 +18,12 @@
         const SCROLL_CULL_CHUNK_PX = 1200;    // 滚动多少像素触发一次窗口重算
         const SCROLL_CULL_MARGIN_PX = 2000;   // 视口两侧预渲染余量 (必须 > CHUNK)
         // --- 开场前 (pre-pull) 的时间段 ---
-        // 爆发药、带吟唱的起手技都发生在 0 秒 (开怒) 之前。后端把 cast 的查询窗口
-        // 往前挪了 PRE_PULL_WINDOW_MS (见 lorgs/models/warcraftlogs_fight.py), 这些 cast 的
-        // 时间戳是负数, 所以整条时间轴从负数秒起算: x = (t - timelineStart) * zoom。
-        const TIMELINE_START_FLOOR = -5;   // 时间轴至少从 -5s 开始 (与后端查询窗口对齐)
+        // FF Logs 把一场 FF14 战斗的起点定在"第一个起手动作", 而不是开怪那一刻;
+        // 后端用 combatTime 算出这段 pre-pull 有多长, 并把所有时间戳改成以开怪为 0
+        // (见 lorgs/models/warcraftlogs_fight.py 的 zero_time_rel), 于是爆发药、
+        // 带吟唱的起手技时间戳是负数, 整条时间轴也就从负数秒起算:
+        //     x = (t - timelineStart) * zoom
+        const TIMELINE_START_FLOOR = -2;   // 时间轴至少画到 -2s
         const TIMELINE_START_LIMIT = -30;  // 脏数据保护: 再早的 cast 不再继续撑开坐标轴
         const MIN_VISIBLE_MINUTES = 0.25;
         const MAX_VISIBLE_MINUTES = 21;
@@ -3007,8 +3009,8 @@
             };
 
             // 时间轴的起点 (负数秒)。至少到 TIMELINE_START_FLOOR, 数据里更早的 cast
-            // 会再继续撑开 —— 带吟唱的技能会被后端按吟唱时间再往前移,
-            // 光看查询窗口宽度算不准最早能早到哪里。
+            // 会再继续撑开 —— 每场战斗的 pre-pull 长度不一样, 带吟唱的技能还会被
+            // 后端按吟唱时间再往前移, 所以只能按实际数据算。
             const timelineStart = useMemo(() => {
                 let earliest = 0;
                 const scan = (casts) => {
