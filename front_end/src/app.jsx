@@ -17,6 +17,12 @@
         // cast: 每滚过 CHUNK 像素才触发一次低优先级重渲染重算可见窗口。
         const SCROLL_CULL_CHUNK_PX = 1200;    // 滚动多少像素触发一次窗口重算
         const SCROLL_CULL_MARGIN_PX = 2000;   // 视口两侧预渲染余量 (必须 > CHUNK)
+        // --- 开场前 (pre-pull) 的时间段 ---
+        // 爆发药、带吟唱的起手技都发生在 0 秒 (开怒) 之前。后端把 cast 的查询窗口
+        // 往前挪了 PRE_PULL_WINDOW_MS (见 lorgs/models/warcraftlogs_fight.py), 这些 cast 的
+        // 时间戳是负数, 所以整条时间轴从负数秒起算: x = (t - timelineStart) * zoom。
+        const TIMELINE_START_FLOOR = -5;   // 时间轴至少从 -5s 开始 (与后端查询窗口对齐)
+        const TIMELINE_START_LIMIT = -30;  // 脏数据保护: 再早的 cast 不再继续撑开坐标轴
         const MIN_VISIBLE_MINUTES = 0.25;
         const MAX_VISIBLE_MINUTES = 21;
         const DEFAULT_VISIBLE_MINUTES = 6;
@@ -111,7 +117,7 @@
         // 坐标系: 内容坐标 (ctx 已由调用方平移), cullX0/cullX1 为需要绘制的内容 x 范围
         const drawRowCasts = (ctx, params, rowY, state, cullX0, cullX1) => {
             const { casts, totalHeight, trackHeight, rowPhases, killTimeSeconds, durOpacity, fontFactor, textAlpha } = params;
-            const { zoom, showCooldown, showDuration, showSkillTimes, isCollapsed, focusedSpellId, isFocusedSpellId, getPhaseOffset, leftPanelWidth, formatTime } = state;
+            const { zoom, showCooldown, showDuration, showSkillTimes, isCollapsed, focusedSpellId, isFocusedSpellId, getPhaseOffset, leftPanelWidth, formatTime, timelineStart } = state;
             const phaseOffset = getPhaseOffset(rowPhases);
             const focusActive = !!focusedSpellId;
 
@@ -127,7 +133,7 @@
 
                     const spell = cast.spell;
                     const alignedT = Number(cast.timestamp || 0) - phaseOffset;
-                    const x = leftPanelWidth + alignedT * zoom;
+                    const x = leftPanelWidth + (alignedT - timelineStart) * zoom;
                     const maxVisibleWidth = timeUntilKill * zoom;
                     const durationWidth = Math.max(0, Math.min((cast.duration || 0) * zoom, maxVisibleWidth));
                     const cdWidth = Math.max(0, Math.min((spell.cd || 0) * zoom, maxVisibleWidth));
@@ -1229,11 +1235,11 @@
         const BOSS_TRACK_HEIGHT = 26;
         const BOSS_MAX_TRACKS = 4;
         const BOSS_MIN_BAR_PX = 22;
-        const layoutBossTimeline = (mechanics, zoom, getName) => {
+        const layoutBossTimeline = (mechanics, zoom, getName, timelineStart) => {
             const trackEnds = [];
             const items = mechanics.map((mech) => {
                 const time = Number(mech.displayTime ?? mech.time ?? 0);
-                const left = time * zoom;
+                const left = (time - timelineStart) * zoom;
                 const name = getName(mech);
                 const barWidth = mech.duration > 0
                     ? Math.max(mech.duration * zoom, BOSS_MIN_BAR_PX)
@@ -3000,6 +3006,24 @@
                 }
             };
 
+            // 时间轴的起点 (负数秒)。至少到 TIMELINE_START_FLOOR, 数据里更早的 cast
+            // 会再继续撑开 —— 带吟唱的技能会被后端按吟唱时间再往前移,
+            // 光看查询窗口宽度算不准最早能早到哪里。
+            const timelineStart = useMemo(() => {
+                let earliest = 0;
+                const scan = (casts) => {
+                    for (let i = 0; i < (casts || []).length; i++) {
+                        const t = Number(casts[i].timestamp);
+                        if (Number.isFinite(t) && t < earliest) earliest = t;
+                    }
+                };
+                rankData.forEach(row => {
+                    scan(row.casts);
+                    (row.buddies || (row.buddy ? [row.buddy] : [])).forEach(buddy => scan(buddy.casts));
+                });
+                importedRows.forEach(row => scan(row.casts));
+                return Math.max(TIMELINE_START_LIMIT, Math.min(TIMELINE_START_FLOOR, Math.floor(earliest)));
+            }, [rankData, importedRows]);
             const getVisibleTimelineWidth = useCallback(() => (
                 Math.max(240, (scrollContainerRef.current?.clientWidth || window.innerWidth) - leftPanelWidth - 12)
             ), [leftPanelWidth]);
@@ -3021,17 +3045,17 @@
                 const oldZoom = Number(zoom) || nextZoom;
                 const centerTime = anchorTime !== null && Number.isFinite(anchorTime)
                     ? anchorTime
-                    : ((container?.scrollLeft || 0) + visibleWidth / 2) / oldZoom;
+                    : ((container?.scrollLeft || 0) + visibleWidth / 2) / oldZoom + timelineStart;
 
                 setZoom(nextZoom);
                 window.requestAnimationFrame(() => {
                     if (!container) return;
-                    const nextScrollLeft = Math.max(0, centerTime * nextZoom - visibleWidth / 2);
+                    const nextScrollLeft = Math.max(0, (centerTime - timelineStart) * nextZoom - visibleWidth / 2);
                     container.scrollLeft = nextScrollLeft;
                     // 大跳转后立刻 (高优先级) 同步裁剪窗口, 避免短暂空白
                     setScrollCullChunk(Math.round(nextScrollLeft / SCROLL_CULL_CHUNK_PX));
                 });
-            }, [zoom, getVisibleTimelineWidth, clampZoom]);
+            }, [zoom, timelineStart, getVisibleTimelineWidth, clampZoom]);
             const adjustVisibleMinutes = (direction) => {
                 const current = getVisibleMinutesForZoom(zoom);
                 const step = current <= 1 ? 0.05 : (current < 5 ? 0.25 : 1);
@@ -3061,7 +3085,12 @@
                     });
                 }
             };
-            const formatTime = (s) => `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
+            // 开怒前的 cast 是负时间 (例: -0:03), 绝对值格式化后再补负号 ——
+            // 直接 Math.floor(-3/60) 会得到 "-1:-3"
+            const formatTime = (s) => {
+                const v = Math.abs(s);
+                return `${s < 0 ? '-' : ''}${Math.floor(v / 60)}:${Math.floor(v % 60).toString().padStart(2, '0')}`;
+            };
             const formatVisibleRange = (minutes) => minutes < 1
                 ? `${Math.round(minutes * 60)}s visible`
                 : `${minutes.toFixed(1)} min visible`;
@@ -3121,10 +3150,10 @@
                 return Math.max(FIGHT_DURATION, ...killTimes, ...importedKillTimes, ...mechanicEnds, ...importedCastEnds, ...buddyCastEnds) + 30;
             }, [rankData, bossMechanics, importedRows, buddySpellMaps, showBuddy, isCombined, resolveBossTimelineTimestamp]);
             const zoomToTimeRange = useCallback((startTime, endTime) => {
-                const start = Math.max(0, Math.min(Number(startTime) || 0, Number(endTime) || 0));
+                const start = Math.max(timelineStart, Math.min(Number(startTime) || 0, Number(endTime) || 0));
                 const end = Math.min(timelineDuration, Math.max(Number(startTime) || 0, Number(endTime) || 0));
                 const rangeSeconds = Math.max(1, end - start);
-                const paddedStart = Math.max(0, start - Math.min(5, rangeSeconds * 0.1));
+                const paddedStart = Math.max(timelineStart, start - Math.min(5, rangeSeconds * 0.1));
                 const paddedEnd = Math.min(timelineDuration, end + Math.min(5, rangeSeconds * 0.1));
                 const visibleSeconds = Math.max(1, paddedEnd - paddedStart);
                 const nextZoom = clampZoom(getVisibleTimelineWidth() / visibleSeconds);
@@ -3132,20 +3161,20 @@
                 setZoom(nextZoom);
                 window.requestAnimationFrame(() => {
                     if (!scrollContainerRef.current) return;
-                    const nextScrollLeft = Math.max(0, paddedStart * nextZoom);
+                    const nextScrollLeft = Math.max(0, (paddedStart - timelineStart) * nextZoom);
                     scrollContainerRef.current.scrollLeft = nextScrollLeft;
                     // 大跳转后立刻 (高优先级) 同步裁剪窗口, 避免短暂空白
                     setScrollCullChunk(Math.round(nextScrollLeft / SCROLL_CULL_CHUNK_PX));
                 });
-            }, [timelineDuration, getVisibleTimelineWidth, clampZoom]);
-            const timelineWidth = timelineDuration * zoom;
+            }, [timelineStart, timelineDuration, getVisibleTimelineWidth, clampZoom]);
+            const timelineWidth = (timelineDuration - timelineStart) * zoom;
             // 横向虚拟化的可见时间窗口 (秒)。scrollCullChunk 变化触发本次渲染,
             // 窗口本身从当前 scrollLeft 现算, 保证缩放后立即正确。
             void scrollCullChunk; // 仅作为渲染触发器
             const cullScrollLeft = scrollContainerRef.current ? scrollContainerRef.current.scrollLeft : 0;
             const cullViewportPx = scrollContainerRef.current ? scrollContainerRef.current.clientWidth : window.innerWidth;
-            const cullT0 = (cullScrollLeft - SCROLL_CULL_MARGIN_PX) / zoom;
-            const cullT1 = (cullScrollLeft + cullViewportPx + SCROLL_CULL_MARGIN_PX) / zoom;
+            const cullT0 = (cullScrollLeft - SCROLL_CULL_MARGIN_PX) / zoom + timelineStart;
+            const cullT1 = (cullScrollLeft + cullViewportPx + SCROLL_CULL_MARGIN_PX) / zoom + timelineStart;
             // 标尺刻度最多上千个, 只在时长/刻度密度变化时重建, 不随每次渲染重算
             const rulerTicks = useMemo(() => {
                 const count = Math.ceil(timelineDuration / tickSettings.minor) + 1;
@@ -3157,8 +3186,9 @@
             const rowGridStyle = useMemo(() => ({
                 backgroundImage: "linear-gradient(to right, rgba(31,41,55,0.2) 1px, transparent 1px)",
                 backgroundSize: `${tickSettings.major * zoom}px 100%`,
-                backgroundPosition: "0 0"
-            }), [tickSettings.major, zoom]);
+                // 网格线从 t=0 (开怪) 起算, 而不是从轴的负数起点起算
+                backgroundPosition: `${-timelineStart * zoom}px 0`
+            }), [tickSettings.major, zoom, timelineStart]);
             const bossTimelineMechanics = useMemo(
                 () => bossMechanics.filter(m => (
                     m.type !== "phase"
@@ -3239,9 +3269,10 @@
                 () => layoutBossTimeline(
                     bossTimelineMechanics,
                     zoom,
-                    (mech) => getLocalizedBossTimelineName(mech, uiLanguage)
+                    (mech) => getLocalizedBossTimelineName(mech, uiLanguage),
+                    timelineStart
                 ),
-                [bossTimelineMechanics, zoom, uiLanguage]
+                [bossTimelineMechanics, zoom, uiLanguage, timelineStart]
             );
             const bossRowHeight = Math.max(40, bossTimelineLayout.trackCount * BOSS_TRACK_HEIGHT + 8);
 
@@ -3272,8 +3303,8 @@
                 return rowAnchor - rulerAnchor;
             }, [phaseAlignIndex, timelinePhases, getPhaseAnchorTimestamp]);
             const getAlignedLeft = useCallback((timestamp, phases) => (
-                `${(Number(timestamp || 0) - getPhaseOffset(phases)) * zoom}px`
-            ), [getPhaseOffset, zoom]);
+                `${(Number(timestamp || 0) - getPhaseOffset(phases) - timelineStart) * zoom}px`
+            ), [getPhaseOffset, zoom, timelineStart]);
             const togglePhaseAlignment = useCallback((phaseIndex) => {
                 setPhaseAlignIndex(prev => prev === phaseIndex ? null : phaseIndex);
             }, []);
@@ -3533,6 +3564,7 @@
                     getPhaseOffset,
                     leftPanelWidth,
                     formatTime,
+                    timelineStart,
                 };
                 handleCanvasCastPressRef.current = handleCanvasCastPress;
                 scheduleCastCanvasDraw();
@@ -3598,7 +3630,7 @@
                             const iconY = yTop + (currentTrackHeight - iconHeight) / 2;
                             if (contentY < iconY || contentY > iconY + iconHeight) continue;
                             const alignedT = Number(cast.timestamp || 0) - phaseOffset;
-                            const xIcon = state.leftPanelWidth + alignedT * state.zoom - scrollLeft;
+                            const xIcon = state.leftPanelWidth + (alignedT - state.timelineStart) * state.zoom - scrollLeft;
                             if (xView >= xIcon && xView <= xIcon + iconHeight) {
                                 return { key, cast, spell: cast.spell };
                             }
@@ -3679,7 +3711,7 @@
                 const rectLeft = container.getBoundingClientRect().left;
                 const timeFromClientX = (clientX) => {
                     const timelineX = container.scrollLeft + (clientX - rectLeft) - leftPanelWidth;
-                    return Math.max(0, Math.min(timelineDuration, timelineX / zoom));
+                    return Math.max(timelineStart, Math.min(timelineDuration, timelineX / zoom + timelineStart));
                 };
 
                 const startTime = timeFromClientX(e.clientX);
@@ -3697,7 +3729,7 @@
                     const pending = timeRangeSelectionRef.current;
                     const overlay = selectionOverlayRef.current;
                     if (!pending || !overlay) return;
-                    overlay.style.left = `${Math.min(pending.startTime, pending.endTime) * zoom}px`;
+                    overlay.style.left = `${(Math.min(pending.startTime, pending.endTime) - timelineStart) * zoom}px`;
                     overlay.style.width = `${Math.max(2, Math.abs(pending.endTime - pending.startTime) * zoom)}px`;
                 };
 
@@ -3726,7 +3758,7 @@
 
                 window.addEventListener('mousemove', handleRangeMouseMove);
                 window.addEventListener('mouseup', handleRangeMouseUp);
-            }, [leftPanelWidth, timelineDuration, zoom, zoomToTimeRange]);
+            }, [leftPanelWidth, timelineStart, timelineDuration, zoom, zoomToTimeRange]);
 
             const onMouseDown = useCallback((e) => {
                 if (e.button !== 0 || !scrollContainerRef.current) return;
@@ -4570,7 +4602,7 @@
                                             ref={selectionOverlayRef}
                                             className="absolute top-0 bottom-0 z-[3200] rounded-sm border border-[#00FF96] bg-[#00FF96]/15 pointer-events-none"
                                             style={{
-                                                left: `${Math.min(timeRangeSelection.startTime, timeRangeSelection.endTime) * zoom}px`,
+                                                left: `${(Math.min(timeRangeSelection.startTime, timeRangeSelection.endTime) - timelineStart) * zoom}px`,
                                                 width: `${Math.max(2, Math.abs(timeRangeSelection.endTime - timeRangeSelection.startTime) * zoom)}px`
                                             }}
                                         />
@@ -4583,7 +4615,7 @@
                                             <div 
                                                 key={i} 
                                                 className="absolute inset-y-0"
-                                                style={{ left: `${time * zoom}px` }}
+                                                style={{ left: `${(time - timelineStart) * zoom}px` }}
                                             >
                                                 <div className={`absolute bottom-0 border-l ${isMajor ? 'border-gray-500/90 h-4' : 'border-gray-700/80 h-2'}`} />
                                                 {isMajor && (
@@ -4601,7 +4633,7 @@
                                         <div
                                             key={`ruler-phase-${i}`}
                                             className="absolute inset-y-0 z-20"
-                                            style={{ left: `${phase.timestamp * zoom}px` }}
+                                            style={{ left: `${(phase.timestamp - timelineStart) * zoom}px` }}
                                             title={`${phase.name} (${formatTime(phase.timestamp)}) - ${phaseAlignIndex === i ? t("clearPhaseAlignment") : t("alignPhase")}`}
                                         >
                                             <div
@@ -4634,6 +4666,21 @@
                                 style={{ left: `${leftPanelWidth}px`, width: `${timelineWidth}px`, ...rowGridStyle }}
                             />
 
+                            {/* 开怪前 (负数秒) 的区域压暗 + t=0 的开怪线:
+                                让爆发药/起手吟唱这些 pre-pull 技能一眼能和开怪后区分开 */}
+                            <div
+                                className="absolute top-0 bottom-0 pointer-events-none z-[1]"
+                                style={{
+                                    left: `${leftPanelWidth}px`,
+                                    width: `${-timelineStart * zoom}px`,
+                                    backgroundColor: 'rgba(0,0,0,0.45)'
+                                }}
+                            />
+                            <div
+                                className="absolute top-0 bottom-0 border-l border-gray-400/45 pointer-events-none z-[255]"
+                                style={{ left: `${leftPanelWidth + -timelineStart * zoom}px` }}
+                            />
+
                             {/* Phase Lines */}
                             {showPhases && timelinePhases.length > 0 && (
                                 <div className="absolute top-8 bottom-0 right-0 pointer-events-none z-[260]" style={{ left: `${leftPanelWidth}px` }}>
@@ -4642,7 +4689,7 @@
                                             key={i}
                                             className="absolute top-0 bottom-0 border-l-2 border-dashed"
                                             style={{
-                                                left: `${phase.timestamp * zoom}px`,
+                                                left: `${(phase.timestamp - timelineStart) * zoom}px`,
                                                 borderColor: 'rgba(0,255,150,0.42)'
                                             }}
                                         />

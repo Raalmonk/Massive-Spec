@@ -21,6 +21,15 @@ from lorgs.models.wow_spec import WowSpec
 
 DEBUG_QUERIES = os.getenv("MSPEC_DEBUG_QUERIES") == "1"
 
+# Pre-pull window for cast queries (milliseconds).
+#
+# Tinctures and hard-cast openers happen *before* the pull, so an events query that
+# starts exactly at the fight start can never return them. We widen only the cast
+# window (not the summary/table/phase queries, which must stay aligned to the fight
+# itself); those casts come out with negative timestamps and the frontend timeline
+# draws from a negative origin to show them.
+PRE_PULL_WINDOW_MS = 5_000
+
 
 if typing.TYPE_CHECKING:
     from lorgs.models.warcraftlogs_actor import BaseActor
@@ -116,6 +125,15 @@ class Fight(warcraftlogs_base.BaseModel):
         """Fight start time, relative the parent report (in milliseconds)."""
         t = self.report.start_time.timestamp() if self.report else 0
         return int(1000 * (self.start_time.timestamp() - t))
+
+    @property
+    def cast_query_start_time_rel(self) -> int:
+        """Start of the cast-events query window, including the pre-pull window.
+
+        Clamped at 0 because report-relative timestamps cannot be negative (a fight
+        may start less than PRE_PULL_WINDOW_MS into its report).
+        """
+        return max(0, self.start_time_rel - PRE_PULL_WINDOW_MS)
 
     @property
     def end_time_rel(self) -> int:

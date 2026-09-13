@@ -138,7 +138,7 @@ class BaseActor(warcraftlogs_base.BaseModel):
                 report(code: "{self.fight.report.report_id}")
                 {{
                     events(
-                        startTime: {self.fight.start_time_rel},
+                        startTime: {self.fight.cast_query_start_time_rel},
                         endTime: {self.fight.end_time_rel},
                         filterExpression: "{sub_query}"
                     )
@@ -241,7 +241,9 @@ class BaseActor(warcraftlogs_base.BaseModel):
         self.casts = process_auras(self.casts)
 
         # Filter out same event at the same time (eg.: raid wide debuff apply)
-        self.casts = utils.uniqify(self.casts, key=lambda cast: (cast.spell_id, int(cast.timestamp / 1000)))
+        # floor division, not int(): truncation would bucket a pre-pull cast at -500ms
+        # together with the same spell at +300ms and drop one of them
+        self.casts = utils.uniqify(self.casts, key=lambda cast: (cast.spell_id, cast.timestamp // 1000))
 
         # make sure casts are sorted correctly
         # avoids weird UI overlaps, and just feels cleaner

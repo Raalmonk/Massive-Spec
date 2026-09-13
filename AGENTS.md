@@ -137,4 +137,5 @@ PCT (Pictomancer): Starry Muse, Striking Muse, Retribution of the Madeen, Mog of
 * Avoid emoji in timeline controls. Prefer short, flat text labels such as `DU`, `CD`, and `PH`, or lucide icons when an icon is clearer.
 * Boss phase intervals should come from FF Logs native `phases` / `phaseTransitions` when available. Do not add hand-authored phase trigger IDs for fights whose official phases are available from FF Logs.
 * Boss timeline mechanics should not render static phase/window placeholders as mechanic icons.
+* The timeline axis starts *before* the pull. Cast queries use `Fight.cast_query_start_time_rel` (fight start minus `PRE_PULL_WINDOW_MS`), so pre-pull casts (tinctures, hard-cast openers) come back with negative timestamps. In the frontend every time->x conversion is `(t - timelineStart) * zoom`; never use a bare `t * zoom`.
 * Horizontal dragging is the primary timeline navigation. Keep row-selection click handling separated from drag movement so dragging does not accidentally highlight rows.
